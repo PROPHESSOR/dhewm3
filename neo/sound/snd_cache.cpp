@@ -363,10 +363,8 @@ void idSoundSample::MakeDefault( void ) {
 
 	alGetError();
 	alBufferData( openalBuffer, objectInfo.nChannels==1?AL_FORMAT_MONO16:AL_FORMAT_STEREO16, nonCacheData, objectMemSize, objectInfo.nSamplesPerSec );
-
-	ALint errorcode;
-	if ( (errorcode = alGetError()) != AL_NO_ERROR ) {
-		common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer: %s", alGetString(errorcode) );
+	if ( alGetError() != AL_NO_ERROR ) {
+		common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer" );
 		hardwareBuffer = false;
 	} else {
 		hardwareBuffer = true;
@@ -496,10 +494,8 @@ void idSoundSample::Load( void ) {
 		if ( alIsBuffer( openalBuffer ) ) {
 			alGetError();
 			alBufferData( openalBuffer, objectInfo.nChannels==1?AL_FORMAT_MONO16:AL_FORMAT_STEREO16, nonCacheData, objectMemSize, objectInfo.nSamplesPerSec );
-
-			ALint errorcode;
-			if ( (errorcode = alGetError()) != AL_NO_ERROR ) {
-				common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer: %s", alGetString(errorcode) );
+			if ( alGetError() != AL_NO_ERROR ) {
+				common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer" );
 				hardwareBuffer = false;
 			} else {
 				hardwareBuffer = true;
@@ -552,10 +548,8 @@ void idSoundSample::Load( void ) {
 
 					alGetError();
 					alBufferData( openalBuffer, objectInfo.nChannels==1?AL_FORMAT_MONO16:AL_FORMAT_STEREO16, destData, objectSize * sizeof( short ), objectInfo.nSamplesPerSec );
-
-					ALint errorcode;
-					if ( (errorcode = alGetError()) != AL_NO_ERROR ) {
-						common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer: %s", alGetString(errorcode) );
+					if ( alGetError() != AL_NO_ERROR ) {
+						common->Warning( "idSoundCache: error loading data into OpenAL hardware buffer" );
 						hardwareBuffer = false;
 					} else {
 						hardwareBuffer = true;
