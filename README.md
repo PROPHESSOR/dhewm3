@@ -10,6 +10,10 @@ altering the original gameplay.
 
 **The official homepage is:** https://dhewm3.org
 
+**Mods supported by dhewm3:** https://dhewm3.org/mods.html
+
+**Mod SDK for dhewm3:**  https://github.com/dhewm/dhewm3-sdk
+
 **The project is hosted at:** https://github.com/dhewm
 
 **Download the latest release:** https://github.com/dhewm/dhewm3/releases/latest

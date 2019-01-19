@@ -27,8 +27,19 @@ if(NOT COMMAND add_compile_options)
 	endfunction()
 endif()
 
+option(LINUX_RELEASE_BINS "Set RPATH to \$ORIGIN/libs/ for Linux binary releases" OFF)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/sys/cmake")
-set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
+
+if(LINUX_RELEASE_BINS)
+	message(STATUS "Setting RPATH to \$ORIGIN/libs/ so you can put dependencies in there")
+	set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+	set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+	set(CMAKE_INSTALL_RPATH "$ORIGIN/libs")
+	set(ldflags "${ldflags} -Wl,-z,origin") # not sure this is even needed, but shouldn't hurt
+else()
+	set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
+endif()
 
 set(DHEWM3BINARY "dhewm3")
 
@@ -110,11 +121,6 @@ include_directories(${VORBISFILE_INCLUDE_DIR})
 find_package(OpenAL REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR})
 
-if(NOT AROS)
-	find_package(X11 REQUIRED)
-	include_directories(${X11_INCLUDE_DIR})
-endif()
-
 if (SDL2)
 	# skip SDL2main
 	if(APPLE OR WIN32)
@@ -154,12 +160,12 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		add_compile_options(-march=pentium3)
 	endif()
 
-	set(CMAKE_C_FLAGS_DEBUG "-g -D_DEBUG -O1")
+	set(CMAKE_C_FLAGS_DEBUG "-g -ggdb -D_DEBUG -O0")
 	set(CMAKE_C_FLAGS_DEBUGALL "-g -ggdb -D_DEBUG")
 	set(CMAKE_C_FLAGS_PROFILE "-g -ggdb -D_DEBUG -O1 -fno-omit-frame-pointer")
-	set(CMAKE_C_FLAGS_RELEASE "-O2 -ffast-math -fno-unsafe-math-optimizations -fomit-frame-pointer")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO "-g -O2 -ffast-math -fno-unsafe-math-optimizations -fomit-frame-pointer")
-	set(CMAKE_C_FLAGS_MINSIZEREL "-Os -ffast-math -fno-unsafe-math-optimizations -fomit-frame-pointer")
+	set(CMAKE_C_FLAGS_RELEASE "-O2 -fno-unsafe-math-optimizations -fno-math-errno -fno-trapping-math -fomit-frame-pointer")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO "-g -ggdb -O2 -fno-unsafe-math-optimizations -fno-math-errno -fno-trapping-math -fno-omit-frame-pointer")
+	set(CMAKE_C_FLAGS_MINSIZEREL "-Os -fno-unsafe-math-optimizations -fno-math-errno -fno-trapping-math -fomit-frame-pointer")
 
 	set(CMAKE_CXX_FLAGS_DEBUGALL ${CMAKE_C_FLAGS_DEBUGALL})
 	set(CMAKE_CXX_FLAGS_PROFILE ${CMAKE_C_FLAGS_PROFILE})
@@ -191,8 +197,8 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		add_definitions(-DMACOS_X=1)
 
 		if(cpu STREQUAL "x86_64")
-			add_compile_options(-arch x86_64 -mmacosx-version-min=10.6)
-			set(ldflags "${ldflags} -arch x86_64 -mmacosx-version-min=10.6")
+			add_compile_options(-arch x86_64 -mmacosx-version-min=10.9)
+			set(ldflags "${ldflags} -arch x86_64 -mmacosx-version-min=10.9")
 		elseif(cpu STREQUAL "x86")
 			CHECK_CXX_COMPILER_FLAG("-arch i386" cxx_has_arch_i386)
 			if(cxx_has_arch_i386)
@@ -220,6 +226,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		set(ldflags "${ldflags} -static-libgcc -static-libstdc++")
 	elseif(os STREQUAL "linux")
 		set(sys_libs ${sys_libs} dl)
+	elseif(os STREQUAL "freebsd")
+		find_library(EXECINFO_LIBRARIES execinfo /usr/lib /usr/local/lib)
+		set(sys_libs ${sys_libs} ${EXECINFO_LIBRARIES})
 	endif()
 elseif(MSVC)
 	add_compile_options(/W4)
@@ -231,6 +240,7 @@ elseif(MSVC)
 	add_compile_options(/wd4714) # 'function' marked as __forceinline not inlined
 	add_compile_options(/wd4996) # 'function': was declared deprecated
 	add_compile_options(/wd4068) # unknown pragma
+	add_compile_options(/wd4458) # declaration of 'variable' hides class member
 	add_definitions(-D_ALLOW_KEYWORD_MACROS) # because of the "#define private public" and "#define protected public" in TypeInfo.cpp
 	set(CMAKE_C_FLAGS_DEBUG "-D_DEBUG /Od /Zi /MDd")
 	set(CMAKE_C_FLAGS_RELEASE "/Ox /Oy /MD")
@@ -241,9 +251,10 @@ else()
 endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
-set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_C_FLAGS_RELWITHDEBINFO})
-set(CMAKE_CXX_FLAGS_MINSIZEREL ${CMAKE_C_FLAGS_MINSIZEREL})
+# disable assertions in release builds
+set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG ${CMAKE_C_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-DNDEBUG ${CMAKE_C_FLAGS_MINSIZEREL}")
 
 # mingw and msvc
 if(WIN32)
@@ -350,6 +361,17 @@ set(src_renderer
 	renderer/tr_turboshadow.cpp
 )
 
+# I'm a bit sloppy with headers and just glob them in..
+# they're only handled in CMake at all so they turn up in Visual Studio solutions..
+
+# globs all the headers from ${PATHPREFIX}/ and adds them to ${SRCLIST}
+function(add_globbed_headers SRCLIST PATHPREFIX)
+	file(GLOB_RECURSE tmp_hdrs RELATIVE "${CMAKE_SOURCE_DIR}" "${PATHPREFIX}/*.h")
+	set(${SRCLIST} ${tmp_hdrs} ${${SRCLIST}} PARENT_SCOPE)
+endfunction()
+
+add_globbed_headers(src_renderer "renderer")
+
 set(src_framework
 	framework/CVarSystem.cpp
 	framework/CmdSystem.cpp
@@ -383,6 +405,8 @@ set(src_framework
 	framework/minizip/unzip.cpp
 )
 
+add_globbed_headers(src_framework "framework")
+
 set(src_cm
 	cm/CollisionModel_contacts.cpp
 	cm/CollisionModel_contents.cpp
@@ -393,6 +417,8 @@ set(src_cm
 	cm/CollisionModel_trace.cpp
 	cm/CollisionModel_translate.cpp
 )
+
+add_globbed_headers(src_cm "cm")
 
 set(src_dmap
 	tools/compilers/dmap/dmap.cpp
@@ -411,6 +437,8 @@ set(src_dmap
 	tools/compilers/dmap/usurface.cpp
 )
 
+add_globbed_headers(src_dmap "tools/compilers/dmap")
+
 set(src_aas
 	tools/compilers/aas/AASBuild.cpp
 	tools/compilers/aas/AASBuild_file.cpp
@@ -427,6 +455,8 @@ set(src_aas
 	tools/compilers/aas/BrushBSP.cpp
 )
 
+add_globbed_headers(src_aas "tools/compilers/aas")
+
 set(src_roq
 	tools/compilers/roqvq/NSBitmapImageRep.cpp
 	tools/compilers/roqvq/codec.cpp
@@ -434,9 +464,13 @@ set(src_roq
 	tools/compilers/roqvq/roqParam.cpp
 )
 
+add_globbed_headers(src_roq "tools/compilers/roqvq")
+
 set(src_renderbump
 	tools/compilers/renderbump/renderbump.cpp
 )
+
+add_globbed_headers(src_renderbump "tools/compilers/renderbump")
 
 set(src_snd
 	sound/snd_cache.cpp
@@ -448,6 +482,8 @@ set(src_snd
 	sound/snd_wavefile.cpp
 	sound/snd_world.cpp
 )
+
+add_globbed_headers(src_snd "sound")
 
 set(src_ui
 	ui/BindWindow.cpp
@@ -471,9 +507,13 @@ set(src_ui
 	ui/Winvar.cpp
 )
 
+add_globbed_headers(src_ui "ui")
+
 set(src_tools
 	tools/guied/GEWindowWrapper_stub.cpp
 )
+
+# TODO: add_globbed_headers(src_tools "tools/guied")
 
 set(src_idlib
 	idlib/bv/Bounds.cpp
@@ -525,6 +565,8 @@ set(src_idlib
 	idlib/Timer.cpp
 	idlib/Heap.cpp
 )
+
+add_globbed_headers(src_idlib "idlib")
 
 set(src_game
 	game/AF.cpp
@@ -597,6 +639,8 @@ set(src_game
 	game/physics/Physics_StaticMulti.cpp
 	game/physics/Push.cpp
 )
+
+add_globbed_headers(src_game "game")
 
 set(src_d3xp
 	d3xp/AF.cpp
@@ -671,6 +715,8 @@ set(src_d3xp
 	d3xp/Grabber.cpp
 	d3xp/physics/Force_Grab.cpp
 )
+
+add_globbed_headers(src_d3xp "d3xp")
 
 set(src_core
 	${src_renderer}
@@ -753,6 +799,14 @@ elseif(WIN32)
 		sys/win32/win_syscon.cpp
 		sys/win32/SDL_win32_main.c
 	)
+	
+	# adding the few relevant headers in sys/ manually..
+	set(src_sys_base ${src_sys_base}
+		sys/platform.h
+		sys/sys_local.h
+		sys/sys_public.h
+		sys/win32/win_local.h
+	)
 
 	set(src_sys_core
 		sys/glimp.cpp
@@ -791,12 +845,16 @@ else()
 	endif()
 endif()
 
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX neo FILES ${src_idlib})
+
 if(CORE)
 	add_executable(${DHEWM3BINARY} WIN32 MACOSX_BUNDLE
 		${src_core}
 		${src_sys_base}
 		${src_sys_core}
 	)
+
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX neo FILES ${src_core} ${src_sys_base} ${src_sys_core})
 
 	set_target_properties(${DHEWM3BINARY} PROPERTIES COMPILE_DEFINITIONS "__DOOM_DLL__")
 	set_target_properties(${DHEWM3BINARY} PROPERTIES LINK_FLAGS "${ldflags}")
@@ -831,6 +889,8 @@ if(DEDICATED)
 		${src_stub_gl}
 		${src_sys_base}
 	)
+	
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX neo FILES ${src_core} ${src_sys_base} ${src_stub_openal} ${src_stub_gl})
 
 	set_target_properties(${DHEWM3BINARY}ded PROPERTIES COMPILE_DEFINITIONS "ID_DEDICATED;__DOOM_DLL__")
 	set_target_properties(${DHEWM3BINARY}ded PROPERTIES LINK_FLAGS "${ldflags}")
@@ -862,9 +922,12 @@ if(BASE)
 	else()
 		add_library(base SHARED ${src_game})
 	endif()
+	
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX neo FILES ${src_game})
+	
 	set_target_properties(base PROPERTIES PREFIX "")
 	set_target_properties(base PROPERTIES COMPILE_DEFINITIONS "GAME_DLL")
-	set_target_properties(base PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}/game")
+	target_include_directories(base PRIVATE "${CMAKE_SOURCE_DIR}/game")
 	set_target_properties(base PROPERTIES LINK_FLAGS "${ldflags}")
 	set_target_properties(base PROPERTIES INSTALL_NAME_DIR "@executable_path")
 	if (AROS)
@@ -889,9 +952,10 @@ if(D3XP)
 	else()
 		add_library(d3xp SHARED ${src_d3xp})
 	endif()
+	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX neo FILES ${src_d3xp})
 	set_target_properties(d3xp PROPERTIES PREFIX "")
 	set_target_properties(d3xp PROPERTIES COMPILE_DEFINITIONS "GAME_DLL;_D3XP;CTF")
-	set_target_properties(d3xp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}/d3xp")
+	target_include_directories(d3xp PRIVATE "${CMAKE_SOURCE_DIR}/d3xp")
 	set_target_properties(d3xp PROPERTIES LINK_FLAGS "${ldflags}")
 	set_target_properties(d3xp PROPERTIES INSTALL_NAME_DIR "@executable_path")
 	if (AROS)
