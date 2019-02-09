@@ -46,8 +46,8 @@ class idCamera : public idEntity {
     ABSTRACT_PROTOTYPE(idCamera);
 
     void                    Spawn(void);
-    virtual void            GetViewParms(renderView_t* view) = 0;
-    virtual renderView_t*   GetRenderView();
+    virtual void            GetViewParms(renderView_t *view) = 0;
+    virtual renderView_t   *GetRenderView();
     virtual void            Stop(void) {} ;
 };
 
@@ -65,20 +65,20 @@ class idCameraView : public idCamera {
     idCameraView();
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                // unarchives object from save game file
 
     void                    Spawn();
-    virtual void            GetViewParms(renderView_t* view);
+    virtual void            GetViewParms(renderView_t *view);
     virtual void            Stop(void);
 
   protected:
-    void                    Event_Activate(idEntity* activator);
+    void                    Event_Activate(idEntity *activator);
     void                    Event_SetAttachments();
-    void                    SetAttachment(idEntity** e, const char* p);
+    void                    SetAttachment(idEntity **e, const char *p);
     float                   fov;
-    idEntity*                attachedTo;
-    idEntity*                attachedView;
+    idEntity                *attachedTo;
+    idEntity                *attachedView;
 };
 
 
@@ -105,11 +105,11 @@ class idCameraAnim : public idCamera {
     ~idCameraAnim();
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                // unarchives object from save game file
 
     void                    Spawn(void);
-    virtual void            GetViewParms(renderView_t* view);
+    virtual void            GetViewParms(renderView_t *view);
 
   private:
     int                     threadNum;
@@ -129,7 +129,7 @@ class idCameraAnim : public idCamera {
     void                    Event_Start(void);
     void                    Event_Stop(void);
     void                    Event_SetCallback(void);
-    void                    Event_Activate(idEntity* activator);
+    void                    Event_Activate(idEntity *activator);
 };
 
 #endif /* !__GAME_CAMERA_H__ */

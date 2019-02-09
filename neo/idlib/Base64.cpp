@@ -42,10 +42,10 @@ idBase64::Encode
 static const char sixtet_to_base64[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-void idBase64::Encode(const byte* from, int size) {
+void idBase64::Encode(const byte *from, int size) {
     int i, j;
     unsigned int w;
-    byte* to;
+    byte *to;
 
     EnsureAlloced(4*(size+3)/3 + 2);   // ratio and padding + trailing \0
     to = data;
@@ -98,13 +98,13 @@ int idBase64::DecodeLength(void) const {
 idBase64::Decode
 ============
 */
-int idBase64::Decode(byte* to) const {
+int idBase64::Decode(byte *to) const {
     unsigned int w;
     int i, j;
     size_t n;
     static char base64_to_sixtet[256];
     static int tab_init = 0;
-    byte* from = data;
+    byte *from = data;
 
     if (!tab_init) {
         memset(base64_to_sixtet, 0, 256);
@@ -127,7 +127,7 @@ int idBase64::Decode(byte* to) const {
             continue;
         }
 
-        in[i] = base64_to_sixtet[* (unsigned char*) from];
+        in[i] = base64_to_sixtet[* (unsigned char *) from];
         ++i;
         ++from;
 
@@ -153,8 +153,8 @@ int idBase64::Decode(byte* to) const {
 idBase64::Encode
 ============
 */
-void idBase64::Encode(const idStr& src) {
-    Encode((const byte*)src.c_str(), src.Length());
+void idBase64::Encode(const idStr &src) {
+    Encode((const byte *)src.c_str(), src.Length());
 }
 
 /*
@@ -162,11 +162,11 @@ void idBase64::Encode(const idStr& src) {
 idBase64::Decode
 ============
 */
-void idBase64::Decode(idStr& dest) const {
-    byte* buf = new byte[ DecodeLength()+1 ]; // +1 for trailing \0
+void idBase64::Decode(idStr &dest) const {
+    byte *buf = new byte[ DecodeLength()+1 ]; // +1 for trailing \0
     int out = Decode(buf);
     buf[out] = '\0';
-    dest = (const char*)buf;
+    dest = (const char *)buf;
     delete[] buf;
 }
 
@@ -175,8 +175,8 @@ void idBase64::Decode(idStr& dest) const {
 idBase64::Decode
 ============
 */
-void idBase64::Decode(idFile* dest) const {
-    byte* buf = new byte[ DecodeLength()+1 ]; // +1 for trailing \0
+void idBase64::Decode(idFile *dest) const {
+    byte *buf = new byte[ DecodeLength()+1 ]; // +1 for trailing \0
     int out = Decode(buf);
     dest->Write(buf, out);
     delete[] buf;
@@ -200,7 +200,7 @@ void idBase64_TestBase64() {
     src_dict.Set("value", "foo");
     idFile_Memory src_fmem("serialize_dict");
     src_dict.WriteToFileHandle(&src_fmem);
-    dest.Encode((const byte*)src_fmem.GetDataPtr(), src_fmem.Length());
+    dest.Encode((const byte *)src_fmem.GetDataPtr(), src_fmem.Length());
     idLib::common->Printf("idDict encoded to %s\n", dest.c_str());
 
     // now decode to another stream and build back
@@ -213,7 +213,7 @@ void idBase64_TestBase64() {
     dest_dict.Print();
 
     // test idDict read from file - from python generated files, see idDict.py
-    idFile* file = idLib::fileSystem->OpenFileRead("idDict.test");
+    idFile *file = idLib::fileSystem->OpenFileRead("idDict.test");
 
     if (file) {
         idDict test_dict;
@@ -228,12 +228,12 @@ void idBase64_TestBase64() {
     }
 
     idBase64 base64_src;
-    void* buffer;
+    void *buffer;
 
     if (idLib::fileSystem->ReadFile("idDict.base64.test", &buffer) != -1) {
         idFile_Memory mem_src("dict");
-        idLib::common->Printf("read: %d %s\n", idStr::Length((char*)buffer), buffer);
-        base64_src = (char*)buffer;
+        idLib::common->Printf("read: %d %s\n", idStr::Length((char *)buffer), buffer);
+        base64_src = (char *)buffer;
         base64_src.Decode(&mem_src);
         mem_src.MakeReadOnly();
         idDict test_dict;

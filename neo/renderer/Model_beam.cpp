@@ -38,7 +38,7 @@ two points that faces the view, like a dynamic deform tube.
 
 */
 
-static const char* beam_SnapshotName = "_beam_Snapshot_";
+static const char *beam_SnapshotName = "_beam_Snapshot_";
 
 /*
 ===============
@@ -63,9 +63,9 @@ bool idRenderModelBeam::IsLoaded() const {
 idRenderModelBeam::InstantiateDynamicModel
 ===============
 */
-idRenderModel* idRenderModelBeam::InstantiateDynamicModel(const struct renderEntity_s* renderEntity, const struct viewDef_s* viewDef, idRenderModel* cachedModel) {
-    idRenderModelStatic* staticModel;
-    srfTriangles_t* tri;
+idRenderModel *idRenderModelBeam::InstantiateDynamicModel(const struct renderEntity_s *renderEntity, const struct viewDef_s *viewDef, idRenderModel *cachedModel) {
+    idRenderModelStatic *staticModel;
+    srfTriangles_t *tri;
     modelSurface_t surf;
 
     if (cachedModel) {
@@ -80,10 +80,10 @@ idRenderModel* idRenderModelBeam::InstantiateDynamicModel(const struct renderEnt
 
     if (cachedModel != NULL) {
 
-        assert(dynamic_cast<idRenderModelStatic*>(cachedModel) != NULL);
+        assert(dynamic_cast<idRenderModelStatic *>(cachedModel) != NULL);
         assert(idStr::Icmp(cachedModel->Name(), beam_SnapshotName) == 0);
 
-        staticModel = static_cast<idRenderModelStatic*>(cachedModel);
+        staticModel = static_cast<idRenderModelStatic *>(cachedModel);
         surf = *staticModel->Surface(0);
         tri = surf.geometry;
 
@@ -128,7 +128,7 @@ idRenderModel* idRenderModelBeam::InstantiateDynamicModel(const struct renderEnt
         staticModel->AddSurface(surf);
     }
 
-    idVec3  target = *reinterpret_cast<const idVec3*>(&renderEntity->shaderParms[SHADERPARM_BEAM_END_X]);
+    idVec3  target = *reinterpret_cast<const idVec3 *>(&renderEntity->shaderParms[SHADERPARM_BEAM_END_X]);
 
     // we need the view direction to project the minor axis of the tube
     // as the view changes
@@ -191,7 +191,7 @@ idRenderModel* idRenderModelBeam::InstantiateDynamicModel(const struct renderEnt
 idRenderModelBeam::Bounds
 ===============
 */
-idBounds idRenderModelBeam::Bounds(const struct renderEntity_s* renderEntity) const {
+idBounds idRenderModelBeam::Bounds(const struct renderEntity_s *renderEntity) const {
     idBounds    b;
 
     b.Zero();
@@ -199,7 +199,7 @@ idBounds idRenderModelBeam::Bounds(const struct renderEntity_s* renderEntity) co
     if (!renderEntity) {
         b.ExpandSelf(8.0f);
     } else {
-        idVec3  target = *reinterpret_cast<const idVec3*>(&renderEntity->shaderParms[SHADERPARM_BEAM_END_X]);
+        idVec3  target = *reinterpret_cast<const idVec3 *>(&renderEntity->shaderParms[SHADERPARM_BEAM_END_X]);
         idVec3  localTarget;
         float   modelMatrix[16];
         R_AxisToModelMatrix(renderEntity->axis, renderEntity->origin, modelMatrix);

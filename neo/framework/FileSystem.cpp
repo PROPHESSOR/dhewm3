@@ -174,17 +174,17 @@ for instance to base a mod of D3 + D3XP assets, fs_game mymod, fs_game_base d3xp
 // the wrong place for Doom 3 don't break pure servers.
 #define DOOM3_PURE_SPECIAL_CASES
 
-typedef bool (*pureExclusionFunc_t)(const struct pureExclusion_s& excl, int l, const idStr& name);
+typedef bool (*pureExclusionFunc_t)(const struct pureExclusion_s &excl, int l, const idStr &name);
 
 typedef struct pureExclusion_s {
     int                 nameLen;
     int                 extLen;
-    const char*         name;
-    const char*         ext;
+    const char         *name;
+    const char         *ext;
     pureExclusionFunc_t func;
 } pureExclusion_t;
 
-bool excludeExtension(const pureExclusion_t& excl, int l, const idStr& name) {
+bool excludeExtension(const pureExclusion_t &excl, int l, const idStr &name) {
     if (l > excl.extLen && !idStr::Icmp(name.c_str() + l - excl.extLen, excl.ext)) {
         return true;
     }
@@ -192,7 +192,7 @@ bool excludeExtension(const pureExclusion_t& excl, int l, const idStr& name) {
     return false;
 }
 
-bool excludePathPrefixAndExtension(const pureExclusion_t& excl, int l, const idStr& name) {
+bool excludePathPrefixAndExtension(const pureExclusion_t &excl, int l, const idStr &name) {
     if (l > excl.nameLen && !idStr::Icmp(name.c_str() + l - excl.extLen, excl.ext) && !name.IcmpPrefixPath(excl.name)) {
         return true;
     }
@@ -200,7 +200,7 @@ bool excludePathPrefixAndExtension(const pureExclusion_t& excl, int l, const idS
     return false;
 }
 
-bool excludeFullName(const pureExclusion_t& excl, int l, const idStr& name) {
+bool excludeFullName(const pureExclusion_t &excl, int l, const idStr &name) {
     if (l == excl.nameLen && !name.Icmp(excl.name)) {
         return true;
     }
@@ -263,7 +263,7 @@ static idInitExclusions initExclusions;
 typedef struct fileInPack_s {
     idStr               name;                       // name of the file
     ZPOS64_T            pos;                        // file info position in zip
-    struct fileInPack_s* next;                      // next file in the hash
+    struct fileInPack_s *next;                      // next file in the hash
 } fileInPack_t;
 
 typedef enum {
@@ -275,7 +275,7 @@ typedef enum {
 
 typedef struct {
     idList<int>         depends;
-    idList<idDict*>    mapDecls;
+    idList<idDict *>    mapDecls;
 } addonInfo_t;
 
 typedef struct {
@@ -287,11 +287,11 @@ typedef struct {
     bool                referenced;
     bool                addon;                      // this is an addon pack - addon_search tells if it's 'active'
     bool                addon_search;               // is in the search list
-    addonInfo_t*         addon_info;
+    addonInfo_t         *addon_info;
     pureStatus_t        pureStatus;
     bool                isNew;                      // for downloaded paks
-    fileInPack_t*        hashTable[FILE_HASH_SIZE];
-    fileInPack_t*        buildBuffer;
+    fileInPack_t        *hashTable[FILE_HASH_SIZE];
+    fileInPack_t        *buildBuffer;
 } pack_t;
 
 typedef struct {
@@ -300,9 +300,9 @@ typedef struct {
 } directory_t;
 
 typedef struct searchpath_s {
-    pack_t*             pack;                       // only one of pack / dir will be non NULL
-    directory_t*        dir;
-    struct searchpath_s* next;
+    pack_t             *pack;                       // only one of pack / dir will be non NULL
+    directory_t        *dir;
+    struct searchpath_s *next;
 } searchpath_t;
 
 // search flags when opening a file
@@ -324,8 +324,8 @@ class idDEntry : public idStrList {
     idDEntry() {}
     virtual             ~idDEntry() {}
 
-    bool                Matches(const char* directory, const char* extension) const;
-    void                Init(const char* directory, const char* extension, const idStrList& list);
+    bool                Matches(const char *directory, const char *extension) const;
+    void                Init(const char *directory, const char *extension, const idStrList &list);
     void                Clear(void);
 
   private:
@@ -343,34 +343,34 @@ class idFileSystemLocal : public idFileSystem {
     virtual void            Shutdown(bool reloading);
     virtual bool            IsInitialized(void) const;
     virtual bool            PerformingCopyFiles(void) const;
-    virtual idModList*      ListMods(void);
-    virtual void            FreeModList(idModList* modList);
-    virtual idFileList*     ListFiles(const char* relativePath, const char* extension, bool sort = false, bool fullRelativePath = false, const char* gamedir = NULL);
-    virtual idFileList*     ListFilesTree(const char* relativePath, const char* extension, bool sort = false, const char* gamedir = NULL);
-    virtual void            FreeFileList(idFileList* fileList);
-    virtual const char*     OSPathToRelativePath(const char* OSPath);
-    virtual const char*     RelativePathToOSPath(const char* relativePath, const char* basePath);
-    virtual const char*     BuildOSPath(const char* base, const char* game, const char* relativePath);
-    virtual void            CreateOSPath(const char* OSPath);
-    virtual bool            FileIsInPAK(const char* relativePath);
+    virtual idModList      *ListMods(void);
+    virtual void            FreeModList(idModList *modList);
+    virtual idFileList     *ListFiles(const char *relativePath, const char *extension, bool sort = false, bool fullRelativePath = false, const char *gamedir = NULL);
+    virtual idFileList     *ListFilesTree(const char *relativePath, const char *extension, bool sort = false, const char *gamedir = NULL);
+    virtual void            FreeFileList(idFileList *fileList);
+    virtual const char     *OSPathToRelativePath(const char *OSPath);
+    virtual const char     *RelativePathToOSPath(const char *relativePath, const char *basePath);
+    virtual const char     *BuildOSPath(const char *base, const char *game, const char *relativePath);
+    virtual void            CreateOSPath(const char *OSPath);
+    virtual bool            FileIsInPAK(const char *relativePath);
     virtual void            UpdatePureServerChecksums(void);
     virtual fsPureReply_t   SetPureServerChecksums(const int pureChecksums[ MAX_PURE_PAKS ], int missingChecksums[ MAX_PURE_PAKS ]);
     virtual void            GetPureServerChecksums(int checksums[ MAX_PURE_PAKS ]);
     virtual void            SetRestartChecksums(const int pureChecksums[ MAX_PURE_PAKS ]);
     virtual void            ClearPureChecksums(void);
-    virtual int             ReadFile(const char* relativePath, void** buffer, ID_TIME_T* timestamp);
-    virtual void            FreeFile(void* buffer);
-    virtual int             WriteFile(const char* relativePath, const void* buffer, int size, const char* basePath = "fs_savepath");
-    virtual void            RemoveFile(const char* relativePath);
-    virtual idFile*         OpenFileReadFlags(const char* relativePath, int searchFlags, pack_t** foundInPak = NULL, bool allowCopyFiles = true, const char* gamedir = NULL);
-    virtual idFile*         OpenFileRead(const char* relativePath, bool allowCopyFiles = true, const char* gamedir = NULL);
-    virtual idFile*         OpenFileWrite(const char* relativePath, const char* basePath = "fs_savepath");
-    virtual idFile*         OpenFileAppend(const char* relativePath, bool sync = false, const char* basePath = "fs_basepath");
-    virtual idFile*         OpenFileByMode(const char* relativePath, fsMode_t mode);
-    virtual idFile*         OpenExplicitFileRead(const char* OSPath);
-    virtual idFile*         OpenExplicitFileWrite(const char* OSPath);
-    virtual void            CloseFile(idFile* f);
-    virtual void            BackgroundDownload(backgroundDownload_t* bgl);
+    virtual int             ReadFile(const char *relativePath, void **buffer, ID_TIME_T *timestamp);
+    virtual void            FreeFile(void *buffer);
+    virtual int             WriteFile(const char *relativePath, const void *buffer, int size, const char *basePath = "fs_savepath");
+    virtual void            RemoveFile(const char *relativePath);
+    virtual idFile         *OpenFileReadFlags(const char *relativePath, int searchFlags, pack_t **foundInPak = NULL, bool allowCopyFiles = true, const char *gamedir = NULL);
+    virtual idFile         *OpenFileRead(const char *relativePath, bool allowCopyFiles = true, const char *gamedir = NULL);
+    virtual idFile         *OpenFileWrite(const char *relativePath, const char *basePath = "fs_savepath");
+    virtual idFile         *OpenFileAppend(const char *relativePath, bool sync = false, const char *basePath = "fs_basepath");
+    virtual idFile         *OpenFileByMode(const char *relativePath, fsMode_t mode);
+    virtual idFile         *OpenExplicitFileRead(const char *OSPath);
+    virtual idFile         *OpenExplicitFileWrite(const char *OSPath);
+    virtual void            CloseFile(idFile *f);
+    virtual void            BackgroundDownload(backgroundDownload_t *bgl);
     virtual void            ResetReadCount(void) {
         readCount = 0;
     }
@@ -380,36 +380,36 @@ class idFileSystemLocal : public idFileSystem {
     virtual int             GetReadCount(void) {
         return readCount;
     }
-    virtual void            FindDLL(const char* basename, char dllPath[ MAX_OSPATH ]);
+    virtual void            FindDLL(const char *basename, char dllPath[ MAX_OSPATH ]);
     virtual void            ClearDirCache(void);
     virtual bool            HasD3XP(void);
     virtual bool            RunningD3XP(void);
-    virtual void            CopyFile(const char* fromOSPath, const char* toOSPath);
+    virtual void            CopyFile(const char *fromOSPath, const char *toOSPath);
     virtual int             ValidateDownloadPakForChecksum(int checksum, char path[ MAX_STRING_CHARS ]);
-    virtual idFile*         MakeTemporaryFile(void);
-    virtual int             AddZipFile(const char* path);
-    virtual findFile_t      FindFile(const char* path, bool scheduleAddons);
+    virtual idFile         *MakeTemporaryFile(void);
+    virtual int             AddZipFile(const char *path);
+    virtual findFile_t      FindFile(const char *path, bool scheduleAddons);
     virtual int             GetNumMaps();
-    virtual const idDict*   GetMapDecl(int i);
-    virtual void            FindMapScreenshot(const char* path, char* buf, int len);
-    virtual bool            FilenameCompare(const char* s1, const char* s2) const;
+    virtual const idDict   *GetMapDecl(int i);
+    virtual void            FindMapScreenshot(const char *path, char *buf, int len);
+    virtual bool            FilenameCompare(const char *s1, const char *s2) const;
 
-    static void             Dir_f(const idCmdArgs& args);
-    static void             DirTree_f(const idCmdArgs& args);
-    static void             Path_f(const idCmdArgs& args);
-    static void             TouchFile_f(const idCmdArgs& args);
-    static void             TouchFileList_f(const idCmdArgs& args);
+    static void             Dir_f(const idCmdArgs &args);
+    static void             DirTree_f(const idCmdArgs &args);
+    static void             Path_f(const idCmdArgs &args);
+    static void             TouchFile_f(const idCmdArgs &args);
+    static void             TouchFileList_f(const idCmdArgs &args);
 
   private:
-    friend int              BackgroundDownloadThread(void* pexit);
+    friend int              BackgroundDownloadThread(void *pexit);
 
-    searchpath_t*           searchPaths;
+    searchpath_t           *searchPaths;
     int                     readCount;          // total bytes read
     int                     loadCount;          // total files read
     int                     loadStack;          // total files in memory
     idStr                   gameFolder;         // this will be a single name without separators
 
-    searchpath_t*            addonPaks;         // not loaded up, but we saw them
+    searchpath_t            *addonPaks;         // not loaded up, but we saw them
 
     idDict                  mapDict;            // for GetMapDecl
 
@@ -426,12 +426,12 @@ class idFileSystemLocal : public idFileSystem {
     static idCVar           fs_caseSensitiveOS;
     static idCVar           fs_searchAddons;
 
-    backgroundDownload_t*   backgroundDownloads;
+    backgroundDownload_t   *backgroundDownloads;
     backgroundDownload_t    defaultBackgroundDownload;
     xthreadInfo             backgroundThread;
     bool                    backgroundThread_exit;
 
-    idList<pack_t*>        serverPaks;
+    idList<pack_t *>        serverPaks;
     bool                    loadedFileFromDir;      // set to true once a file was loaded from a directory - can't switch to pure anymore
     idList<int>             restartChecksums;       // used during a restart to set things in right order
     idList<int>             addonChecksums;         // list of checksums that should go to the search list directly ( for restarts )
@@ -443,37 +443,37 @@ class idFileSystemLocal : public idFileSystem {
     int                     d3xp;   // 0: didn't check, -1: not installed, 1: installed
 
   private:
-    void                    ReplaceSeparators(idStr& path, char sep = PATHSEPERATOR_CHAR);
-    int                     HashFileName(const char* fname) const;
-    int                     ListOSFiles(const char* directory, const char* extension, idStrList& list);
-    FILE*                   OpenOSFile(const char* name, const char* mode, idStr* caseSensitiveName = NULL);
-    FILE*                   OpenOSFileCorrectName(idStr& path, const char* mode);
-    int                     DirectFileLength(FILE* o);
-    void                    CopyFile(idFile* src, const char* toOSPath);
-    int                     AddUnique(const char* name, idStrList& list, idHashIndex& hashIndex) const;
-    void                    GetExtensionList(const char* extension, idStrList& extensionList) const;
-    int                     GetFileList(const char* relativePath, const idStrList& extensions, idStrList& list, idHashIndex& hashIndex, bool fullRelativePath, const char* gamedir = NULL);
+    void                    ReplaceSeparators(idStr &path, char sep = PATHSEPERATOR_CHAR);
+    int                     HashFileName(const char *fname) const;
+    int                     ListOSFiles(const char *directory, const char *extension, idStrList &list);
+    FILE                   *OpenOSFile(const char *name, const char *mode, idStr *caseSensitiveName = NULL);
+    FILE                   *OpenOSFileCorrectName(idStr &path, const char *mode);
+    int                     DirectFileLength(FILE *o);
+    void                    CopyFile(idFile *src, const char *toOSPath);
+    int                     AddUnique(const char *name, idStrList &list, idHashIndex &hashIndex) const;
+    void                    GetExtensionList(const char *extension, idStrList &extensionList) const;
+    int                     GetFileList(const char *relativePath, const idStrList &extensions, idStrList &list, idHashIndex &hashIndex, bool fullRelativePath, const char *gamedir = NULL);
 
-    int                     GetFileListTree(const char* relativePath, const idStrList& extensions, idStrList& list, idHashIndex& hashIndex, const char* gamedir = NULL);
-    pack_t*                 LoadZipFile(const char* zipfile);
-    void                    AddGameDirectory(const char* path, const char* dir);
-    void                    SetupGameDirectories(const char* gameName);
+    int                     GetFileListTree(const char *relativePath, const idStrList &extensions, idStrList &list, idHashIndex &hashIndex, const char *gamedir = NULL);
+    pack_t                 *LoadZipFile(const char *zipfile);
+    void                    AddGameDirectory(const char *path, const char *dir);
+    void                    SetupGameDirectories(const char *gameName);
     void                    Startup(void);
     // some files can be obtained from directories without compromising si_pure
-    bool                    FileAllowedFromDir(const char* path);
+    bool                    FileAllowedFromDir(const char *path);
     // searches all the paks, no pure check
-    pack_t*                 GetPackForChecksum(int checksum, bool searchAddons = false);
+    pack_t                 *GetPackForChecksum(int checksum, bool searchAddons = false);
     // searches all the paks, no pure check
-    pack_t*                 FindPakForFileChecksum(const char* relativePath, int fileChecksum, bool bReference);
-    idFile_InZip*           ReadFileFromZip(pack_t* pak, fileInPack_t* pakFile, const char* relativePath);
-    int                     GetFileChecksum(idFile* file);
-    pureStatus_t            GetPackStatus(pack_t* pak);
-    addonInfo_t*            ParseAddonDef(const char* buf, const int len);
-    void                    FollowAddonDependencies(pack_t* pak);
+    pack_t                 *FindPakForFileChecksum(const char *relativePath, int fileChecksum, bool bReference);
+    idFile_InZip           *ReadFileFromZip(pack_t *pak, fileInPack_t *pakFile, const char *relativePath);
+    int                     GetFileChecksum(idFile *file);
+    pureStatus_t            GetPackStatus(pack_t *pak);
+    addonInfo_t            *ParseAddonDef(const char *buf, const int len);
+    void                    FollowAddonDependencies(pack_t *pak);
 
-    static size_t           CurlWriteFunction(void* ptr, size_t size, size_t nmemb, void* stream);
+    static size_t           CurlWriteFunction(void *ptr, size_t size, size_t nmemb, void *stream);
     // curl_progress_callback in curl.h
-    static int              CurlProgressFunction(void* clientp, double dltotal, double dlnow, double ultotal, double ulnow);
+    static int              CurlProgressFunction(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 };
 
 idCVar  idFileSystemLocal::fs_restrict("fs_restrict", "", CVAR_SYSTEM | CVAR_INIT | CVAR_BOOL, "");
@@ -494,7 +494,7 @@ idCVar  idFileSystemLocal::fs_game_base("fs_game_base", "", CVAR_SYSTEM | CVAR_I
 idCVar  idFileSystemLocal::fs_searchAddons("fs_searchAddons", "0", CVAR_SYSTEM | CVAR_BOOL, "search all addon pk4s ( disables addon functionality )");
 
 idFileSystemLocal   fileSystemLocal;
-idFileSystem*       fileSystem = &fileSystemLocal;
+idFileSystem       *fileSystem = &fileSystemLocal;
 
 /*
 ================
@@ -522,7 +522,7 @@ idFileSystemLocal::HashFileName
 return a hash value for the filename
 ================
 */
-int idFileSystemLocal::HashFileName(const char* fname) const {
+int idFileSystemLocal::HashFileName(const char *fname) const {
     int     i;
     int     hash;
     char    letter;
@@ -558,7 +558,7 @@ Ignore case and separator char distinctions
 RETURNS false WHEN EQUAL THIS IS SO STUPID IT HURTS!
 ===========
 */
-bool idFileSystemLocal::FilenameCompare(const char* s1, const char* s2) const {
+bool idFileSystemLocal::FilenameCompare(const char *s1, const char *s2) const {
     int     c1, c2;
 
     do {
@@ -595,9 +595,9 @@ idFileSystemLocal::OpenOSFile
 optional caseSensitiveName is set to case sensitive file name as found on disc (fs_caseSensitiveOS only)
 ================
 */
-FILE* idFileSystemLocal::OpenOSFile(const char* fileName, const char* mode, idStr* caseSensitiveName) {
+FILE *idFileSystemLocal::OpenOSFile(const char *fileName, const char *mode, idStr *caseSensitiveName) {
     int i;
-    FILE* fp;
+    FILE *fp;
     idStr fpath, entry;
     idStrList list;
 
@@ -657,9 +657,9 @@ FILE* idFileSystemLocal::OpenOSFile(const char* fileName, const char* mode, idSt
 idFileSystemLocal::OpenOSFileCorrectName
 ================
 */
-FILE* idFileSystemLocal::OpenOSFileCorrectName(idStr& path, const char* mode) {
+FILE *idFileSystemLocal::OpenOSFileCorrectName(idStr &path, const char *mode) {
     idStr caseName;
-    FILE* f = OpenOSFile(path.c_str(), mode, &caseName);
+    FILE *f = OpenOSFile(path.c_str(), mode, &caseName);
 
     if (f) {
         path.StripFilename();
@@ -675,7 +675,7 @@ FILE* idFileSystemLocal::OpenOSFileCorrectName(idStr& path, const char* mode) {
 idFileSystemLocal::DirectFileLength
 ================
 */
-int idFileSystemLocal::DirectFileLength(FILE* o) {
+int idFileSystemLocal::DirectFileLength(FILE *o) {
     int     pos;
     int     end;
 
@@ -693,8 +693,8 @@ idFileSystemLocal::CreateOSPath
 Creates any directories needed to store the given filename
 ============
 */
-void idFileSystemLocal::CreateOSPath(const char* OSPath) {
-    char*    ofs;
+void idFileSystemLocal::CreateOSPath(const char *OSPath) {
+    char    *ofs;
 
     // make absolutely sure that it can't back up the path
     // FIXME: what about c: ?
@@ -724,10 +724,10 @@ idFileSystemLocal::CopyFile
 Copy a fully specified file from one place to another
 =================
 */
-void idFileSystemLocal::CopyFile(const char* fromOSPath, const char* toOSPath) {
-    FILE*    f;
+void idFileSystemLocal::CopyFile(const char *fromOSPath, const char *toOSPath) {
+    FILE    *f;
     int     len;
-    byte*    buf;
+    byte    *buf;
 
     common->Printf("copy %s to %s\n", fromOSPath, toOSPath);
     f = OpenOSFile(fromOSPath, "rb");
@@ -740,7 +740,7 @@ void idFileSystemLocal::CopyFile(const char* fromOSPath, const char* toOSPath) {
     len = ftell(f);
     fseek(f, 0, SEEK_SET);
 
-    buf = (byte*)Mem_Alloc(len);
+    buf = (byte *)Mem_Alloc(len);
 
     if (fread(buf, 1, len, f) != (unsigned int)len) {
         common->FatalError("short read in idFileSystemLocal::CopyFile()\n");
@@ -770,17 +770,17 @@ void idFileSystemLocal::CopyFile(const char* fromOSPath, const char* toOSPath) {
 idFileSystemLocal::CopyFile
 =================
 */
-void idFileSystemLocal::CopyFile(idFile* src, const char* toOSPath) {
-    FILE*    f;
+void idFileSystemLocal::CopyFile(idFile *src, const char *toOSPath) {
+    FILE    *f;
     int     len;
-    byte*    buf;
+    byte    *buf;
 
     common->Printf("copy %s to %s\n", src->GetName(), toOSPath);
     src->Seek(0, FS_SEEK_END);
     len = src->Tell();
     src->Seek(0, FS_SEEK_SET);
 
-    buf = (byte*)Mem_Alloc(len);
+    buf = (byte *)Mem_Alloc(len);
 
     if (src->Read(buf, len) != len) {
         common->FatalError("Short read in idFileSystemLocal::CopyFile()\n");
@@ -810,8 +810,8 @@ idFileSystemLocal::ReplaceSeparators
 Fix things up differently for win/unix/mac
 ====================
 */
-void idFileSystemLocal::ReplaceSeparators(idStr& path, char sep) {
-    char* s;
+void idFileSystemLocal::ReplaceSeparators(idStr &path, char sep) {
+    char *s;
 
     for (s = &path[ 0 ]; *s ; s++) {
         if (*s == '/' || *s == '\\') {
@@ -825,7 +825,7 @@ void idFileSystemLocal::ReplaceSeparators(idStr& path, char sep) {
 idFileSystemLocal::BuildOSPath
 ===================
 */
-const char* idFileSystemLocal::BuildOSPath(const char* base, const char* game, const char* relativePath) {
+const char *idFileSystemLocal::BuildOSPath(const char *base, const char *game, const char *relativePath) {
     static char OSPath[MAX_STRING_CHARS];
     idStr newPath;
 
@@ -875,9 +875,9 @@ search paths.
 
 ================
 */
-const char* idFileSystemLocal::OSPathToRelativePath(const char* OSPath) {
+const char *idFileSystemLocal::OSPathToRelativePath(const char *OSPath) {
     static char relativePath[MAX_STRING_CHARS];
-    const char* s, *base;
+    const char *s, *base;
 
     // skip a drive letter?
 
@@ -906,7 +906,7 @@ const char* idFileSystemLocal::OSPathToRelativePath(const char* OSPath) {
 
     // fs_game and fs_game_base support - look for first complete name with a mod path
     // ( fs_game searched before fs_game_base )
-    const char* fsgame = NULL;
+    const char *fsgame = NULL;
     int igame = 0;
 
     for (igame = 0; igame < 2; igame++) {
@@ -968,8 +968,8 @@ idFileSystemLocal::RelativePathToOSPath
 Returns a fully qualified path that can be used with stdio libraries
 =====================
 */
-const char* idFileSystemLocal::RelativePathToOSPath(const char* relativePath, const char* basePath) {
-    const char* path = cvarSystem->GetCVarString(basePath);
+const char *idFileSystemLocal::RelativePathToOSPath(const char *relativePath, const char *basePath) {
+    const char *path = cvarSystem->GetCVarString(basePath);
 
     if (!path[0]) {
         path = fs_savepath.GetString();
@@ -983,7 +983,7 @@ const char* idFileSystemLocal::RelativePathToOSPath(const char* relativePath, co
 idFileSystemLocal::RemoveFile
 =================
 */
-void idFileSystemLocal::RemoveFile(const char* relativePath) {
+void idFileSystemLocal::RemoveFile(const char *relativePath) {
     idStr OSPath;
 
     if (fs_devpath.GetString()[0]) {
@@ -1002,10 +1002,10 @@ void idFileSystemLocal::RemoveFile(const char* relativePath) {
 idFileSystemLocal::FileIsInPAK
 ================
 */
-bool idFileSystemLocal::FileIsInPAK(const char* relativePath) {
-    searchpath_t*    search;
-    pack_t*          pak;
-    fileInPack_t*    pakFile;
+bool idFileSystemLocal::FileIsInPAK(const char *relativePath) {
+    searchpath_t    *search;
+    pack_t          *pak;
+    fileInPack_t    *pakFile;
     int             hash;
 
     if (!searchPaths) {
@@ -1074,9 +1074,9 @@ a null buffer will just return the file length and time without loading
 timestamp can be NULL if not required
 ============
 */
-int idFileSystemLocal::ReadFile(const char* relativePath, void** buffer, ID_TIME_T* timestamp) {
-    idFile*     f;
-    byte*       buf;
+int idFileSystemLocal::ReadFile(const char *relativePath, void **buffer, ID_TIME_T *timestamp) {
+    idFile     *f;
+    byte       *buf;
     int         len;
     bool        isConfig;
 
@@ -1118,7 +1118,7 @@ int idFileSystemLocal::ReadFile(const char* relativePath, void** buffer, ID_TIME
                 return -1;
             }
 
-            buf = (byte*)Mem_ClearedAlloc(len+1);
+            buf = (byte *)Mem_ClearedAlloc(len+1);
             *buffer = buf;
             r = eventLoop->com_journalDataFile->Read(buf, len);
 
@@ -1160,7 +1160,7 @@ int idFileSystemLocal::ReadFile(const char* relativePath, void** buffer, ID_TIME
     loadCount++;
     loadStack++;
 
-    buf = (byte*)Mem_ClearedAlloc(len+1);
+    buf = (byte *)Mem_ClearedAlloc(len+1);
     *buffer = buf;
 
     f->Read(buf, len);
@@ -1185,7 +1185,7 @@ int idFileSystemLocal::ReadFile(const char* relativePath, void** buffer, ID_TIME
 idFileSystemLocal::FreeFile
 =============
 */
-void idFileSystemLocal::FreeFile(void* buffer) {
+void idFileSystemLocal::FreeFile(void *buffer) {
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
     }
@@ -1206,8 +1206,8 @@ idFileSystemLocal::WriteFile
 Filenames are relative to the search path
 ============
 */
-int idFileSystemLocal::WriteFile(const char* relativePath, const void* buffer, int size, const char* basePath) {
-    idFile* f;
+int idFileSystemLocal::WriteFile(const char *relativePath, const void *buffer, int size, const char *basePath) {
+    idFile *f;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -1236,10 +1236,10 @@ int idFileSystemLocal::WriteFile(const char* relativePath, const void* buffer, i
 idFileSystemLocal::ParseAddonDef
 =================
 */
-addonInfo_t* idFileSystemLocal::ParseAddonDef(const char* buf, const int len) {
+addonInfo_t *idFileSystemLocal::ParseAddonDef(const char *buf, const int len) {
     idLexer     src;
     idToken     token, token2;
-    addonInfo_t* info;
+    addonInfo_t *info;
 
     src.LoadMemory(buf, len, "<addon.conf>");
     src.SetFlags(DECL_LEXER_FLAGS);
@@ -1297,7 +1297,7 @@ addonInfo_t* idFileSystemLocal::ParseAddonDef(const char* buf, const int len) {
             return NULL;
         }
 
-        idDict* dict = new idDict;
+        idDict *dict = new idDict;
         dict->Set("path", token.c_str());
 
         if (!src.ReadToken(&token)) {
@@ -1352,9 +1352,9 @@ addonInfo_t* idFileSystemLocal::ParseAddonDef(const char* buf, const int len) {
 idFileSystemLocal::LoadZipFile
 =================
 */
-pack_t* idFileSystemLocal::LoadZipFile(const char* zipfile) {
-    fileInPack_t*   buildBuffer;
-    pack_t*         pack;
+pack_t *idFileSystemLocal::LoadZipFile(const char *zipfile) {
+    fileInPack_t   *buildBuffer;
+    pack_t         *pack;
     unzFile         uf;
     int             err;
     unz_global_info64 gi;
@@ -1363,11 +1363,11 @@ pack_t* idFileSystemLocal::LoadZipFile(const char* zipfile) {
     int             i;
     int             hash;
     int             fs_numHeaderLongs;
-    int*            fs_headerLongs;
-    FILE*            f;
+    int            *fs_headerLongs;
+    FILE            *f;
     int             len;
     int             confHash;
-    fileInPack_t*    pakFile;
+    fileInPack_t    *pakFile;
 
     f = OpenOSFile(zipfile, "rb");
 
@@ -1409,7 +1409,7 @@ pack_t* idFileSystemLocal::LoadZipFile(const char* zipfile) {
     pack->length = len;
 
     unzGoToFirstFile(uf);
-    fs_headerLongs = (int*)Mem_ClearedAlloc(gi.number_entry * sizeof(int));
+    fs_headerLongs = (int *)Mem_ClearedAlloc(gi.number_entry * sizeof(int));
 
     for (i = 0; i < (int)gi.number_entry; i++) {
         err = unzGetCurrentFileInfo64(uf, &file_info, filename_inzip, sizeof(filename_inzip), NULL, 0, NULL, 0);
@@ -1455,13 +1455,13 @@ pack_t* idFileSystemLocal::LoadZipFile(const char* zipfile) {
     for (pakFile = pack->hashTable[confHash]; pakFile; pakFile = pakFile->next) {
         if (!FilenameCompare(pakFile->name, ADDON_CONFIG)) {
             pack->addon = true;
-            idFile_InZip* file = ReadFileFromZip(pack, pakFile, ADDON_CONFIG);
+            idFile_InZip *file = ReadFileFromZip(pack, pakFile, ADDON_CONFIG);
 
             // may be just an empty file if you don't bother about the mapDef
             if (file && file->Length()) {
-                char* buf;
+                char *buf;
                 buf = new char[ file->Length() + 1 ];
-                file->Read((void*)buf, file->Length());
+                file->Read((void *)buf, file->Length());
                 buf[ file->Length() ] = '\0';
                 pack->addon_info = ParseAddonDef(buf, file->Length());
                 delete[] buf;
@@ -1490,10 +1490,10 @@ adds a downloaded pak file to the list so we can work out what we have and what 
 the isNew flag is set to true, indicating that we cannot add this pak to the search lists without a restart
 ===============
 */
-int idFileSystemLocal::AddZipFile(const char* path) {
+int idFileSystemLocal::AddZipFile(const char *path) {
     idStr           fullpath = fs_savepath.GetString();
-    pack_t*          pak;
-    searchpath_t*    search, *last;
+    pack_t          *pak;
+    searchpath_t    *search, *last;
 
     fullpath.AppendPath(path);
     pak = LoadZipFile(fullpath);
@@ -1525,7 +1525,7 @@ int idFileSystemLocal::AddZipFile(const char* path) {
 idFileSystemLocal::AddUnique
 ===============
 */
-int idFileSystemLocal::AddUnique(const char* name, idStrList& list, idHashIndex& hashIndex) const {
+int idFileSystemLocal::AddUnique(const char *name, idStrList &list, idHashIndex &hashIndex) const {
     int i, hashKey;
 
     hashKey = hashIndex.GenerateKey(name);
@@ -1546,7 +1546,7 @@ int idFileSystemLocal::AddUnique(const char* name, idStrList& list, idHashIndex&
 idFileSystemLocal::GetExtensionList
 ===============
 */
-void idFileSystemLocal::GetExtensionList(const char* extension, idStrList& extensionList) const {
+void idFileSystemLocal::GetExtensionList(const char *extension, idStrList &extensionList) const {
     int s, e, l;
 
     l = idStr::Length(extension);
@@ -1573,14 +1573,14 @@ Does not clear the list first so this can be used to progressively build a file 
 When 'sort' is true only the new files added to the list are sorted.
 ===============
 */
-int idFileSystemLocal::GetFileList(const char* relativePath, const idStrList& extensions, idStrList& list, idHashIndex& hashIndex, bool fullRelativePath, const char* gamedir) {
-    searchpath_t*   search;
-    fileInPack_t*   buildBuffer;
+int idFileSystemLocal::GetFileList(const char *relativePath, const idStrList &extensions, idStrList &list, idHashIndex &hashIndex, bool fullRelativePath, const char *gamedir) {
+    searchpath_t   *search;
+    fileInPack_t   *buildBuffer;
     int             i, j;
     int             pathLength;
     int             length;
-    const char*     name;
-    pack_t*         pak;
+    const char     *name;
+    pack_t         *pak;
     idStr           work;
 
     if (!searchPaths) {
@@ -1721,11 +1721,11 @@ int idFileSystemLocal::GetFileList(const char* relativePath, const idStrList& ex
 idFileSystemLocal::ListFiles
 ===============
 */
-idFileList* idFileSystemLocal::ListFiles(const char* relativePath, const char* extension, bool sort, bool fullRelativePath, const char* gamedir) {
+idFileList *idFileSystemLocal::ListFiles(const char *relativePath, const char *extension, bool sort, bool fullRelativePath, const char *gamedir) {
     idHashIndex hashIndex(4096, 4096);
     idStrList extensionList;
 
-    idFileList* fileList = new idFileList;
+    idFileList *fileList = new idFileList;
     fileList->basePath = relativePath;
 
     GetExtensionList(extension, extensionList);
@@ -1744,7 +1744,7 @@ idFileList* idFileSystemLocal::ListFiles(const char* relativePath, const char* e
 idFileSystemLocal::GetFileListTree
 ===============
 */
-int idFileSystemLocal::GetFileListTree(const char* relativePath, const idStrList& extensions, idStrList& list, idHashIndex& hashIndex, const char* gamedir) {
+int idFileSystemLocal::GetFileListTree(const char *relativePath, const idStrList &extensions, idStrList &list, idHashIndex &hashIndex, const char *gamedir) {
     int i;
     idStrList slash, folders(128);
     idHashIndex folderHashIndex(1024, 128);
@@ -1776,11 +1776,11 @@ int idFileSystemLocal::GetFileListTree(const char* relativePath, const idStrList
 idFileSystemLocal::ListFilesTree
 ===============
 */
-idFileList* idFileSystemLocal::ListFilesTree(const char* relativePath, const char* extension, bool sort, const char* gamedir) {
+idFileList *idFileSystemLocal::ListFilesTree(const char *relativePath, const char *extension, bool sort, const char *gamedir) {
     idHashIndex hashIndex(4096, 4096);
     idStrList extensionList;
 
-    idFileList* fileList = new idFileList();
+    idFileList *fileList = new idFileList();
     fileList->basePath = relativePath;
     fileList->list.SetGranularity(4096);
 
@@ -1800,7 +1800,7 @@ idFileList* idFileSystemLocal::ListFilesTree(const char* relativePath, const cha
 idFileSystemLocal::FreeFileList
 ===============
 */
-void idFileSystemLocal::FreeFileList(idFileList* fileList) {
+void idFileSystemLocal::FreeFileList(idFileList *fileList) {
     delete fileList;
 }
 
@@ -1809,7 +1809,7 @@ void idFileSystemLocal::FreeFileList(idFileList* fileList) {
 idFileSystemLocal::ListMods
 ===============
 */
-idModList* idFileSystemLocal::ListMods(void) {
+idModList *idFileSystemLocal::ListMods(void) {
     int         i;
     const int   MAX_DESCRIPTION = 256;
     char        desc[ MAX_DESCRIPTION ];
@@ -1818,13 +1818,13 @@ idModList* idFileSystemLocal::ListMods(void) {
     idStrList   files;
     idStrList   pk4s;
 
-    idModList*   list = new idModList;
+    idModList   *list = new idModList;
 
     // TODO: Add games list (base, q4base and more supported games directories, like iwads in previous DooMs)
     const idStr baseFolder("/base");
 
 #define SEARCH_LEN 4
-    const char* search[] = {
+    const char *search[] = {
         fs_savepath.GetString(),
         fs_devpath.GetString(),
         fs_basepath.GetString(),
@@ -1877,7 +1877,7 @@ idModList* idFileSystemLocal::ListMods(void) {
         for (isearch = 0; isearch < 4; isearch++) {
 
             idStr descfile = BuildOSPath(search[ isearch ] + baseFolder, list->mods[ i ], "it4mod.txt");
-            FILE* f = OpenOSFile(descfile, "r");
+            FILE *f = OpenOSFile(descfile, "r");
 
             if (f) {
                 if (fgets(desc, MAX_DESCRIPTION, f)) {
@@ -1910,7 +1910,7 @@ idModList* idFileSystemLocal::ListMods(void) {
 idFileSystemLocal::FreeModList
 ===============
 */
-void idFileSystemLocal::FreeModList(idModList* modList) {
+void idFileSystemLocal::FreeModList(idModList *modList) {
     delete modList;
 }
 
@@ -1919,7 +1919,7 @@ void idFileSystemLocal::FreeModList(idModList* modList) {
 idDEntry::Matches
 ===============
 */
-bool idDEntry::Matches(const char* directory, const char* extension) const {
+bool idDEntry::Matches(const char *directory, const char *extension) const {
     if (!idDEntry::directory.Icmp(directory) && !idDEntry::extension.Icmp(extension)) {
         return true;
     }
@@ -1932,7 +1932,7 @@ bool idDEntry::Matches(const char* directory, const char* extension) const {
 idDEntry::Init
 ===============
 */
-void idDEntry::Init(const char* directory, const char* extension, const idStrList& list) {
+void idDEntry::Init(const char *directory, const char *extension, const idStrList &list) {
     idDEntry::directory = directory;
     idDEntry::extension = extension;
     idStrList::operator=(list);
@@ -1957,7 +1957,7 @@ idFileSystemLocal::ListOSFiles
  optionally, perform some caching of the entries
 ===============
 */
-int idFileSystemLocal::ListOSFiles(const char* directory, const char* extension, idStrList& list) {
+int idFileSystemLocal::ListOSFiles(const char *directory, const char *extension, idStrList &list) {
     int i, j, ret;
 
     if (!extension) {
@@ -2012,10 +2012,10 @@ int idFileSystemLocal::ListOSFiles(const char* directory, const char* extension,
 idFileSystemLocal::Dir_f
 ================
 */
-void idFileSystemLocal::Dir_f(const idCmdArgs& args) {
+void idFileSystemLocal::Dir_f(const idCmdArgs &args) {
     idStr       relativePath;
     idStr       extension;
-    idFileList* fileList;
+    idFileList *fileList;
     int         i;
 
     if (args.Argc() < 2 || args.Argc() > 3) {
@@ -2057,10 +2057,10 @@ void idFileSystemLocal::Dir_f(const idCmdArgs& args) {
 idFileSystemLocal::DirTree_f
 ================
 */
-void idFileSystemLocal::DirTree_f(const idCmdArgs& args) {
+void idFileSystemLocal::DirTree_f(const idCmdArgs &args) {
     idStr       relativePath;
     idStr       extension;
-    idFileList* fileList;
+    idFileList *fileList;
     int         i;
 
     if (args.Argc() < 2 || args.Argc() > 3) {
@@ -2102,8 +2102,8 @@ void idFileSystemLocal::DirTree_f(const idCmdArgs& args) {
 idFileSystemLocal::Path_f
 ============
 */
-void idFileSystemLocal::Path_f(const idCmdArgs& args) {
-    searchpath_t* sp;
+void idFileSystemLocal::Path_f(const idCmdArgs &args) {
+    searchpath_t *sp;
     idStr status;
 
     common->Printf("Current search path:\n");
@@ -2156,8 +2156,8 @@ The only purpose of this function is to allow game script files to copy
 arbitrary files furing an "fs_copyfiles 1" run.
 ============
 */
-void idFileSystemLocal::TouchFile_f(const idCmdArgs& args) {
-    idFile* f;
+void idFileSystemLocal::TouchFile_f(const idCmdArgs &args) {
+    idFile *f;
 
     if (args.Argc() != 2) {
         common->Printf("Usage: touchFile <file>\n");
@@ -2178,17 +2178,17 @@ idFileSystemLocal::TouchFileList_f
 Takes a text file and touches every file in it, use one file per line.
 ============
 */
-void idFileSystemLocal::TouchFileList_f(const idCmdArgs& args) {
+void idFileSystemLocal::TouchFileList_f(const idCmdArgs &args) {
 
     if (args.Argc() != 2) {
         common->Printf("Usage: touchFileList <filename>\n");
         return;
     }
 
-    const char* buffer = NULL;
+    const char *buffer = NULL;
     idParser src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
-    if (fileSystem->ReadFile(args.Argv(1), (void**)&buffer, NULL) && buffer) {
+    if (fileSystem->ReadFile(args.Argv(1), (void **)&buffer, NULL) && buffer) {
         src.LoadMemory(buffer, strlen(buffer), args.Argv(1));
 
         if (src.IsLoaded()) {
@@ -2197,7 +2197,7 @@ void idFileSystemLocal::TouchFileList_f(const idCmdArgs& args) {
             while (src.ReadToken(&token)) {
                 common->Printf("%s\n", token.c_str());
                 session->UpdateScreen();
-                idFile* f = fileSystemLocal.OpenFileRead(token);
+                idFile *f = fileSystemLocal.OpenFileRead(token);
 
                 if (f) {
                     fileSystemLocal.CloseFile(f);
@@ -2216,10 +2216,10 @@ idFileSystemLocal::AddGameDirectory
 Sets gameFolder, adds the directory to the head of the search paths, then loads any pk4 files.
 ================
 */
-void idFileSystemLocal::AddGameDirectory(const char* path, const char* dir) {
+void idFileSystemLocal::AddGameDirectory(const char *path, const char *dir) {
     int             i;
-    searchpath_t*   search;
-    pack_t*         pak;
+    searchpath_t   *search;
+    pack_t         *pak;
     idStr           pakfile;
     idStrList       pakfiles;
 
@@ -2284,7 +2284,7 @@ idFileSystemLocal::SetupGameDirectories
   Takes care of the correct search order.
 ================
 */
-void idFileSystemLocal::SetupGameDirectories(const char* gameName) {
+void idFileSystemLocal::SetupGameDirectories(const char *gameName) {
     // setup cdpath
     if (fs_cdpath.GetString()[0]) {
         AddGameDirectory(fs_cdpath.GetString(), gameName);
@@ -2316,7 +2316,7 @@ void idFileSystemLocal::SetupGameDirectories(const char* gameName) {
 idFileSystemLocal::FollowDependencies
 ===============
 */
-void idFileSystemLocal::FollowAddonDependencies(pack_t* pak) {
+void idFileSystemLocal::FollowAddonDependencies(pack_t *pak) {
     assert(pak);
 
     if (!pak->addon_info || !pak->addon_info->depends.Num()) {
@@ -2326,7 +2326,7 @@ void idFileSystemLocal::FollowAddonDependencies(pack_t* pak) {
     int i, num = pak->addon_info->depends.Num();
 
     for (i = 0; i < num; i++) {
-        pack_t* deppak = GetPackForChecksum(pak->addon_info->depends[ i ], true);
+        pack_t *deppak = GetPackForChecksum(pak->addon_info->depends[ i ], true);
 
         if (deppak) {
             // make sure it hasn't been marked for search already
@@ -2357,9 +2357,9 @@ idFileSystemLocal::Startup
 ================
 */
 void idFileSystemLocal::Startup(void) {
-    searchpath_t**    search;
+    searchpath_t    **search;
     int             i;
-    pack_t*          pak;
+    pack_t          *pak;
     int             addon_index;
 
     common->Printf("----- Initializing File System -----\n");
@@ -2437,7 +2437,7 @@ void idFileSystemLocal::Startup(void) {
             search = &((*search)->next);
         } else {
             // remove from search list, put in addons list
-            searchpath_t* paksearch = *search;
+            searchpath_t *paksearch = *search;
             *search = (*search)->next;
             paksearch->next = addonPaks;
             addonPaks = paksearch;
@@ -2473,7 +2473,7 @@ void idFileSystemLocal::Startup(void) {
                     continue;
                 } else {
                     // this pak will be on the pure list, but order is not right yet
-                    searchpath_t*    aux;
+                    searchpath_t    *aux;
                     aux = (*search)->next;
 
                     if (!aux) {
@@ -2501,7 +2501,7 @@ void idFileSystemLocal::Startup(void) {
                     }
 
                     // put this search path at the end of the list
-                    searchpath_t* search_end;
+                    searchpath_t *search_end;
                     search_end = (*search)->next;
 
                     while (search_end->next) {
@@ -2560,7 +2560,7 @@ idFileSystemLocal::UpdatePureServerChecksums
 =====================
 */
 void idFileSystemLocal::UpdatePureServerChecksums(void) {
-    searchpath_t*    search;
+    searchpath_t    *search;
     int             i;
     pureStatus_t    status;
 
@@ -2605,8 +2605,8 @@ void idFileSystemLocal::UpdatePureServerChecksums(void) {
 idFileSystemLocal::GetPackForChecksum
 =====================
 */
-pack_t* idFileSystemLocal::GetPackForChecksum(int checksum, bool searchAddons) {
-    searchpath_t*    search;
+pack_t *idFileSystemLocal::GetPackForChecksum(int checksum, bool searchAddons) {
+    searchpath_t    *search;
 
     for (search = searchPaths; search; search = search->next) {
         if (!search->pack) {
@@ -2641,7 +2641,7 @@ int idFileSystemLocal::ValidateDownloadPakForChecksum(int checksum, char path[ M
     idStrList   testList;
     idStr       name;
     idStr       relativePath;
-    pack_t*      pak = GetPackForChecksum(checksum);
+    pack_t      *pak = GetPackForChecksum(checksum);
 
     if (!pak) {
         return 0;
@@ -2705,7 +2705,7 @@ DLL:
 =====================
 */
 fsPureReply_t idFileSystemLocal::SetPureServerChecksums(const int pureChecksums[ MAX_PURE_PAKS ], int missingChecksums[ MAX_PURE_PAKS ]) {
-    pack_t*          pack;
+    pack_t          *pack;
     int             i, j, imissing;
     bool            success = true;
     bool            canPrepend = true;
@@ -2842,7 +2842,7 @@ idFileSystemLocal::SetRestartChecksums
 */
 void idFileSystemLocal::SetRestartChecksums(const int pureChecksums[ MAX_PURE_PAKS ]) {
     int     i;
-    pack_t*  pack;
+    pack_t  *pack;
 
     restartChecksums.Clear();
     i = 0;
@@ -2963,7 +2963,7 @@ Frees all resources and closes all files
 ================
 */
 void idFileSystemLocal::Shutdown(bool reloading) {
-    searchpath_t* sp, *next, *loop;
+    searchpath_t *sp, *next, *loop;
 
     backgroundThread_exit = true;
     Sys_TriggerEvent();
@@ -3043,7 +3043,7 @@ Opening files
 idFileSystemLocal::FileAllowedFromDir
 ===========
 */
-bool idFileSystemLocal::FileAllowedFromDir(const char* path) {
+bool idFileSystemLocal::FileAllowedFromDir(const char *path) {
     unsigned int l;
 
     l = strlen(path);
@@ -3093,9 +3093,9 @@ bool idFileSystemLocal::FileAllowedFromDir(const char* path) {
 idFileSystemLocal::GetPackStatus
 ===========
 */
-pureStatus_t idFileSystemLocal::GetPackStatus(pack_t* pak) {
+pureStatus_t idFileSystemLocal::GetPackStatus(pack_t *pak) {
     int             i, l, hashindex;
-    fileInPack_t*    file;
+    fileInPack_t    *file;
     bool            abrt;
     idStr           name;
 
@@ -3158,7 +3158,7 @@ pureStatus_t idFileSystemLocal::GetPackStatus(pack_t* pak) {
 idFileSystemLocal::ReadFileFromZip
 ===========
 */
-idFile_InZip* idFileSystemLocal::ReadFileFromZip(pack_t* pak, fileInPack_t* pakFile, const char* relativePath) {
+idFile_InZip *idFileSystemLocal::ReadFileFromZip(pack_t *pak, fileInPack_t *pakFile, const char *relativePath) {
     // relativePath == pakFile->name according to FilenameCompare()
     // pakFile->Pos is position of that file within the zip
 
@@ -3182,7 +3182,7 @@ idFile_InZip* idFileSystemLocal::ReadFileFromZip(pack_t* pak, fileInPack_t* pakF
     }
 
     // create idFile_InZip and set fields accordingly
-    idFile_InZip* file = new idFile_InZip();
+    idFile_InZip *file = new idFile_InZip();
     file->z = uf;
     file->name = relativePath;
     file->fullPath = pak->pakFilename + "/" + relativePath;
@@ -3202,14 +3202,14 @@ Used for streaming data out of either a
 separate file or a ZIP file.
 ===========
 */
-idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searchFlags, pack_t** foundInPak, bool allowCopyFiles, const char* gamedir) {
-    searchpath_t*   search;
+idFile *idFileSystemLocal::OpenFileReadFlags(const char *relativePath, int searchFlags, pack_t **foundInPak, bool allowCopyFiles, const char *gamedir) {
+    searchpath_t   *search;
     idStr           netpath;
-    pack_t*         pak;
-    fileInPack_t*   pakFile;
-    directory_t*    dir;
+    pack_t         *pak;
+    fileInPack_t   *pakFile;
+    directory_t    *dir;
     int             hash;
-    FILE*           fp;
+    FILE           *fp;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -3279,7 +3279,7 @@ idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searc
                 continue;
             }
 
-            idFile_Permanent* file = new idFile_Permanent();
+            idFile_Permanent *file = new idFile_Permanent();
             file->o = fp;
             file->name = relativePath;
             file->fullPath = netpath;
@@ -3332,12 +3332,12 @@ idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searc
                         } else if (isFromSavePath || isFromBasePath) {
                             idStr sourcepath;
                             sourcepath = BuildOSPath(fs_cdpath.GetString(), dir->gamedir, relativePath);
-                            FILE* f1 = OpenOSFile(sourcepath, "r");
+                            FILE *f1 = OpenOSFile(sourcepath, "r");
 
                             if (f1) {
                                 ID_TIME_T t1 = Sys_FileTimeStamp(f1);
                                 fclose(f1);
-                                FILE* f2 = OpenOSFile(copypath, "r");
+                                FILE *f2 = OpenOSFile(copypath, "r");
 
                                 if (f2) {
                                     ID_TIME_T t2 = Sys_FileTimeStamp(f2);
@@ -3390,7 +3390,7 @@ idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searc
             for (pakFile = pak->hashTable[hash]; pakFile; pakFile = pakFile->next) {
                 // case and separator insensitive comparisons
                 if (!FilenameCompare(pakFile->name, relativePath)) {
-                    idFile_InZip* file = ReadFileFromZip(pak, pakFile, relativePath);
+                    idFile_InZip *file = ReadFileFromZip(pak, pakFile, relativePath);
 
                     if (foundInPak) {
                         *foundInPak = pak;
@@ -3418,12 +3418,12 @@ idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searc
     if (searchFlags & FSFLAG_SEARCH_ADDONS) {
         for (search = addonPaks; search; search = search->next) {
             assert(search->pack);
-            fileInPack_t*    pakFile;
+            fileInPack_t    *pakFile;
             pak = search->pack;
 
             for (pakFile = pak->hashTable[hash]; pakFile; pakFile = pakFile->next) {
                 if (!FilenameCompare(pakFile->name, relativePath)) {
-                    idFile_InZip* file = ReadFileFromZip(pak, pakFile, relativePath);
+                    idFile_InZip *file = ReadFileFromZip(pak, pakFile, relativePath);
 
                     if (foundInPak) {
                         *foundInPak = pak;
@@ -3452,7 +3452,7 @@ idFile* idFileSystemLocal::OpenFileReadFlags(const char* relativePath, int searc
 idFileSystemLocal::OpenFileRead
 ===========
 */
-idFile* idFileSystemLocal::OpenFileRead(const char* relativePath, bool allowCopyFiles, const char* gamedir) {
+idFile *idFileSystemLocal::OpenFileRead(const char *relativePath, bool allowCopyFiles, const char *gamedir) {
     return OpenFileReadFlags(relativePath, FSFLAG_SEARCH_DIRS | FSFLAG_SEARCH_PAKS, NULL, allowCopyFiles, gamedir);
 }
 
@@ -3461,10 +3461,10 @@ idFile* idFileSystemLocal::OpenFileRead(const char* relativePath, bool allowCopy
 idFileSystemLocal::OpenFileWrite
 ===========
 */
-idFile* idFileSystemLocal::OpenFileWrite(const char* relativePath, const char* basePath) {
-    const char* path;
+idFile *idFileSystemLocal::OpenFileWrite(const char *relativePath, const char *basePath) {
+    const char *path;
     idStr OSpath;
-    idFile_Permanent* f;
+    idFile_Permanent *f;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -3511,8 +3511,8 @@ idFile* idFileSystemLocal::OpenFileWrite(const char* relativePath, const char* b
 idFileSystemLocal::OpenExplicitFileRead
 ===========
 */
-idFile* idFileSystemLocal::OpenExplicitFileRead(const char* OSPath) {
-    idFile_Permanent* f;
+idFile *idFileSystemLocal::OpenExplicitFileRead(const char *OSPath) {
+    idFile_Permanent *f;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -3546,8 +3546,8 @@ idFile* idFileSystemLocal::OpenExplicitFileRead(const char* OSPath) {
 idFileSystemLocal::OpenExplicitFileWrite
 ===========
 */
-idFile* idFileSystemLocal::OpenExplicitFileWrite(const char* OSPath) {
-    idFile_Permanent* f;
+idFile *idFileSystemLocal::OpenExplicitFileWrite(const char *OSPath) {
+    idFile_Permanent *f;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -3582,10 +3582,10 @@ idFile* idFileSystemLocal::OpenExplicitFileWrite(const char* OSPath) {
 idFileSystemLocal::OpenFileAppend
 ===========
 */
-idFile* idFileSystemLocal::OpenFileAppend(const char* relativePath, bool sync, const char* basePath) {
-    const char* path;
+idFile *idFileSystemLocal::OpenFileAppend(const char *relativePath, bool sync, const char *basePath) {
+    const char *path;
     idStr OSpath;
-    idFile_Permanent* f;
+    idFile_Permanent *f;
 
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
@@ -3626,7 +3626,7 @@ idFile* idFileSystemLocal::OpenFileAppend(const char* relativePath, bool sync, c
 idFileSystemLocal::OpenFileByMode
 ================
 */
-idFile* idFileSystemLocal::OpenFileByMode(const char* relativePath, fsMode_t mode) {
+idFile *idFileSystemLocal::OpenFileByMode(const char *relativePath, fsMode_t mode) {
     if (mode == FS_READ) {
         return OpenFileRead(relativePath);
     }
@@ -3648,7 +3648,7 @@ idFile* idFileSystemLocal::OpenFileByMode(const char* relativePath, fsMode_t mod
 idFileSystemLocal::CloseFile
 ==============
 */
-void idFileSystemLocal::CloseFile(idFile* f) {
+void idFileSystemLocal::CloseFile(idFile *f) {
     if (!searchPaths) {
         common->FatalError("Filesystem call made without initialization\n");
     }
@@ -3670,17 +3670,17 @@ back ground loading
 idFileSystemLocal::CurlWriteFunction
 =================
 */
-size_t idFileSystemLocal::CurlWriteFunction(void* ptr, size_t size, size_t nmemb, void* stream) {
-    backgroundDownload_t* bgl = (backgroundDownload_t*)stream;
+size_t idFileSystemLocal::CurlWriteFunction(void *ptr, size_t size, size_t nmemb, void *stream) {
+    backgroundDownload_t *bgl = (backgroundDownload_t *)stream;
 
     if (!bgl->f) {
         return size * nmemb;
     }
 
     #ifdef _WIN32
-    return _write(_fileno(static_cast<idFile_Permanent*>(bgl->f)->GetFilePtr()), ptr, size * nmemb);
+    return _write(_fileno(static_cast<idFile_Permanent *>(bgl->f)->GetFilePtr()), ptr, size * nmemb);
     #else
-    return fwrite(ptr, size, nmemb, static_cast<idFile_Permanent*>(bgl->f)->GetFilePtr());
+    return fwrite(ptr, size, nmemb, static_cast<idFile_Permanent *>(bgl->f)->GetFilePtr());
     #endif
 }
 
@@ -3689,8 +3689,8 @@ size_t idFileSystemLocal::CurlWriteFunction(void* ptr, size_t size, size_t nmemb
 idFileSystemLocal::CurlProgressFunction
 =================
 */
-int idFileSystemLocal::CurlProgressFunction(void* clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
-    backgroundDownload_t* bgl = (backgroundDownload_t*)clientp;
+int idFileSystemLocal::CurlProgressFunction(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
+    backgroundDownload_t *bgl = (backgroundDownload_t *)clientp;
 
     if (bgl->url.status == DL_ABORTING) {
         return 1;
@@ -3708,12 +3708,12 @@ BackgroundDownload
 Reads part of a file from a background thread.
 ===================
 */
-int BackgroundDownloadThread(void* pexit) {
-    bool* exit = (bool*)pexit;
+int BackgroundDownloadThread(void *pexit) {
+    bool *exit = (bool *)pexit;
 
     while (!(*exit)) {
         Sys_EnterCriticalSection();
-        backgroundDownload_t*    bgl = fileSystemLocal.backgroundDownloads;
+        backgroundDownload_t    *bgl = fileSystemLocal.backgroundDownloads;
 
         if (!bgl) {
             Sys_LeaveCriticalSection();
@@ -3730,9 +3730,9 @@ int BackgroundDownloadThread(void* pexit) {
         if (bgl->opcode == DLTYPE_FILE) {
             // use the low level read function, because fread may allocate memory
             #if defined(WIN32)
-            _read(_fileno(static_cast<idFile_Permanent*>(bgl->f)->GetFilePtr()), bgl->file.buffer, bgl->file.length);
+            _read(_fileno(static_cast<idFile_Permanent *>(bgl->f)->GetFilePtr()), bgl->file.buffer, bgl->file.length);
             #else
-            fread(bgl->file.buffer, bgl->file.length, 1, static_cast<idFile_Permanent*>(bgl->f)->GetFilePtr());
+            fread(bgl->file.buffer, bgl->file.length, 1, static_cast<idFile_Permanent *>(bgl->f)->GetFilePtr());
             #endif
             bgl->completed = true;
         } else {
@@ -3741,7 +3741,7 @@ int BackgroundDownloadThread(void* pexit) {
             // use a local buffer for curl error since the size define is local
             char error_buf[ CURL_ERROR_SIZE ];
             bgl->url.dlerror[ 0 ] = '\0';
-            CURL* session = curl_easy_init();
+            CURL *session = curl_easy_init();
             CURLcode ret;
 
             if (!session) {
@@ -3867,9 +3867,9 @@ void idFileSystemLocal::StartBackgroundDownloadThread() {
 idFileSystemLocal::BackgroundDownload
 =================
 */
-void idFileSystemLocal::BackgroundDownload(backgroundDownload_t* bgl) {
+void idFileSystemLocal::BackgroundDownload(backgroundDownload_t *bgl) {
     if (bgl->opcode == DLTYPE_FILE) {
-        if (dynamic_cast<idFile_Permanent*>(bgl->f)) {
+        if (dynamic_cast<idFile_Permanent *>(bgl->f)) {
             // add the bgl to the background download list
             Sys_EnterCriticalSection();
             bgl->next = backgroundDownloads;
@@ -3905,10 +3905,10 @@ bool idFileSystemLocal::PerformingCopyFiles(void) const {
 idFileSystemLocal::FindPakForFileChecksum
 =================
 */
-pack_t* idFileSystemLocal::FindPakForFileChecksum(const char* relativePath, int findChecksum, bool bReference) {
-    searchpath_t*    search;
-    pack_t*          pak;
-    fileInPack_t*    pakFile;
+pack_t *idFileSystemLocal::FindPakForFileChecksum(const char *relativePath, int findChecksum, bool bReference) {
+    searchpath_t    *search;
+    pack_t          *pak;
+    fileInPack_t    *pakFile;
     int             hash;
     assert(!serverPaks.Num());
     hash = HashFileName(relativePath);
@@ -3919,7 +3919,7 @@ pack_t* idFileSystemLocal::FindPakForFileChecksum(const char* relativePath, int 
 
             for (pakFile = pak->hashTable[ hash ]; pakFile; pakFile = pakFile->next) {
                 if (!FilenameCompare(pakFile->name, relativePath)) {
-                    idFile_InZip* file = ReadFileFromZip(pak, pakFile, relativePath);
+                    idFile_InZip *file = ReadFileFromZip(pak, pakFile, relativePath);
 
                     if (findChecksum == GetFileChecksum(file)) {
                         if (fs_debug.GetBool()) {
@@ -3955,14 +3955,14 @@ pack_t* idFileSystemLocal::FindPakForFileChecksum(const char* relativePath, int 
 idFileSystemLocal::GetFileChecksum
 =================
 */
-int idFileSystemLocal::GetFileChecksum(idFile* file) {
+int idFileSystemLocal::GetFileChecksum(idFile *file) {
     int len, ret;
-    byte* buf;
+    byte *buf;
 
     file->Seek(0, FS_SEEK_END);
     len = file->Tell();
     file->Seek(0, FS_SEEK_SET);
-    buf = (byte*)Mem_Alloc(len);
+    buf = (byte *)Mem_Alloc(len);
 
     if (file->Read(buf, len) != len) {
         common->FatalError("Short read in idFileSystemLocal::GetFileChecksum()\n");
@@ -3978,8 +3978,8 @@ int idFileSystemLocal::GetFileChecksum(idFile* file) {
 idFileSystemLocal::FindDLL
 =================
 */
-void idFileSystemLocal::FindDLL(const char* name, char _dllPath[ MAX_OSPATH ]) {
-    idFile*          dllFile = NULL;
+void idFileSystemLocal::FindDLL(const char *name, char _dllPath[ MAX_OSPATH ]) {
+    idFile          *dllFile = NULL;
     char            dllName[MAX_OSPATH];
     idStr           dllPath;
 
@@ -4060,8 +4060,8 @@ bool idFileSystemLocal::HasD3XP(void) {
     // check for d3xp's d3xp/pak000.pk4 in any search path
     // checking wether the pak is loaded by checksum wouldn't be enough:
     // we may have a different fs_game right now but still need to reply that it's installed
-    const char*  search[4];
-    idFile*      pakfile;
+    const char  *search[4];
+    idFile      *pakfile;
     search[0] = fs_savepath.GetString();
     search[1] = fs_devpath.GetString();
     search[2] = fs_basepath.GetString();
@@ -4087,7 +4087,7 @@ bool idFileSystemLocal::HasD3XP(void) {
         if (dirs[i].Icmp("d3xp") == 0) {
 
             gamepath = BuildOSPath(fs_configpath.GetString(), dirs[ i ], "default.cfg");
-            idFile* cfg = OpenExplicitFileRead(gamepath);
+            idFile *cfg = OpenExplicitFileRead(gamepath);
 
             if (cfg) {
                 CloseFile(cfg);
@@ -4122,15 +4122,15 @@ bool idFileSystemLocal::RunningD3XP(void) {
 idFileSystemLocal::MakeTemporaryFile
 ===============
 */
-idFile* idFileSystemLocal::MakeTemporaryFile(void) {
-    FILE* f = tmpfile();
+idFile *idFileSystemLocal::MakeTemporaryFile(void) {
+    FILE *f = tmpfile();
 
     if (!f) {
         common->Warning("idFileSystem::MakeTemporaryFile failed: %s", strerror(errno));
         return NULL;
     }
 
-    idFile_Permanent* file = new idFile_Permanent();
+    idFile_Permanent *file = new idFile_Permanent();
     file->o = f;
     file->name = "<tempfile>";
     file->fullPath = "<tempfile>";
@@ -4144,9 +4144,9 @@ idFile* idFileSystemLocal::MakeTemporaryFile(void) {
 idFileSystemLocal::FindFile
 ===============
 */
-findFile_t idFileSystemLocal::FindFile(const char* path, bool scheduleAddons) {
-    pack_t* pak;
-    idFile* f = OpenFileReadFlags(path, FSFLAG_SEARCH_DIRS | FSFLAG_SEARCH_PAKS | FSFLAG_SEARCH_ADDONS, &pak);
+findFile_t idFileSystemLocal::FindFile(const char *path, bool scheduleAddons) {
+    pack_t *pak;
+    idFile *f = OpenFileReadFlags(path, FSFLAG_SEARCH_DIRS | FSFLAG_SEARCH_PAKS | FSFLAG_SEARCH_ADDONS, &pak);
 
     if (!f) {
         return FIND_NO;
@@ -4180,7 +4180,7 @@ account for actual decls and for addon maps
 */
 int idFileSystemLocal::GetNumMaps() {
     int             i;
-    searchpath_t*    search = NULL;
+    searchpath_t    *search = NULL;
     int             ret = declManager->GetNumDecls(DECL_MAPDEF);
 
     // add to this all addon decls - coming from all addon packs ( searched or not )
@@ -4209,16 +4209,16 @@ idFileSystemLocal::GetMapDecl
 retrieve the decl dictionary, add a 'path' value
 ===============
 */
-const idDict* idFileSystemLocal::GetMapDecl(int idecl) {
+const idDict *idFileSystemLocal::GetMapDecl(int idecl) {
     int                     i;
-    const idDecl*            mapDecl;
-    const idDeclEntityDef*   mapDef;
+    const idDecl            *mapDecl;
+    const idDeclEntityDef   *mapDef;
     int                     numdecls = declManager->GetNumDecls(DECL_MAPDEF);
-    searchpath_t*            search = NULL;
+    searchpath_t            *search = NULL;
 
     if (idecl < numdecls) {
         mapDecl = declManager->DeclByIndex(DECL_MAPDEF, idecl);
-        mapDef = static_cast<const idDeclEntityDef*>(mapDecl);
+        mapDef = static_cast<const idDeclEntityDef *>(mapDecl);
 
         if (!mapDef) {
             common->Error("idFileSystemLocal::GetMapDecl %d: not found\n", idecl);
@@ -4262,8 +4262,8 @@ const idDict* idFileSystemLocal::GetMapDecl(int idecl) {
 idFileSystemLocal::FindMapScreenshot
 ===============
 */
-void idFileSystemLocal::FindMapScreenshot(const char* path, char* buf, int len) {
-    idFile*  file;
+void idFileSystemLocal::FindMapScreenshot(const char *path, char *buf, int len) {
+    idFile  *file;
     idStr   mapname = path;
 
     mapname.StripPath();
@@ -4278,7 +4278,7 @@ void idFileSystemLocal::FindMapScreenshot(const char* path, char* buf, int len) 
         if (file) {
             // save it out to an addon splash directory
             int dlen = file->Length();
-            char* data = new char[ dlen ];
+            char *data = new char[ dlen ];
             file->Read(data, dlen);
             CloseFile(file);
             idStr::snPrintf(buf, len, "guis/assets/splash/addon/%s.tga", mapname.c_str());

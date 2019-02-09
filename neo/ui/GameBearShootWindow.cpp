@@ -49,7 +49,7 @@ idCVar bearTurretForce("bearTurretForce", "200", CVAR_FLOAT, "");
 * BSEntity
 ****************************************************************************
 */
-BSEntity::BSEntity(idGameBearShootWindow* _game) {
+BSEntity::BSEntity(idGameBearShootWindow *_game) {
     game = _game;
     visible = true;
 
@@ -74,7 +74,7 @@ BSEntity::~BSEntity() {
 BSEntity::WriteToSaveGame
 ======================
 */
-void BSEntity::WriteToSaveGame(idFile* savefile) {
+void BSEntity::WriteToSaveGame(idFile *savefile) {
 
     game->WriteSaveGameString(materialName, savefile);
 
@@ -97,7 +97,7 @@ void BSEntity::WriteToSaveGame(idFile* savefile) {
 BSEntity::ReadFromSaveGame
 ======================
 */
-void BSEntity::ReadFromSaveGame(idFile* savefile, idGameBearShootWindow* _game) {
+void BSEntity::ReadFromSaveGame(idFile *savefile, idGameBearShootWindow *_game) {
     game = _game;
 
     game->ReadSaveGameString(materialName, savefile);
@@ -122,7 +122,7 @@ void BSEntity::ReadFromSaveGame(idFile* savefile, idGameBearShootWindow* _game) 
 BSEntity::SetMaterial
 ======================
 */
-void BSEntity::SetMaterial(const char* name) {
+void BSEntity::SetMaterial(const char *name) {
     materialName = name;
     material = declManager->FindMaterial(name);
     material->SetSort(SS_GUI);
@@ -189,7 +189,7 @@ void BSEntity::Update(float timeslice) {
 BSEntity::Draw
 ======================
 */
-void BSEntity::Draw(idDeviceContext* dc) {
+void BSEntity::Draw(idDeviceContext *dc) {
     if (visible) {
         dc->DrawMaterialRotated(position.x, position.y, width, height, material, entColor, 1.0f, 1.0f, DEG2RAD(rotation));
     }
@@ -200,13 +200,13 @@ void BSEntity::Draw(idDeviceContext* dc) {
 * idGameBearShootWindow
 ****************************************************************************
 */
-idGameBearShootWindow::idGameBearShootWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idGameBearShootWindow::idGameBearShootWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idGameBearShootWindow::idGameBearShootWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idGameBearShootWindow::idGameBearShootWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -220,7 +220,7 @@ idGameBearShootWindow::~idGameBearShootWindow() {
 idGameBearShootWindow::WriteToSaveGame
 =============================
 */
-void idGameBearShootWindow::WriteToSaveGame(idFile* savefile) {
+void idGameBearShootWindow::WriteToSaveGame(idFile *savefile) {
     idWindow::WriteToSaveGame(savefile);
 
     gamerunning.WriteToSaveGame(savefile);
@@ -274,7 +274,7 @@ void idGameBearShootWindow::WriteToSaveGame(idFile* savefile) {
 idGameBearShootWindow::ReadFromSaveGame
 =============================
 */
-void idGameBearShootWindow::ReadFromSaveGame(idFile* savefile) {
+void idGameBearShootWindow::ReadFromSaveGame(idFile *savefile) {
     idWindow::ReadFromSaveGame(savefile);
 
     // Remove all existing entities
@@ -308,7 +308,7 @@ void idGameBearShootWindow::ReadFromSaveGame(idFile* savefile) {
     savefile->Read(&numberOfEnts, sizeof(numberOfEnts));
 
     for (int i=0; i<numberOfEnts; i++) {
-        BSEntity* ent;
+        BSEntity *ent;
 
         ent = new BSEntity(this);
         ent->ReadFromSaveGame(savefile, this);
@@ -365,7 +365,7 @@ idGameBearShootWindow::CommonInit
 =============================
 */
 void idGameBearShootWindow::CommonInit() {
-    BSEntity*           ent;
+    BSEntity           *ent;
 
     // Precache sounds
     declManager->FindSound("arcade_beargroan");
@@ -441,11 +441,11 @@ void idGameBearShootWindow::CommonInit() {
 idGameBearShootWindow::HandleEvent
 =============================
 */
-const char* idGameBearShootWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idGameBearShootWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
     int key = event->evValue;
 
     // need to call this to allow proper focus and capturing on embedded children
-    const char* ret = idWindow::HandleEvent(event, updateVisuals);
+    const char *ret = idWindow::HandleEvent(event, updateVisuals);
 
     if (event->evType == SE_KEY) {
 
@@ -468,7 +468,7 @@ const char* idGameBearShootWindow::HandleEvent(const sysEvent_t* event, bool* up
 idGameBearShootWindow::ParseInternalVar
 =============================
 */
-bool idGameBearShootWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idGameBearShootWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "gamerunning") == 0) {
         gamerunning = src->ParseBool();
         return true;
@@ -497,8 +497,8 @@ bool idGameBearShootWindow::ParseInternalVar(const char* _name, idParser* src) {
 idGameBearShootWindow::GetWinVarByName
 =============================
 */
-idWinVar* idGameBearShootWindow::GetWinVarByName(const char* _name, bool winLookup, drawWin_t** owner) {
-    idWinVar* retVar = NULL;
+idWinVar *idGameBearShootWindow::GetWinVarByName(const char *_name, bool winLookup, drawWin_t **owner) {
+    idWinVar *retVar = NULL;
 
     if (idStr::Icmp(_name, "gamerunning") == 0) {
         retVar = &gamerunning;

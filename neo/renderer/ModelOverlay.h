@@ -48,14 +48,14 @@ typedef struct overlaySurface_s {
     int                         surfaceNum;
     int                         surfaceId;
     int                         numIndexes;
-    glIndex_t*                  indexes;
+    glIndex_t                  *indexes;
     int                         numVerts;
-    overlayVertex_t*            verts;
+    overlayVertex_t            *verts;
 } overlaySurface_t;
 
 typedef struct overlayMaterial_s {
-    const idMaterial*           material;
-    idList<overlaySurface_t*>  surfaces;
+    const idMaterial           *material;
+    idList<overlaySurface_t *>  surfaces;
 } overlayMaterial_t;
 
 
@@ -64,8 +64,8 @@ class idRenderModelOverlay {
     idRenderModelOverlay();
     ~idRenderModelOverlay();
 
-    static idRenderModelOverlay* Alloc(void);
-    static void                 Free(idRenderModelOverlay* overlay);
+    static idRenderModelOverlay *Alloc(void);
+    static void                 Free(idRenderModelOverlay *overlay);
 
     // Projects an overlay onto deformable geometry and can be added to
     // a render entity to allow decals on top of dynamic models.
@@ -73,21 +73,21 @@ class idRenderModelOverlay {
     // light interaction shaders. Materials for overlays should always
     // be clamped, because the projected texcoords can run well off the
     // texture since no new clip vertexes are generated.
-    void                        CreateOverlay(const idRenderModel* model, const idPlane localTextureAxis[2], const idMaterial* material);
+    void                        CreateOverlay(const idRenderModel *model, const idPlane localTextureAxis[2], const idMaterial *material);
 
     // Creates new model surfaces for baseModel, which should be a static instantiation of a dynamic model.
-    void                        AddOverlaySurfacesToModel(idRenderModel* baseModel);
+    void                        AddOverlaySurfacesToModel(idRenderModel *baseModel);
 
     // Removes overlay surfaces from the model.
-    static void                 RemoveOverlaySurfacesFromModel(idRenderModel* baseModel);
+    static void                 RemoveOverlaySurfacesFromModel(idRenderModel *baseModel);
 
-    void                        ReadFromDemoFile(class idDemoFile* f);
-    void                        WriteToDemoFile(class idDemoFile* f) const;
+    void                        ReadFromDemoFile(class idDemoFile *f);
+    void                        WriteToDemoFile(class idDemoFile *f) const;
 
   private:
-    idList<overlayMaterial_t*> materials;
+    idList<overlayMaterial_t *> materials;
 
-    void                        FreeSurface(overlaySurface_t* surface);
+    void                        FreeSurface(overlaySurface_t *surface);
 };
 
 #endif /* !__MODELOVERLAY_H__ */

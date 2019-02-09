@@ -46,28 +46,28 @@ class idDeclEmail : public idDecl {
     idDeclEmail() {}
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
     virtual void            Print(void) const;
     virtual void            List(void) const;
 
-    const char*             GetFrom() const {
+    const char             *GetFrom() const {
         return from;
     }
-    const char*             GetBody() const {
+    const char             *GetBody() const {
         return text;
     }
-    const char*             GetSubject() const {
+    const char             *GetSubject() const {
         return subject;
     }
-    const char*             GetDate() const {
+    const char             *GetDate() const {
         return date;
     }
-    const char*             GetTo() const {
+    const char             *GetTo() const {
         return to;
     }
-    const char*             GetImage() const {
+    const char             *GetImage() const {
         return image;
     }
 
@@ -86,25 +86,25 @@ class idDeclVideo : public idDecl {
     idDeclVideo() {};
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
     virtual void            Print(void) const;
     virtual void            List(void) const;
 
-    const char*             GetRoq() const {
+    const char             *GetRoq() const {
         return video;
     }
-    const char*             GetWave() const {
+    const char             *GetWave() const {
         return audio;
     }
-    const char*             GetVideoName() const {
+    const char             *GetVideoName() const {
         return videoName;
     }
-    const char*             GetInfo() const {
+    const char             *GetInfo() const {
         return info;
     }
-    const char*             GetPreview() const {
+    const char             *GetPreview() const {
         return preview;
     }
 
@@ -122,22 +122,22 @@ class idDeclAudio : public idDecl {
     idDeclAudio() {};
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
     virtual void            Print(void) const;
     virtual void            List(void) const;
 
-    const char*             GetAudioName() const {
+    const char             *GetAudioName() const {
         return audioName;
     }
-    const char*             GetWave() const {
+    const char             *GetWave() const {
         return audio;
     }
-    const char*             GetInfo() const {
+    const char             *GetInfo() const {
         return info;
     }
-    const char*             GetPreview() const {
+    const char             *GetPreview() const {
         return preview;
     }
 
@@ -156,45 +156,45 @@ class idDeclPDA : public idDecl {
     };
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
     virtual void            Print(void) const;
     virtual void            List(void) const;
 
-    virtual void            AddVideo(const char* name, bool unique = true) const;
-    virtual void            AddAudio(const char* name, bool unique = true) const;
-    virtual void            AddEmail(const char* name, bool unique = true) const;
+    virtual void            AddVideo(const char *name, bool unique = true) const;
+    virtual void            AddAudio(const char *name, bool unique = true) const;
+    virtual void            AddEmail(const char *name, bool unique = true) const;
     virtual void            RemoveAddedEmailsAndVideos() const;
 
     virtual const int       GetNumVideos() const;
     virtual const int       GetNumAudios() const;
     virtual const int       GetNumEmails() const;
-    virtual const idDeclVideo* GetVideoByIndex(int index) const;
-    virtual const idDeclAudio* GetAudioByIndex(int index) const;
-    virtual const idDeclEmail* GetEmailByIndex(int index) const;
+    virtual const idDeclVideo *GetVideoByIndex(int index) const;
+    virtual const idDeclAudio *GetAudioByIndex(int index) const;
+    virtual const idDeclEmail *GetEmailByIndex(int index) const;
 
-    virtual void            SetSecurity(const char* sec) const;
+    virtual void            SetSecurity(const char *sec) const;
 
-    const char*             GetPdaName() const {
+    const char             *GetPdaName() const {
         return pdaName;
     }
-    const char*             GetSecurity() const {
+    const char             *GetSecurity() const {
         return security;
     }
-    const char*             GetFullName() const {
+    const char             *GetFullName() const {
         return fullName;
     }
-    const char*             GetIcon() const {
+    const char             *GetIcon() const {
         return icon;
     }
-    const char*             GetPost() const {
+    const char             *GetPost() const {
         return post;
     }
-    const char*             GetID() const {
+    const char             *GetID() const {
         return id;
     }
-    const char*             GetTitle() const {
+    const char             *GetTitle() const {
         return title;
     }
 

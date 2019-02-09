@@ -58,27 +58,27 @@ const int   CINEMATIC_SKIP_DELAY    = SEC2MS(2.0f);
 
 #ifdef GAME_DLL
 
-    idSys*                      sys = NULL;
-    idCommon*                   common = NULL;
-    idCmdSystem*                cmdSystem = NULL;
-    idCVarSystem*               cvarSystem = NULL;
-    idFileSystem*               fileSystem = NULL;
-    idNetworkSystem*            networkSystem = NULL;
-    idRenderSystem*             renderSystem = NULL;
-    idSoundSystem*              soundSystem = NULL;
-    idRenderModelManager*       renderModelManager = NULL;
-    idUserInterfaceManager*     uiManager = NULL;
-    idDeclManager*              declManager = NULL;
-    idAASFileManager*           AASFileManager = NULL;
-    idCollisionModelManager*    collisionModelManager = NULL;
-    idCVar*                     idCVar::staticVars = NULL;
+    idSys                      *sys = NULL;
+    idCommon                   *common = NULL;
+    idCmdSystem                *cmdSystem = NULL;
+    idCVarSystem               *cvarSystem = NULL;
+    idFileSystem               *fileSystem = NULL;
+    idNetworkSystem            *networkSystem = NULL;
+    idRenderSystem             *renderSystem = NULL;
+    idSoundSystem              *soundSystem = NULL;
+    idRenderModelManager       *renderModelManager = NULL;
+    idUserInterfaceManager     *uiManager = NULL;
+    idDeclManager              *declManager = NULL;
+    idAASFileManager           *AASFileManager = NULL;
+    idCollisionModelManager    *collisionModelManager = NULL;
+    idCVar                     *idCVar::staticVars = NULL;
 
     idCVar com_forceGenericSIMD("com_forceGenericSIMD", "0", CVAR_BOOL|CVAR_SYSTEM, "force generic platform independent SIMD");
 
 #endif
 
-idRenderWorld*              gameRenderWorld = NULL;     // all drawing is done to this world
-idSoundWorld*               gameSoundWorld = NULL;      // all audio goes to this world
+idRenderWorld              *gameRenderWorld = NULL;     // all drawing is done to this world
+idSoundWorld               *gameSoundWorld = NULL;      // all audio goes to this world
 
 static gameExport_t         gameExport;
 
@@ -87,16 +87,16 @@ idAnimManager               animationLib;
 
 // the rest of the engine will only reference the "game" variable, while all local aspects stay hidden
 idGameLocal                 gameLocal;
-idGame*                     game = &gameLocal;  // statically pointed at an idGameLocal
+idGame                     *game = &gameLocal;  // statically pointed at an idGameLocal
 
-const char* idGameLocal::sufaceTypeNames[ MAX_SURFACE_TYPES ] = {
+const char *idGameLocal::sufaceTypeNames[ MAX_SURFACE_TYPES ] = {
     "none", "metal", "stone", "flesh", "wood", "cardboard", "liquid", "glass", "plastic",
     "ricochet", "surftype10", "surftype11", "surftype12", "surftype13", "surftype14", "surftype15"
 };
 
 #ifdef _D3XP
 // List of all defs used by the player that will stay on the fast timeline
-static const char* fastEntityList[] = {
+static const char *fastEntityList[] = {
     "player_doommarine",
     "weapon_chainsaw",
     "weapon_fists",
@@ -135,7 +135,7 @@ static const char* fastEntityList[] = {
 GetGameAPI
 ============
 */
-extern "C" ID_GAME_API gameExport_t* GetGameAPI(gameImport_t* import) {
+extern "C" ID_GAME_API gameExport_t *GetGameAPI(gameImport_t *import) {
 
     if (import->version == GAME_API_VERSION) {
 
@@ -309,8 +309,8 @@ idGameLocal::Init
 ============
 */
 void idGameLocal::Init(void) {
-    const idDict* dict;
-    idAAS* aas;
+    const idDict *dict;
+    idAAS *aas;
 
     #ifndef GAME_DLL
 
@@ -405,7 +405,7 @@ void idGameLocal::Init(void) {
     }
 
     // allocate space for the aas
-    const idKeyValue* kv = dict->MatchPrefix("type");
+    const idKeyValue *kv = dict->MatchPrefix("type");
 
     while (kv != NULL) {
         aas = idAAS::Alloc();
@@ -499,10 +499,10 @@ save the current player state, level name, and level state
 the session may have written some data to the file already
 ============
 */
-void idGameLocal::SaveGame(idFile* f) {
+void idGameLocal::SaveGame(idFile *f) {
     int i;
-    idEntity* ent;
-    idEntity* link;
+    idEntity *ent;
+    idEntity *link;
 
     idSaveGame savegame(f);
 
@@ -529,7 +529,7 @@ void idGameLocal::SaveGame(idFile* f) {
         }
     }
 
-    idList<idThread*> threads;
+    idList<idThread *> threads;
     threads = idThread::GetThreads();
 
     for (i = 0; i < threads.Num(); i++) {
@@ -695,14 +695,14 @@ void idGameLocal::SaveGame(idFile* f) {
 idGameLocal::GetPersistentPlayerInfo
 ============
 */
-const idDict& idGameLocal::GetPersistentPlayerInfo(int clientNum) {
-    idEntity*    ent;
+const idDict &idGameLocal::GetPersistentPlayerInfo(int clientNum) {
+    idEntity    *ent;
 
     persistentPlayerInfo[ clientNum ].Clear();
     ent = entities[ clientNum ];
 
     if (ent && ent->IsType(idPlayer::Type)) {
-        static_cast<idPlayer*>(ent)->SavePersistantInfo();
+        static_cast<idPlayer *>(ent)->SavePersistantInfo();
     }
 
     return persistentPlayerInfo[ clientNum ];
@@ -713,7 +713,7 @@ const idDict& idGameLocal::GetPersistentPlayerInfo(int clientNum) {
 idGameLocal::SetPersistentPlayerInfo
 ============
 */
-void idGameLocal::SetPersistentPlayerInfo(int clientNum, const idDict& playerInfo) {
+void idGameLocal::SetPersistentPlayerInfo(int clientNum, const idDict &playerInfo) {
     persistentPlayerInfo[ clientNum ] = playerInfo;
 }
 
@@ -722,7 +722,7 @@ void idGameLocal::SetPersistentPlayerInfo(int clientNum, const idDict& playerInf
 idGameLocal::Printf
 ============
 */
-void idGameLocal::Printf(const char* fmt, ...) const {
+void idGameLocal::Printf(const char *fmt, ...) const {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
 
@@ -738,7 +738,7 @@ void idGameLocal::Printf(const char* fmt, ...) const {
 idGameLocal::DPrintf
 ============
 */
-void idGameLocal::DPrintf(const char* fmt, ...) const {
+void idGameLocal::DPrintf(const char *fmt, ...) const {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
 
@@ -758,10 +758,10 @@ void idGameLocal::DPrintf(const char* fmt, ...) const {
 idGameLocal::Warning
 ============
 */
-void idGameLocal::Warning(const char* fmt, ...) const {
+void idGameLocal::Warning(const char *fmt, ...) const {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
-    idThread*   thread;
+    idThread   *thread;
 
     va_start(argptr, fmt);
     idStr::vsnPrintf(text, sizeof(text), fmt, argptr);
@@ -781,10 +781,10 @@ void idGameLocal::Warning(const char* fmt, ...) const {
 idGameLocal::DWarning
 ============
 */
-void idGameLocal::DWarning(const char* fmt, ...) const {
+void idGameLocal::DWarning(const char *fmt, ...) const {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
-    idThread*   thread;
+    idThread   *thread;
 
     if (!developer.GetBool()) {
         return;
@@ -808,10 +808,10 @@ void idGameLocal::DWarning(const char* fmt, ...) const {
 idGameLocal::Error
 ============
 */
-void idGameLocal::Error(const char* fmt, ...) const {
+void idGameLocal::Error(const char *fmt, ...) const {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
-    idThread*   thread;
+    idThread   *thread;
 
     va_start(argptr, fmt);
     idStr::vsnPrintf(text, sizeof(text), fmt, argptr);
@@ -831,7 +831,7 @@ void idGameLocal::Error(const char* fmt, ...) const {
 gameError
 ===============
 */
-void gameError(const char* fmt, ...) {
+void gameError(const char *fmt, ...) {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
 
@@ -856,7 +856,7 @@ void idGameLocal::SetLocalClient(int clientNum) {
 idGameLocal::SetUserInfo
 ============
 */
-const idDict* idGameLocal::SetUserInfo(int clientNum, const idDict& userInfo, bool isClient, bool canModify) {
+const idDict *idGameLocal::SetUserInfo(int clientNum, const idDict &userInfo, bool isClient, bool canModify) {
     int i;
     bool modifiedInfo = false;
 
@@ -892,7 +892,7 @@ const idDict* idGameLocal::SetUserInfo(int clientNum, const idDict& userInfo, bo
         }
 
         if (entities[ clientNum ] && entities[ clientNum ]->IsType(idPlayer::Type)) {
-            modifiedInfo |= static_cast<idPlayer*>(entities[ clientNum ])->UserInfoChanged(canModify);
+            modifiedInfo |= static_cast<idPlayer *>(entities[ clientNum ])->UserInfoChanged(canModify);
         }
 
         if (!isClient) {
@@ -915,7 +915,7 @@ const idDict* idGameLocal::SetUserInfo(int clientNum, const idDict& userInfo, bo
 idGameLocal::GetUserInfo
 ============
 */
-const idDict* idGameLocal::GetUserInfo(int clientNum) {
+const idDict *idGameLocal::GetUserInfo(int clientNum) {
     if (entities[ clientNum ] && entities[ clientNum ]->IsType(idPlayer::Type)) {
         return &userInfo[ clientNum ];
     }
@@ -928,7 +928,7 @@ const idDict* idGameLocal::GetUserInfo(int clientNum) {
 idGameLocal::SetServerInfo
 ============
 */
-void idGameLocal::SetServerInfo(const idDict& _serverInfo) {
+void idGameLocal::SetServerInfo(const idDict &_serverInfo) {
     idBitMsg    outMsg;
     byte        msgBuf[MAX_GAME_MESSAGE_SIZE];
 
@@ -952,7 +952,7 @@ idGameLocal::LoadMap
 Initializes all map variables common to both save games and spawned games.
 ===================
 */
-void idGameLocal::LoadMap(const char* mapName, int randseed) {
+void idGameLocal::LoadMap(const char *mapName, int randseed) {
     int i;
     bool sameMap = (mapFile && idStr::Icmp(mapFileName, mapName) == 0);
 
@@ -1088,7 +1088,7 @@ void idGameLocal::LocalMapRestart() {
 
     for (i = 0; i < MAX_CLIENTS; i++) {
         if (entities[ i ] && entities[ i ]->IsType(idPlayer::Type)) {
-            static_cast< idPlayer* >(entities[ i ])->PrepareForRestart();
+            static_cast< idPlayer * >(entities[ i ])->PrepareForRestart();
         }
     }
 
@@ -1132,7 +1132,7 @@ void idGameLocal::LocalMapRestart() {
     // setup the client entities again
     for (i = 0; i < MAX_CLIENTS; i++) {
         if (entities[ i ] && entities[ i ]->IsType(idPlayer::Type)) {
-            static_cast< idPlayer* >(entities[ i ])->Restart();
+            static_cast< idPlayer * >(entities[ i ])->Restart();
         }
     }
 
@@ -1149,7 +1149,7 @@ void idGameLocal::MapRestart() {
     byte        msgBuf[MAX_GAME_MESSAGE_SIZE];
     idDict      newInfo;
     int         i;
-    const idKeyValue* keyval, *keyval2;
+    const idKeyValue *keyval, *keyval2;
 
     #ifdef _D3XP
 
@@ -1223,7 +1223,7 @@ void idGameLocal::MapRestart() {
 idGameLocal::MapRestart_f
 ===================
 */
-void idGameLocal::MapRestart_f(const idCmdArgs& args) {
+void idGameLocal::MapRestart_f(const idCmdArgs &args) {
     if (!gameLocal.isMultiplayer || gameLocal.isClient) {
         common->Printf("server is not running - use spawnServer\n");
         cmdSystem->BufferCommandText(CMD_EXEC_APPEND, "spawnServer\n");
@@ -1239,10 +1239,10 @@ idGameLocal::NextMap
 ===================
 */
 bool idGameLocal::NextMap(void) {
-    const function_t*    func;
-    idThread*            thread;
+    const function_t    *func;
+    idThread            *thread;
     idDict              newInfo;
-    const idKeyValue*    keyval, *keyval2;
+    const idKeyValue    *keyval, *keyval2;
     int                 i;
 
     if (!g_mapCycle.GetString()[0]) {
@@ -1295,7 +1295,7 @@ bool idGameLocal::NextMap(void) {
 idGameLocal::NextMap_f
 ===================
 */
-void idGameLocal::NextMap_f(const idCmdArgs& args) {
+void idGameLocal::NextMap_f(const idCmdArgs &args) {
     if (!gameLocal.isMultiplayer || gameLocal.isClient) {
         common->Printf("server is not running\n");
         return;
@@ -1342,7 +1342,7 @@ void idGameLocal::MapPopulate(void) {
 idGameLocal::InitFromNewMap
 ===================
 */
-void idGameLocal::InitFromNewMap(const char* mapName, idRenderWorld* renderWorld, idSoundWorld* soundWorld, bool isServer, bool isClient, int randseed) {
+void idGameLocal::InitFromNewMap(const char *mapName, idRenderWorld *renderWorld, idSoundWorld *soundWorld, bool isServer, bool isClient, int randseed) {
 
     this->isServer = isServer;
     this->isClient = isClient;
@@ -1380,10 +1380,10 @@ void idGameLocal::InitFromNewMap(const char* mapName, idRenderWorld* renderWorld
 idGameLocal::InitFromSaveGame
 =================
 */
-bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWorld, idSoundWorld* soundWorld, idFile* saveGameFile) {
+bool idGameLocal::InitFromSaveGame(const char *mapName, idRenderWorld *renderWorld, idSoundWorld *soundWorld, idFile *saveGameFile) {
     int i;
     int num;
-    idEntity* ent;
+    idEntity *ent;
     idDict si;
 
     if (mapFileName.Length()) {
@@ -1426,11 +1426,11 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
 
     // precache any media specified in the map
     for (i = 0; i < mapFile->GetNumEntities(); i++) {
-        idMapEntity* mapEnt = mapFile->GetEntity(i);
+        idMapEntity *mapEnt = mapFile->GetEntity(i);
 
         if (!InhibitEntitySpawn(mapEnt->epairs)) {
             CacheDictionaryMedia(&mapEnt->epairs);
-            const char* classname;
+            const char *classname;
 
             if (mapEnt->epairs.GetString("classname", "", &classname)) {
                 FindEntityDef(classname, false);
@@ -1450,7 +1450,7 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
     }
 
     for (i = 0; i < MAX_GENTITIES; i++) {
-        savegame.ReadObject(reinterpret_cast<idClass*&>(entities[ i ]));
+        savegame.ReadObject(reinterpret_cast<idClass *&>(entities[ i ]));
         savegame.ReadInt(spawnIds[ i ]);
 
         // restore the entityNumber
@@ -1464,12 +1464,12 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
 
     // enityHash is restored by idEntity::Restore setting the entity name.
 
-    savegame.ReadObject(reinterpret_cast<idClass*&>(world));
+    savegame.ReadObject(reinterpret_cast<idClass *&>(world));
 
     savegame.ReadInt(num);
 
     for (i = 0; i < num; i++) {
-        savegame.ReadObject(reinterpret_cast<idClass*&>(ent));
+        savegame.ReadObject(reinterpret_cast<idClass *&>(ent));
         assert(ent);
 
         if (ent) {
@@ -1480,7 +1480,7 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
     savegame.ReadInt(num);
 
     for (i = 0; i < num; i++) {
-        savegame.ReadObject(reinterpret_cast<idClass*&>(ent));
+        savegame.ReadObject(reinterpret_cast<idClass *&>(ent));
         assert(ent);
 
         if (ent) {
@@ -1500,7 +1500,7 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
     savegame.ReadInt(i);
     random.SetSeed(i);
 
-    savegame.ReadObject(reinterpret_cast<idClass*&>(frameCommandThread));
+    savegame.ReadObject(reinterpret_cast<idClass *&>(frameCommandThread));
 
     // clip
     // push
@@ -1520,7 +1520,7 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
     savegame.ReadBool(skipCinematic);
 
     savegame.ReadBool(isMultiplayer);
-    savegame.ReadInt((int&)gameType);
+    savegame.ReadInt((int &)gameType);
 
     savegame.ReadInt(framenum);
     savegame.ReadInt(previousTime);
@@ -1587,11 +1587,11 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
         locationEntities = new idLocationEntity *[ num ];
 
         for (i = 0; i < num; i++) {
-            savegame.ReadObject(reinterpret_cast<idClass*&>(locationEntities[ i ]));
+            savegame.ReadObject(reinterpret_cast<idClass *&>(locationEntities[ i ]));
         }
     }
 
-    savegame.ReadObject(reinterpret_cast<idClass*&>(camera));
+    savegame.ReadObject(reinterpret_cast<idClass *&>(camera));
 
     savegame.ReadMaterial(globalMaterial);
 
@@ -1601,9 +1601,9 @@ bool idGameLocal::InitFromSaveGame(const char* mapName, idRenderWorld* renderWor
     savegame.ReadDict(&spawnArgs);
 
     savegame.ReadInt(playerPVS.i);
-    savegame.ReadInt((int&)playerPVS.h);
+    savegame.ReadInt((int &)playerPVS.h);
     savegame.ReadInt(playerConnectedAreas.i);
-    savegame.ReadInt((int&)playerConnectedAreas.h);
+    savegame.ReadInt((int &)playerConnectedAreas.h);
 
     savegame.ReadVec3(gravity);
 
@@ -1730,19 +1730,19 @@ idGameLocal::DumpOggSounds
 */
 void idGameLocal::DumpOggSounds(void) {
     int i, j, k, size, totalSize;
-    idFile* file;
+    idFile *file;
     idStrList oggSounds, weaponSounds;
-    const idSoundShader* soundShader;
-    const soundShaderParms_t* parms;
+    const idSoundShader *soundShader;
+    const soundShaderParms_t *parms;
     idStr soundName;
 
     for (i = 0; i < declManager->GetNumDecls(DECL_SOUND); i++) {
-        soundShader = static_cast<const idSoundShader*>(declManager->DeclByIndex(DECL_SOUND, i, false));
+        soundShader = static_cast<const idSoundShader *>(declManager->DeclByIndex(DECL_SOUND, i, false));
         parms = soundShader->GetParms();
 
         if (soundShader->EverReferenced() && soundShader->GetState() != DS_DEFAULTED) {
 
-            const_cast<idSoundShader*>(soundShader)->EnsureNotPurged();
+            const_cast<idSoundShader *>(soundShader)->EnsureNotPurged();
 
             for (j = 0; j < soundShader->GetNumSounds(); j++) {
                 soundName = soundShader->GetSound(j);
@@ -1859,9 +1859,9 @@ void idGameLocal::DumpOggSounds(void) {
 idGameLocal::GetShakeSounds
 ===================
 */
-void idGameLocal::GetShakeSounds(const idDict* dict) {
-    const idSoundShader* soundShader;
-    const char* soundShaderName;
+void idGameLocal::GetShakeSounds(const idDict *dict) {
+    const idSoundShader *soundShader;
+    const char *soundShaderName;
     idStr soundName;
 
     if (dict->GetString("s_shader", "", &soundShaderName)
@@ -1886,8 +1886,8 @@ merging the entitydef.  It could be done post-merge, but that would
 avoid the fast pre-cache check associated with each entityDef
 ===================
 */
-void idGameLocal::CacheDictionaryMedia(const idDict* dict) {
-    const idKeyValue* kv;
+void idGameLocal::CacheDictionaryMedia(const idDict *dict) {
+    const idKeyValue *kv;
 
     if (dict == NULL) {
         if (cvarSystem->GetCVarBool("com_makingBuild")) {
@@ -1946,7 +1946,7 @@ void idGameLocal::CacheDictionaryMedia(const idDict* dict) {
                 // unfortunate flag names, they aren't actually a gui
             } else {
                 declManager->MediaPrint("Precaching gui %s\n", kv->GetValue().c_str());
-                idUserInterface* gui = uiManager->Alloc();
+                idUserInterface *gui = uiManager->Alloc();
 
                 if (gui) {
                     gui->InitFromFile(kv->GetValue());
@@ -1991,7 +1991,7 @@ void idGameLocal::CacheDictionaryMedia(const idDict* dict) {
 
     if (kv && kv->GetValue().Length()) {
         int teleportType = atoi(kv->GetValue());
-        const char* p = (teleportType) ? va("fx/teleporter%i.fx", teleportType) : "fx/teleporter.fx";
+        const char *p = (teleportType) ? va("fx/teleporter%i.fx", teleportType) : "fx/teleporter.fx";
         declManager->FindType(DECL_FX, p);
     }
 
@@ -2087,10 +2087,10 @@ void idGameLocal::InitScriptForMap(void) {
     frameCommandThread->SetThreadName("frameCommands");
 
     // run the main game script function (not the level specific main)
-    const function_t* func = program.FindFunction(SCRIPT_DEFAULTFUNC);
+    const function_t *func = program.FindFunction(SCRIPT_DEFAULTFUNC);
 
     if (func != NULL) {
-        idThread* thread = new idThread(func);
+        idThread *thread = new idThread(func);
 
         if (thread->Start()) {
             // thread has finished executing, so delete it
@@ -2105,7 +2105,7 @@ idGameLocal::SpawnPlayer
 ============
 */
 void idGameLocal::SpawnPlayer(int clientNum) {
-    idEntity*    ent;
+    idEntity    *ent;
     idDict      args;
 
     // they can connect
@@ -2148,13 +2148,13 @@ void idGameLocal::SpawnPlayer(int clientNum) {
 idGameLocal::GetClientByNum
 ================
 */
-idPlayer* idGameLocal::GetClientByNum(int current) const {
+idPlayer *idGameLocal::GetClientByNum(int current) const {
     if (current < 0 || current >= numClients) {
         current = 0;
     }
 
     if (entities[current]) {
-        return static_cast<idPlayer*>(entities[ current ]);
+        return static_cast<idPlayer *>(entities[ current ]);
     }
 
     return NULL;
@@ -2165,16 +2165,16 @@ idPlayer* idGameLocal::GetClientByNum(int current) const {
 idGameLocal::GetClientByName
 ================
 */
-idPlayer* idGameLocal::GetClientByName(const char* name) const {
+idPlayer *idGameLocal::GetClientByName(const char *name) const {
     int i;
-    idEntity* ent;
+    idEntity *ent;
 
     for (i = 0 ; i < numClients ; i++) {
         ent = entities[ i ];
 
         if (ent && ent->IsType(idPlayer::Type)) {
             if (idStr::IcmpNoColor(name, userInfo[ i ].GetString("ui_name")) == 0) {
-                return static_cast<idPlayer*>(ent);
+                return static_cast<idPlayer *>(ent);
             }
         }
     }
@@ -2187,8 +2187,8 @@ idPlayer* idGameLocal::GetClientByName(const char* name) const {
 idGameLocal::GetClientByCmdArgs
 ================
 */
-idPlayer* idGameLocal::GetClientByCmdArgs(const idCmdArgs& args) const {
-    idPlayer* player;
+idPlayer *idGameLocal::GetClientByCmdArgs(const idCmdArgs &args) const {
+    idPlayer *player;
     idStr client = args.Argv(1);
 
     if (!client.Length()) {
@@ -2240,7 +2240,7 @@ draw phase even happening.  This just returns client 0, which will
 be correct for single player.
 ================
 */
-idPlayer* idGameLocal::GetLocalPlayer() const {
+idPlayer *idGameLocal::GetLocalPlayer() const {
     if (localClientNum < 0) {
         return NULL;
     }
@@ -2250,7 +2250,7 @@ idPlayer* idGameLocal::GetLocalPlayer() const {
         return NULL;
     }
 
-    return static_cast<idPlayer*>(entities[ localClientNum ]);
+    return static_cast<idPlayer *>(entities[ localClientNum ]);
 }
 
 /*
@@ -2258,7 +2258,7 @@ idPlayer* idGameLocal::GetLocalPlayer() const {
 idGameLocal::SetupClientPVS
 ================
 */
-pvsHandle_t idGameLocal::GetClientPVS(idPlayer* player, pvsType_t type) {
+pvsHandle_t idGameLocal::GetClientPVS(idPlayer *player, pvsType_t type) {
     if (player->GetPrivateCameraView()) {
         return pvs.SetupCurrentPVS(player->GetPrivateCameraView()->GetPVSAreas(), player->GetPrivateCameraView()->GetNumPVSAreas());
     } else if (camera) {
@@ -2275,8 +2275,8 @@ idGameLocal::SetupPlayerPVS
 */
 void idGameLocal::SetupPlayerPVS(void) {
     int         i;
-    idEntity*   ent;
-    idPlayer*   player;
+    idEntity   *ent;
+    idPlayer   *player;
     pvsHandle_t otherPVS, newPVS;
 
     playerPVS.i = -1;
@@ -2288,7 +2288,7 @@ void idGameLocal::SetupPlayerPVS(void) {
             continue;
         }
 
-        player = static_cast<idPlayer*>(ent);
+        player = static_cast<idPlayer *>(ent);
 
         if (playerPVS.i == -1) {
             playerPVS = GetClientPVS(player, PVS_NORMAL);
@@ -2314,7 +2314,7 @@ void idGameLocal::SetupPlayerPVS(void) {
 
         // if portalSky is preset, then merge into pvs so we get rotating brushes, etc
         if (portalSkyEnt.GetEntity()) {
-            idEntity* skyEnt = portalSkyEnt.GetEntity();
+            idEntity *skyEnt = portalSkyEnt.GetEntity();
 
             otherPVS = pvs.SetupCurrentPVS(skyEnt->GetPVSAreas(), skyEnt->GetNumPVSAreas());
             newPVS = pvs.MergeCurrentPVS(playerPVS, otherPVS);
@@ -2357,7 +2357,7 @@ idGameLocal::InPlayerPVS
   should only be called during entity thinking and event handling
 ================
 */
-bool idGameLocal::InPlayerPVS(idEntity* ent) const {
+bool idGameLocal::InPlayerPVS(idEntity *ent) const {
     if (playerPVS.i == -1) {
         return false;
     }
@@ -2372,7 +2372,7 @@ idGameLocal::InPlayerConnectedArea
   should only be called during entity thinking and event handling
 ================
 */
-bool idGameLocal::InPlayerConnectedArea(idEntity* ent) const {
+bool idGameLocal::InPlayerConnectedArea(idEntity *ent) const {
     if (playerConnectedAreas.i == -1) {
         return false;
     }
@@ -2386,7 +2386,7 @@ idGameLocal::UpdateGravity
 ================
 */
 void idGameLocal::UpdateGravity(void) {
-    idEntity* ent;
+    idEntity *ent;
 
     if (g_gravity.IsModified()) {
         if (g_gravity.GetFloat() == 0.0f) {
@@ -2398,7 +2398,7 @@ void idGameLocal::UpdateGravity(void) {
         // update all physics objects
         for (ent = spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
             if (ent->IsType(idAFEntity_Generic::Type)) {
-                idPhysics* phys = ent->GetPhysics();
+                idPhysics *phys = ent->GetPhysics();
 
                 if (phys) {
                     phys->SetGravity(gravity);
@@ -2415,7 +2415,7 @@ void idGameLocal::UpdateGravity(void) {
 idGameLocal::GetGravity
 ================
 */
-const idVec3& idGameLocal::GetGravity(void) const {
+const idVec3 &idGameLocal::GetGravity(void) const {
     return gravity;
 }
 
@@ -2428,7 +2428,7 @@ idGameLocal::SortActiveEntityList
 ================
 */
 void idGameLocal::SortActiveEntityList(void) {
-    idEntity* ent, *next_ent, *master, *part;
+    idEntity *ent, *next_ent, *master, *part;
 
     // if the active entity list needs to be reordered to place physics team masters at the front
     if (sortTeamMasters) {
@@ -2498,7 +2498,7 @@ idGameLocal::RunTimeGroup2
 ================
 */
 void idGameLocal::RunTimeGroup2() {
-    idEntity* ent;
+    idEntity *ent;
     int num = 0;
 
     fast.Increment();
@@ -2522,14 +2522,14 @@ void idGameLocal::RunTimeGroup2() {
 idGameLocal::RunFrame
 ================
 */
-gameReturn_t idGameLocal::RunFrame(const usercmd_t* clientCmds) {
-    idEntity*   ent;
+gameReturn_t idGameLocal::RunFrame(const usercmd_t *clientCmds) {
+    idEntity   *ent;
     int         num;
     float       ms;
     idTimer     timer_think, timer_events, timer_singlethink;
     gameReturn_t ret;
-    idPlayer*    player;
-    const renderView_t* view;
+    idPlayer    *player;
+    const renderView_t *view;
 
     #ifdef _DEBUG
 
@@ -2676,7 +2676,7 @@ gameReturn_t idGameLocal::RunFrame(const usercmd_t* clientCmds) {
 
             // remove any entities that have stopped thinking
             if (numEntitiesToDeactivate) {
-                idEntity* next_ent;
+                idEntity *next_ent;
                 int c = 0;
 
                 for (ent = activeEntities.Next(); ent != NULL; ent = next_ent) {
@@ -2788,7 +2788,7 @@ idGameLocal::CalcFov
 Calculates the horizontal and vertical field of view based on a horizontal field of view and custom aspect ratio
 ====================
 */
-void idGameLocal::CalcFov(float base_fov, float& fov_x, float& fov_y) const {
+void idGameLocal::CalcFov(float base_fov, float &fov_x, float &fov_y) const {
     float   x;
     float   y;
     float   ratio_x;
@@ -2870,7 +2870,7 @@ bool idGameLocal::Draw(int clientNum) {
         return mpGame.Draw(clientNum);
     }
 
-    idPlayer* player = static_cast<idPlayer*>(entities[ clientNum ]);
+    idPlayer *player = static_cast<idPlayer *>(entities[ clientNum ]);
 
     if (!player) {
         return false;
@@ -2887,14 +2887,14 @@ bool idGameLocal::Draw(int clientNum) {
 idGameLocal::HandleESC
 ================
 */
-escReply_t idGameLocal::HandleESC(idUserInterface** gui) {
+escReply_t idGameLocal::HandleESC(idUserInterface **gui) {
     if (isMultiplayer) {
         *gui = StartMenu();
         // we may set the gui back to NULL to hide it
         return ESC_GUI;
     }
 
-    idPlayer* player = GetLocalPlayer();
+    idPlayer *player = GetLocalPlayer();
 
     if (player) {
         if (player->HandleESC()) {
@@ -2912,7 +2912,7 @@ escReply_t idGameLocal::HandleESC(idUserInterface** gui) {
 idGameLocal::StartMenu
 ================
 */
-idUserInterface* idGameLocal::StartMenu(void) {
+idUserInterface *idGameLocal::StartMenu(void) {
     if (!isMultiplayer) {
         return NULL;
     }
@@ -2925,7 +2925,7 @@ idUserInterface* idGameLocal::StartMenu(void) {
 idGameLocal::HandleGuiCommands
 ================
 */
-const char* idGameLocal::HandleGuiCommands(const char* menuCommand) {
+const char *idGameLocal::HandleGuiCommands(const char *menuCommand) {
     if (!isMultiplayer) {
         return NULL;
     }
@@ -2938,7 +2938,7 @@ const char* idGameLocal::HandleGuiCommands(const char* menuCommand) {
 idGameLocal::HandleMainMenuCommands
 ================
 */
-void idGameLocal::HandleMainMenuCommands(const char* menuCommand, idUserInterface* gui) { }
+void idGameLocal::HandleMainMenuCommands(const char *menuCommand, idUserInterface *gui) { }
 
 /*
 ================
@@ -2947,7 +2947,7 @@ idGameLocal::GetLevelMap
   should only be used for in-game level editing
 ================
 */
-idMapFile* idGameLocal::GetLevelMap(void) {
+idMapFile *idGameLocal::GetLevelMap(void) {
     if (mapFile && mapFile->HasPrimitiveData()) {
         return mapFile;
     }
@@ -2975,7 +2975,7 @@ idMapFile* idGameLocal::GetLevelMap(void) {
 idGameLocal::GetMapName
 ================
 */
-const char* idGameLocal::GetMapName(void) const {
+const char *idGameLocal::GetMapName(void) const {
     return mapFileName.c_str();
 }
 
@@ -2984,7 +2984,7 @@ const char* idGameLocal::GetMapName(void) const {
 idGameLocal::CallFrameCommand
 ================
 */
-void idGameLocal::CallFrameCommand(idEntity* ent, const function_t* frameCommand) {
+void idGameLocal::CallFrameCommand(idEntity *ent, const function_t *frameCommand) {
     frameCommandThread->CallFunction(ent, frameCommand, true);
     frameCommandThread->Execute();
 }
@@ -2994,8 +2994,8 @@ void idGameLocal::CallFrameCommand(idEntity* ent, const function_t* frameCommand
 idGameLocal::CallObjectFrameCommand
 ================
 */
-void idGameLocal::CallObjectFrameCommand(idEntity* ent, const char* frameCommand) {
-    const function_t* func;
+void idGameLocal::CallObjectFrameCommand(idEntity *ent, const char *frameCommand) {
+    const function_t *func;
 
     func = ent->scriptObject.GetFunction(frameCommand);
 
@@ -3017,12 +3017,12 @@ idGameLocal::ShowTargets
 void idGameLocal::ShowTargets(void) {
     idMat3      axis = GetLocalPlayer()->viewAngles.ToMat3();
     idVec3      up = axis[ 2 ] * 5.0f;
-    const idVec3& viewPos = GetLocalPlayer()->GetPhysics()->GetOrigin();
+    const idVec3 &viewPos = GetLocalPlayer()->GetPhysics()->GetOrigin();
     idBounds    viewTextBounds(viewPos);
     idBounds    viewBounds(viewPos);
     idBounds    box(idVec3(-4.0f, -4.0f, -4.0f), idVec3(4.0f, 4.0f, 4.0f));
-    idEntity*    ent;
-    idEntity*    target;
+    idEntity    *ent;
+    idEntity    *target;
     int         i;
     idBounds    totalBounds;
 
@@ -3080,8 +3080,8 @@ idGameLocal::RunDebugInfo
 ================
 */
 void idGameLocal::RunDebugInfo(void) {
-    idEntity* ent;
-    idPlayer* player;
+    idEntity *ent;
+    idPlayer *player;
 
     player = GetLocalPlayer();
 
@@ -3089,7 +3089,7 @@ void idGameLocal::RunDebugInfo(void) {
         return;
     }
 
-    const idVec3& origin = player->GetPhysics()->GetOrigin();
+    const idVec3 &origin = player->GetPhysics()->GetOrigin();
 
     if (g_showEntityInfo.GetBool()) {
         idMat3      axis = player->viewAngles.ToMat3();
@@ -3111,7 +3111,7 @@ void idGameLocal::RunDebugInfo(void) {
                 continue;
             }
 
-            const idBounds& entBounds = ent->GetPhysics()->GetAbsBounds();
+            const idBounds &entBounds = ent->GetPhysics()->GetAbsBounds();
             int contents = ent->GetPhysics()->GetContents();
 
             if (contents & CONTENTS_BODY) {
@@ -3190,7 +3190,7 @@ void idGameLocal::RunDebugInfo(void) {
     }
 
     if (aas_test.GetInteger() >= 0) {
-        idAAS* aas = GetAAS(aas_test.GetInteger());
+        idAAS *aas = GetAAS(aas_test.GetInteger());
 
         if (aas) {
             aas->Test(origin);
@@ -3208,7 +3208,7 @@ void idGameLocal::RunDebugInfo(void) {
     }
 
     if (ai_showObstacleAvoidance.GetInteger() == 2) {
-        idAAS* aas = GetAAS(0);
+        idAAS *aas = GetAAS(0);
 
         if (aas) {
             idVec3 seekPos;
@@ -3237,7 +3237,7 @@ int idGameLocal::NumAAS(void) const {
 idGameLocal::GetAAS
 ==================
 */
-idAAS* idGameLocal::GetAAS(int num) const {
+idAAS *idGameLocal::GetAAS(int num) const {
     if ((num >= 0) && (num < aasList.Num())) {
         if (aasList[ num ] && aasList[ num ]->GetSettings()) {
             return aasList[ num ];
@@ -3252,7 +3252,7 @@ idAAS* idGameLocal::GetAAS(int num) const {
 idGameLocal::GetAAS
 ==================
 */
-idAAS* idGameLocal::GetAAS(const char* name) const {
+idAAS *idGameLocal::GetAAS(const char *name) const {
     int i;
 
     for (i = 0; i < aasNames.Num(); i++) {
@@ -3273,7 +3273,7 @@ idAAS* idGameLocal::GetAAS(const char* name) const {
 idGameLocal::SetAASAreaState
 ==================
 */
-void idGameLocal::SetAASAreaState(const idBounds& bounds, const int areaContents, bool closed) {
+void idGameLocal::SetAASAreaState(const idBounds &bounds, const int areaContents, bool closed) {
     int i;
 
     for (i = 0; i < aasList.Num(); i++) {
@@ -3286,7 +3286,7 @@ void idGameLocal::SetAASAreaState(const idBounds& bounds, const int areaContents
 idGameLocal::AddAASObstacle
 ==================
 */
-aasHandle_t idGameLocal::AddAASObstacle(const idBounds& bounds) {
+aasHandle_t idGameLocal::AddAASObstacle(const idBounds &bounds) {
     int i;
     aasHandle_t obstacle;
     aasHandle_t check id_attribute((unused));
@@ -3337,7 +3337,7 @@ idGameLocal::CheatsOk
 ==================
 */
 bool idGameLocal::CheatsOk(bool requirePlayer) {
-    idPlayer* player;
+    idPlayer *player;
 
     if (isMultiplayer && !cvarSystem->GetCVarBool("net_allowCheats")) {
         Printf("Not allowed in multiplayer.\n");
@@ -3364,7 +3364,7 @@ bool idGameLocal::CheatsOk(bool requirePlayer) {
 idGameLocal::RegisterEntity
 ===================
 */
-void idGameLocal::RegisterEntity(idEntity* ent) {
+void idGameLocal::RegisterEntity(idEntity *ent) {
     int spawn_entnum;
 
     if (spawnCount >= (1 << (32 - GENTITYNUM_BITS))) {
@@ -3399,7 +3399,7 @@ void idGameLocal::RegisterEntity(idEntity* ent) {
 idGameLocal::UnregisterEntity
 ===================
 */
-void idGameLocal::UnregisterEntity(idEntity* ent) {
+void idGameLocal::UnregisterEntity(idEntity *ent) {
     assert(ent);
 
     if (editEntities) {
@@ -3424,8 +3424,8 @@ void idGameLocal::UnregisterEntity(idEntity* ent) {
 idGameLocal::SpawnEntityType
 ================
 */
-idEntity* idGameLocal::SpawnEntityType(const idTypeInfo& classdef, const idDict* args, bool bIsClientReadSnapshot) {
-    idClass* obj;
+idEntity *idGameLocal::SpawnEntityType(const idTypeInfo &classdef, const idDict *args, bool bIsClientReadSnapshot) {
+    idClass *obj;
 
     #if _DEBUG
 
@@ -3450,13 +3450,13 @@ idEntity* idGameLocal::SpawnEntityType(const idTypeInfo& classdef, const idDict*
         obj->CallSpawn();
     }
 
-    catch (idAllocError&) {
+    catch (idAllocError &) {
         obj = NULL;
     }
 
     spawnArgs.Clear();
 
-    return static_cast<idEntity*>(obj);
+    return static_cast<idEntity *>(obj);
 }
 
 /*
@@ -3467,13 +3467,13 @@ Finds the spawn function for the entity and calls it,
 returning false if not found
 ===================
 */
-bool idGameLocal::SpawnEntityDef(const idDict& args, idEntity** ent, bool setDefaults) {
-    const char*  classname;
-    const char*  spawn;
-    idTypeInfo*  cls;
-    idClass*     obj;
+bool idGameLocal::SpawnEntityDef(const idDict &args, idEntity **ent, bool setDefaults) {
+    const char  *classname;
+    const char  *spawn;
+    idTypeInfo  *cls;
+    idClass     *obj;
     idStr       error;
-    const char*  name;
+    const char  *name;
 
     if (ent) {
         *ent = NULL;
@@ -3487,7 +3487,7 @@ bool idGameLocal::SpawnEntityDef(const idDict& args, idEntity** ent, bool setDef
 
     spawnArgs.GetString("classname", NULL, &classname);
 
-    const idDeclEntityDef* def = FindEntityDef(classname, false);
+    const idDeclEntityDef *def = FindEntityDef(classname, false);
 
     if (!def) {
         Warning("Unknown classname '%s'%s.", classname, error.c_str());
@@ -3537,7 +3537,7 @@ bool idGameLocal::SpawnEntityDef(const idDict& args, idEntity** ent, bool setDef
         obj->CallSpawn();
 
         if (ent && obj->IsType(idEntity::Type)) {
-            *ent = static_cast<idEntity*>(obj);
+            *ent = static_cast<idEntity *>(obj);
         }
 
         return true;
@@ -3547,14 +3547,14 @@ bool idGameLocal::SpawnEntityDef(const idDict& args, idEntity** ent, bool setDef
     spawnArgs.GetString("spawnfunc", NULL, &spawn);
 
     if (spawn) {
-        const function_t* func = program.FindFunction(spawn);
+        const function_t *func = program.FindFunction(spawn);
 
         if (!func) {
             Warning("Could not spawn '%s'.  Script function '%s' not found%s.", classname, spawn, error.c_str());
             return false;
         }
 
-        idThread* thread = new idThread(func);
+        idThread *thread = new idThread(func);
         thread->DelayedStart(0);
         return true;
     }
@@ -3568,8 +3568,8 @@ bool idGameLocal::SpawnEntityDef(const idDict& args, idEntity** ent, bool setDef
 idGameLocal::FindEntityDef
 ================
 */
-const idDeclEntityDef* idGameLocal::FindEntityDef(const char* name, bool makeDefault) const {
-    const idDecl* decl = NULL;
+const idDeclEntityDef *idGameLocal::FindEntityDef(const char *name, bool makeDefault) const {
+    const idDecl *decl = NULL;
 
     if (isMultiplayer) {
         decl = declManager->FindType(DECL_ENTITYDEF, va("%s_mp", name), false);
@@ -3579,7 +3579,7 @@ const idDeclEntityDef* idGameLocal::FindEntityDef(const char* name, bool makeDef
         decl = declManager->FindType(DECL_ENTITYDEF, name, makeDefault);
     }
 
-    return static_cast<const idDeclEntityDef*>(decl);
+    return static_cast<const idDeclEntityDef *>(decl);
 }
 
 /*
@@ -3587,8 +3587,8 @@ const idDeclEntityDef* idGameLocal::FindEntityDef(const char* name, bool makeDef
 idGameLocal::FindEntityDefDict
 ================
 */
-const idDict* idGameLocal::FindEntityDefDict(const char* name, bool makeDefault) const {
-    const idDeclEntityDef* decl = FindEntityDef(name, makeDefault);
+const idDict *idGameLocal::FindEntityDefDict(const char *name, bool makeDefault) const {
+    const idDeclEntityDef *decl = FindEntityDef(name, makeDefault);
     return decl ? &decl->dict : NULL;
 }
 
@@ -3597,7 +3597,7 @@ const idDict* idGameLocal::FindEntityDefDict(const char* name, bool makeDefault)
 idGameLocal::InhibitEntitySpawn
 ================
 */
-bool idGameLocal::InhibitEntitySpawn(idDict& spawnArgs) {
+bool idGameLocal::InhibitEntitySpawn(idDict &spawnArgs) {
 
     bool result = false;
 
@@ -3619,7 +3619,7 @@ bool idGameLocal::InhibitEntitySpawn(idDict& spawnArgs) {
     }
 
 
-    const char* name;
+    const char *name;
 
     if (g_skill.GetInteger() == 3) {
         name = spawnArgs.GetString("classname");
@@ -3684,7 +3684,7 @@ void idGameLocal::SpawnMapEntities(void) {
     int         i;
     int         num;
     int         inhibit;
-    idMapEntity* mapEnt;
+    idMapEntity *mapEnt;
     int         numEntities;
     idDict      args;
 
@@ -3739,7 +3739,7 @@ void idGameLocal::SpawnMapEntities(void) {
 idGameLocal::AddEntityToHash
 ================
 */
-void idGameLocal::AddEntityToHash(const char* name, idEntity* ent) {
+void idGameLocal::AddEntityToHash(const char *name, idEntity *ent) {
     if (FindEntity(name)) {
         Error("Multiple entities named '%s'", name);
     }
@@ -3752,7 +3752,7 @@ void idGameLocal::AddEntityToHash(const char* name, idEntity* ent) {
 idGameLocal::RemoveEntityFromHash
 ================
 */
-bool idGameLocal::RemoveEntityFromHash(const char* name, idEntity* ent) {
+bool idGameLocal::RemoveEntityFromHash(const char *name, idEntity *ent) {
     int hash, i;
 
     hash = entityHash.GenerateKey(name, true);
@@ -3772,10 +3772,10 @@ bool idGameLocal::RemoveEntityFromHash(const char* name, idEntity* ent) {
 idGameLocal::GetTargets
 ================
 */
-int idGameLocal::GetTargets(const idDict& args, idList< idEntityPtr<idEntity> >& list, const char* ref) const {
+int idGameLocal::GetTargets(const idDict &args, idList< idEntityPtr<idEntity> > &list, const char *ref) const {
     int i, num, refLength;
-    const idKeyValue* arg;
-    idEntity* ent;
+    const idKeyValue *arg;
+    idEntity *ent;
 
     list.Clear();
 
@@ -3791,7 +3791,7 @@ int idGameLocal::GetTargets(const idDict& args, idList< idEntityPtr<idEntity> >&
             ent = FindEntity(arg->GetValue());
 
             if (ent) {
-                idEntityPtr<idEntity>& entityPtr = list.Alloc();
+                idEntityPtr<idEntity> &entityPtr = list.Alloc();
                 entityPtr = ent;
             }
         }
@@ -3807,8 +3807,8 @@ idGameLocal::GetTraceEntity
 returns the master entity of a trace.  for example, if the trace entity is the player's head, it will return the player.
 =============
 */
-idEntity* idGameLocal::GetTraceEntity(const trace_t& trace) const {
-    idEntity* master;
+idEntity *idGameLocal::GetTraceEntity(const trace_t &trace) const {
+    idEntity *master;
 
     if (!entities[ trace.c.entityNum ]) {
         return NULL;
@@ -3830,7 +3830,7 @@ idGameLocal::ArgCompletion_EntityName
 Argument completion for entity names
 =============
 */
-void idGameLocal::ArgCompletion_EntityName(const idCmdArgs& args, void(*callback)(const char* s)) {
+void idGameLocal::ArgCompletion_EntityName(const idCmdArgs &args, void(*callback)(const char *s)) {
     int i;
 
     for (i = 0; i < gameLocal.num_entities; i++) {
@@ -3847,7 +3847,7 @@ idGameLocal::FindEntity
 Returns the entity whose name matches the specified string.
 =============
 */
-idEntity* idGameLocal::FindEntity(const char* name) const {
+idEntity *idGameLocal::FindEntity(const char *name) const {
     int hash, i;
 
     hash = entityHash.GenerateKey(name, true);
@@ -3871,8 +3871,8 @@ Searches beginning at the entity after from, or the beginning if NULL
 NULL will be returned if the end of the list is reached.
 =============
 */
-idEntity* idGameLocal::FindEntityUsingDef(idEntity* from, const char* match) const {
-    idEntity*    ent;
+idEntity *idGameLocal::FindEntityUsingDef(idEntity *from, const char *match) const {
+    idEntity    *ent;
 
     if (!from) {
         ent = spawnedEntities.Next();
@@ -3899,9 +3899,9 @@ Searches all active entities for the closest ( to start ) match that intersects
 the line start,end
 =============
 */
-idEntity* idGameLocal::FindTraceEntity(idVec3 start, idVec3 end, const idTypeInfo& c, const idEntity* skip) const {
-    idEntity* ent;
-    idEntity* bestEnt;
+idEntity *idGameLocal::FindTraceEntity(idVec3 start, idVec3 end, const idTypeInfo &c, const idEntity *skip) const {
+    idEntity *ent;
+    idEntity *bestEnt;
     float scale;
     float bestScale;
     idBounds b;
@@ -3930,8 +3930,8 @@ idEntity* idGameLocal::FindTraceEntity(idVec3 start, idVec3 end, const idTypeInf
 idGameLocal::EntitiesWithinRadius
 ================
 */
-int idGameLocal::EntitiesWithinRadius(const idVec3 org, float radius, idEntity** entityList, int maxCount) const {
-    idEntity* ent;
+int idGameLocal::EntitiesWithinRadius(const idVec3 org, float radius, idEntity **entityList, int maxCount) const {
+    idEntity *ent;
     idBounds bo(org);
     int entCount = 0;
 
@@ -3955,13 +3955,13 @@ Checks if player entities are in the teleporter, and marks them to die at telepo
 If catch_teleport, this only marks teleport players for death on exit
 =================
 */
-void idGameLocal::KillBox(idEntity* ent, bool catch_teleport) {
+void idGameLocal::KillBox(idEntity *ent, bool catch_teleport) {
     int         i;
     int         num;
-    idEntity*   hit;
-    idClipModel* cm;
-    idClipModel* clipModels[ MAX_GENTITIES ];
-    idPhysics*   phys;
+    idEntity   *hit;
+    idClipModel *cm;
+    idClipModel *clipModels[ MAX_GENTITIES ];
+    idPhysics   *phys;
 
     phys = ent->GetPhysics();
 
@@ -3990,8 +3990,8 @@ void idGameLocal::KillBox(idEntity* ent, bool catch_teleport) {
         }
 
         // nail it
-        if (hit->IsType(idPlayer::Type) && static_cast< idPlayer* >(hit)->IsInTeleport()) {
-            static_cast< idPlayer* >(hit)->TeleportDeath(ent->entityNumber);
+        if (hit->IsType(idPlayer::Type) && static_cast< idPlayer * >(hit)->IsInTeleport()) {
+            static_cast< idPlayer * >(hit)->TeleportDeath(ent->entityNumber);
         } else if (!catch_teleport) {
             hit->Damage(ent, ent, vec3_origin, "damage_telefrag", 1.0f, INVALID_JOINT);
         }
@@ -4008,11 +4008,11 @@ void idGameLocal::KillBox(idEntity* ent, bool catch_teleport) {
 idGameLocal::RequirementMet
 ================
 */
-bool idGameLocal::RequirementMet(idEntity* activator, const idStr& requires, int removeItem) {
+bool idGameLocal::RequirementMet(idEntity *activator, const idStr &requires, int removeItem) {
     if (requires.Length()) {
         if (activator->IsType(idPlayer::Type)) {
-            idPlayer* player = static_cast<idPlayer*>(activator);
-            idDict* item = player->FindInventoryItem(requires);
+            idPlayer *player = static_cast<idPlayer *>(activator);
+            idDict *item = player->FindInventoryItem(requires);
 
             if (item) {
                 if (removeItem) {
@@ -4034,11 +4034,11 @@ bool idGameLocal::RequirementMet(idEntity* activator, const idStr& requires, int
 idGameLocal::AlertAI
 ============
 */
-void idGameLocal::AlertAI(idEntity* ent) {
+void idGameLocal::AlertAI(idEntity *ent) {
     if (ent && ent->IsType(idActor::Type)) {
         // alert them for the next frame
         lastAIAlertTime = time + msec;
-        lastAIAlertEntity = static_cast<idActor*>(ent);
+        lastAIAlertEntity = static_cast<idActor *>(ent);
     }
 }
 
@@ -4047,7 +4047,7 @@ void idGameLocal::AlertAI(idEntity* ent) {
 idGameLocal::GetAlertEntity
 ============
 */
-idActor* idGameLocal::GetAlertEntity(void) {
+idActor *idGameLocal::GetAlertEntity(void) {
     #ifdef _D3XP
     int timeGroup = 0;
 
@@ -4070,16 +4070,16 @@ idActor* idGameLocal::GetAlertEntity(void) {
 idGameLocal::RadiusDamage
 ============
 */
-void idGameLocal::RadiusDamage(const idVec3& origin, idEntity* inflictor, idEntity* attacker, idEntity* ignoreDamage, idEntity* ignorePush, const char* damageDefName, float dmgPower) {
+void idGameLocal::RadiusDamage(const idVec3 &origin, idEntity *inflictor, idEntity *attacker, idEntity *ignoreDamage, idEntity *ignorePush, const char *damageDefName, float dmgPower) {
     float       dist, damageScale, attackerDamageScale, attackerPushScale;
-    idEntity*   ent;
-    idEntity*   entityList[ MAX_GENTITIES ];
+    idEntity   *ent;
+    idEntity   *entityList[ MAX_GENTITIES ];
     int         numListedEntities;
     idBounds    bounds;
     idVec3      v, damagePoint, dir;
     int         i, e, damage, radius, push;
 
-    const idDict* damageDef = FindEntityDefDict(damageDefName, false);
+    const idDict *damageDef = FindEntityDefDict(damageDefName, false);
 
     if (!damageDef) {
         Warning("Unknown damageDef '%s'", damageDefName);
@@ -4102,15 +4102,15 @@ void idGameLocal::RadiusDamage(const idVec3& origin, idEntity* inflictor, idEnti
     numListedEntities = clip.EntitiesTouchingBounds(bounds, -1, entityList, MAX_GENTITIES);
 
     if (inflictor && inflictor->IsType(idAFAttachment::Type)) {
-        inflictor = static_cast<idAFAttachment*>(inflictor)->GetBody();
+        inflictor = static_cast<idAFAttachment *>(inflictor)->GetBody();
     }
 
     if (attacker && attacker->IsType(idAFAttachment::Type)) {
-        attacker = static_cast<idAFAttachment*>(attacker)->GetBody();
+        attacker = static_cast<idAFAttachment *>(attacker)->GetBody();
     }
 
     if (ignoreDamage && ignoreDamage->IsType(idAFAttachment::Type)) {
-        ignoreDamage = static_cast<idAFAttachment*>(ignoreDamage)->GetBody();
+        ignoreDamage = static_cast<idAFAttachment *>(ignoreDamage)->GetBody();
     }
 
     // apply damage to the entities
@@ -4122,16 +4122,16 @@ void idGameLocal::RadiusDamage(const idVec3& origin, idEntity* inflictor, idEnti
             continue;
         }
 
-        if (ent == inflictor || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment*>(ent)->GetBody() == inflictor)) {
+        if (ent == inflictor || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment *>(ent)->GetBody() == inflictor)) {
             continue;
         }
 
-        if (ent == ignoreDamage || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment*>(ent)->GetBody() == ignoreDamage)) {
+        if (ent == ignoreDamage || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment *>(ent)->GetBody() == ignoreDamage)) {
             continue;
         }
 
         // don't damage a dead player
-        if (isMultiplayer && ent->entityNumber < MAX_CLIENTS && ent->IsType(idPlayer::Type) && static_cast< idPlayer* >(ent)->health < 0) {
+        if (isMultiplayer && ent->entityNumber < MAX_CLIENTS && ent->IsType(idPlayer::Type) && static_cast< idPlayer * >(ent)->health < 0) {
             continue;
         }
 
@@ -4161,7 +4161,7 @@ void idGameLocal::RadiusDamage(const idVec3& origin, idEntity* inflictor, idEnti
             // get the damage scale
             damageScale = dmgPower * (1.0f - dist / radius);
 
-            if (ent == attacker || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment*>(ent)->GetBody() == attacker)) {
+            if (ent == attacker || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment *>(ent)->GetBody() == attacker)) {
                 damageScale *= attackerDamageScale;
             }
 
@@ -4180,14 +4180,14 @@ void idGameLocal::RadiusDamage(const idVec3& origin, idEntity* inflictor, idEnti
 idGameLocal::RadiusPush
 ==============
 */
-void idGameLocal::RadiusPush(const idVec3& origin, const float radius, const float push, const idEntity* inflictor, const idEntity* ignore, float inflictorScale, const bool quake) {
+void idGameLocal::RadiusPush(const idVec3 &origin, const float radius, const float push, const idEntity *inflictor, const idEntity *ignore, float inflictorScale, const bool quake) {
     int i, numListedClipModels;
-    idClipModel* clipModel;
-    idClipModel* clipModelList[ MAX_GENTITIES ];
+    idClipModel *clipModel;
+    idClipModel *clipModelList[ MAX_GENTITIES ];
     idVec3 dir;
     idBounds bounds;
     modelTrace_t result;
-    idEntity* ent;
+    idEntity *ent;
     float scale;
 
     dir.Set(0.0f, 0.0f, 1.0f);
@@ -4198,11 +4198,11 @@ void idGameLocal::RadiusPush(const idVec3& origin, const float radius, const flo
     numListedClipModels = clip.ClipModelsTouchingBounds(bounds, -1, clipModelList, MAX_GENTITIES);
 
     if (inflictor && inflictor->IsType(idAFAttachment::Type)) {
-        inflictor = static_cast<const idAFAttachment*>(inflictor)->GetBody();
+        inflictor = static_cast<const idAFAttachment *>(inflictor)->GetBody();
     }
 
     if (ignore && ignore->IsType(idAFAttachment::Type)) {
-        ignore = static_cast<const idAFAttachment*>(ignore)->GetBody();
+        ignore = static_cast<const idAFAttachment *>(ignore)->GetBody();
     }
 
     // apply impact to all the clip models through their associated physics objects
@@ -4228,7 +4228,7 @@ void idGameLocal::RadiusPush(const idVec3& origin, const float radius, const flo
         }
 
         // don't push the ignore entity
-        if (ent == ignore || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment*>(ent)->GetBody() == ignore)) {
+        if (ent == ignore || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment *>(ent)->GetBody() == ignore)) {
             continue;
         }
 
@@ -4237,7 +4237,7 @@ void idGameLocal::RadiusPush(const idVec3& origin, const float radius, const flo
         }
 
         // scale the push for the inflictor
-        if (ent == inflictor || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment*>(ent)->GetBody() == inflictor)) {
+        if (ent == inflictor || (ent->IsType(idAFAttachment::Type) && static_cast<idAFAttachment *>(ent)->GetBody() == inflictor)) {
             scale = inflictorScale;
         } else {
             scale = 1.0f;
@@ -4256,11 +4256,11 @@ void idGameLocal::RadiusPush(const idVec3& origin, const float radius, const flo
 idGameLocal::RadiusPushClipModel
 ==============
 */
-void idGameLocal::RadiusPushClipModel(const idVec3& origin, const float push, const idClipModel* clipModel) {
+void idGameLocal::RadiusPushClipModel(const idVec3 &origin, const float push, const idClipModel *clipModel) {
     int i, j;
     float dot, dist, area;
-    const idTraceModel* trm;
-    const traceModelPoly_t* poly;
+    const idTraceModel *trm;
+    const traceModelPoly_t *poly;
     idFixedWinding w;
     idVec3 v, localOrigin, center, impulse;
 
@@ -4319,7 +4319,7 @@ void idGameLocal::RadiusPushClipModel(const idVec3& origin, const float push, co
 idGameLocal::ProjectDecal
 ===============
 */
-void idGameLocal::ProjectDecal(const idVec3& origin, const idVec3& dir, float depth, bool parallel, float size, const char* material, float angle) {
+void idGameLocal::ProjectDecal(const idVec3 &origin, const idVec3 &dir, float depth, bool parallel, float size, const char *material, float angle) {
     float s, c;
     idMat3 axis, axistemp;
     idFixedWinding winding;
@@ -4369,7 +4369,7 @@ void idGameLocal::ProjectDecal(const idVec3& origin, const idVec3& dir, float de
 idGameLocal::BloodSplat
 ==============
 */
-void idGameLocal::BloodSplat(const idVec3& origin, const idVec3& dir, float size, const char* material) {
+void idGameLocal::BloodSplat(const idVec3 &origin, const idVec3 &dir, float size, const char *material) {
     float halfSize = size * 0.5f;
     idVec3 verts[] = {  idVec3(0.0f, +halfSize, +halfSize),
                         idVec3(0.0f, +halfSize, -halfSize),
@@ -4397,13 +4397,13 @@ void idGameLocal::BloodSplat(const idVec3& origin, const idVec3& dir, float size
 idGameLocal::SetCamera
 =============
 */
-void idGameLocal::SetCamera(idCamera* cam) {
+void idGameLocal::SetCamera(idCamera *cam) {
     int i;
-    idEntity* ent;
-    idAI* ai;
+    idEntity *ent;
+    idAI *ai;
 
     // this should fix going into a cinematic when dead.. rare but happens
-    idPlayer* client = GetLocalPlayer();
+    idPlayer *client = GetLocalPlayer();
 
     if (client->health <= 0 || client->AI_DEAD) {
         return;
@@ -4432,7 +4432,7 @@ void idGameLocal::SetCamera(idCamera* cam) {
         // hide all the player models
         for (i = 0; i < numClients; i++) {
             if (entities[ i ]) {
-                client = static_cast< idPlayer* >(entities[ i ]);
+                client = static_cast< idPlayer * >(entities[ i ]);
                 client->EnterCinematic();
             }
         }
@@ -4446,7 +4446,7 @@ void idGameLocal::SetCamera(idCamera* cam) {
                 }
 
                 if (ent->IsType(idAI::Type)) {
-                    ai = static_cast<idAI*>(ent);
+                    ai = static_cast<idAI *>(ent);
 
                     if (!ai->GetEnemy() || !ai->IsActive()) {
                         // no enemy, or inactive, so probably safe to ignore
@@ -4477,7 +4477,7 @@ void idGameLocal::SetCamera(idCamera* cam) {
         // show all the player models
         for (i = 0; i < numClients; i++) {
             if (entities[ i ]) {
-                idPlayer* client = static_cast< idPlayer* >(entities[ i ]);
+                idPlayer *client = static_cast< idPlayer * >(entities[ i ]);
                 client->ExitCinematic();
             }
         }
@@ -4489,7 +4489,7 @@ void idGameLocal::SetCamera(idCamera* cam) {
 idGameLocal::GetCamera
 =============
 */
-idCamera* idGameLocal::GetCamera(void) const {
+idCamera *idGameLocal::GetCamera(void) const {
     return camera;
 }
 
@@ -4533,7 +4533,7 @@ Now that everything has been spawned, associate areas with location entities
 ======================
 */
 void idGameLocal::SpreadLocations() {
-    idEntity* ent;
+    idEntity *ent;
 
     // allocate the area table
     int numAreas = gameRenderWorld->NumAreas();
@@ -4564,7 +4564,7 @@ void idGameLocal::SpreadLocations() {
             continue;
         }
 
-        locationEntities[areaNum] = static_cast<idLocationEntity*>(ent);
+        locationEntities[areaNum] = static_cast<idLocationEntity *>(ent);
 
         // spread to all other connected areas
         for (int i = 0 ; i < numAreas ; i++) {
@@ -4573,7 +4573,7 @@ void idGameLocal::SpreadLocations() {
             }
 
             if (gameRenderWorld->AreasAreConnected(areaNum, i, PS_BLOCK_LOCATION)) {
-                locationEntities[i] = static_cast<idLocationEntity*>(ent);
+                locationEntities[i] = static_cast<idLocationEntity *>(ent);
             }
         }
     }
@@ -4587,7 +4587,7 @@ The player checks the location each frame to update the HUD text display
 May return NULL
 ===================
 */
-idLocationEntity* idGameLocal::LocationForPoint(const idVec3& point) {
+idLocationEntity *idGameLocal::LocationForPoint(const idVec3 &point) {
     if (!locationEntities) {
         // before SpreadLocations() has been called
         return NULL;
@@ -4631,9 +4631,9 @@ void idGameLocal::SetPortalState(qhandle_t portal, int blockingBits) {
 idGameLocal::sortSpawnPoints
 ============
 */
-int idGameLocal::sortSpawnPoints(const void* ptr1, const void* ptr2) {
-    const spawnSpot_t* spot1 = static_cast<const spawnSpot_t*>(ptr1);
-    const spawnSpot_t* spot2 = static_cast<const spawnSpot_t*>(ptr2);
+int idGameLocal::sortSpawnPoints(const void *ptr1, const void *ptr2) {
+    const spawnSpot_t *spot1 = static_cast<const spawnSpot_t *>(ptr1);
+    const spawnSpot_t *spot2 = static_cast<const spawnSpot_t *>(ptr2);
     float diff;
 
     diff = spot1->dist - spot2->dist;
@@ -4661,7 +4661,7 @@ void idGameLocal::RandomizeInitialSpawns(void) {
     int k;
     #endif
 
-    idEntity* ent;
+    idEntity *ent;
 
     if (!isMultiplayer || isClient) {
         return;
@@ -4810,7 +4810,7 @@ upon map restart, initial spawns are used (randomized ordered list of spawns fla
   if there are more players than initial spots, overflow to regular spawning
 ============
 */
-idEntity* idGameLocal::SelectInitialSpawnPoint(idPlayer* player) {
+idEntity *idGameLocal::SelectInitialSpawnPoint(idPlayer *player) {
     int             i, j, which;
     spawnSpot_t     spot;
     idVec3          pos;
@@ -4906,7 +4906,7 @@ idEntity* idGameLocal::SelectInitialSpawnPoint(idPlayer* player) {
                 for (j = 0; j < MAX_CLIENTS; j++) {
                     if (!entities[ j ] || !entities[ j ]->IsType(idPlayer::Type)
                             || entities[ j ] == player
-                            || static_cast< idPlayer* >(entities[ j ])->spectating) {
+                            || static_cast< idPlayer * >(entities[ j ])->spectating) {
                         continue;
                     }
 
@@ -4919,7 +4919,7 @@ idEntity* idGameLocal::SelectInitialSpawnPoint(idPlayer* player) {
             }
 
             // sort the list
-            qsort((void*)teamSpawnSpots[ team ].Ptr(), teamSpawnSpots[ team ].Num(), sizeof(spawnSpot_t), (int (*)(const void*, const void*))sortSpawnPoints);
+            qsort((void *)teamSpawnSpots[ team ].Ptr(), teamSpawnSpots[ team ].Num(), sizeof(spawnSpot_t), (int (*)(const void *, const void *))sortSpawnPoints);
 
             // choose a random one in the top half
             which = random.RandomInt(teamSpawnSpots[ team ].Num() / 2);
@@ -4939,7 +4939,7 @@ idEntity* idGameLocal::SelectInitialSpawnPoint(idPlayer* player) {
             for (j = 0; j < MAX_CLIENTS; j++) {
                 if (!entities[ j ] || !entities[ j ]->IsType(idPlayer::Type)
                         || entities[ j ] == player
-                        || static_cast< idPlayer* >(entities[ j ])->spectating) {
+                        || static_cast< idPlayer * >(entities[ j ])->spectating) {
                     continue;
                 }
 
@@ -4952,7 +4952,7 @@ idEntity* idGameLocal::SelectInitialSpawnPoint(idPlayer* player) {
         }
 
         // sort the list
-        qsort((void*)spawnSpots.Ptr(), spawnSpots.Num(), sizeof(spawnSpot_t), (int (*)(const void*, const void*))sortSpawnPoints);
+        qsort((void *)spawnSpots.Ptr(), spawnSpots.Num(), sizeof(spawnSpot_t), (int (*)(const void *, const void *))sortSpawnPoints);
 
         // choose a random one in the top half
         which = random.RandomInt(spawnSpots.Num() / 2);
@@ -5006,7 +5006,7 @@ void idGameLocal::UpdateServerInfoFlags() {
 idGameLocal::SetGlobalMaterial
 ================
 */
-void idGameLocal::SetGlobalMaterial(const idMaterial* mat) {
+void idGameLocal::SetGlobalMaterial(const idMaterial *mat) {
     globalMaterial = mat;
 }
 
@@ -5015,7 +5015,7 @@ void idGameLocal::SetGlobalMaterial(const idMaterial* mat) {
 idGameLocal::GetGlobalMaterial
 ================
 */
-const idMaterial* idGameLocal::GetGlobalMaterial() {
+const idMaterial *idGameLocal::GetGlobalMaterial() {
     return globalMaterial;
 }
 
@@ -5024,7 +5024,7 @@ const idMaterial* idGameLocal::GetGlobalMaterial() {
 idGameLocal::GetSpawnId
 ================
 */
-int idGameLocal::GetSpawnId(const idEntity* ent) const {
+int idGameLocal::GetSpawnId(const idEntity *ent) const {
     return (gameLocal.spawnIds[ ent->entityNumber ] << GENTITYNUM_BITS) | ent->entityNumber;
 }
 
@@ -5043,7 +5043,7 @@ void idGameLocal::ThrottleUserInfo(void) {
 idPlayer::SetPortalSkyEnt
 =================
 */
-void idGameLocal::SetPortalSkyEnt(idEntity* ent) {
+void idGameLocal::SetPortalSkyEnt(idEntity *ent) {
     portalSkyEnt = ent;
 }
 
@@ -5087,7 +5087,7 @@ int idGameLocal::GetTimeGroupTime(int timeGroup) {
 idGameLocal::GetBestGameType
 ===============
 */
-void idGameLocal::GetBestGameType(const char* map, const char* gametype, char buf[ MAX_STRING_CHARS ]) {
+void idGameLocal::GetBestGameType(const char *map, const char *gametype, char buf[ MAX_STRING_CHARS ]) {
     idStr aux = mpGame.GetBestGametype(map, gametype);
     strncpy(buf, aux.c_str(), MAX_STRING_CHARS);
     buf[ MAX_STRING_CHARS - 1 ] = '\0';
@@ -5099,7 +5099,7 @@ idGameLocal::ComputeSlowMsec
 ============
 */
 void idGameLocal::ComputeSlowMsec() {
-    idPlayer* player;
+    idPlayer *player;
     bool powerupOn;
     float delta;
 
@@ -5219,7 +5219,7 @@ idGameLocal::NeedRestart
 bool idGameLocal::NeedRestart() {
 
     idDict      newInfo;
-    const idKeyValue* keyval, *keyval2;
+    const idKeyValue *keyval, *keyval2;
 
     newInfo = *cvarSystem->MoveCVarsToDict(CVAR_SERVERINFO);
 
@@ -5247,7 +5247,7 @@ bool idGameLocal::NeedRestart() {
 idGameLocal::GetClientStats
 ================
 */
-void idGameLocal::GetClientStats(int clientNum, char* data, const int len) {
+void idGameLocal::GetClientStats(int clientNum, char *data, const int len) {
     mpGame.PlayerStats(clientNum, data, len);
 }
 
@@ -5259,13 +5259,13 @@ idGameLocal::SwitchTeam
 */
 void idGameLocal::SwitchTeam(int clientNum, int team) {
 
-    idPlayer*    player;
-    player = static_cast< idPlayer* >(entities[ clientNum ]);
+    idPlayer    *player;
+    player = static_cast< idPlayer * >(entities[ clientNum ]);
     int oldTeam = player->team ;
 
     // Put in spectator mode
     if (team == -1) {
-        static_cast< idPlayer* >(entities[ clientNum ])->Spectate(true);
+        static_cast< idPlayer * >(entities[ clientNum ])->Spectate(true);
     }
     // Switch to a team
     else {

@@ -60,11 +60,11 @@ class idHeap {
     idHeap(void);
     ~idHeap(void);               // frees all associated data
     void            Init(void);                      // initialize
-    void*           Allocate(const dword bytes);     // allocate memory
-    void            Free(void* p);               // free memory
-    void*           Allocate16(const dword bytes);  // allocate 16 byte aligned memory
-    void            Free16(void* p);                 // free 16 byte aligned memory
-    dword           Msize(void* p);                  // return size of data block
+    void           *Allocate(const dword bytes);     // allocate memory
+    void            Free(void *p);               // free memory
+    void           *Allocate16(const dword bytes);  // allocate 16 byte aligned memory
+    void            Free16(void *p);                 // free 16 byte aligned memory
+    dword           Msize(void *p);                  // return size of data block
     void            Dump(void);
 
     void            AllocDefragBlock(void);          // hack for huge renderbumps
@@ -83,37 +83,37 @@ class idHeap {
     };
 
     struct page_s {                                 // allocation page
-        void*               data;                   // data pointer to allocated memory
+        void               *data;                   // data pointer to allocated memory
         dword               dataSize;               // number of bytes of memory 'data' points to
-        page_s*             next;                   // next free page in same page manager
-        page_s*             prev;                   // used only when allocated
+        page_s             *next;                   // next free page in same page manager
+        page_s             *prev;                   // used only when allocated
         dword               largestFree;            // this data used by the medium-size heap manager
-        void*               firstFree;              // pointer to first free entry
+        void               *firstFree;              // pointer to first free entry
     };
 
     struct mediumHeapEntry_s {
-        page_s*             page;                   // pointer to page
+        page_s             *page;                   // pointer to page
         dword               size;                   // size of block
-        mediumHeapEntry_s*  prev;                   // previous block
-        mediumHeapEntry_s*  next;                   // next block
-        mediumHeapEntry_s*  prevFree;               // previous free block
-        mediumHeapEntry_s*  nextFree;               // next free block
+        mediumHeapEntry_s  *prev;                   // previous block
+        mediumHeapEntry_s  *next;                   // next block
+        mediumHeapEntry_s  *prevFree;               // previous free block
+        mediumHeapEntry_s  *nextFree;               // next free block
         dword               freeBlock;              // non-zero if free block
     };
 
     // variables
-    void*           smallFirstFree[256/ALIGN+1];    // small heap allocator lists (for allocs of 1-255 bytes)
-    page_s*         smallCurPage;                   // current page for small allocations
+    void           *smallFirstFree[256/ALIGN+1];    // small heap allocator lists (for allocs of 1-255 bytes)
+    page_s         *smallCurPage;                   // current page for small allocations
     dword           smallCurPageOffset;             // byte offset in current page
-    page_s*         smallFirstUsedPage;             // first used page of the small heap manager
+    page_s         *smallFirstUsedPage;             // first used page of the small heap manager
 
-    page_s*         mediumFirstFreePage;            // first partially free page
-    page_s*         mediumLastFreePage;             // last partially free page
-    page_s*         mediumFirstUsedPage;            // completely used page
+    page_s         *mediumFirstFreePage;            // first partially free page
+    page_s         *mediumLastFreePage;             // last partially free page
+    page_s         *mediumFirstUsedPage;            // completely used page
 
-    page_s*         largeFirstUsedPage;             // first page used by the large heap manager
+    page_s         *largeFirstUsedPage;             // first page used by the large heap manager
 
-    page_s*         swapPage;
+    page_s         *swapPage;
 
     dword           pagesAllocated;                 // number of pages currently allocated
     dword           pageSize;                       // size of one alloc page in bytes
@@ -123,25 +123,25 @@ class idHeap {
 
     int             c_heapAllocRunningCount;
 
-    void*            defragBlock;                   // a single huge block that can be allocated
+    void            *defragBlock;                   // a single huge block that can be allocated
     // at startup, then freed when needed
 
     // methods
-    page_s*         AllocatePage(dword bytes);   // allocate page from the OS
-    void            FreePage(idHeap::page_s* p);     // free an OS allocated page
+    page_s         *AllocatePage(dword bytes);   // allocate page from the OS
+    void            FreePage(idHeap::page_s *p);     // free an OS allocated page
 
-    void*           SmallAllocate(dword bytes);      // allocate memory (1-255 bytes) from small heap manager
-    void            SmallFree(void* ptr);            // free memory allocated by small heap manager
+    void           *SmallAllocate(dword bytes);      // allocate memory (1-255 bytes) from small heap manager
+    void            SmallFree(void *ptr);            // free memory allocated by small heap manager
 
-    void*           MediumAllocateFromPage(idHeap::page_s* p, dword sizeNeeded);
-    void*           MediumAllocate(dword bytes);     // allocate memory (256-32768 bytes) from medium heap manager
-    void            MediumFree(void* ptr);       // free memory allocated by medium heap manager
+    void           *MediumAllocateFromPage(idHeap::page_s *p, dword sizeNeeded);
+    void           *MediumAllocate(dword bytes);     // allocate memory (256-32768 bytes) from medium heap manager
+    void            MediumFree(void *ptr);       // free memory allocated by medium heap manager
 
-    void*           LargeAllocate(dword bytes);      // allocate large block from OS directly
-    void            LargeFree(void* ptr);            // free memory allocated by large heap manager
+    void           *LargeAllocate(dword bytes);      // allocate large block from OS directly
+    void            LargeFree(void *ptr);            // free memory allocated by large heap manager
 
     void            ReleaseSwappedPages(void);
-    void            FreePageReal(idHeap::page_s* p);
+    void            FreePageReal(idHeap::page_s *p);
 };
 
 
@@ -192,7 +192,7 @@ idHeap::~idHeap
 */
 idHeap::~idHeap(void) {
 
-    idHeap::page_s*  p;
+    idHeap::page_s  *p;
 
     if (smallCurPage) {
         FreePage(smallCurPage);              // free small-heap current allocation page
@@ -201,7 +201,7 @@ idHeap::~idHeap(void) {
     p = smallFirstUsedPage;                 // free small-heap allocated pages
 
     while (p) {
-        idHeap::page_s* next = p->next;
+        idHeap::page_s *next = p->next;
         FreePage(p);
         p= next;
     }
@@ -209,7 +209,7 @@ idHeap::~idHeap(void) {
     p = largeFirstUsedPage;                 // free large-heap allocated pages
 
     while (p) {
-        idHeap::page_s* next = p->next;
+        idHeap::page_s *next = p->next;
         FreePage(p);
         p = next;
     }
@@ -217,7 +217,7 @@ idHeap::~idHeap(void) {
     p = mediumFirstFreePage;                // free medium-heap allocated pages
 
     while (p) {
-        idHeap::page_s* next = p->next;
+        idHeap::page_s *next = p->next;
         FreePage(p);
         p = next;
     }
@@ -225,7 +225,7 @@ idHeap::~idHeap(void) {
     p = mediumFirstUsedPage;                // free medium-heap allocated completely used pages
 
     while (p) {
-        idHeap::page_s* next = p->next;
+        idHeap::page_s *next = p->next;
         FreePage(p);
         p = next;
     }
@@ -269,7 +269,7 @@ void idHeap::AllocDefragBlock(void) {
 idHeap::Allocate
 ================
 */
-void* idHeap::Allocate(const dword bytes) {
+void *idHeap::Allocate(const dword bytes) {
     if (!bytes) {
         return NULL;
     }
@@ -297,7 +297,7 @@ void* idHeap::Allocate(const dword bytes) {
 idHeap::Free
 ================
 */
-void idHeap::Free(void* p) {
+void idHeap::Free(void *p) {
     if (!p) {
         return;
     }
@@ -308,7 +308,7 @@ void idHeap::Free(void* p) {
     free(p);
     #else
 
-    switch (((byte*)(p))[-1]) {
+    switch (((byte *)(p))[-1]) {
         case SMALL_ALLOC: {
                 SmallFree(p);
                 break;
@@ -338,17 +338,17 @@ void idHeap::Free(void* p) {
 idHeap::Allocate16
 ================
 */
-void* idHeap::Allocate16(const dword bytes) {
-    byte* ptr, *alignedPtr;
+void *idHeap::Allocate16(const dword bytes) {
+    byte *ptr, *alignedPtr;
 
-    ptr = (byte*) malloc(bytes + 16 + sizeof(intptr_t));
+    ptr = (byte *) malloc(bytes + 16 + sizeof(intptr_t));
 
     if (!ptr) {
         if (defragBlock) {
             idLib::common->Printf("Freeing defragBlock on alloc of %i.\n", bytes);
             free(defragBlock);
             defragBlock = NULL;
-            ptr = (byte*) malloc(bytes + 16 + sizeof(intptr_t));
+            ptr = (byte *) malloc(bytes + 16 + sizeof(intptr_t));
             AllocDefragBlock();
         }
 
@@ -357,14 +357,14 @@ void* idHeap::Allocate16(const dword bytes) {
         }
     }
 
-    alignedPtr = (byte*)((((intptr_t) ptr) + 15) & ~15);
+    alignedPtr = (byte *)((((intptr_t) ptr) + 15) & ~15);
 
     if (alignedPtr - ptr < sizeof(intptr_t)) {
         alignedPtr += 16;
     }
 
-    *((intptr_t*)(alignedPtr - sizeof(intptr_t))) = (intptr_t) ptr;
-    return (void*) alignedPtr;
+    *((intptr_t *)(alignedPtr - sizeof(intptr_t))) = (intptr_t) ptr;
+    return (void *) alignedPtr;
 }
 
 /*
@@ -372,8 +372,8 @@ void* idHeap::Allocate16(const dword bytes) {
 idHeap::Free16
 ================
 */
-void idHeap::Free16(void* p) {
-    free((void*) *((intptr_t*)(((byte*) p) - sizeof(intptr_t))));
+void idHeap::Free16(void *p) {
+    free((void *) *((intptr_t *)(((byte *) p) - sizeof(intptr_t))));
 }
 
 /*
@@ -386,7 +386,7 @@ idHeap::Msize
             allocation request (due to block alignment reasons).
 ================
 */
-dword idHeap::Msize(void* p) {
+dword idHeap::Msize(void *p) {
 
     if (!p) {
         return 0;
@@ -400,17 +400,17 @@ dword idHeap::Msize(void* p) {
     #endif
     #else
 
-    switch (((byte*)(p))[-1]) {
+    switch (((byte *)(p))[-1]) {
         case SMALL_ALLOC: {
-                return SMALL_ALIGN(((byte*)(p))[-SMALL_HEADER_SIZE] * ALIGN);
+                return SMALL_ALIGN(((byte *)(p))[-SMALL_HEADER_SIZE] * ALIGN);
             }
 
         case MEDIUM_ALLOC: {
-                return ((mediumHeapEntry_s*)(((byte*)(p)) - ALIGN_SIZE(MEDIUM_HEADER_SIZE)))->size - ALIGN_SIZE(MEDIUM_HEADER_SIZE);
+                return ((mediumHeapEntry_s *)(((byte *)(p)) - ALIGN_SIZE(MEDIUM_HEADER_SIZE)))->size - ALIGN_SIZE(MEDIUM_HEADER_SIZE);
             }
 
         case LARGE_ALLOC: {
-                return ((idHeap::page_s*)(*((intptr_t*)(((byte*)p) - ALIGN_SIZE(LARGE_HEADER_SIZE)))))->dataSize - ALIGN_SIZE(LARGE_HEADER_SIZE);
+                return ((idHeap::page_s *)(*((intptr_t *)(((byte *)p) - ALIGN_SIZE(LARGE_HEADER_SIZE)))))->dataSize - ALIGN_SIZE(LARGE_HEADER_SIZE);
             }
 
         default: {
@@ -430,7 +430,7 @@ idHeap::Dump
 ================
 */
 void idHeap::Dump(void) {
-    idHeap::page_s*  pg;
+    idHeap::page_s  *pg;
 
     for (pg = smallFirstUsedPage; pg; pg = pg->next) {
         idLib::common->Printf("%p  bytes %-8d  (in use by small heap)\n", pg->data, pg->dataSize);
@@ -464,7 +464,7 @@ idHeap::FreePageReal
   p = page to free
 ================
 */
-void idHeap::FreePageReal(idHeap::page_s* p) {
+void idHeap::FreePageReal(idHeap::page_s *p) {
     assert(p);
     ::free(p);
 }
@@ -493,8 +493,8 @@ idHeap::AllocatePage
   returns pointer to page
 ================
 */
-idHeap::page_s* idHeap::AllocatePage(dword bytes) {
-    idHeap::page_s* p;
+idHeap::page_s *idHeap::AllocatePage(dword bytes) {
+    idHeap::page_s *p;
 
     pageRequests++;
 
@@ -506,14 +506,14 @@ idHeap::page_s* idHeap::AllocatePage(dword bytes) {
 
         size = bytes + sizeof(idHeap::page_s);
 
-        p = (idHeap::page_s*) ::malloc(size + ALIGN - 1);
+        p = (idHeap::page_s *) ::malloc(size + ALIGN - 1);
 
         if (!p) {
             if (defragBlock) {
                 idLib::common->Printf("Freeing defragBlock on alloc of %i.\n", size + ALIGN - 1);
                 free(defragBlock);
                 defragBlock = NULL;
-                p = (idHeap::page_s*) ::malloc(size + ALIGN - 1);
+                p = (idHeap::page_s *) ::malloc(size + ALIGN - 1);
                 AllocDefragBlock();
             }
 
@@ -522,7 +522,7 @@ idHeap::page_s* idHeap::AllocatePage(dword bytes) {
             }
         }
 
-        p->data     = (void*) ALIGN_SIZE((intptr_t)((byte*)(p)) + sizeof(idHeap::page_s));
+        p->data     = (void *) ALIGN_SIZE((intptr_t)((byte *)(p)) + sizeof(idHeap::page_s));
         p->dataSize = size - sizeof(idHeap::page_s);
         p->firstFree = NULL;
         p->largestFree = 0;
@@ -545,7 +545,7 @@ idHeap::FreePage
   p = pointer to page
 ================
 */
-void idHeap::FreePage(idHeap::page_s* p) {
+void idHeap::FreePage(idHeap::page_s *p) {
     assert(p);
 
     if (p->dataSize == pageSize && !swapPage) {              // add to swap list?
@@ -572,7 +572,7 @@ idHeap::SmallAllocate
   returns pointer to allocated memory
 ================
 */
-void* idHeap::SmallAllocate(dword bytes) {
+void *idHeap::SmallAllocate(dword bytes) {
     // we need the at least sizeof( dword ) bytes for the free list
     if (bytes < sizeof(intptr_t)) {
         bytes = sizeof(intptr_t);
@@ -581,13 +581,13 @@ void* idHeap::SmallAllocate(dword bytes) {
     // increase the number of bytes if necessary to make sure the next small allocation is aligned
     bytes = SMALL_ALIGN(bytes);
 
-    byte* smallBlock = (byte*)(smallFirstFree[bytes / ALIGN]);
+    byte *smallBlock = (byte *)(smallFirstFree[bytes / ALIGN]);
 
     if (smallBlock) {
-        intptr_t* link = (intptr_t*)(smallBlock + SMALL_HEADER_SIZE);
+        intptr_t *link = (intptr_t *)(smallBlock + SMALL_HEADER_SIZE);
         smallBlock[1] = SMALL_ALLOC;                    // allocation identifier
-        smallFirstFree[bytes / ALIGN] = (void*)(*link);
-        return (void*)(link);
+        smallFirstFree[bytes / ALIGN] = (void *)(*link);
+        return (void *)(link);
     }
 
     dword bytesLeft = (size_t)(pageSize) - smallCurPageOffset;
@@ -607,7 +607,7 @@ void* idHeap::SmallAllocate(dword bytes) {
         smallCurPageOffset  = SMALL_ALIGN(0);
     }
 
-    smallBlock          = ((byte*)smallCurPage->data) + smallCurPageOffset;
+    smallBlock          = ((byte *)smallCurPage->data) + smallCurPageOffset;
     smallBlock[0]       = (byte)(bytes / ALIGN);        // write # of bytes/ALIGN
     smallBlock[1]       = SMALL_ALLOC;                  // allocation identifier
     smallCurPageOffset  += bytes + SMALL_HEADER_SIZE;   // increase the offset on the current page
@@ -622,11 +622,11 @@ idHeap::SmallFree
   data = pointer to block of memory
 ================
 */
-void idHeap::SmallFree(void* ptr) {
-    ((byte*)(ptr))[-1] = INVALID_ALLOC;
+void idHeap::SmallFree(void *ptr) {
+    ((byte *)(ptr))[-1] = INVALID_ALLOC;
 
-    byte* d = ((byte*)ptr) - SMALL_HEADER_SIZE;
-    intptr_t* link = (intptr_t*)ptr;
+    byte *d = ((byte *)ptr) - SMALL_HEADER_SIZE;
+    intptr_t *link = (intptr_t *)ptr;
     // index into the table with free small memory blocks
     dword ix = *d;
 
@@ -636,7 +636,7 @@ void idHeap::SmallFree(void* ptr) {
     }
 
     *link = (intptr_t)smallFirstFree[ix];   // write next index
-    smallFirstFree[ix] = (void*)d;      // link
+    smallFirstFree[ix] = (void *)d;     // link
 }
 
 //===============================================================
@@ -658,12 +658,12 @@ idHeap::MediumAllocateFromPage
   returns pointer to allocated memory
 ================
 */
-void* idHeap::MediumAllocateFromPage(idHeap::page_s* p, dword sizeNeeded) {
+void *idHeap::MediumAllocateFromPage(idHeap::page_s *p, dword sizeNeeded) {
 
-    mediumHeapEntry_s*   best,*nw = NULL;
-    byte*                ret;
+    mediumHeapEntry_s   *best,*nw = NULL;
+    byte                *ret;
 
-    best = (mediumHeapEntry_s*)(p->firstFree);          // first block is largest
+    best = (mediumHeapEntry_s *)(p->firstFree);         // first block is largest
 
     assert(best);
     assert(best->size == p->largestFree);
@@ -671,7 +671,7 @@ void* idHeap::MediumAllocateFromPage(idHeap::page_s* p, dword sizeNeeded) {
 
     // if we can allocate another block from this page after allocating sizeNeeded bytes
     if (best->size >= (dword)(sizeNeeded + MEDIUM_SMALLEST_SIZE)) {
-        nw = (mediumHeapEntry_s*)((byte*)best + best->size - sizeNeeded);
+        nw = (mediumHeapEntry_s *)((byte *)best + best->size - sizeNeeded);
         nw->page        = p;
         nw->prev        = best;
         nw->next        = best->next;
@@ -692,7 +692,7 @@ void* idHeap::MediumAllocateFromPage(idHeap::page_s* p, dword sizeNeeded) {
         if (best->prevFree) {
             best->prevFree->nextFree = best->nextFree;
         } else {
-            p->firstFree = (void*)best->nextFree;
+            p->firstFree = (void *)best->nextFree;
         }
 
         if (best->nextFree) {
@@ -707,10 +707,10 @@ void* idHeap::MediumAllocateFromPage(idHeap::page_s* p, dword sizeNeeded) {
         p->largestFree = 0;
     }
 
-    ret     = (byte*)(nw) + ALIGN_SIZE(MEDIUM_HEADER_SIZE);
+    ret     = (byte *)(nw) + ALIGN_SIZE(MEDIUM_HEADER_SIZE);
     ret[-1] = MEDIUM_ALLOC;     // allocation identifier
 
-    return (void*)(ret);
+    return (void *)(ret);
 }
 
 /*
@@ -722,9 +722,9 @@ idHeap::MediumAllocate
   returns pointer to allocated memory
 ================
 */
-void* idHeap::MediumAllocate(dword bytes) {
-    idHeap::page_s*      p;
-    void*                data;
+void *idHeap::MediumAllocate(dword bytes) {
+    idHeap::page_s      *p;
+    void                *data;
 
     dword sizeNeeded = ALIGN_SIZE(bytes) + ALIGN_SIZE(MEDIUM_HEADER_SIZE);
 
@@ -754,10 +754,10 @@ void* idHeap::MediumAllocate(dword bytes) {
         mediumFirstFreePage     = p;
 
         p->largestFree  = pageSize;
-        p->firstFree    = (void*)p->data;
+        p->firstFree    = (void *)p->data;
 
-        mediumHeapEntry_s* e;
-        e               = (mediumHeapEntry_s*)(p->firstFree);
+        mediumHeapEntry_s *e;
+        e               = (mediumHeapEntry_s *)(p->firstFree);
         e->page         = p;
         // make sure ((byte *)e + e->size) is aligned
         e->size         = pageSize & ~(ALIGN - 1);
@@ -831,11 +831,11 @@ idHeap::MediumFree
   ptr   = pointer to data block
 ================
 */
-void idHeap::MediumFree(void* ptr) {
-    ((byte*)(ptr))[-1] = INVALID_ALLOC;
+void idHeap::MediumFree(void *ptr) {
+    ((byte *)(ptr))[-1] = INVALID_ALLOC;
 
-    mediumHeapEntry_s*   e = (mediumHeapEntry_s*)((byte*)ptr - ALIGN_SIZE(MEDIUM_HEADER_SIZE));
-    idHeap::page_s*      p = e->page;
+    mediumHeapEntry_s   *e = (mediumHeapEntry_s *)((byte *)ptr - ALIGN_SIZE(MEDIUM_HEADER_SIZE));
+    idHeap::page_s      *p = e->page;
     bool                isInFreeList;
 
     isInFreeList = p->largestFree >= MEDIUM_SMALLEST_SIZE;
@@ -843,7 +843,7 @@ void idHeap::MediumFree(void* ptr) {
     assert(e->size);
     assert(e->freeBlock == 0);
 
-    mediumHeapEntry_s* prev = e->prev;
+    mediumHeapEntry_s *prev = e->prev;
 
     // if the previous block is free we can merge
     if (prev && prev->freeBlock) {
@@ -857,7 +857,7 @@ void idHeap::MediumFree(void* ptr) {
         e = prev;
     } else {
         e->prevFree     = NULL;             // link to beginning of free list
-        e->nextFree     = (mediumHeapEntry_s*)p->firstFree;
+        e->nextFree     = (mediumHeapEntry_s *)p->firstFree;
 
         if (e->nextFree) {
             assert(!(e->nextFree->prevFree));
@@ -869,7 +869,7 @@ void idHeap::MediumFree(void* ptr) {
         e->freeBlock    = 1;                // mark block as free
     }
 
-    mediumHeapEntry_s* next = e->next;
+    mediumHeapEntry_s *next = e->next;
 
     // if the next block is free we can merge
     if (next && next->freeBlock) {
@@ -893,7 +893,7 @@ void idHeap::MediumFree(void* ptr) {
     }
 
     if (p->firstFree) {
-        p->largestFree = ((mediumHeapEntry_s*)(p->firstFree))->size;
+        p->largestFree = ((mediumHeapEntry_s *)(p->firstFree))->size;
     } else {
         p->largestFree = 0;
     }
@@ -912,7 +912,7 @@ void idHeap::MediumFree(void* ptr) {
             e->nextFree->prevFree = e->prevFree;
         }
 
-        e->nextFree = (mediumHeapEntry_s*)p->firstFree;
+        e->nextFree = (mediumHeapEntry_s *)p->firstFree;
         e->prevFree = NULL;
 
         if (e->nextFree) {
@@ -968,8 +968,8 @@ idHeap::LargeAllocate
   returns pointer to allocated memory
 ================
 */
-void* idHeap::LargeAllocate(dword bytes) {
-    idHeap::page_s* p = AllocatePage(bytes + ALIGN_SIZE(LARGE_HEADER_SIZE));
+void *idHeap::LargeAllocate(dword bytes) {
+    idHeap::page_s *p = AllocatePage(bytes + ALIGN_SIZE(LARGE_HEADER_SIZE));
 
     assert(p);
 
@@ -977,8 +977,8 @@ void* idHeap::LargeAllocate(dword bytes) {
         return NULL;
     }
 
-    byte*   d   = (byte*)(p->data) + ALIGN_SIZE(LARGE_HEADER_SIZE);
-    intptr_t* dw   = (intptr_t*)(d - ALIGN_SIZE(LARGE_HEADER_SIZE));
+    byte   *d   = (byte *)(p->data) + ALIGN_SIZE(LARGE_HEADER_SIZE);
+    intptr_t *dw   = (intptr_t *)(d - ALIGN_SIZE(LARGE_HEADER_SIZE));
     dw[0]       = (intptr_t)p;          // write pointer back to page table
     d[-1]       = LARGE_ALLOC;          // allocation identifier
 
@@ -992,7 +992,7 @@ void* idHeap::LargeAllocate(dword bytes) {
 
     largeFirstUsedPage = p;
 
-    return (void*)(d);
+    return (void *)(d);
 }
 
 /*
@@ -1003,13 +1003,13 @@ idHeap::LargeFree
   p = pointer to allocated memory
 ================
 */
-void idHeap::LargeFree(void* ptr) {
-    idHeap::page_s* pg;
+void idHeap::LargeFree(void *ptr) {
+    idHeap::page_s *pg;
 
-    ((byte*)(ptr))[-1] = INVALID_ALLOC;
+    ((byte *)(ptr))[-1] = INVALID_ALLOC;
 
     // get page pointer
-    pg = (idHeap::page_s*)(*((intptr_t*)(((byte*)ptr) - ALIGN_SIZE(LARGE_HEADER_SIZE))));
+    pg = (idHeap::page_s *)(*((intptr_t *)(((byte *)ptr) - ALIGN_SIZE(LARGE_HEADER_SIZE))));
 
     // unlink from doubly linked list
     if (pg->prev) {
@@ -1037,7 +1037,7 @@ void idHeap::LargeFree(void* ptr) {
 
 #undef new
 
-static idHeap*          mem_heap = NULL;
+static idHeap          *mem_heap = NULL;
 static memoryStats_t    mem_total_allocs = { 0, 0x0fffffff, -1, 0 };
 static memoryStats_t    mem_frame_allocs;
 static memoryStats_t    mem_frame_frees;
@@ -1059,7 +1059,7 @@ void Mem_ClearFrameStats(void) {
 Mem_GetFrameStats
 ==================
 */
-void Mem_GetFrameStats(memoryStats_t& allocs, memoryStats_t& frees) {
+void Mem_GetFrameStats(memoryStats_t &allocs, memoryStats_t &frees) {
     allocs = mem_frame_allocs;
     frees = mem_frame_frees;
 }
@@ -1069,7 +1069,7 @@ void Mem_GetFrameStats(memoryStats_t& allocs, memoryStats_t& frees) {
 Mem_GetStats
 ==================
 */
-void Mem_GetStats(memoryStats_t& stats) {
+void Mem_GetStats(memoryStats_t &stats) {
     stats = mem_total_allocs;
 }
 
@@ -1078,7 +1078,7 @@ void Mem_GetStats(memoryStats_t& stats) {
 Mem_UpdateStats
 ==================
 */
-void Mem_UpdateStats(memoryStats_t& stats, int size) {
+void Mem_UpdateStats(memoryStats_t &stats, int size) {
     stats.num++;
 
     if (size < stats.minSize) {
@@ -1121,19 +1121,19 @@ void Mem_UpdateFreeStats(int size) {
 Mem_Alloc
 ==================
 */
-void* Mem_Alloc(const int size) {
+void *Mem_Alloc(const int size) {
     if (!size) {
         return NULL;
     }
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         return malloc(size);
     }
 
-    void* mem = mem_heap->Allocate(size);
+    void *mem = mem_heap->Allocate(size);
     Mem_UpdateAllocStats(mem_heap->Msize(mem));
     return mem;
 }
@@ -1143,14 +1143,14 @@ void* Mem_Alloc(const int size) {
 Mem_Free
 ==================
 */
-void Mem_Free(void* ptr) {
+void Mem_Free(void *ptr) {
     if (!ptr) {
         return;
     }
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         free(ptr);
         return;
@@ -1165,19 +1165,19 @@ void Mem_Free(void* ptr) {
 Mem_Alloc16
 ==================
 */
-void* Mem_Alloc16(const int size) {
+void *Mem_Alloc16(const int size) {
     if (!size) {
         return NULL;
     }
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         return malloc(size);
     }
 
-    void* mem = mem_heap->Allocate16(size);
+    void *mem = mem_heap->Allocate16(size);
     // make sure the memory is 16 byte aligned
     assert((((intptr_t)mem) & 15) == 0);
     return mem;
@@ -1188,14 +1188,14 @@ void* Mem_Alloc16(const int size) {
 Mem_Free16
 ==================
 */
-void Mem_Free16(void* ptr) {
+void Mem_Free16(void *ptr) {
     if (!ptr) {
         return;
     }
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         free(ptr);
         return;
@@ -1211,8 +1211,8 @@ void Mem_Free16(void* ptr) {
 Mem_ClearedAlloc
 ==================
 */
-void* Mem_ClearedAlloc(const int size) {
-    void* mem = Mem_Alloc(size);
+void *Mem_ClearedAlloc(const int size) {
+    void *mem = Mem_Alloc(size);
     SIMDProcessor->Memset(mem, 0, size);
     return mem;
 }
@@ -1231,10 +1231,10 @@ void Mem_AllocDefragBlock(void) {
 Mem_CopyString
 ==================
 */
-char* Mem_CopyString(const char* in) {
-    char*    out;
+char *Mem_CopyString(const char *in) {
+    char    *out;
 
-    out = (char*)Mem_Alloc(strlen(in) + 1);
+    out = (char *)Mem_Alloc(strlen(in) + 1);
     strcpy(out, in);
     return out;
 }
@@ -1244,7 +1244,7 @@ char* Mem_CopyString(const char* in) {
 Mem_Dump_f
 ==================
 */
-void Mem_Dump_f(const idCmdArgs& args) {
+void Mem_Dump_f(const idCmdArgs &args) {
 }
 
 /*
@@ -1252,7 +1252,7 @@ void Mem_Dump_f(const idCmdArgs& args) {
 Mem_DumpCompressed_f
 ==================
 */
-void Mem_DumpCompressed_f(const idCmdArgs& args) {
+void Mem_DumpCompressed_f(const idCmdArgs &args) {
 }
 
 /*
@@ -1271,7 +1271,7 @@ Mem_Shutdown
 ==================
 */
 void Mem_Shutdown(void) {
-    idHeap* m = mem_heap;
+    idHeap *m = mem_heap;
     mem_heap = NULL;
     delete m;
 }
@@ -1281,7 +1281,7 @@ void Mem_Shutdown(void) {
 Mem_EnableLeakTest
 ==================
 */
-void Mem_EnableLeakTest(const char* name) {
+void Mem_EnableLeakTest(const char *name) {
 }
 
 
@@ -1297,15 +1297,15 @@ void Mem_EnableLeakTest(const char* name) {
 
 // size of this struct must be a multiple of 16 bytes
 typedef struct debugMemory_s {
-    const char*             fileName;
+    const char             *fileName;
     int                     lineNumber;
     int                     frameNumber;
     int                     size;
-    struct debugMemory_s*   prev;
-    struct debugMemory_s*   next;
+    struct debugMemory_s   *prev;
+    struct debugMemory_s   *next;
 } debugMemory_t;
 
-static debugMemory_t*   mem_debugMemory = NULL;
+static debugMemory_t   *mem_debugMemory = NULL;
 static char             mem_leakName[256] = "";
 
 /*
@@ -1313,7 +1313,7 @@ static char             mem_leakName[256] = "";
 Mem_CleanupFileName
 ==================
 */
-const char* Mem_CleanupFileName(const char* fileName) {
+const char *Mem_CleanupFileName(const char *fileName) {
     int i1, i2;
     idStr newFileName;
     static char newFileNames[4][MAX_STRING_CHARS];
@@ -1354,12 +1354,12 @@ const char* Mem_CleanupFileName(const char* fileName) {
 Mem_Dump
 ==================
 */
-void Mem_Dump(const char* fileName) {
+void Mem_Dump(const char *fileName) {
     int i, numBlocks, totalSize;
     char dump[32], *ptr;
-    debugMemory_t* b;
+    debugMemory_t *b;
     idStr module, funcName;
-    FILE* f;
+    FILE *f;
 
     f = fopen(fileName, "wb");
 
@@ -1370,7 +1370,7 @@ void Mem_Dump(const char* fileName) {
     totalSize = 0;
 
     for (numBlocks = 0, b = mem_debugMemory; b; b = b->next, numBlocks++) {
-        ptr = ((char*) b) + sizeof(debugMemory_t);
+        ptr = ((char *) b) + sizeof(debugMemory_t);
         totalSize += b->size;
 
         for (i = 0; i < (sizeof(dump)-1) && i < b->size; i++) {
@@ -1401,8 +1401,8 @@ void Mem_Dump(const char* fileName) {
 Mem_Dump_f
 ==================
 */
-void Mem_Dump_f(const idCmdArgs& args) {
-    const char* fileName;
+void Mem_Dump_f(const idCmdArgs &args) {
+    const char *fileName;
 
     if (args.Argc() >= 2) {
         fileName = args.Argv(1);
@@ -1419,11 +1419,11 @@ Mem_DumpCompressed
 ==================
 */
 typedef struct allocInfo_s {
-    const char*             fileName;
+    const char             *fileName;
     int                     lineNumber;
     int                     size;
     int                     numAllocs;
-    struct allocInfo_s*     next;
+    struct allocInfo_s     *next;
 } allocInfo_t;
 
 typedef enum {
@@ -1432,12 +1432,12 @@ typedef enum {
     MEMSORT_NUMALLOCS,
 } memorySortType_t;
 
-void Mem_DumpCompressed(const char* fileName, memorySortType_t memSort, int numFrames) {
+void Mem_DumpCompressed(const char *fileName, memorySortType_t memSort, int numFrames) {
     int numBlocks, totalSize, r, j;
-    debugMemory_t* b;
-    allocInfo_t* a, *nexta, *allocInfo = NULL, *sortedAllocInfo = NULL, *prevSorted, *nextSorted;
+    debugMemory_t *b;
+    allocInfo_t *a, *nexta, *allocInfo = NULL, *sortedAllocInfo = NULL, *prevSorted, *nextSorted;
     idStr module, funcName;
-    FILE* f;
+    FILE *f;
 
     // build list with memory allocations
     totalSize = 0;
@@ -1473,7 +1473,7 @@ void Mem_DumpCompressed(const char* fileName, memorySortType_t memSort, int numF
 
         // if this is an allocation from a new source location
         if (!a) {
-            a = (allocInfo_t*) ::malloc(sizeof(allocInfo_t));
+            a = (allocInfo_t *) ::malloc(sizeof(allocInfo_t));
             a->fileName = b->fileName;
             a->lineNumber = b->lineNumber;
             a->size = b->size;
@@ -1567,9 +1567,9 @@ void Mem_DumpCompressed(const char* fileName, memorySortType_t memSort, int numF
 Mem_DumpCompressed_f
 ==================
 */
-void Mem_DumpCompressed_f(const idCmdArgs& args) {
+void Mem_DumpCompressed_f(const idCmdArgs &args) {
     int argNum;
-    const char* arg, *fileName;
+    const char *arg, *fileName;
     memorySortType_t memSort = MEMSORT_LOCATION;
     int numFrames = 0;
 
@@ -1620,9 +1620,9 @@ void Mem_DumpCompressed_f(const idCmdArgs& args) {
 Mem_AllocDebugMemory
 ==================
 */
-void* Mem_AllocDebugMemory(const int size, const char* fileName, const int lineNumber, const bool align16) {
-    void* p;
-    debugMemory_t* m;
+void *Mem_AllocDebugMemory(const int size, const char *fileName, const int lineNumber, const bool align16) {
+    void *p;
+    debugMemory_t *m;
 
     if (!size) {
         return NULL;
@@ -1630,7 +1630,7 @@ void* Mem_AllocDebugMemory(const int size, const char* fileName, const int lineN
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         // NOTE: set a breakpoint here to find memory allocations before mem_heap is initialized
         return malloc(size);
@@ -1644,7 +1644,7 @@ void* Mem_AllocDebugMemory(const int size, const char* fileName, const int lineN
 
     Mem_UpdateAllocStats(size);
 
-    m = (debugMemory_t*) p;
+    m = (debugMemory_t *) p;
     m->fileName = fileName;
     m->lineNumber = lineNumber;
     m->frameNumber = idLib::frameNumber;
@@ -1658,7 +1658,7 @@ void* Mem_AllocDebugMemory(const int size, const char* fileName, const int lineN
 
     mem_debugMemory = m;
 
-    return (((byte*) p) + sizeof(debugMemory_t));
+    return (((byte *) p) + sizeof(debugMemory_t));
 }
 
 /*
@@ -1666,8 +1666,8 @@ void* Mem_AllocDebugMemory(const int size, const char* fileName, const int lineN
 Mem_FreeDebugMemory
 ==================
 */
-void Mem_FreeDebugMemory(void* p, const char* fileName, const int lineNumber, const bool align16) {
-    debugMemory_t* m;
+void Mem_FreeDebugMemory(void *p, const char *fileName, const int lineNumber, const bool align16) {
+    debugMemory_t *m;
 
     if (!p) {
         return;
@@ -1675,14 +1675,14 @@ void Mem_FreeDebugMemory(void* p, const char* fileName, const int lineNumber, co
 
     if (!mem_heap) {
         #ifdef CRASH_ON_STATIC_ALLOCATION
-        *((int*)0x0) = 1;
+        *((int *)0x0) = 1;
         #endif
         // NOTE: set a breakpoint here to find memory being freed before mem_heap is initialized
         free(p);
         return;
     }
 
-    m = (debugMemory_t*)(((byte*) p) - sizeof(debugMemory_t));
+    m = (debugMemory_t *)(((byte *) p) - sizeof(debugMemory_t));
 
     if (m->size < 0) {
         idLib::common->FatalError("memory freed twice");
@@ -1717,7 +1717,7 @@ void Mem_FreeDebugMemory(void* p, const char* fileName, const int lineNumber, co
 Mem_Alloc
 ==================
 */
-void* Mem_Alloc(const int size, const char* fileName, const int lineNumber) {
+void *Mem_Alloc(const int size, const char *fileName, const int lineNumber) {
     if (!size) {
         return NULL;
     }
@@ -1730,7 +1730,7 @@ void* Mem_Alloc(const int size, const char* fileName, const int lineNumber) {
 Mem_Free
 ==================
 */
-void Mem_Free(void* ptr, const char* fileName, const int lineNumber) {
+void Mem_Free(void *ptr, const char *fileName, const int lineNumber) {
     if (!ptr) {
         return;
     }
@@ -1743,12 +1743,12 @@ void Mem_Free(void* ptr, const char* fileName, const int lineNumber) {
 Mem_Alloc16
 ==================
 */
-void* Mem_Alloc16(const int size, const char* fileName, const int lineNumber) {
+void *Mem_Alloc16(const int size, const char *fileName, const int lineNumber) {
     if (!size) {
         return NULL;
     }
 
-    void* mem = Mem_AllocDebugMemory(size, fileName, lineNumber, true);
+    void *mem = Mem_AllocDebugMemory(size, fileName, lineNumber, true);
     // make sure the memory is 16 byte aligned
     assert((((int)mem) & 15) == 0);
     return mem;
@@ -1759,7 +1759,7 @@ void* Mem_Alloc16(const int size, const char* fileName, const int lineNumber) {
 Mem_Free16
 ==================
 */
-void Mem_Free16(void* ptr, const char* fileName, const int lineNumber) {
+void Mem_Free16(void *ptr, const char *fileName, const int lineNumber) {
     if (!ptr) {
         return;
     }
@@ -1774,8 +1774,8 @@ void Mem_Free16(void* ptr, const char* fileName, const int lineNumber) {
 Mem_ClearedAlloc
 ==================
 */
-void* Mem_ClearedAlloc(const int size, const char* fileName, const int lineNumber) {
-    void* mem = Mem_Alloc(size, fileName, lineNumber);
+void *Mem_ClearedAlloc(const int size, const char *fileName, const int lineNumber) {
+    void *mem = Mem_Alloc(size, fileName, lineNumber);
     SIMDProcessor->Memset(mem, 0, size);
     return mem;
 }
@@ -1785,10 +1785,10 @@ void* Mem_ClearedAlloc(const int size, const char* fileName, const int lineNumbe
 Mem_CopyString
 ==================
 */
-char* Mem_CopyString(const char* in, const char* fileName, const int lineNumber) {
-    char*    out;
+char *Mem_CopyString(const char *in, const char *fileName, const int lineNumber) {
+    char    *out;
 
-    out = (char*)Mem_Alloc(strlen(in) + 1, fileName, lineNumber);
+    out = (char *)Mem_Alloc(strlen(in) + 1, fileName, lineNumber);
     strcpy(out, in);
     return out;
 }
@@ -1814,7 +1814,7 @@ void Mem_Shutdown(void) {
         Mem_DumpCompressed(va("%s_leak_location.txt", mem_leakName), MEMSORT_LOCATION, 0);
     }
 
-    idHeap* m = mem_heap;
+    idHeap *m = mem_heap;
     mem_heap = NULL;
     delete m;
 }
@@ -1824,7 +1824,7 @@ void Mem_Shutdown(void) {
 Mem_EnableLeakTest
 ==================
 */
-void Mem_EnableLeakTest(const char* name) {
+void Mem_EnableLeakTest(const char *name) {
     idStr::Copynz(mem_leakName, name, sizeof(mem_leakName));
 }
 

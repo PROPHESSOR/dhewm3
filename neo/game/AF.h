@@ -54,9 +54,9 @@ typedef struct jointConversion_s {
 } jointConversion_t;
 
 typedef struct afTouch_s {
-    idEntity*               touchedEnt;
-    idClipModel*            touchedClipModel;
-    idAFBody*               touchedByBody;
+    idEntity               *touchedEnt;
+    idClipModel            *touchedClipModel;
+    idAFBody               *touchedByBody;
 } afTouch_t;
 
 class idAF {
@@ -64,21 +64,21 @@ class idAF {
     idAF(void);
     ~idAF(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
-    void                    SetAnimator(idAnimator* a) {
+    void                    SetAnimator(idAnimator *a) {
         animator = a;
     }
-    bool                    Load(idEntity* ent, const char* fileName);
+    bool                    Load(idEntity *ent, const char *fileName);
     bool                    IsLoaded(void) const {
         return isLoaded && self != NULL;
     }
-    const char*             GetName(void) const {
+    const char             *GetName(void) const {
         return name.c_str();
     }
-    void                    SetupPose(idEntity* ent, int time);
-    void                    ChangePose(idEntity* ent, int time);
+    void                    SetupPose(idEntity *ent, int time);
+    void                    ChangePose(idEntity *ent, int time);
     int                     EntitiesTouchingAF(afTouch_t touchList[ MAX_GENTITIES ]) const;
     void                    Start(void);
     void                    StartFromCurrentPose(int inheritVelocityTime);
@@ -87,25 +87,25 @@ class idAF {
     bool                    IsActive(void) const {
         return isActive;
     }
-    void                    SetConstraintPosition(const char* name, const idVec3& pos);
+    void                    SetConstraintPosition(const char *name, const idVec3 &pos);
 
-    idPhysics_AF*           GetPhysics(void) {
+    idPhysics_AF           *GetPhysics(void) {
         return &physicsObj;
     }
-    const idPhysics_AF*     GetPhysics(void) const {
+    const idPhysics_AF     *GetPhysics(void) const {
         return &physicsObj;
     }
     idBounds                GetBounds(void) const;
     bool                    UpdateAnimation(void);
 
-    void                    GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis) const;
-    void                    GetImpactInfo(idEntity* ent, int id, const idVec3& point, impactInfo_t* info);
-    void                    ApplyImpulse(idEntity* ent, int id, const idVec3& point, const idVec3& impulse);
-    void                    AddForce(idEntity* ent, int id, const idVec3& point, const idVec3& force);
+    void                    GetPhysicsToVisualTransform(idVec3 &origin, idMat3 &axis) const;
+    void                    GetImpactInfo(idEntity *ent, int id, const idVec3 &point, impactInfo_t *info);
+    void                    ApplyImpulse(idEntity *ent, int id, const idVec3 &point, const idVec3 &impulse);
+    void                    AddForce(idEntity *ent, int id, const idVec3 &point, const idVec3 &force);
     int                     BodyForClipModelId(int id) const;
 
-    void                    SaveState(idDict& args) const;
-    void                    LoadState(const idDict& args);
+    void                    SaveState(idDict &args) const;
+    void                    LoadState(const idDict &args);
 
     void                    AddBindConstraints(void);
     void                    RemoveBindConstraints(void);
@@ -113,8 +113,8 @@ class idAF {
   protected:
     idStr                   name;               // name of the loaded .af file
     idPhysics_AF            physicsObj;         // articulated figure physics
-    idEntity*               self;               // entity using the animated model
-    idAnimator*             animator;           // animator on entity
+    idEntity               *self;               // entity using the animated model
+    idAnimator             *animator;           // animator on entity
     int                     modifiedAnim;       // anim to modify
     idVec3                  baseOrigin;         // offset of base body relative to skeletal model origin
     idMat3                  baseAxis;           // axis of base body relative to skeletal model origin
@@ -127,11 +127,11 @@ class idAF {
     bool                    hasBindConstraints; // true if the bind constraints have been added
 
   protected:
-    void                    SetBase(idAFBody* body, const idJointMat* joints);
-    void                    AddBody(idAFBody* body, const idJointMat* joints, const char* jointName, const AFJointModType_t mod);
+    void                    SetBase(idAFBody *body, const idJointMat *joints);
+    void                    AddBody(idAFBody *body, const idJointMat *joints, const char *jointName, const AFJointModType_t mod);
 
-    bool                    LoadBody(const idDeclAF_Body* fb, const idJointMat* joints);
-    bool                    LoadConstraint(const idDeclAF_Constraint* fc);
+    bool                    LoadBody(const idDeclAF_Body *fb, const idJointMat *joints);
+    bool                    LoadConstraint(const idDeclAF_Constraint *fc);
 
     bool                    TestSolid(void) const;
 };

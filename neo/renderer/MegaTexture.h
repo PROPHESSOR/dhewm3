@@ -46,13 +46,13 @@ class   idMegaTexture;
 
 class idTextureLevel {
   public:
-    idMegaTexture*   mega;
+    idMegaTexture   *mega;
 
     int             tileOffset;
     int             tilesWide;
     int             tilesHigh;
 
-    idImage*         image;
+    idImage         *image;
     idTextureTile   tileMap[TILE_PER_LEVEL][TILE_PER_LEVEL];
 
     float           parms[4];
@@ -71,21 +71,21 @@ typedef struct {
 
 class idMegaTexture {
   public:
-    bool    InitFromMegaFile(const char* fileBase);
-    void    SetMappingForSurface(const srfTriangles_t* tri);     // analyzes xyz and st to create a mapping
+    bool    InitFromMegaFile(const char *fileBase);
+    void    SetMappingForSurface(const srfTriangles_t *tri);     // analyzes xyz and st to create a mapping
     void    BindForViewOrigin(const idVec3 origin);      // binds images and sets program parameters
     void    Unbind();                               // removes texture bindings
 
-    static  void MakeMegaTexture_f(const idCmdArgs& args);
+    static  void MakeMegaTexture_f(const idCmdArgs &args);
   private:
     friend class idTextureLevel;
     void    SetViewOrigin(const idVec3 origin);
-    static void GenerateMegaMipMaps(megaTextureHeader_t* header, idFile* file);
-    static void GenerateMegaPreview(const char* fileName);
+    static void GenerateMegaMipMaps(megaTextureHeader_t *header, idFile *file);
+    static void GenerateMegaPreview(const char *fileName);
 
-    idFile*          fileHandle;
+    idFile          *fileHandle;
 
-    const srfTriangles_t* currentTriMapping;
+    const srfTriangles_t *currentTriMapping;
 
     idVec3          currentViewOrigin;
 

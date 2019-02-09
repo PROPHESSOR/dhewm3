@@ -48,10 +48,10 @@ Calculates two axis for the surface sutch that a point dotted against
 the axis will give a 0.0 to 1.0 range in S and T when inside the gui surface
 ================
 */
-void R_SurfaceToTextureAxis(const srfTriangles_t* tri, idVec3& origin, idVec3 axis[3]) {
+void R_SurfaceToTextureAxis(const srfTriangles_t *tri, idVec3 &origin, idVec3 axis[3]) {
     float       area, inva;
     float       d0[5], d1[5];
-    idDrawVert*  a, *b, *c;
+    idDrawVert  *a, *b, *c;
     float       bounds[2][2];
     float       boundsOrg[2];
     int         i, j;
@@ -133,7 +133,7 @@ Create a texture space on the given surface and
 call the GUI generator to create quads for it.
 =================
 */
-void R_RenderGuiSurf(idUserInterface* gui, drawSurf_t* drawSurf) {
+void R_RenderGuiSurf(idUserInterface *gui, drawSurf_t *drawSurf) {
     idVec3  origin, axis[3];
 
     // for testing the performance hit
@@ -202,7 +202,7 @@ if they are not out of date.
 Should we also reload the map models?
 ================
 */
-void R_ReloadGuis_f(const idCmdArgs& args) {
+void R_ReloadGuis_f(const idCmdArgs &args) {
     bool all;
 
     if (!idStr::Icmp(args.Argv(1), "all")) {
@@ -222,6 +222,6 @@ R_ListGuis_f
 
 ================
 */
-void R_ListGuis_f(const idCmdArgs& args) {
+void R_ListGuis_f(const idCmdArgs &args) {
     uiManager->ListGuis();
 }

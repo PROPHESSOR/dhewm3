@@ -34,7 +34,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "PlayerIcon.h"
 
-static const char* iconKeys[ ICON_NONE ] = {
+static const char *iconKeys[ ICON_NONE ] = {
     "mtr_icon_lag",
     "mtr_icon_chat"
     #ifdef CTF
@@ -67,7 +67,7 @@ idPlayerIcon::~idPlayerIcon() {
 idPlayerIcon::Draw
 ===============
 */
-void idPlayerIcon::Draw(idPlayer* player, jointHandle_t joint) {
+void idPlayerIcon::Draw(idPlayer *player, jointHandle_t joint) {
     idVec3 origin;
     idMat3 axis;
 
@@ -87,8 +87,8 @@ void idPlayerIcon::Draw(idPlayer* player, jointHandle_t joint) {
 idPlayerIcon::Draw
 ===============
 */
-void idPlayerIcon::Draw(idPlayer* player, const idVec3& origin) {
-    idPlayer* localPlayer = gameLocal.GetLocalPlayer();
+void idPlayerIcon::Draw(idPlayer *player, const idVec3 &origin) {
+    idPlayer *localPlayer = gameLocal.GetLocalPlayer();
 
     if (!localPlayer || !localPlayer->GetRenderView()) {
         FreeIcon();
@@ -144,9 +144,9 @@ void idPlayerIcon::FreeIcon(void) {
 idPlayerIcon::CreateIcon
 ===============
 */
-bool idPlayerIcon::CreateIcon(idPlayer* player, playerIconType_t type, const idVec3& origin, const idMat3& axis) {
+bool idPlayerIcon::CreateIcon(idPlayer *player, playerIconType_t type, const idVec3 &origin, const idMat3 &axis) {
     assert(type != ICON_NONE);
-    const char* mtr = player->spawnArgs.GetString(iconKeys[ type ], "_default");
+    const char *mtr = player->spawnArgs.GetString(iconKeys[ type ], "_default");
     return CreateIcon(player, type, mtr, origin, axis);
 }
 
@@ -155,7 +155,7 @@ bool idPlayerIcon::CreateIcon(idPlayer* player, playerIconType_t type, const idV
 idPlayerIcon::CreateIcon
 ===============
 */
-bool idPlayerIcon::CreateIcon(idPlayer* player, playerIconType_t type, const char* mtr, const idVec3& origin, const idMat3& axis) {
+bool idPlayerIcon::CreateIcon(idPlayer *player, playerIconType_t type, const char *mtr, const idVec3 &origin, const idMat3 &axis) {
     assert(type != ICON_NONE);
 
     if (type == iconType) {
@@ -195,7 +195,7 @@ bool idPlayerIcon::CreateIcon(idPlayer* player, playerIconType_t type, const cha
 idPlayerIcon::UpdateIcon
 ===============
 */
-void idPlayerIcon::UpdateIcon(idPlayer* player, const idVec3& origin, const idMat3& axis) {
+void idPlayerIcon::UpdateIcon(idPlayer *player, const idVec3 &origin, const idMat3 &axis) {
     assert(iconHandle >= 0);
 
     renderEnt.origin = origin;

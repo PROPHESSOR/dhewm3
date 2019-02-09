@@ -44,12 +44,12 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 typedef struct commandDef_s {
-    struct commandDef_s*    next;
-    char*                   name;
+    struct commandDef_s    *next;
+    char                   *name;
     cmdFunction_t           function;
     argCompletion_t         argCompletion;
     int                     flags;
-    char*                   description;
+    char                   *description;
 } commandDef_t;
 
 
@@ -58,35 +58,35 @@ class idCmdSystemLocal : public idCmdSystem {
     virtual void            Init(void);
     virtual void            Shutdown(void);
 
-    virtual void            AddCommand(const char* cmdName, cmdFunction_t function, int flags, const char* description, argCompletion_t argCompletion = NULL);
-    virtual void            RemoveCommand(const char* cmdName);
+    virtual void            AddCommand(const char *cmdName, cmdFunction_t function, int flags, const char *description, argCompletion_t argCompletion = NULL);
+    virtual void            RemoveCommand(const char *cmdName);
     virtual void            RemoveFlaggedCommands(int flags);
 
-    virtual void            CommandCompletion(void(*callback)(const char* s));
-    virtual void            ArgCompletion(const char* cmdString, void(*callback)(const char* s));
+    virtual void            CommandCompletion(void(*callback)(const char *s));
+    virtual void            ArgCompletion(const char *cmdString, void(*callback)(const char *s));
 
-    virtual void            BufferCommandText(cmdExecution_t exec, const char* text);
+    virtual void            BufferCommandText(cmdExecution_t exec, const char *text);
     virtual void            ExecuteCommandBuffer(void);
 
-    virtual void            ArgCompletion_FolderExtension(const idCmdArgs& args, void(*callback)(const char* s), const char* folder, bool stripFolder, ...);
-    virtual void            ArgCompletion_DeclName(const idCmdArgs& args, void(*callback)(const char* s), int type);
+    virtual void            ArgCompletion_FolderExtension(const idCmdArgs &args, void(*callback)(const char *s), const char *folder, bool stripFolder, ...);
+    virtual void            ArgCompletion_DeclName(const idCmdArgs &args, void(*callback)(const char *s), int type);
 
-    virtual void            BufferCommandArgs(cmdExecution_t exec, const idCmdArgs& args);
+    virtual void            BufferCommandArgs(cmdExecution_t exec, const idCmdArgs &args);
 
-    virtual void            SetupReloadEngine(const idCmdArgs& args);
+    virtual void            SetupReloadEngine(const idCmdArgs &args);
     virtual bool            PostReloadEngine(void);
 
     void                    SetWait(int numFrames) {
         wait = numFrames;
     }
-    commandDef_t*           GetCommands(void) const {
+    commandDef_t           *GetCommands(void) const {
         return commands;
     }
 
   private:
     static const int        MAX_CMD_BUFFER = 0x10000;
 
-    commandDef_t*           commands;
+    commandDef_t           *commands;
 
     int                     wait;
     int                     textLength;
@@ -102,28 +102,28 @@ class idCmdSystemLocal : public idCmdSystem {
     idCmdArgs               postReload;
 
   private:
-    void                    ExecuteTokenizedString(const idCmdArgs& args);
-    void                    ExecuteCommandText(const char* text);
-    void                    InsertCommandText(const char* text);
-    void                    AppendCommandText(const char* text);
+    void                    ExecuteTokenizedString(const idCmdArgs &args);
+    void                    ExecuteCommandText(const char *text);
+    void                    InsertCommandText(const char *text);
+    void                    AppendCommandText(const char *text);
 
-    static void             ListByFlags(const idCmdArgs& args, cmdFlags_t flags);
-    static void             List_f(const idCmdArgs& args);
-    static void             SystemList_f(const idCmdArgs& args);
-    static void             RendererList_f(const idCmdArgs& args);
-    static void             SoundList_f(const idCmdArgs& args);
-    static void             GameList_f(const idCmdArgs& args);
-    static void             ToolList_f(const idCmdArgs& args);
-    static void             Exec_f(const idCmdArgs& args);
-    static void             Vstr_f(const idCmdArgs& args);
-    static void             Echo_f(const idCmdArgs& args);
-    static void             Parse_f(const idCmdArgs& args);
-    static void             Wait_f(const idCmdArgs& args);
-    static void             PrintMemInfo_f(const idCmdArgs& args);
+    static void             ListByFlags(const idCmdArgs &args, cmdFlags_t flags);
+    static void             List_f(const idCmdArgs &args);
+    static void             SystemList_f(const idCmdArgs &args);
+    static void             RendererList_f(const idCmdArgs &args);
+    static void             SoundList_f(const idCmdArgs &args);
+    static void             GameList_f(const idCmdArgs &args);
+    static void             ToolList_f(const idCmdArgs &args);
+    static void             Exec_f(const idCmdArgs &args);
+    static void             Vstr_f(const idCmdArgs &args);
+    static void             Echo_f(const idCmdArgs &args);
+    static void             Parse_f(const idCmdArgs &args);
+    static void             Wait_f(const idCmdArgs &args);
+    static void             PrintMemInfo_f(const idCmdArgs &args);
 };
 
 idCmdSystemLocal            cmdSystemLocal;
-idCmdSystem*                cmdSystem = &cmdSystemLocal;
+idCmdSystem                *cmdSystem = &cmdSystemLocal;
 
 
 /*
@@ -133,15 +133,15 @@ idCmdSystemLocal::ListByFlags
 */
 // NOTE: the const wonkyness is required to make msvc happy
 template<>
-ID_INLINE int idListSortCompare(const commandDef_t* const* a, const commandDef_t* const* b) {
+ID_INLINE int idListSortCompare(const commandDef_t *const *a, const commandDef_t *const *b) {
     return idStr::Icmp((*a)->name, (*b)->name);
 }
 
-void idCmdSystemLocal::ListByFlags(const idCmdArgs& args, cmdFlags_t flags) {
+void idCmdSystemLocal::ListByFlags(const idCmdArgs &args, cmdFlags_t flags) {
     int i;
     idStr match;
-    const commandDef_t* cmd;
-    idList<const commandDef_t*> cmdList;
+    const commandDef_t *cmd;
+    idList<const commandDef_t *> cmdList;
 
     if (args.Argc() > 1) {
         match = args.Args(1, -1);
@@ -178,7 +178,7 @@ void idCmdSystemLocal::ListByFlags(const idCmdArgs& args, cmdFlags_t flags) {
 idCmdSystemLocal::List_f
 ============
 */
-void idCmdSystemLocal::List_f(const idCmdArgs& args) {
+void idCmdSystemLocal::List_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_ALL);
 }
 
@@ -187,7 +187,7 @@ void idCmdSystemLocal::List_f(const idCmdArgs& args) {
 idCmdSystemLocal::SystemList_f
 ============
 */
-void idCmdSystemLocal::SystemList_f(const idCmdArgs& args) {
+void idCmdSystemLocal::SystemList_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_SYSTEM);
 }
 
@@ -196,7 +196,7 @@ void idCmdSystemLocal::SystemList_f(const idCmdArgs& args) {
 idCmdSystemLocal::RendererList_f
 ============
 */
-void idCmdSystemLocal::RendererList_f(const idCmdArgs& args) {
+void idCmdSystemLocal::RendererList_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_RENDERER);
 }
 
@@ -205,7 +205,7 @@ void idCmdSystemLocal::RendererList_f(const idCmdArgs& args) {
 idCmdSystemLocal::SoundList_f
 ============
 */
-void idCmdSystemLocal::SoundList_f(const idCmdArgs& args) {
+void idCmdSystemLocal::SoundList_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_SOUND);
 }
 
@@ -214,7 +214,7 @@ void idCmdSystemLocal::SoundList_f(const idCmdArgs& args) {
 idCmdSystemLocal::GameList_f
 ============
 */
-void idCmdSystemLocal::GameList_f(const idCmdArgs& args) {
+void idCmdSystemLocal::GameList_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_GAME);
 }
 
@@ -223,7 +223,7 @@ void idCmdSystemLocal::GameList_f(const idCmdArgs& args) {
 idCmdSystemLocal::ToolList_f
 ============
 */
-void idCmdSystemLocal::ToolList_f(const idCmdArgs& args) {
+void idCmdSystemLocal::ToolList_f(const idCmdArgs &args) {
     idCmdSystemLocal::ListByFlags(args, CMD_FL_TOOL);
 }
 
@@ -232,8 +232,8 @@ void idCmdSystemLocal::ToolList_f(const idCmdArgs& args) {
 idCmdSystemLocal::Exec_f
 ===============
 */
-void idCmdSystemLocal::Exec_f(const idCmdArgs& args) {
-    char*   f;
+void idCmdSystemLocal::Exec_f(const idCmdArgs &args) {
+    char   *f;
     idStr   filename;
 
     if (args.Argc() != 2) {
@@ -243,7 +243,7 @@ void idCmdSystemLocal::Exec_f(const idCmdArgs& args) {
 
     filename = args.Argv(1);
     filename.DefaultFileExtension(".cfg");
-    fileSystem->ReadFile(filename, reinterpret_cast<void**>(&f), NULL);
+    fileSystem->ReadFile(filename, reinterpret_cast<void **>(&f), NULL);
 
     if (!f) {
         common->Printf("couldn't exec %s\n", args.Argv(1));
@@ -264,8 +264,8 @@ idCmdSystemLocal::Vstr_f
 Inserts the current value of a cvar as command text
 ===============
 */
-void idCmdSystemLocal::Vstr_f(const idCmdArgs& args) {
-    const char* v;
+void idCmdSystemLocal::Vstr_f(const idCmdArgs &args) {
+    const char *v;
 
     if (args.Argc() != 2) {
         common->Printf("vstr <variablename> : execute a variable command\n");
@@ -284,7 +284,7 @@ idCmdSystemLocal::Echo_f
 Just prints the rest of the line to the console
 ===============
 */
-void idCmdSystemLocal::Echo_f(const idCmdArgs& args) {
+void idCmdSystemLocal::Echo_f(const idCmdArgs &args) {
     int     i;
 
     for (i = 1; i < args.Argc(); i++) {
@@ -301,7 +301,7 @@ idCmdSystemLocal::Wait_f
 Causes execution of the remainder of the command buffer to be delayed until next frame.
 ============
 */
-void idCmdSystemLocal::Wait_f(const idCmdArgs& args) {
+void idCmdSystemLocal::Wait_f(const idCmdArgs &args) {
     if (args.Argc() == 2) {
         cmdSystemLocal.SetWait(atoi(args.Argv(1)));
     } else {
@@ -316,7 +316,7 @@ idCmdSystemLocal::Parse_f
 This just prints out how the rest of the line was parsed, as a debugging tool.
 ============
 */
-void idCmdSystemLocal::Parse_f(const idCmdArgs& args) {
+void idCmdSystemLocal::Parse_f(const idCmdArgs &args) {
     int     i;
 
     for (i = 0; i < args.Argc(); i++) {
@@ -354,7 +354,7 @@ idCmdSystemLocal::Shutdown
 ============
 */
 void idCmdSystemLocal::Shutdown(void) {
-    commandDef_t* cmd;
+    commandDef_t *cmd;
 
     for (cmd = commands; cmd; cmd = commands) {
         commands = commands->next;
@@ -374,8 +374,8 @@ void idCmdSystemLocal::Shutdown(void) {
 idCmdSystemLocal::AddCommand
 ============
 */
-void idCmdSystemLocal::AddCommand(const char* cmdName, cmdFunction_t function, int flags, const char* description, argCompletion_t argCompletion) {
-    commandDef_t* cmd;
+void idCmdSystemLocal::AddCommand(const char *cmdName, cmdFunction_t function, int flags, const char *description, argCompletion_t argCompletion) {
+    commandDef_t *cmd;
 
     // fail if the command already exists
     for (cmd = commands; cmd; cmd = cmd->next) {
@@ -403,8 +403,8 @@ void idCmdSystemLocal::AddCommand(const char* cmdName, cmdFunction_t function, i
 idCmdSystemLocal::RemoveCommand
 ============
 */
-void idCmdSystemLocal::RemoveCommand(const char* cmdName) {
-    commandDef_t* cmd, **last;
+void idCmdSystemLocal::RemoveCommand(const char *cmdName) {
+    commandDef_t *cmd, **last;
 
     for (last = &commands, cmd = *last; cmd; cmd = *last) {
         if (idStr::Cmp(cmdName, cmd->name) == 0) {
@@ -425,7 +425,7 @@ idCmdSystemLocal::RemoveFlaggedCommands
 ============
 */
 void idCmdSystemLocal::RemoveFlaggedCommands(int flags) {
-    commandDef_t* cmd, **last;
+    commandDef_t *cmd, **last;
 
     for (last = &commands, cmd = *last; cmd; cmd = *last) {
         if (cmd->flags & flags) {
@@ -445,8 +445,8 @@ void idCmdSystemLocal::RemoveFlaggedCommands(int flags) {
 idCmdSystemLocal::CommandCompletion
 ============
 */
-void idCmdSystemLocal::CommandCompletion(void(*callback)(const char* s)) {
-    commandDef_t* cmd;
+void idCmdSystemLocal::CommandCompletion(void(*callback)(const char *s)) {
+    commandDef_t *cmd;
 
     for (cmd = commands; cmd; cmd = cmd->next) {
         callback(cmd->name);
@@ -458,8 +458,8 @@ void idCmdSystemLocal::CommandCompletion(void(*callback)(const char* s)) {
 idCmdSystemLocal::ArgCompletion
 ============
 */
-void idCmdSystemLocal::ArgCompletion(const char* cmdString, void(*callback)(const char* s)) {
-    commandDef_t* cmd;
+void idCmdSystemLocal::ArgCompletion(const char *cmdString, void(*callback)(const char *s)) {
+    commandDef_t *cmd;
     idCmdArgs args;
 
     args.TokenizeString(cmdString, false);
@@ -481,8 +481,8 @@ void idCmdSystemLocal::ArgCompletion(const char* cmdString, void(*callback)(cons
 idCmdSystemLocal::ExecuteTokenizedString
 ============
 */
-void idCmdSystemLocal::ExecuteTokenizedString(const idCmdArgs& args) {
-    commandDef_t* cmd, **prev;
+void idCmdSystemLocal::ExecuteTokenizedString(const idCmdArgs &args) {
+    commandDef_t *cmd, **prev;
 
     // execute the command line
     if (!args.Argc()) {
@@ -531,7 +531,7 @@ idCmdSystemLocal::ExecuteCommandText
 Tokenizes, then executes.
 ============
 */
-void idCmdSystemLocal::ExecuteCommandText(const char* text) {
+void idCmdSystemLocal::ExecuteCommandText(const char *text) {
     ExecuteTokenizedString(idCmdArgs(text, false));
 }
 
@@ -543,7 +543,7 @@ Adds command text immediately after the current command
 Adds a \n to the text
 ============
 */
-void idCmdSystemLocal::InsertCommandText(const char* text) {
+void idCmdSystemLocal::InsertCommandText(const char *text) {
     int     len;
     int     i;
 
@@ -575,7 +575,7 @@ idCmdSystemLocal::AppendCommandText
 Adds command text at the end of the buffer, does NOT add a final \n
 ============
 */
-void idCmdSystemLocal::AppendCommandText(const char* text) {
+void idCmdSystemLocal::AppendCommandText(const char *text) {
     int l;
 
     l = strlen(text);
@@ -594,7 +594,7 @@ void idCmdSystemLocal::AppendCommandText(const char* text) {
 idCmdSystemLocal::BufferCommandText
 ============
 */
-void idCmdSystemLocal::BufferCommandText(cmdExecution_t exec, const char* text) {
+void idCmdSystemLocal::BufferCommandText(cmdExecution_t exec, const char *text) {
     switch (exec) {
         case CMD_EXEC_NOW: {
                 ExecuteCommandText(text);
@@ -622,7 +622,7 @@ void idCmdSystemLocal::BufferCommandText(cmdExecution_t exec, const char* text) 
 idCmdSystemLocal::BufferCommandArgs
 ============
 */
-void idCmdSystemLocal::BufferCommandArgs(cmdExecution_t exec, const idCmdArgs& args) {
+void idCmdSystemLocal::BufferCommandArgs(cmdExecution_t exec, const idCmdArgs &args) {
     switch (exec) {
         case CMD_EXEC_NOW: {
                 ExecuteTokenizedString(args);
@@ -648,7 +648,7 @@ idCmdSystemLocal::ExecuteCommandBuffer
 */
 void idCmdSystemLocal::ExecuteCommandBuffer(void) {
     int         i;
-    char*       text;
+    char       *text;
     int         quotes;
     idCmdArgs   args;
 
@@ -661,7 +661,7 @@ void idCmdSystemLocal::ExecuteCommandBuffer(void) {
         }
 
         // find a \n or ; line break
-        text = (char*)textBuf;
+        text = (char *)textBuf;
 
         quotes = 0;
 
@@ -710,10 +710,10 @@ void idCmdSystemLocal::ExecuteCommandBuffer(void) {
 idCmdSystemLocal::ArgCompletion_FolderExtension
 ============
 */
-void idCmdSystemLocal::ArgCompletion_FolderExtension(const idCmdArgs& args, void(*callback)(const char* s), const char* folder, bool stripFolder, ...) {
+void idCmdSystemLocal::ArgCompletion_FolderExtension(const idCmdArgs &args, void(*callback)(const char *s), const char *folder, bool stripFolder, ...) {
     int i;
     idStr string;
-    const char* extension;
+    const char *extension;
     va_list argPtr;
 
     string = args.Argv(0);
@@ -722,7 +722,7 @@ void idCmdSystemLocal::ArgCompletion_FolderExtension(const idCmdArgs& args, void
 
     if (string.Icmp(completionString) != 0) {
         idStr parm, path;
-        idFileList* names;
+        idFileList *names;
 
         completionString = string;
         completionParms.Clear();
@@ -757,7 +757,7 @@ void idCmdSystemLocal::ArgCompletion_FolderExtension(const idCmdArgs& args, void
         // list files
         va_start(argPtr, stripFolder);
 
-        for (extension = va_arg(argPtr, const char*); extension; extension = va_arg(argPtr, const char*)) {
+        for (extension = va_arg(argPtr, const char *); extension; extension = va_arg(argPtr, const char *)) {
             names = fileSystem->ListFiles(path, extension, true, true);
 
             for (i = 0; i < names->GetNumFiles(); i++) {
@@ -789,7 +789,7 @@ void idCmdSystemLocal::ArgCompletion_FolderExtension(const idCmdArgs& args, void
 idCmdSystemLocal::ArgCompletion_DeclName
 ============
 */
-void idCmdSystemLocal::ArgCompletion_DeclName(const idCmdArgs& args, void(*callback)(const char* s), int type) {
+void idCmdSystemLocal::ArgCompletion_DeclName(const idCmdArgs &args, void(*callback)(const char *s), int type) {
     int i, num;
 
     if (declManager == NULL) {
@@ -808,7 +808,7 @@ void idCmdSystemLocal::ArgCompletion_DeclName(const idCmdArgs& args, void(*callb
 idCmdSystemLocal::SetupReloadEngine
 ============
 */
-void idCmdSystemLocal::SetupReloadEngine(const idCmdArgs& args) {
+void idCmdSystemLocal::SetupReloadEngine(const idCmdArgs &args) {
     BufferCommandText(CMD_EXEC_APPEND, "reloadEngine\n");
     postReload = args;
 }

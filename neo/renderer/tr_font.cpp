@@ -54,7 +54,7 @@ If you have questions concerning this license or the applicable additional terms
 R_GetGlyphInfo
 ============
 */
-void R_GetGlyphInfo(FT_GlyphSlot glyph, int* left, int* right, int* width, int* top, int* bottom, int* height, int* pitch) {
+void R_GetGlyphInfo(FT_GlyphSlot glyph, int *left, int *right, int *width, int *top, int *bottom, int *height, int *pitch) {
 
     *left  = _FLOOR(glyph->metrics.horiBearingX);
     *right = _CEIL(glyph->metrics.horiBearingX + glyph->metrics.width);
@@ -71,8 +71,8 @@ void R_GetGlyphInfo(FT_GlyphSlot glyph, int* left, int* right, int* width, int* 
 R_RenderGlyph
 ============
 */
-FT_Bitmap* R_RenderGlyph(FT_GlyphSlot glyph, glyphInfo_t* glyphOut) {
-    FT_Bitmap*  bit2;
+FT_Bitmap *R_RenderGlyph(FT_GlyphSlot glyph, glyphInfo_t *glyphOut) {
+    FT_Bitmap  *bit2;
     int left, right, width, top, bottom, height, pitch, size;
 
     R_GetGlyphInfo(glyph, &left, &right, &width, &top, &bottom, &height, &pitch);
@@ -114,12 +114,12 @@ FT_Bitmap* R_RenderGlyph(FT_GlyphSlot glyph, glyphInfo_t* glyphOut) {
 RE_ConstructGlyphInfo
 ============
 */
-glyphInfo_t* RE_ConstructGlyphInfo(unsigned char* imageOut, int* xOut, int* yOut, int* maxHeight, FT_Face face, const unsigned char c, qboolean calcHeight) {
+glyphInfo_t *RE_ConstructGlyphInfo(unsigned char *imageOut, int *xOut, int *yOut, int *maxHeight, FT_Face face, const unsigned char c, qboolean calcHeight) {
     int i;
     static glyphInfo_t glyph;
-    unsigned char* src, *dst;
+    unsigned char *src, *dst;
     float scaled_width, scaled_height;
-    FT_Bitmap* bitmap = NULL;
+    FT_Bitmap *bitmap = NULL;
 
     memset(&glyph, 0, sizeof(glyphInfo_t));
 
@@ -182,8 +182,8 @@ glyphInfo_t* RE_ConstructGlyphInfo(unsigned char* imageOut, int* xOut, int* yOut
         if (bitmap->pixel_mode == ft_pixel_mode_mono) {
             for (i = 0; i < glyph.height; i++) {
                 int j;
-                unsigned char* _src = src;
-                unsigned char* _dst = dst;
+                unsigned char *_src = src;
+                unsigned char *_dst = dst;
                 unsigned char mask = 0x80;
                 unsigned char val = *_src;
 
@@ -239,7 +239,7 @@ glyphInfo_t* RE_ConstructGlyphInfo(unsigned char* imageOut, int* xOut, int* yOut
 #endif
 
 static int fdOffset;
-static byte* fdFile;
+static byte *fdFile;
 
 /*
 ============
@@ -286,18 +286,18 @@ RegisterFont
 Loads 3 point sizes, 12, 24, and 48
 ============
 */
-bool idRenderSystemLocal::RegisterFont(const char* fontName, fontInfoEx_t& font) {
+bool idRenderSystemLocal::RegisterFont(const char *fontName, fontInfoEx_t &font) {
     #ifdef BUILD_FREETYPE
     FT_Face face;
     int j, k, xOut, yOut, lastStart, imageNumber;
     int scaledSize, newSize, maxHeight, left, satLevels;
-    unsigned char* out, *imageBuff;
-    glyphInfo_t* glyph;
-    idImage* image;
-    idMaterial* h;
+    unsigned char *out, *imageBuff;
+    glyphInfo_t *glyph;
+    idImage *image;
+    idMaterial *h;
     float max;
     #endif
-    void* faceData;
+    void *faceData;
     ID_TIME_T ftime;
     int i, len, fontCount;
     char name[1024];
@@ -337,7 +337,7 @@ bool idRenderSystemLocal::RegisterFont(const char* fontName, fontInfoEx_t& font)
 
         idStr::snPrintf(name, sizeof(name), "%s/fontImage_%i.dat", fontName, pointSize);
 
-        fontInfo_t* outFont;
+        fontInfo_t *outFont;
 
         if (fontCount == 0) {
             outFont = &font.fontInfoSmall;
@@ -358,7 +358,7 @@ bool idRenderSystemLocal::RegisterFont(const char* fontName, fontInfoEx_t& font)
 
         fileSystem->ReadFile(name, &faceData, &ftime);
         fdOffset = 0;
-        fdFile = reinterpret_cast<unsigned char*>(faceData);
+        fdFile = reinterpret_cast<unsigned char *>(faceData);
 
         for (i = 0; i < GLYPHS_PER_FONT; i++) {
             outFont->glyphs[i].height       = readInt();

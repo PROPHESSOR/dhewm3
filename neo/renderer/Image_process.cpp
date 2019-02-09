@@ -45,14 +45,14 @@ after resampling to the next lower power of two.
 ================
 */
 #define MAX_DIMENSION   4096
-byte* R_ResampleTexture(const byte* in, int inwidth, int inheight,
+byte *R_ResampleTexture(const byte *in, int inwidth, int inheight,
                         int outwidth, int outheight) {
     int     i, j;
-    const byte*  inrow, *inrow2;
+    const byte  *inrow, *inrow2;
     unsigned int    frac, fracstep;
     unsigned int    p1[MAX_DIMENSION], p2[MAX_DIMENSION];
-    const byte*      pix1, *pix2, *pix3, *pix4;
-    byte*        out, *out_p;
+    const byte      *pix1, *pix2, *pix3, *pix4;
+    byte        *out, *out_p;
 
     if (outwidth > MAX_DIMENSION) {
         outwidth = MAX_DIMENSION;
@@ -62,7 +62,7 @@ byte* R_ResampleTexture(const byte* in, int inwidth, int inheight,
         outheight = MAX_DIMENSION;
     }
 
-    out = (byte*)R_StaticAlloc(outwidth * outheight * 4);
+    out = (byte *)R_StaticAlloc(outwidth * outheight * 4);
     out_p = out;
 
     fracstep = inwidth*0x10000/outwidth;
@@ -109,14 +109,14 @@ Used to resample images in a more general than quartering fashion.
 Normal maps and such should not be bilerped.
 ================
 */
-byte* R_Dropsample(const byte* in, int inwidth, int inheight,
+byte *R_Dropsample(const byte *in, int inwidth, int inheight,
                    int outwidth, int outheight) {
     int     i, j, k;
-    const byte*  inrow;
-    const byte*  pix1;
-    byte*        out, *out_p;
+    const byte  *inrow;
+    const byte  *pix1;
+    byte        *out, *out_p;
 
-    out = (byte*)R_StaticAlloc(outwidth * outheight * 4);
+    out = (byte *)R_StaticAlloc(outwidth * outheight * 4);
     out_p = out;
 
     for (i=0 ; i<outheight ; i++, out_p += outwidth*4) {
@@ -142,9 +142,9 @@ R_SetBorderTexels
 
 ===============
 */
-void R_SetBorderTexels(byte* inBase, int width, int height, const byte border[4]) {
+void R_SetBorderTexels(byte *inBase, int width, int height, const byte border[4]) {
     int     i;
-    byte*    out;
+    byte    *out;
 
     out = inBase;
 
@@ -189,9 +189,9 @@ R_SetBorderTexels3D
 
 ===============
 */
-void R_SetBorderTexels3D(byte* inBase, int width, int height, int depth, const byte border[4]) {
+void R_SetBorderTexels3D(byte *inBase, int width, int height, int depth, const byte border[4]) {
     int     i, j;
-    byte*    out;
+    byte    *out;
     int     row, plane;
 
     row = width * 4;
@@ -276,11 +276,11 @@ With mip maps, the lowest samnpled value will be retained
 Should we rewrite the normal as the centered average?
 ================
 */
-void    R_SetAlphaNormalDivergence(byte* in, int width, int height) {
+void    R_SetAlphaNormalDivergence(byte *in, int width, int height) {
     for (int y = 0 ; y < height ; y++) {
         for (int x = 0 ; x < width ; x++) {
             // the divergence is the smallest dot product of any of the eight surrounding texels
-            byte*    pic_p = in + (y * width + x) * 4;
+            byte    *pic_p = in + (y * width + x) * 4;
             idVec3  center;
             center[0] = (pic_p[0] - 128) / 127;
             center[1] = (pic_p[1] - 128) / 127;
@@ -296,7 +296,7 @@ void    R_SetAlphaNormalDivergence(byte* in, int width, int height) {
                         continue;
                     }
 
-                    byte*    corner_p = in + (((y+yy)&(height-1)) * width + ((x+xx)&(width-1))) * 4;
+                    byte    *corner_p = in + (((y+yy)&(height-1)) * width + ((x+xx)&(width-1))) * 4;
                     idVec3  corner;
                     corner[0] = (corner_p[0] - 128) / 127;
                     corner[1] = (corner_p[1] - 128) / 127;
@@ -331,12 +331,12 @@ The alpha channel is taken to be the minimum of the dots of all surrounding norm
 */
 #define MIP_MIN(a,b) (a<b?a:b)
 
-byte* R_MipMapWithAlphaSpecularity(const byte* in, int width, int height) {
+byte *R_MipMapWithAlphaSpecularity(const byte *in, int width, int height) {
     int     i, j, c, x, y, sx, sy;
-    const byte*  in_p;
-    byte*    out, *out_p;
+    const byte  *in_p;
+    byte    *out, *out_p;
     int     newWidth, newHeight;
-    float*   fbuf, *fbuf_p;
+    float   *fbuf, *fbuf_p;
 
     if (width < 1 || height < 1 || (width + height == 2)) {
         common->FatalError("R_MipMapWithAlphaMin called with size %i,%i", width, height);
@@ -344,7 +344,7 @@ byte* R_MipMapWithAlphaSpecularity(const byte* in, int width, int height) {
 
     // convert the incoming texture to centered floating point
     c = width * height;
-    fbuf = (float*)_alloca(c * 4 * sizeof(*fbuf));
+    fbuf = (float *)_alloca(c * 4 * sizeof(*fbuf));
     in_p = in;
     fbuf_p = fbuf;
 
@@ -366,7 +366,7 @@ byte* R_MipMapWithAlphaSpecularity(const byte* in, int width, int height) {
         newHeight = 1;
     }
 
-    out = (byte*)R_StaticAlloc(newWidth * newHeight * 4);
+    out = (byte *)R_StaticAlloc(newWidth * newHeight * 4);
     out_p = out;
 
     in_p = in;
@@ -424,10 +424,10 @@ will result in a slight shrinking of the texture as it mips, but better than
 smeared clamps...
 ================
 */
-byte* R_MipMap(const byte* in, int width, int height, bool preserveBorder) {
+byte *R_MipMap(const byte *in, int width, int height, bool preserveBorder) {
     int     i, j;
-    const byte*  in_p;
-    byte*    out, *out_p;
+    const byte  *in_p;
+    byte    *out, *out_p;
     int     row;
     byte    border[4];
     int     newWidth, newHeight;
@@ -454,7 +454,7 @@ byte* R_MipMap(const byte* in, int width, int height, bool preserveBorder) {
         newHeight = 1;
     }
 
-    out = (byte*)R_StaticAlloc(newWidth * newHeight * 4);
+    out = (byte *)R_StaticAlloc(newWidth * newHeight * 4);
     out_p = out;
 
     in_p = in;
@@ -514,10 +514,10 @@ will result in a slight shrinking of the texture as it mips, but better than
 smeared clamps...
 ================
 */
-byte* R_MipMap3D(const byte* in, int width, int height, int depth, bool preserveBorder) {
+byte *R_MipMap3D(const byte *in, int width, int height, int depth, bool preserveBorder) {
     int     i, j, k;
-    const byte*  in_p;
-    byte*    out, *out_p;
+    const byte  *in_p;
+    byte    *out, *out_p;
     int     row, plane;
     byte    border[4];
     int     newWidth, newHeight, newDepth;
@@ -543,7 +543,7 @@ byte* R_MipMap3D(const byte* in, int width, int height, int depth, bool preserve
     newHeight = height >> 1;
     newDepth = depth >> 1;
 
-    out = (byte*)R_StaticAlloc(newWidth * newHeight * newDepth * 4);
+    out = (byte *)R_StaticAlloc(newWidth * newHeight * newDepth * 4);
     out_p = out;
 
     in_p = in;
@@ -587,7 +587,7 @@ R_BlendOverTexture
 Apply a color blend over a set of pixels
 ==================
 */
-void R_BlendOverTexture(byte* data, int pixelCount, const byte blend[4]) {
+void R_BlendOverTexture(byte *data, int pixelCount, const byte blend[4]) {
     int     i;
     int     inverseAlpha;
     int     premult[3];
@@ -612,41 +612,41 @@ R_HorizontalFlip
 Flip the image in place
 ==================
 */
-void R_HorizontalFlip(byte* data, int width, int height) {
+void R_HorizontalFlip(byte *data, int width, int height) {
     int     i, j;
     int     temp;
 
     for (i = 0 ; i < height ; i++) {
         for (j = 0 ; j < width / 2 ; j++) {
-            temp = *((int*)data + i * width + j);
-            *((int*)data + i * width + j) = *((int*)data + i * width + width - 1 - j);
-            *((int*)data + i * width + width - 1 - j) = temp;
+            temp = *((int *)data + i * width + j);
+            *((int *)data + i * width + j) = *((int *)data + i * width + width - 1 - j);
+            *((int *)data + i * width + width - 1 - j) = temp;
         }
     }
 }
 
-void R_VerticalFlip(byte* data, int width, int height) {
+void R_VerticalFlip(byte *data, int width, int height) {
     int     i, j;
     int     temp;
 
     for (i = 0 ; i < width ; i++) {
         for (j = 0 ; j < height / 2 ; j++) {
-            temp = *((int*)data + j * width + i);
-            *((int*)data + j * width + i) = *((int*)data + (height - 1 - j) * width + i);
-            *((int*)data + (height - 1 - j) * width + i) = temp;
+            temp = *((int *)data + j * width + i);
+            *((int *)data + j * width + i) = *((int *)data + (height - 1 - j) * width + i);
+            *((int *)data + (height - 1 - j) * width + i) = temp;
         }
     }
 }
 
-void R_RotatePic(byte* data, int width) {
+void R_RotatePic(byte *data, int width) {
     int     i, j;
-    int*     temp;
+    int     *temp;
 
-    temp = (int*)R_StaticAlloc(width * width * 4);
+    temp = (int *)R_StaticAlloc(width * width * 4);
 
     for (i = 0 ; i < width ; i++) {
         for (j = 0 ; j < width ; j++) {
-            *(temp + i * width + j) = *((int*)data + j * width + i);
+            *(temp + i * width + j) = *((int *)data + j * width + i);
         }
     }
 

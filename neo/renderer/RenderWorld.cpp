@@ -39,9 +39,9 @@ If you have questions concerning this license or the applicable additional terms
 R_ListRenderLightDefs_f
 ===================
 */
-void R_ListRenderLightDefs_f(const idCmdArgs& args) {
+void R_ListRenderLightDefs_f(const idCmdArgs &args) {
     int         i;
-    idRenderLightLocal*  ldef;
+    idRenderLightLocal  *ldef;
 
     if (!tr.primaryWorld) {
         return;
@@ -62,7 +62,7 @@ void R_ListRenderLightDefs_f(const idCmdArgs& args) {
         // count up the interactions
         int iCount = 0;
 
-        for (idInteraction* inter = ldef->firstInteraction; inter != NULL; inter = inter->lightNext) {
+        for (idInteraction *inter = ldef->firstInteraction; inter != NULL; inter = inter->lightNext) {
             iCount++;
         }
 
@@ -71,7 +71,7 @@ void R_ListRenderLightDefs_f(const idCmdArgs& args) {
         // count up the references
         int rCount = 0;
 
-        for (areaReference_t* ref = ldef->references ; ref ; ref = ref->ownerNext) {
+        for (areaReference_t *ref = ldef->references ; ref ; ref = ref->ownerNext) {
             rCount++;
         }
 
@@ -89,9 +89,9 @@ void R_ListRenderLightDefs_f(const idCmdArgs& args) {
 R_ListRenderEntityDefs_f
 ===================
 */
-void R_ListRenderEntityDefs_f(const idCmdArgs& args) {
+void R_ListRenderEntityDefs_f(const idCmdArgs &args) {
     int         i;
-    idRenderEntityLocal* mdef;
+    idRenderEntityLocal *mdef;
 
     if (!tr.primaryWorld) {
         return;
@@ -112,7 +112,7 @@ void R_ListRenderEntityDefs_f(const idCmdArgs& args) {
         // count up the interactions
         int iCount = 0;
 
-        for (idInteraction* inter = mdef->firstInteraction; inter != NULL; inter = inter->entityNext) {
+        for (idInteraction *inter = mdef->firstInteraction; inter != NULL; inter = inter->entityNext) {
             iCount++;
         }
 
@@ -121,7 +121,7 @@ void R_ListRenderEntityDefs_f(const idCmdArgs& args) {
         // count up the references
         int rCount = 0;
 
-        for (areaReference_t* ref = mdef->entityRefs ; ref ; ref = ref->ownerNext) {
+        for (areaReference_t *ref = mdef->entityRefs ; ref ; ref = ref->ownerNext) {
             rCount++;
         }
 
@@ -192,7 +192,7 @@ void idRenderWorldLocal::ResizeInteractionTable() {
 AddEntityDef
 ===================
 */
-qhandle_t idRenderWorldLocal::AddEntityDef(const renderEntity_t* re) {
+qhandle_t idRenderWorldLocal::AddEntityDef(const renderEntity_t *re) {
     // try and reuse a free spot
     int entityHandle = entityDefs.FindNull();
 
@@ -219,7 +219,7 @@ visible entities
 */
 int c_callbackUpdate;
 
-void idRenderWorldLocal::UpdateEntityDef(qhandle_t entityHandle, const renderEntity_t* re) {
+void idRenderWorldLocal::UpdateEntityDef(qhandle_t entityHandle, const renderEntity_t *re) {
     if (r_skipUpdates.GetBool()) {
         return;
     }
@@ -239,7 +239,7 @@ void idRenderWorldLocal::UpdateEntityDef(qhandle_t entityHandle, const renderEnt
         entityDefs.Append(NULL);
     }
 
-    idRenderEntityLocal* def = entityDefs[entityHandle];
+    idRenderEntityLocal *def = entityDefs[entityHandle];
 
     if (def) {
 
@@ -317,7 +317,7 @@ NULL's out it's entry in the world list
 ===================
 */
 void idRenderWorldLocal::FreeEntityDef(qhandle_t entityHandle) {
-    idRenderEntityLocal* def;
+    idRenderEntityLocal *def;
 
     if (entityHandle < 0 || entityHandle >= entityDefs.Num()) {
         common->Printf("idRenderWorld::FreeEntityDef: handle %i > %i\n", entityHandle, entityDefs.Num());
@@ -354,8 +354,8 @@ void idRenderWorldLocal::FreeEntityDef(qhandle_t entityHandle) {
 GetRenderEntity
 ==================
 */
-const renderEntity_t* idRenderWorldLocal::GetRenderEntity(qhandle_t entityHandle) const {
-    idRenderEntityLocal* def;
+const renderEntity_t *idRenderWorldLocal::GetRenderEntity(qhandle_t entityHandle) const {
+    idRenderEntityLocal *def;
 
     if (entityHandle < 0 || entityHandle >= entityDefs.Num()) {
         common->Printf("idRenderWorld::GetRenderEntity: invalid handle %i [0, %i]\n", entityHandle, entityDefs.Num());
@@ -377,7 +377,7 @@ const renderEntity_t* idRenderWorldLocal::GetRenderEntity(qhandle_t entityHandle
 AddLightDef
 ==================
 */
-qhandle_t idRenderWorldLocal::AddLightDef(const renderLight_t* rlight) {
+qhandle_t idRenderWorldLocal::AddLightDef(const renderLight_t *rlight) {
     // try and reuse a free spot
     int lightHandle = lightDefs.FindNull();
 
@@ -404,7 +404,7 @@ usually be deferred until it is visible in a scene
 Does not write to the demo file, which will only be done for visible lights
 =================
 */
-void idRenderWorldLocal::UpdateLightDef(qhandle_t lightHandle, const renderLight_t* rlight) {
+void idRenderWorldLocal::UpdateLightDef(qhandle_t lightHandle, const renderLight_t *rlight) {
     if (r_skipUpdates.GetBool()) {
         return;
     }
@@ -421,7 +421,7 @@ void idRenderWorldLocal::UpdateLightDef(qhandle_t lightHandle, const renderLight
     }
 
     bool justUpdate = false;
-    idRenderLightLocal* light = lightDefs[lightHandle];
+    idRenderLightLocal *light = lightDefs[lightHandle];
 
     if (light) {
         // if the shape of the light stays the same, we don't need to dump
@@ -476,7 +476,7 @@ NULL's out it's entry in the world list
 ====================
 */
 void idRenderWorldLocal::FreeLightDef(qhandle_t lightHandle) {
-    idRenderLightLocal*  light;
+    idRenderLightLocal  *light;
 
     if (lightHandle < 0 || lightHandle >= lightDefs.Num()) {
         common->Printf("idRenderWorld::FreeLightDef: invalid handle %i [0, %i]\n", lightHandle, lightDefs.Num());
@@ -505,8 +505,8 @@ void idRenderWorldLocal::FreeLightDef(qhandle_t lightHandle) {
 GetRenderLight
 ==================
 */
-const renderLight_t* idRenderWorldLocal::GetRenderLight(qhandle_t lightHandle) const {
-    idRenderLightLocal* def;
+const renderLight_t *idRenderWorldLocal::GetRenderLight(qhandle_t lightHandle) const {
+    idRenderLightLocal *def;
 
     if (lightHandle < 0 || lightHandle >= lightDefs.Num()) {
         common->Printf("idRenderWorld::GetRenderLight: handle %i > %i\n", lightHandle, lightDefs.Num());
@@ -528,12 +528,12 @@ const renderLight_t* idRenderWorldLocal::GetRenderLight(qhandle_t lightHandle) c
 idRenderWorldLocal::ProjectDecalOntoWorld
 ================
 */
-void idRenderWorldLocal::ProjectDecalOntoWorld(const idFixedWinding& winding, const idVec3& projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial* material, const int startTime) {
+void idRenderWorldLocal::ProjectDecalOntoWorld(const idFixedWinding &winding, const idVec3 &projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial *material, const int startTime) {
     int i, areas[10], numAreas;
-    const areaReference_t* ref;
-    const portalArea_t* area;
-    const idRenderModel* model;
-    idRenderEntityLocal* def;
+    const areaReference_t *ref;
+    const portalArea_t *area;
+    const idRenderModel *model;
+    idRenderEntityLocal *def;
     decalProjectionInfo_t info, localInfo;
 
     if (!idRenderModelDecal::CreateProjectionInfo(info, winding, projectionOrigin, parallel, fadeDepth, material, startTime)) {
@@ -589,7 +589,7 @@ void idRenderWorldLocal::ProjectDecalOntoWorld(const idFixedWinding& winding, co
 idRenderWorldLocal::ProjectDecal
 ====================
 */
-void idRenderWorldLocal::ProjectDecal(qhandle_t entityHandle, const idFixedWinding& winding, const idVec3& projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial* material, const int startTime) {
+void idRenderWorldLocal::ProjectDecal(qhandle_t entityHandle, const idFixedWinding &winding, const idVec3 &projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial *material, const int startTime) {
     decalProjectionInfo_t info, localInfo;
 
     if (entityHandle < 0 || entityHandle >= entityDefs.Num()) {
@@ -597,13 +597,13 @@ void idRenderWorldLocal::ProjectDecal(qhandle_t entityHandle, const idFixedWindi
         return;
     }
 
-    idRenderEntityLocal* def = entityDefs[ entityHandle ];
+    idRenderEntityLocal *def = entityDefs[ entityHandle ];
 
     if (!def) {
         return;
     }
 
-    const idRenderModel* model = def->parms.hModel;
+    const idRenderModel *model = def->parms.hModel;
 
     if (model == NULL || model->IsDynamicModel() != DM_STATIC || def->parms.callback) {
         return;
@@ -637,22 +637,22 @@ void idRenderWorldLocal::ProjectDecal(qhandle_t entityHandle, const idFixedWindi
 idRenderWorldLocal::ProjectOverlay
 ====================
 */
-void idRenderWorldLocal::ProjectOverlay(qhandle_t entityHandle, const idPlane localTextureAxis[2], const idMaterial* material) {
+void idRenderWorldLocal::ProjectOverlay(qhandle_t entityHandle, const idPlane localTextureAxis[2], const idMaterial *material) {
 
     if (entityHandle < 0 || entityHandle >= entityDefs.Num()) {
         common->Error("idRenderWorld::ProjectOverlay: index = %i", entityHandle);
         return;
     }
 
-    idRenderEntityLocal* def = entityDefs[ entityHandle ];
+    idRenderEntityLocal *def = entityDefs[ entityHandle ];
 
     if (!def) {
         return;
     }
 
-    const renderEntity_t* refEnt = &def->parms;
+    const renderEntity_t *refEnt = &def->parms;
 
-    idRenderModel* model = refEnt->hModel;
+    idRenderModel *model = refEnt->hModel;
 
     if (model->IsDynamicModel() != DM_CACHED) {      // FIXME: probably should be MD5 only
         return;
@@ -678,7 +678,7 @@ void idRenderWorldLocal::RemoveDecals(qhandle_t entityHandle) {
         return;
     }
 
-    idRenderEntityLocal* def = entityDefs[ entityHandle ];
+    idRenderEntityLocal *def = entityDefs[ entityHandle ];
 
     if (!def) {
         return;
@@ -695,7 +695,7 @@ SetRenderView
 Sets the current view so any calls to the render world will use the correct parms.
 ====================
 */
-void idRenderWorldLocal::SetRenderView(const renderView_t* renderView) {
+void idRenderWorldLocal::SetRenderView(const renderView_t *renderView) {
     tr.primaryRenderView = *renderView;
 }
 
@@ -710,7 +710,7 @@ Rendering a scene may require multiple views to be rendered
 to handle mirrors,
 ====================
 */
-void idRenderWorldLocal::RenderScene(const renderView_t* renderView) {
+void idRenderWorldLocal::RenderScene(const renderView_t *renderView) {
     #ifndef ID_DEDICATED
     renderView_t    copy;
 
@@ -738,7 +738,7 @@ void idRenderWorldLocal::RenderScene(const renderView_t* renderView) {
 
     // setup view parms for the initial view
     //
-    viewDef_t*       parms = (viewDef_t*)R_ClearedFrameAlloc(sizeof(*parms));
+    viewDef_t       *parms = (viewDef_t *)R_ClearedFrameAlloc(sizeof(*parms));
     parms->renderView = *renderView;
 
     if (tr.takingScreenshot) {
@@ -802,7 +802,7 @@ void idRenderWorldLocal::RenderScene(const renderView_t* renderView) {
     #if 0
 
     for (int i = 0 ; i < entityDefs.Num() ; i++) {
-        idRenderEntityLocal* def = entityDefs[i];
+        idRenderEntityLocal *def = entityDefs[i];
 
         if (!def) {
             continue;
@@ -842,9 +842,9 @@ NumPortalsInArea
 ===================
 */
 int idRenderWorldLocal::NumPortalsInArea(int areaNum) {
-    portalArea_t*    area;
+    portalArea_t    *area;
     int             count;
-    portal_t*        portal;
+    portal_t        *portal;
 
     if (areaNum >= numPortalAreas || areaNum < 0) {
         common->Error("idRenderWorld::NumPortalsInArea: bad areanum %i", areaNum);
@@ -867,9 +867,9 @@ GetPortal
 ===================
 */
 exitPortal_t idRenderWorldLocal::GetPortal(int areaNum, int portalNum) {
-    portalArea_t*    area;
+    portalArea_t    *area;
     int             count;
-    portal_t*        portal;
+    portal_t        *portal;
     exitPortal_t    ret;
 
     if (areaNum > numPortalAreas) {
@@ -907,8 +907,8 @@ Will return -1 if the point is not in an area, otherwise
 it will return 0 <= value < tr.world->numPortalAreas
 ===============
 */
-int idRenderWorldLocal::PointInArea(const idVec3& point) const {
-    areaNode_t*  node;
+int idRenderWorldLocal::PointInArea(const idVec3 &point) const {
+    areaNode_t  *node;
     int         nodeNum;
     float       d;
 
@@ -952,9 +952,9 @@ int idRenderWorldLocal::PointInArea(const idVec3& point) const {
 BoundsInAreas_r
 ===================
 */
-void idRenderWorldLocal::BoundsInAreas_r(int nodeNum, const idBounds& bounds, int* areas, int* numAreas, int maxAreas) const {
+void idRenderWorldLocal::BoundsInAreas_r(int nodeNum, const idBounds &bounds, int *areas, int *numAreas, int maxAreas) const {
     int side, i;
-    areaNode_t* node;
+    areaNode_t *node;
 
     do {
         if (nodeNum < 0) {
@@ -1005,7 +1005,7 @@ BoundsInAreas
   returns the total number of areas the bounds are in
 ===================
 */
-int idRenderWorldLocal::BoundsInAreas(const idBounds& bounds, int* areas, int maxAreas) const {
+int idRenderWorldLocal::BoundsInAreas(const idBounds &bounds, int *areas, int maxAreas) const {
     int numAreas = 0;
 
     assert(areas);
@@ -1034,9 +1034,9 @@ guiPoint_t  idRenderWorldLocal::GuiTrace(qhandle_t entityHandle, const idVec3 st
     localTrace_t    local;
     idVec3          localStart, localEnd, bestPoint;
     int             j;
-    idRenderModel*   model;
-    srfTriangles_t*  tri;
-    const idMaterial* shader;
+    idRenderModel   *model;
+    srfTriangles_t  *tri;
+    const idMaterial *shader;
     guiPoint_t  pt;
 
     pt.x = pt.y = -1;
@@ -1047,7 +1047,7 @@ guiPoint_t  idRenderWorldLocal::GuiTrace(qhandle_t entityHandle, const idVec3 st
         return pt;
     }
 
-    idRenderEntityLocal* def = entityDefs[entityHandle];
+    idRenderEntityLocal *def = entityDefs[entityHandle];
 
     if (!def) {
         common->Printf("idRenderWorld::GuiTrace: handle %i is NULL\n", entityHandle);
@@ -1065,7 +1065,7 @@ guiPoint_t  idRenderWorldLocal::GuiTrace(qhandle_t entityHandle, const idVec3 st
     R_GlobalPointToLocal(def->modelMatrix, end, localEnd);
 
     for (j = 0 ; j < model->NumSurfaces() ; j++) {
-        const modelSurface_t* surf = model->Surface(j);
+        const modelSurface_t *surf = model->Surface(j);
 
         tri = surf->geometry;
 
@@ -1113,15 +1113,15 @@ guiPoint_t  idRenderWorldLocal::GuiTrace(qhandle_t entityHandle, const idVec3 st
 idRenderWorldLocal::ModelTrace
 ===================
 */
-bool idRenderWorldLocal::ModelTrace(modelTrace_t& trace, qhandle_t entityHandle, const idVec3& start, const idVec3& end, const float radius) const {
+bool idRenderWorldLocal::ModelTrace(modelTrace_t &trace, qhandle_t entityHandle, const idVec3 &start, const idVec3 &end, const float radius) const {
     int i;
     bool collisionSurface;
-    const modelSurface_t* surf;
+    const modelSurface_t *surf;
     localTrace_t localTrace;
-    idRenderModel* model;
+    idRenderModel *model;
     float modelMatrix[16];
     idVec3 localStart, localEnd;
-    const idMaterial* shader;
+    const idMaterial *shader;
 
     trace.fraction = 1.0f;
 
@@ -1130,13 +1130,13 @@ bool idRenderWorldLocal::ModelTrace(modelTrace_t& trace, qhandle_t entityHandle,
         return false;
     }
 
-    idRenderEntityLocal* def = entityDefs[entityHandle];
+    idRenderEntityLocal *def = entityDefs[entityHandle];
 
     if (!def) {
         return false;
     }
 
-    renderEntity_t* refEnt = &def->parms;
+    renderEntity_t *refEnt = &def->parms;
 
     model = R_EntityDefDynamicModel(def);
 
@@ -1207,30 +1207,30 @@ idRenderWorldLocal::Trace
 ===================
 */
 // FIXME: _D3XP added those.
-const char* playerModelExcludeList[] = {
+const char *playerModelExcludeList[] = {
     "models/md5/characters/player/d3xp_spplayer.md5mesh",
     "models/md5/characters/player/head/d3xp_head.md5mesh",
     "models/md5/weapons/pistol_world/worldpistol.md5mesh",
     NULL
 };
 
-const char* playerMaterialExcludeList[] = {
+const char *playerMaterialExcludeList[] = {
     "muzzlesmokepuff",
     NULL
 };
 
-bool idRenderWorldLocal::Trace(modelTrace_t& trace, const idVec3& start, const idVec3& end, const float radius, bool skipDynamic, bool skipPlayer /*_D3XP*/) const {
-    areaReference_t* ref;
-    idRenderEntityLocal* def;
-    portalArea_t* area;
-    idRenderModel* model;
-    srfTriangles_t* tri;
+bool idRenderWorldLocal::Trace(modelTrace_t &trace, const idVec3 &start, const idVec3 &end, const float radius, bool skipDynamic, bool skipPlayer /*_D3XP*/) const {
+    areaReference_t *ref;
+    idRenderEntityLocal *def;
+    portalArea_t *area;
+    idRenderModel *model;
+    srfTriangles_t *tri;
     localTrace_t localTrace;
     int areas[128], numAreas, i, j, numSurfaces;
     idBounds traceBounds, bounds;
     float modelMatrix[16];
     idVec3 localStart, localEnd;
-    const idMaterial* shader;
+    const idMaterial *shader;
 
     trace.fraction = 1.0f;
     trace.point = end;
@@ -1269,7 +1269,7 @@ bool idRenderWorldLocal::Trace(modelTrace_t& trace, const idVec3& start, const i
 
                 if (skipPlayer) {
                     idStr name = model->Name();
-                    const char* exclude;
+                    const char *exclude;
                     int k;
 
                     for (k = 0; playerModelExcludeList[k]; k++) {
@@ -1303,7 +1303,7 @@ bool idRenderWorldLocal::Trace(modelTrace_t& trace, const idVec3& start, const i
 
             // check all model surfaces
             for (j = 0; j < model->NumSurfaces(); j++) {
-                const modelSurface_t* surf = model->Surface(j);
+                const modelSurface_t *surf = model->Surface(j);
 
                 shader = R_RemapShaderBySkin(surf->shader, def->parms.customSkin, def->parms.customShader);
 
@@ -1316,7 +1316,7 @@ bool idRenderWorldLocal::Trace(modelTrace_t& trace, const idVec3& start, const i
 
                 if (skipPlayer) {
                     idStr name = shader->GetName();
-                    const char* exclude;
+                    const char *exclude;
                     int k;
 
                     for (k = 0; playerMaterialExcludeList[k]; k++) {
@@ -1376,13 +1376,13 @@ bool idRenderWorldLocal::Trace(modelTrace_t& trace, const idVec3& start, const i
 idRenderWorldLocal::RecurseProcBSP
 ==================
 */
-void idRenderWorldLocal::RecurseProcBSP_r(modelTrace_t* results, int parentNodeNum, int nodeNum, float p1f, float p2f, const idVec3& p1, const idVec3& p2) const {
+void idRenderWorldLocal::RecurseProcBSP_r(modelTrace_t *results, int parentNodeNum, int nodeNum, float p1f, float p2f, const idVec3 &p1, const idVec3 &p2) const {
     float       t1, t2;
     float       frac;
     idVec3      mid;
     int         side;
     float       midf;
-    areaNode_t* node;
+    areaNode_t *node;
 
     if (results->fraction <= p1f) {
         return;     // already hit something nearer
@@ -1436,7 +1436,7 @@ void idRenderWorldLocal::RecurseProcBSP_r(modelTrace_t* results, int parentNodeN
 idRenderWorldLocal::FastWorldTrace
 ==================
 */
-bool idRenderWorldLocal::FastWorldTrace(modelTrace_t& results, const idVec3& start, const idVec3& end) const {
+bool idRenderWorldLocal::FastWorldTrace(modelTrace_t &results, const idVec3 &start, const idVec3 &end) const {
     memset(&results, 0, sizeof(modelTrace_t));
     results.fraction = 1.0f;
 
@@ -1464,8 +1464,8 @@ This is called by R_PushVolumeIntoTree and also directly
 for the world model references that are precalculated.
 =================
 */
-void idRenderWorldLocal::AddEntityRefToArea(idRenderEntityLocal* def, portalArea_t* area) {
-    areaReference_t* ref;
+void idRenderWorldLocal::AddEntityRefToArea(idRenderEntityLocal *def, portalArea_t *area) {
+    areaReference_t *ref;
 
     if (!def) {
         common->Error("idRenderWorldLocal::AddEntityRefToArea: NULL def");
@@ -1495,8 +1495,8 @@ AddLightRefToArea
 
 ===================
 */
-void idRenderWorldLocal::AddLightRefToArea(idRenderLightLocal* light, portalArea_t* area) {
-    areaReference_t* lref;
+void idRenderWorldLocal::AddLightRefToArea(idRenderLightLocal *light, portalArea_t *area) {
+    areaReference_t *lref;
 
     // add a lightref to this area
     lref = areaReferenceAllocator.Alloc();
@@ -1542,7 +1542,7 @@ void idRenderWorldLocal::GenerateAllInteractions() {
     tr.viewDef = NULL;
 
     for (int i = 0 ; i < this->lightDefs.Num() ; i++) {
-        idRenderLightLocal*  ldef = this->lightDefs[i];
+        idRenderLightLocal  *ldef = this->lightDefs[i];
 
         if (!ldef) {
             continue;
@@ -1562,21 +1562,21 @@ void idRenderWorldLocal::GenerateAllInteractions() {
         interactionTableWidth = entityDefs.Num() + 100;
         interactionTableHeight = lightDefs.Num() + 100;
         int size =  interactionTableWidth * interactionTableHeight * sizeof(*interactionTable);
-        interactionTable = (idInteraction**)R_ClearedStaticAlloc(size);
+        interactionTable = (idInteraction **)R_ClearedStaticAlloc(size);
 
         int count = 0;
 
         for (int i = 0 ; i < this->lightDefs.Num() ; i++) {
-            idRenderLightLocal*  ldef = this->lightDefs[i];
+            idRenderLightLocal  *ldef = this->lightDefs[i];
 
             if (!ldef) {
                 continue;
             }
 
-            idInteraction*   inter;
+            idInteraction   *inter;
 
             for (inter = ldef->firstInteraction; inter != NULL; inter = inter->lightNext) {
-                idRenderEntityLocal* edef = inter->entityDef;
+                idRenderEntityLocal *edef = inter->entityDef;
                 int index = ldef->index * interactionTableWidth + edef->index;
 
                 interactionTable[ index ] = inter;
@@ -1599,7 +1599,7 @@ idRenderWorldLocal::FreeInteractions
 */
 void idRenderWorldLocal::FreeInteractions() {
     int         i;
-    idRenderEntityLocal* def;
+    idRenderEntityLocal *def;
 
     for (i = 0 ; i < entityDefs.Num(); i++) {
         def = entityDefs[i];
@@ -1630,14 +1630,14 @@ to prevent double checking areas.
 We might alternatively choose to do this with an area flow.
 ==================
 */
-void idRenderWorldLocal::PushVolumeIntoTree_r(idRenderEntityLocal* def, idRenderLightLocal* light, const idSphere* sphere, int numPoints, const idVec3(*points),
+void idRenderWorldLocal::PushVolumeIntoTree_r(idRenderEntityLocal *def, idRenderLightLocal *light, const idSphere *sphere, int numPoints, const idVec3(*points),
         int nodeNum) {
     int         i;
-    areaNode_t*  node;
+    areaNode_t  *node;
     bool    front, back;
 
     if (nodeNum < 0) {
-        portalArea_t*    area;
+        portalArea_t    *area;
         int     areaNum = -1 - nodeNum;
 
         area = &portalAreas[ areaNum ];
@@ -1801,7 +1801,7 @@ void idRenderWorldLocal::PushVolumeIntoTree_r(idRenderEntityLocal* def, idRender
 PushVolumeIntoTree
 ==============
 */
-void idRenderWorldLocal::PushVolumeIntoTree(idRenderEntityLocal* def, idRenderLightLocal* light, int numPoints, const idVec3(*points)) {
+void idRenderWorldLocal::PushVolumeIntoTree(idRenderEntityLocal *def, idRenderLightLocal *light, int numPoints, const idVec3(*points)) {
     int i;
     float radSquared, lr;
     idVec3 mid, dir;
@@ -1852,7 +1852,7 @@ void idRenderWorldLocal::DebugClearLines(int time) {
 idRenderWorldLocal::DebugLine
 ====================
 */
-void idRenderWorldLocal::DebugLine(const idVec4& color, const idVec3& start, const idVec3& end, const int lifetime, const bool depthTest) {
+void idRenderWorldLocal::DebugLine(const idVec4 &color, const idVec3 &start, const idVec3 &end, const int lifetime, const bool depthTest) {
     RB_AddDebugLine(color, start, end, lifetime, depthTest);
 }
 
@@ -1861,7 +1861,7 @@ void idRenderWorldLocal::DebugLine(const idVec4& color, const idVec3& start, con
 idRenderWorldLocal::DebugArrow
 ================
 */
-void idRenderWorldLocal::DebugArrow(const idVec4& color, const idVec3& start, const idVec3& end, int size, const int lifetime) {
+void idRenderWorldLocal::DebugArrow(const idVec4 &color, const idVec3 &start, const idVec3 &end, int size, const int lifetime) {
     idVec3 forward, right, up, v1, v2;
     float a, s;
     int i;
@@ -1916,7 +1916,7 @@ void idRenderWorldLocal::DebugArrow(const idVec4& color, const idVec3& start, co
 idRenderWorldLocal::DebugWinding
 ====================
 */
-void idRenderWorldLocal::DebugWinding(const idVec4& color, const idWinding& w, const idVec3& origin, const idMat3& axis, const int lifetime, const bool depthTest) {
+void idRenderWorldLocal::DebugWinding(const idVec4 &color, const idWinding &w, const idVec3 &origin, const idMat3 &axis, const int lifetime, const bool depthTest) {
     int i;
     idVec3 point, lastPoint;
 
@@ -1938,7 +1938,7 @@ void idRenderWorldLocal::DebugWinding(const idVec4& color, const idWinding& w, c
 idRenderWorldLocal::DebugCircle
 ====================
 */
-void idRenderWorldLocal::DebugCircle(const idVec4& color, const idVec3& origin, const idVec3& dir, const float radius, const int numSteps, const int lifetime, const bool depthTest) {
+void idRenderWorldLocal::DebugCircle(const idVec4 &color, const idVec3 &origin, const idVec3 &dir, const float radius, const int numSteps, const int lifetime, const bool depthTest) {
     int i;
     float a;
     idVec3 left, up, point, lastPoint;
@@ -1961,13 +1961,13 @@ void idRenderWorldLocal::DebugCircle(const idVec4& color, const idVec3& origin, 
 idRenderWorldLocal::DebugSphere
 ============
 */
-void idRenderWorldLocal::DebugSphere(const idVec4& color, const idSphere& sphere, const int lifetime, const bool depthTest /*_D3XP*/) {
+void idRenderWorldLocal::DebugSphere(const idVec4 &color, const idSphere &sphere, const int lifetime, const bool depthTest /*_D3XP*/) {
     int i, j, n, num;
     float s, c;
     idVec3 p, lastp, *lastArray;
 
     num = 360 / 15;
-    lastArray = (idVec3*) _alloca16(num * sizeof(idVec3));
+    lastArray = (idVec3 *) _alloca16(num * sizeof(idVec3));
     lastArray[0] = sphere.GetOrigin() + idVec3(0, 0, sphere.GetRadius());
 
     for (n = 1; n < num; n++) {
@@ -2000,7 +2000,7 @@ void idRenderWorldLocal::DebugSphere(const idVec4& color, const idSphere& sphere
 idRenderWorldLocal::DebugBounds
 ====================
 */
-void idRenderWorldLocal::DebugBounds(const idVec4& color, const idBounds& bounds, const idVec3& org, const int lifetime) {
+void idRenderWorldLocal::DebugBounds(const idVec4 &color, const idBounds &bounds, const idVec3 &org, const int lifetime) {
     int i;
     idVec3 v[8];
 
@@ -2026,7 +2026,7 @@ void idRenderWorldLocal::DebugBounds(const idVec4& color, const idBounds& bounds
 idRenderWorldLocal::DebugBox
 ====================
 */
-void idRenderWorldLocal::DebugBox(const idVec4& color, const idBox& box, const int lifetime) {
+void idRenderWorldLocal::DebugBox(const idVec4 &color, const idBox &box, const int lifetime) {
     int i;
     idVec3 v[8];
 
@@ -2044,7 +2044,7 @@ void idRenderWorldLocal::DebugBox(const idVec4& color, const idBox& box, const i
 idRenderWorldLocal::DebugFrustum
 ================
 */
-void idRenderWorldLocal::DebugFrustum(const idVec4& color, const idFrustum& frustum, const bool showFromOrigin, const int lifetime) {
+void idRenderWorldLocal::DebugFrustum(const idVec4 &color, const idFrustum &frustum, const bool showFromOrigin, const int lifetime) {
     int i;
     idVec3 v[8];
 
@@ -2077,7 +2077,7 @@ idRenderWorldLocal::DebugCone
   radius2 is the radius at apex+dir
 ============
 */
-void idRenderWorldLocal::DebugCone(const idVec4& color, const idVec3& apex, const idVec3& dir, float radius1, float radius2, const int lifetime) {
+void idRenderWorldLocal::DebugCone(const idVec4 &color, const idVec3 &apex, const idVec3 &dir, float radius1, float radius2, const int lifetime) {
     int i;
     idMat3 axis;
     idVec3 top, p1, p2, lastp1, lastp2, d;
@@ -2119,7 +2119,7 @@ void idRenderWorldLocal::DebugCone(const idVec4& color, const idVec3& apex, cons
 idRenderWorldLocal::DebugAxis
 ================
 */
-void idRenderWorldLocal::DebugAxis(const idVec3& origin, const idMat3& axis) {
+void idRenderWorldLocal::DebugAxis(const idVec3 &origin, const idMat3 &axis) {
     idVec3 start = origin;
     idVec3 end = start + axis[0] * 20.0f;
     DebugArrow(colorWhite, start, end, 2);
@@ -2149,7 +2149,7 @@ void idRenderWorldLocal::DebugClearPolygons(int time) {
 idRenderWorldLocal::DebugPolygon
 ====================
 */
-void idRenderWorldLocal::DebugPolygon(const idVec4& color, const idWinding& winding, const int lifeTime, const bool depthTest) {
+void idRenderWorldLocal::DebugPolygon(const idVec4 &color, const idWinding &winding, const int lifeTime, const bool depthTest) {
     RB_AddDebugPolygon(color, winding, lifeTime, depthTest);
 }
 
@@ -2158,7 +2158,7 @@ void idRenderWorldLocal::DebugPolygon(const idVec4& color, const idWinding& wind
 idRenderWorldLocal::DebugScreenRect
 ================
 */
-void idRenderWorldLocal::DebugScreenRect(const idVec4& color, const idScreenRect& rect, const viewDef_t* viewDef, const int lifetime) {
+void idRenderWorldLocal::DebugScreenRect(const idVec4 &color, const idScreenRect &rect, const viewDef_t *viewDef, const int lifetime) {
     int i;
     float centerx, centery, dScale, hScale, vScale;
     idBounds bounds;
@@ -2196,7 +2196,7 @@ idRenderWorldLocal::DrawTextLength
   returns the length of the given text
 ================
 */
-float idRenderWorldLocal::DrawTextLength(const char* text, float scale, int len) {
+float idRenderWorldLocal::DrawTextLength(const char *text, float scale, int len) {
     return RB_DrawTextLength(text, scale, len);
 }
 
@@ -2208,7 +2208,7 @@ idRenderWorldLocal::DrawText
   align can be 0-left, 1-center (default), 2-right
 ================
 */
-void idRenderWorldLocal::DrawText(const char* text, const idVec3& origin, float scale, const idVec4& color, const idMat3& viewAxis, const int align, const int lifetime, const bool depthTest) {
+void idRenderWorldLocal::DrawText(const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align, const int lifetime, const bool depthTest) {
     RB_AddDebugText(text, origin, scale, color, viewAxis, align, lifetime, depthTest);
 }
 
@@ -2226,7 +2226,7 @@ void idRenderWorldLocal::RegenerateWorld() {
 R_GlobalShaderOverride
 ===============
 */
-bool R_GlobalShaderOverride(const idMaterial** shader) {
+bool R_GlobalShaderOverride(const idMaterial **shader) {
 
     if (!(*shader)->IsDrawn()) {
         return false;
@@ -2250,7 +2250,7 @@ bool R_GlobalShaderOverride(const idMaterial** shader) {
 R_RemapShaderBySkin
 ===============
 */
-const idMaterial* R_RemapShaderBySkin(const idMaterial* shader, const idDeclSkin* skin, const idMaterial* customShader) {
+const idMaterial *R_RemapShaderBySkin(const idMaterial *shader, const idDeclSkin *skin, const idMaterial *customShader) {
 
     if (!shader) {
         return NULL;
@@ -2268,11 +2268,11 @@ const idMaterial* R_RemapShaderBySkin(const idMaterial* shader, const idDeclSkin
             return NULL;
         }
 
-        return const_cast<idMaterial*>(customShader);
+        return const_cast<idMaterial *>(customShader);
     }
 
     if (!skin || !shader) {
-        return const_cast<idMaterial*>(shader);
+        return const_cast<idMaterial *>(shader);
     }
 
     return skin->RemapShaderBySkin(shader);

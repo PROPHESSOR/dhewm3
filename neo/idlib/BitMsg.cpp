@@ -86,8 +86,8 @@ bool idBitMsg::CheckOverflow(int numBits) {
 idBitMsg::GetByteSpace
 ================
 */
-byte* idBitMsg::GetByteSpace(int length) {
-    byte* ptr;
+byte *idBitMsg::GetByteSpace(int length) {
+    byte *ptr;
 
     if (!writeData) {
         idLib::common->FatalError("idBitMsg::GetByteSpace: cannot write to message");
@@ -179,13 +179,13 @@ void idBitMsg::WriteBits(int value, int numBits) {
 idBitMsg::WriteString
 ================
 */
-void idBitMsg::WriteString(const char* s, int maxLength, bool make7Bit) {
+void idBitMsg::WriteString(const char *s, int maxLength, bool make7Bit) {
     if (!s) {
         WriteData("", 1);
     } else {
         int i, l;
-        byte* dataPtr;
-        const byte* bytePtr;
+        byte *dataPtr;
+        const byte *bytePtr;
 
         l = idStr::Length(s);
 
@@ -194,7 +194,7 @@ void idBitMsg::WriteString(const char* s, int maxLength, bool make7Bit) {
         }
 
         dataPtr = GetByteSpace(l + 1);
-        bytePtr = reinterpret_cast<const byte*>(s);
+        bytePtr = reinterpret_cast<const byte *>(s);
 
         if (make7Bit) {
             for (i = 0; i < l; i++) {
@@ -219,7 +219,7 @@ void idBitMsg::WriteString(const char* s, int maxLength, bool make7Bit) {
 idBitMsg::WriteData
 ================
 */
-void idBitMsg::WriteData(const void* data, int length) {
+void idBitMsg::WriteData(const void *data, int length) {
     memcpy(GetByteSpace(length), data, length);
 }
 
@@ -229,7 +229,7 @@ idBitMsg::WriteNetadr
 ================
 */
 void idBitMsg::WriteNetadr(const netadr_t adr) {
-    byte* dataPtr;
+    byte *dataPtr;
     dataPtr = GetByteSpace(4);
     memcpy(dataPtr, adr.ip, 4);
     WriteUShort(adr.port);
@@ -327,9 +327,9 @@ void idBitMsg::WriteDeltaIntCounter(int oldValue, int newValue) {
 idBitMsg::WriteDeltaDict
 ==================
 */
-bool idBitMsg::WriteDeltaDict(const idDict& dict, const idDict* base) {
+bool idBitMsg::WriteDeltaDict(const idDict &dict, const idDict *base) {
     int i;
-    const idKeyValue* kv, *basekv;
+    const idKeyValue *kv, *basekv;
     bool changed = false;
 
     if (base != NULL) {
@@ -449,7 +449,7 @@ int idBitMsg::ReadBits(int numBits) const {
 idBitMsg::ReadString
 ================
 */
-int idBitMsg::ReadString(char* buffer, int bufferSize) const {
+int idBitMsg::ReadString(char *buffer, int bufferSize) const {
     int l, c;
 
     ReadByteAlign();
@@ -485,7 +485,7 @@ int idBitMsg::ReadString(char* buffer, int bufferSize) const {
 idBitMsg::ReadData
 ================
 */
-int idBitMsg::ReadData(void* data, int length) const {
+int idBitMsg::ReadData(void *data, int length) const {
     int cnt;
 
     ReadByteAlign();
@@ -513,7 +513,7 @@ int idBitMsg::ReadData(void* data, int length) const {
 idBitMsg::ReadNetadr
 ================
 */
-void idBitMsg::ReadNetadr(netadr_t* adr) const {
+void idBitMsg::ReadNetadr(netadr_t *adr) const {
     int i;
 
     adr->type = NA_IP;
@@ -597,7 +597,7 @@ int idBitMsg::ReadDeltaIntCounter(int oldValue) const {
 idBitMsg::ReadDeltaDict
 ==================
 */
-bool idBitMsg::ReadDeltaDict(idDict& dict, const idDict* base) const {
+bool idBitMsg::ReadDeltaDict(idDict &dict, const idDict *base) const {
     char        key[MAX_STRING_CHARS];
     char        value[MAX_STRING_CHARS];
     bool        changed = false;
@@ -627,7 +627,7 @@ bool idBitMsg::ReadDeltaDict(idDict& dict, const idDict* base) const {
 idBitMsg::DirToBits
 ================
 */
-int idBitMsg::DirToBits(const idVec3& dir, int numBits) {
+int idBitMsg::DirToBits(const idVec3 &dir, int numBits) {
     int max, bits;
     float bias;
 
@@ -818,7 +818,7 @@ int idBitMsgDelta::ReadDelta(int oldValue, int numBits) const {
 idBitMsgDelta::WriteString
 ================
 */
-void idBitMsgDelta::WriteString(const char* s, int maxLength) {
+void idBitMsgDelta::WriteString(const char *s, int maxLength) {
     if (newBase) {
         newBase->WriteString(s, maxLength);
     }
@@ -845,7 +845,7 @@ void idBitMsgDelta::WriteString(const char* s, int maxLength) {
 idBitMsgDelta::WriteData
 ================
 */
-void idBitMsgDelta::WriteData(const void* data, int length) {
+void idBitMsgDelta::WriteData(const void *data, int length) {
     if (newBase) {
         newBase->WriteData(data, length);
     }
@@ -873,7 +873,7 @@ void idBitMsgDelta::WriteData(const void* data, int length) {
 idBitMsgDelta::WriteDict
 ================
 */
-void idBitMsgDelta::WriteDict(const idDict& dict) {
+void idBitMsgDelta::WriteDict(const idDict &dict) {
     if (newBase) {
         newBase->WriteDeltaDict(dict, NULL);
     }
@@ -971,7 +971,7 @@ void idBitMsgDelta::WriteDeltaIntCounter(int oldValue, int newValue) {
 idBitMsgDelta::ReadString
 ================
 */
-void idBitMsgDelta::ReadString(char* buffer, int bufferSize) const {
+void idBitMsgDelta::ReadString(char *buffer, int bufferSize) const {
     if (!base) {
         readDelta->ReadString(buffer, bufferSize);
         changed = true;
@@ -997,7 +997,7 @@ void idBitMsgDelta::ReadString(char* buffer, int bufferSize) const {
 idBitMsgDelta::ReadData
 ================
 */
-void idBitMsgDelta::ReadData(void* data, int length) const {
+void idBitMsgDelta::ReadData(void *data, int length) const {
     if (!base) {
         readDelta->ReadData(data, length);
         changed = true;
@@ -1024,7 +1024,7 @@ void idBitMsgDelta::ReadData(void* data, int length) const {
 idBitMsgDelta::ReadDict
 ================
 */
-void idBitMsgDelta::ReadDict(idDict& dict) {
+void idBitMsgDelta::ReadDict(idDict &dict) {
     if (!base) {
         readDelta->ReadDeltaDict(dict, NULL);
         changed = true;

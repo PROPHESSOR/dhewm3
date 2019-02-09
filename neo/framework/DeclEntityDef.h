@@ -45,8 +45,8 @@ class idDeclEntityDef : public idDecl {
     idDict                  dict;
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition() const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition() const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
     virtual void            Print(void) const;
 };

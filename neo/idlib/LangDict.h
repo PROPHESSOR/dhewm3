@@ -53,17 +53,17 @@ class idLangDict {
     ~idLangDict(void);
 
     void                    Clear(void);
-    bool                    Load(const char* fileName, bool clear = true);
-    void                    Save(const char* fileName);
+    bool                    Load(const char *fileName, bool clear = true);
+    void                    Save(const char *fileName);
 
-    const char*             AddString(const char* str);
-    const char*             GetString(const char* str) const;
+    const char             *AddString(const char *str);
+    const char             *GetString(const char *str) const;
 
     // adds the value and key as passed (doesn't generate a "#str_xxxxx" key or ensure the key/value pair is unique)
-    void                    AddKeyVal(const char* key, const char* val);
+    void                    AddKeyVal(const char *key, const char *val);
 
     int                     GetNumKeyVals(void) const;
-    const idLangKeyValue*   GetKeyVal(int i) const;
+    const idLangKeyValue   *GetKeyVal(int i) const;
 
     void                    SetBaseID(int id) {
         baseID = id;
@@ -73,9 +73,9 @@ class idLangDict {
     idList<idLangKeyValue>  args;
     idHashIndex             hash;
 
-    bool                    ExcludeString(const char* str) const;
+    bool                    ExcludeString(const char *str) const;
     int                     GetNextId(void) const;
-    int                     GetHashKey(const char* str) const;
+    int                     GetHashKey(const char *str) const;
 
     int                     baseID;
 };

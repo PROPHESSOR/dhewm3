@@ -36,7 +36,7 @@ If you have questions concerning this license or the applicable additional terms
 RB_BakeTextureMatrixIntoTexgen
 =====================
 */
-void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3], const float* textureMatrix) {
+void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3], const float *textureMatrix) {
     float   genMatrix[16];
     float   final[16];
 
@@ -78,7 +78,7 @@ void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3], const float* textur
 RB_PrepareStageTexturing
 ================
 */
-void RB_PrepareStageTexturing(const shaderStage_t* pStage,  const drawSurf_t* surf, idDrawVert* ac) {
+void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *surf, idDrawVert *ac) {
     // set privatePolygonOffset if necessary
     if (pStage->privatePolygonOffset) {
         qglEnable(GL_POLYGON_OFFSET_FILL);
@@ -196,7 +196,7 @@ void RB_PrepareStageTexturing(const shaderStage_t* pStage,  const drawSurf_t* su
     if (pStage->texture.texgen == TG_REFLECT_CUBE) {
         if (tr.backEndRenderer == BE_ARB2) {
             // see if there is also a bump map specified
-            const shaderStage_t* bumpStage = surf->material->GetBumpStage();
+            const shaderStage_t *bumpStage = surf->material->GetBumpStage();
 
             if (bumpStage) {
                 // per-pixel reflection mapping with bump mapping
@@ -254,7 +254,7 @@ void RB_PrepareStageTexturing(const shaderStage_t* pStage,  const drawSurf_t* su
 RB_FinishStageTexturing
 ================
 */
-void RB_FinishStageTexturing(const shaderStage_t* pStage, const drawSurf_t* surf, idDrawVert* ac) {
+void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf, idDrawVert *ac) {
     // unset privatePolygonOffset if necessary
     if (pStage->privatePolygonOffset && !surf->material->TestMaterialFlag(MF_POLYGONOFFSET)) {
         qglDisable(GL_POLYGON_OFFSET_FILL);
@@ -262,7 +262,7 @@ void RB_FinishStageTexturing(const shaderStage_t* pStage, const drawSurf_t* surf
 
     if (pStage->texture.texgen == TG_DIFFUSE_CUBE || pStage->texture.texgen == TG_SKYBOX_CUBE
             || pStage->texture.texgen == TG_WOBBLESKY_CUBE) {
-        qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), (void*)&ac->st);
+        qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), (void *)&ac->st);
     }
 
     if (pStage->texture.texgen == TG_SCREEN) {
@@ -300,7 +300,7 @@ void RB_FinishStageTexturing(const shaderStage_t* pStage, const drawSurf_t* surf
     if (pStage->texture.texgen == TG_REFLECT_CUBE) {
         if (tr.backEndRenderer == BE_ARB2) {
             // see if there is also a bump map specified
-            const shaderStage_t* bumpStage = surf->material->GetBumpStage();
+            const shaderStage_t *bumpStage = surf->material->GetBumpStage();
 
             if (bumpStage) {
                 // per-pixel reflection mapping with bump mapping
@@ -355,13 +355,13 @@ FILL DEPTH BUFFER
 RB_T_FillDepthBuffer
 ==================
 */
-void RB_T_FillDepthBuffer(const drawSurf_t* surf) {
+void RB_T_FillDepthBuffer(const drawSurf_t *surf) {
     int         stage;
-    const idMaterial*    shader;
-    const shaderStage_t* pStage;
-    const float* regs;
+    const idMaterial    *shader;
+    const shaderStage_t *pStage;
+    const float *regs;
     float       color[4];
-    const srfTriangles_t*    tri;
+    const srfTriangles_t    *tri;
 
     tri = surf->geo;
     shader = surf->material;
@@ -436,9 +436,9 @@ void RB_T_FillDepthBuffer(const drawSurf_t* surf) {
         color[3] = 1;
     }
 
-    idDrawVert* ac = (idDrawVert*)vertexCache.Position(tri->ambientCache);
+    idDrawVert *ac = (idDrawVert *)vertexCache.Position(tri->ambientCache);
     qglVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
-    qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), reinterpret_cast<void*>(&ac->st));
+    qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), reinterpret_cast<void *>(&ac->st));
 
     bool drawSolid = false;
 
@@ -532,7 +532,7 @@ If we are rendering a subview with a near clip plane, use a second texture
 to force the alpha test to fail when behind that clip plane
 =====================
 */
-void RB_STD_FillDepthBuffer(drawSurf_t** drawSurfs, int numDrawSurfs) {
+void RB_STD_FillDepthBuffer(drawSurf_t **drawSurfs, int numDrawSurfs) {
     // if we are just doing 2D rendering, no need to fill the depth buffer
     if (!backEnd.viewDef->viewEntitys) {
         return;
@@ -669,11 +669,11 @@ void RB_SetProgramEnvironmentSpace(void) {
         return;
     }
 
-    const struct viewEntity_s* space = backEnd.currentSpace;
+    const struct viewEntity_s *space = backEnd.currentSpace;
     float   parm[4];
 
     // set eye position in local space
-    R_GlobalPointToLocal(space->modelMatrix, backEnd.viewDef->renderView.vieworg, *(idVec3*)parm);
+    R_GlobalPointToLocal(space->modelMatrix, backEnd.viewDef->renderView.vieworg, *(idVec3 *)parm);
     parm[3] = 1.0;
     qglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, 5, parm);
 
@@ -703,13 +703,13 @@ RB_STD_T_RenderShaderPasses
 This is also called for the generated 2D rendering
 ==================
 */
-void RB_STD_T_RenderShaderPasses(const drawSurf_t* surf) {
+void RB_STD_T_RenderShaderPasses(const drawSurf_t *surf) {
     int         stage;
-    const idMaterial*    shader;
-    const shaderStage_t* pStage;
-    const float* regs;
+    const idMaterial    *shader;
+    const shaderStage_t *pStage;
+    const float *regs;
     float       color[4];
-    const srfTriangles_t*    tri;
+    const srfTriangles_t    *tri;
 
     tri = surf->geo;
     shader = surf->material;
@@ -768,9 +768,9 @@ void RB_STD_T_RenderShaderPasses(const drawSurf_t* surf) {
         RB_EnterModelDepthHack(surf->space->modelDepthHack);
     }
 
-    idDrawVert* ac = (idDrawVert*)vertexCache.Position(tri->ambientCache);
+    idDrawVert *ac = (idDrawVert *)vertexCache.Position(tri->ambientCache);
     qglVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
-    qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), reinterpret_cast<void*>(&ac->st));
+    qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), reinterpret_cast<void *>(&ac->st));
 
     for (stage = 0; stage < shader->GetNumStages() ; stage++) {
         pStage = shader->GetStage(stage);
@@ -791,7 +791,7 @@ void RB_STD_T_RenderShaderPasses(const drawSurf_t* surf) {
         }
 
         // see if we are a new-style stage
-        newShaderStage_t* newStage = pStage->newStage;
+        newShaderStage_t *newStage = pStage->newStage;
 
         if (newStage) {
             //--------------------------
@@ -809,7 +809,7 @@ void RB_STD_T_RenderShaderPasses(const drawSurf_t* surf) {
                 continue;
             }
 
-            qglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), (void*)&ac->color);
+            qglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), (void *)&ac->color);
             qglVertexAttribPointerARB(9, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[0].ToFloatPtr());
             qglVertexAttribPointerARB(10, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
             qglNormalPointer(GL_FLOAT, sizeof(idDrawVert), ac->normal.ToFloatPtr());
@@ -907,7 +907,7 @@ void RB_STD_T_RenderShaderPasses(const drawSurf_t* surf) {
         if (pStage->vertexColor == SVC_IGNORE) {
             qglColor4fv(color);
         } else {
-            qglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), (void*)&ac->color);
+            qglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), (void *)&ac->color);
             qglEnableClientState(GL_COLOR_ARRAY);
 
             if (pStage->vertexColor == SVC_INVERSE_MODULATE) {
@@ -989,7 +989,7 @@ RB_STD_DrawShaderPasses
 Draw non-light dependent passes
 =====================
 */
-int RB_STD_DrawShaderPasses(drawSurf_t** drawSurfs, int numDrawSurfs) {
+int RB_STD_DrawShaderPasses(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int             i;
 
     // only obey skipAmbient if we are rendering a view
@@ -1070,8 +1070,8 @@ RB_T_Shadow
 the shadow volumes face INSIDE
 =====================
 */
-static void RB_T_Shadow(const drawSurf_t* surf) {
-    const srfTriangles_t*    tri;
+static void RB_T_Shadow(const drawSurf_t *surf) {
+    const srfTriangles_t    *tri;
 
     // set the light position if we are using a vertex program to project the rear surfaces
     if (tr.backEndRendererHasVertexPrograms && r_useShadowVertexProgram.GetBool()
@@ -1194,7 +1194,7 @@ Stencil test should already be enabled, and the stencil buffer should have
 been set to 128 on any surfaces that might receive shadows
 =====================
 */
-void RB_StencilShadowPass(const drawSurf_t* drawSurfs) {
+void RB_StencilShadowPass(const drawSurf_t *drawSurfs) {
     if (!r_shadows.GetBool()) {
         return;
     }
@@ -1265,8 +1265,8 @@ RB_T_BlendLight
 
 =====================
 */
-static void RB_T_BlendLight(const drawSurf_t* surf) {
-    const srfTriangles_t* tri;
+static void RB_T_BlendLight(const drawSurf_t *surf) {
+    const srfTriangles_t *tri;
 
     tri = surf->geo;
 
@@ -1289,10 +1289,10 @@ static void RB_T_BlendLight(const drawSurf_t* surf) {
 
     // this gets used for both blend lights and shadow draws
     if (tri->ambientCache) {
-        idDrawVert*  ac = (idDrawVert*)vertexCache.Position(tri->ambientCache);
+        idDrawVert  *ac = (idDrawVert *)vertexCache.Position(tri->ambientCache);
         qglVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
     } else if (tri->shadowCache) {
-        shadowCache_t*   sc = (shadowCache_t*)vertexCache.Position(tri->shadowCache);
+        shadowCache_t   *sc = (shadowCache_t *)vertexCache.Position(tri->shadowCache);
         qglVertexPointer(3, GL_FLOAT, sizeof(shadowCache_t), sc->xyz.ToFloatPtr());
     }
 
@@ -1308,11 +1308,11 @@ Dual texture together the falloff and projection texture with a blend
 mode to the framebuffer, instead of interacting with the surface texture
 =====================
 */
-static void RB_BlendLight(const drawSurf_t* drawSurfs,  const drawSurf_t* drawSurfs2) {
-    const idMaterial*    lightShader;
-    const shaderStage_t* stage;
+static void RB_BlendLight(const drawSurf_t *drawSurfs,  const drawSurf_t *drawSurfs2) {
+    const idMaterial    *lightShader;
+    const shaderStage_t *stage;
     int                 i;
-    const float* regs;
+    const float *regs;
 
     if (!drawSurfs) {
         return;
@@ -1394,7 +1394,7 @@ RB_T_BasicFog
 
 =====================
 */
-static void RB_T_BasicFog(const drawSurf_t* surf) {
+static void RB_T_BasicFog(const drawSurf_t *surf) {
     if (backEnd.currentSpace != surf->space) {
         idPlane local;
 
@@ -1431,12 +1431,12 @@ static void RB_T_BasicFog(const drawSurf_t* surf) {
 RB_FogPass
 ==================
 */
-static void RB_FogPass(const drawSurf_t* drawSurfs,  const drawSurf_t* drawSurfs2) {
-    const srfTriangles_t* frustumTris;
+static void RB_FogPass(const drawSurf_t *drawSurfs,  const drawSurf_t *drawSurfs2) {
+    const srfTriangles_t *frustumTris;
     drawSurf_t          ds;
-    const idMaterial*    lightShader;
-    const shaderStage_t* stage;
-    const float*         regs;
+    const idMaterial    *lightShader;
+    const shaderStage_t *stage;
+    const float         *regs;
 
     // create a surface for the light frustom triangles, which are oriented drawn side out
     frustumTris = backEnd.vLight->frustumTris;
@@ -1549,7 +1549,7 @@ RB_STD_FogAllLights
 ==================
 */
 void RB_STD_FogAllLights(void) {
-    viewLight_t* vLight;
+    viewLight_t *vLight;
 
     if (r_skipFogLights.GetBool() || r_showOverDraw.GetInteger() != 0
             || backEnd.viewDef->isXraySubview /* dont fog in xray mode*/
@@ -1687,12 +1687,12 @@ RB_STD_DrawView
 =============
 */
 void    RB_STD_DrawView(void) {
-    drawSurf_t**   drawSurfs;
+    drawSurf_t   **drawSurfs;
     int         numDrawSurfs;
 
     backEnd.depthFunc = GLS_DEPTHFUNC_EQUAL;
 
-    drawSurfs = (drawSurf_t**)&backEnd.viewDef->drawSurfs[0];
+    drawSurfs = (drawSurf_t **)&backEnd.viewDef->drawSurfs[0];
     numDrawSurfs = backEnd.viewDef->numDrawSurfs;
 
     // clear the z buffer, set the projection matrix, etc

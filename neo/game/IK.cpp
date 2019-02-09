@@ -69,7 +69,7 @@ idIK::~idIK(void) {
 idIK::Save
 ================
 */
-void idIK::Save(idSaveGame* savefile) const {
+void idIK::Save(idSaveGame *savefile) const {
     savefile->WriteBool(initialized);
     savefile->WriteBool(ik_activate);
     savefile->WriteObject(self);
@@ -82,12 +82,12 @@ void idIK::Save(idSaveGame* savefile) const {
 idIK::Restore
 ================
 */
-void idIK::Restore(idRestoreGame* savefile) {
+void idIK::Restore(idRestoreGame *savefile) {
     idStr anim;
 
     savefile->ReadBool(initialized);
     savefile->ReadBool(ik_activate);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(self));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(self));
     savefile->ReadString(anim);
     savefile->ReadVec3(modelOffset);
 
@@ -125,8 +125,8 @@ bool idIK::IsInitialized(void) const {
 idIK::Init
 ================
 */
-bool idIK::Init(idEntity* self, const char* anim, const idVec3& modelOffset) {
-    idRenderModel* model;
+bool idIK::Init(idEntity *self, const char *anim, const idVec3 &modelOffset) {
+    idRenderModel *model;
 
     if (self == NULL) {
         return false;
@@ -191,7 +191,7 @@ void idIK::ClearJointMods(void) {
 idIK::SolveTwoBones
 ================
 */
-bool idIK::SolveTwoBones(const idVec3& startPos, const idVec3& endPos, const idVec3& dir, float len0, float len1, idVec3& jointPos) {
+bool idIK::SolveTwoBones(const idVec3 &startPos, const idVec3 &endPos, const idVec3 &dir, float len0, float len1, idVec3 &jointPos) {
     float length, lengthSqr, lengthInv, x, y;
     idVec3 vec0, vec1;
 
@@ -223,7 +223,7 @@ bool idIK::SolveTwoBones(const idVec3& startPos, const idVec3& endPos, const idV
 idIK::GetBoneAxis
 ================
 */
-float idIK::GetBoneAxis(const idVec3& startPos, const idVec3& endPos, const idVec3& dir, idMat3& axis) {
+float idIK::GetBoneAxis(const idVec3 &startPos, const idVec3 &endPos, const idVec3 &dir, idMat3 &axis) {
     float length;
     axis[0] = endPos - startPos;
     length = axis[0].Normalize();
@@ -308,7 +308,7 @@ idIK_Walk::~idIK_Walk() {
 idIK_Walk::Save
 ================
 */
-void idIK_Walk::Save(idSaveGame* savefile) const {
+void idIK_Walk::Save(idSaveGame *savefile) const {
     int i;
 
     idIK::Save(savefile);
@@ -393,7 +393,7 @@ void idIK_Walk::Save(idSaveGame* savefile) const {
 idIK_Walk::Restore
 ================
 */
-void idIK_Walk::Restore(idRestoreGame* savefile) {
+void idIK_Walk::Restore(idRestoreGame *savefile) {
     int i;
 
     idIK::Restore(savefile);
@@ -404,26 +404,26 @@ void idIK_Walk::Restore(idRestoreGame* savefile) {
     savefile->ReadInt(enabledLegs);
 
     for (i = 0; i < MAX_LEGS; i++) {
-        savefile->ReadInt((int&)footJoints[i]);
+        savefile->ReadInt((int &)footJoints[i]);
     }
 
     for (i = 0; i < MAX_LEGS; i++) {
-        savefile->ReadInt((int&)ankleJoints[i]);
+        savefile->ReadInt((int &)ankleJoints[i]);
     }
 
     for (i = 0; i < MAX_LEGS; i++) {
-        savefile->ReadInt((int&)kneeJoints[i]);
+        savefile->ReadInt((int &)kneeJoints[i]);
     }
 
     for (i = 0; i < MAX_LEGS; i++) {
-        savefile->ReadInt((int&)hipJoints[i]);
+        savefile->ReadInt((int &)hipJoints[i]);
     }
 
     for (i = 0; i < MAX_LEGS; i++) {
-        savefile->ReadInt((int&)dirJoints[i]);
+        savefile->ReadInt((int &)dirJoints[i]);
     }
 
-    savefile->ReadInt((int&)waistJoint);
+    savefile->ReadInt((int &)waistJoint);
 
     for (i = 0; i < MAX_LEGS; i++) {
         savefile->ReadVec3(hipForward[i]);
@@ -478,12 +478,12 @@ void idIK_Walk::Restore(idRestoreGame* savefile) {
 idIK_Walk::Init
 ================
 */
-bool idIK_Walk::Init(idEntity* self, const char* anim, const idVec3& modelOffset) {
+bool idIK_Walk::Init(idEntity *self, const char *anim, const idVec3 &modelOffset) {
     int i;
     float footSize;
     idVec3 verts[4];
     idTraceModel trm;
-    const char* jointName;
+    const char *jointName;
     idVec3 dir, ankleOrigin, kneeOrigin, hipOrigin, dirOrigin;
     idMat3 axis, ankleAxis, kneeAxis, hipAxis;
 
@@ -509,7 +509,7 @@ bool idIK_Walk::Init(idEntity* self, const char* anim, const idVec3& modelOffset
     }
 
     int numJoints = animator->NumJoints();
-    idJointMat* joints = (idJointMat*)_alloca16(numJoints * sizeof(joints[0]));
+    idJointMat *joints = (idJointMat *)_alloca16(numJoints * sizeof(joints[0]));
 
     // create the animation frame used to setup the IK
     gameEdit->ANIM_CreateAnimFrame(animator->ModelHandle(), animator->GetAnim(modifiedAnim)->MD5Anim(0), numJoints, joints, 1, animator->ModelDef()->GetVisualOffset() + modelOffset, animator->RemoveOrigin());
@@ -708,7 +708,7 @@ void idIK_Walk::Evaluate(void) {
         }
     }
 
-    const idPhysics* phys = self->GetPhysics();
+    const idPhysics *phys = self->GetPhysics();
 
     // test whether or not the character standing on the ground
     bool onGround = phys->HasGroundContacts();
@@ -717,7 +717,7 @@ void idIK_Walk::Evaluate(void) {
     bool onPlat = false;
 
     for (i = 0; i < phys->GetNumContacts(); i++) {
-        idEntity* ent = gameLocal.entities[ phys->GetContact(i).entityNum ];
+        idEntity *ent = gameLocal.entities[ phys->GetContact(i).entityNum ];
 
         if (ent != NULL && ent->IsType(idPlat::Type)) {
             onPlat = true;
@@ -958,7 +958,7 @@ idIK_Reach::~idIK_Reach() {
 idIK_Reach::Save
 ================
 */
-void idIK_Reach::Save(idSaveGame* savefile) const {
+void idIK_Reach::Save(idSaveGame *savefile) const {
     int i;
     idIK::Save(savefile);
 
@@ -1011,7 +1011,7 @@ void idIK_Reach::Save(idSaveGame* savefile) const {
 idIK_Reach::Restore
 ================
 */
-void idIK_Reach::Restore(idRestoreGame* savefile) {
+void idIK_Reach::Restore(idRestoreGame *savefile) {
     int i;
     idIK::Restore(savefile);
 
@@ -1019,19 +1019,19 @@ void idIK_Reach::Restore(idRestoreGame* savefile) {
     savefile->ReadInt(enabledArms);
 
     for (i = 0; i <  MAX_ARMS; i++) {
-        savefile->ReadInt((int&)handJoints[i]);
+        savefile->ReadInt((int &)handJoints[i]);
     }
 
     for (i = 0; i <  MAX_ARMS; i++) {
-        savefile->ReadInt((int&)elbowJoints[i]);
+        savefile->ReadInt((int &)elbowJoints[i]);
     }
 
     for (i = 0; i <  MAX_ARMS; i++) {
-        savefile->ReadInt((int&)shoulderJoints[i]);
+        savefile->ReadInt((int &)shoulderJoints[i]);
     }
 
     for (i = 0; i <  MAX_ARMS; i++) {
-        savefile->ReadInt((int&)dirJoints[i]);
+        savefile->ReadInt((int &)dirJoints[i]);
     }
 
     for (i = 0; i <  MAX_ARMS; i++) {
@@ -1064,9 +1064,9 @@ void idIK_Reach::Restore(idRestoreGame* savefile) {
 idIK_Reach::Init
 ================
 */
-bool idIK_Reach::Init(idEntity* self, const char* anim, const idVec3& modelOffset) {
+bool idIK_Reach::Init(idEntity *self, const char *anim, const idVec3 &modelOffset) {
     int i;
-    const char* jointName;
+    const char *jointName;
     idTraceModel trm;
     idVec3 dir, handOrigin, elbowOrigin, shoulderOrigin, dirOrigin;
     idMat3 axis, handAxis, elbowAxis, shoulderAxis;
@@ -1086,7 +1086,7 @@ bool idIK_Reach::Init(idEntity* self, const char* anim, const idVec3& modelOffse
     }
 
     int numJoints = animator->NumJoints();
-    idJointMat* joints = (idJointMat*)_alloca16(numJoints * sizeof(joints[0]));
+    idJointMat *joints = (idJointMat *)_alloca16(numJoints * sizeof(joints[0]));
 
     // create the animation frame used to setup the IK
     gameEdit->ANIM_CreateAnimFrame(animator->ModelHandle(), animator->GetAnim(modifiedAnim)->MD5Anim(0), numJoints, joints, 1, animator->ModelDef()->GetVisualOffset() + modelOffset, animator->RemoveOrigin());

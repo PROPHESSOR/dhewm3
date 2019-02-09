@@ -31,7 +31,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "sys/sys_local.h"
 
-const char* sysLanguageNames[] = {
+const char *sysLanguageNames[] = {
     "english", "spanish", "italian", "german", "french", "russian",
     "polish", "korean", "japanese", "chinese", NULL
 };
@@ -39,9 +39,9 @@ const char* sysLanguageNames[] = {
 idCVar sys_lang("sys_lang", "english", CVAR_SYSTEM | CVAR_ARCHIVE,  "", sysLanguageNames, idCmdSystem::ArgCompletion_String<sysLanguageNames>);
 
 idSysLocal          sysLocal;
-idSys*              sys = &sysLocal;
+idSys              *sys = &sysLocal;
 
-void idSysLocal::DebugPrintf(const char* fmt, ...) {
+void idSysLocal::DebugPrintf(const char *fmt, ...) {
     va_list argptr;
 
     va_start(argptr, fmt);
@@ -49,7 +49,7 @@ void idSysLocal::DebugPrintf(const char* fmt, ...) {
     va_end(argptr);
 }
 
-void idSysLocal::DebugVPrintf(const char* fmt, va_list arg) {
+void idSysLocal::DebugVPrintf(const char *fmt, va_list arg) {
     Sys_DebugVPrintf(fmt, arg);
 }
 
@@ -69,19 +69,19 @@ void idSysLocal::FPU_SetDAZ(bool enable) {
     Sys_FPU_SetDAZ(enable);
 }
 
-bool idSysLocal::LockMemory(void* ptr, int bytes) {
+bool idSysLocal::LockMemory(void *ptr, int bytes) {
     return Sys_LockMemory(ptr, bytes);
 }
 
-bool idSysLocal::UnlockMemory(void* ptr, int bytes) {
+bool idSysLocal::UnlockMemory(void *ptr, int bytes) {
     return Sys_UnlockMemory(ptr, bytes);
 }
 
-uintptr_t idSysLocal::DLL_Load(const char* dllName) {
+uintptr_t idSysLocal::DLL_Load(const char *dllName) {
     return Sys_DLL_Load(dllName);
 }
 
-void* idSysLocal::DLL_GetProcAddress(uintptr_t dllHandle, const char* procName) {
+void *idSysLocal::DLL_GetProcAddress(uintptr_t dllHandle, const char *procName) {
     return Sys_DLL_GetProcAddress(dllHandle, procName);
 }
 
@@ -89,7 +89,7 @@ void idSysLocal::DLL_Unload(uintptr_t dllHandle) {
     Sys_DLL_Unload(dllHandle);
 }
 
-void idSysLocal::DLL_GetFileName(const char* baseName, char* dllName, int maxLength) {
+void idSysLocal::DLL_GetFileName(const char *baseName, char *dllName, int maxLength) {
     idStr::snPrintf(dllName, maxLength, "%s" BUILD_LIBRARY_SUFFIX, baseName);
 }
 
@@ -118,11 +118,11 @@ sysEvent_t idSysLocal::GenerateMouseMoveEvent(int deltax, int deltay) {
 Sys_TimeStampToStr
 =================
 */
-const char* Sys_TimeStampToStr(ID_TIME_T timeStamp) {
+const char *Sys_TimeStampToStr(ID_TIME_T timeStamp) {
     static char timeString[MAX_STRING_CHARS];
     timeString[0] = '\0';
 
-    tm* time = localtime(&timeStamp);
+    tm *time = localtime(&timeStamp);
     idStr out;
 
     idStr lang = cvarSystem->GetCVarString("sys_lang");

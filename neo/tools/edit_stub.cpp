@@ -34,40 +34,40 @@ void    RadiantInit(void) {
 }
 void    RadiantShutdown(void) {}
 void    RadiantRun(void) {}
-void    RadiantPrint(const char* text) {}
-void    RadiantSync(const char* mapName, const idVec3& viewOrg, const idAngles& viewAngles) {}
+void    RadiantPrint(const char *text) {}
+void    RadiantSync(const char *mapName, const idVec3 &viewOrg, const idAngles &viewAngles) {}
 
-void    LightEditorInit(const idDict* spawnArgs) {
+void    LightEditorInit(const idDict *spawnArgs) {
     common->Printf("The Light Editor only runs on Win32\n");
 }
 void    LightEditorShutdown(void) {}
 void    LightEditorRun(void) {}
 
-void    SoundEditorInit(const idDict* spawnArgs) {
+void    SoundEditorInit(const idDict *spawnArgs) {
     common->Printf("The Sound Editor only runs on Win32\n");
 }
 void    SoundEditorShutdown(void) {}
 void    SoundEditorRun(void) {}
 
-void    AFEditorInit(const idDict* spawnArgs) {
+void    AFEditorInit(const idDict *spawnArgs) {
     common->Printf("The Articulated Figure Editor only runs on Win32\n");
 }
 void    AFEditorShutdown(void) {}
 void    AFEditorRun(void) {}
 
-void    ParticleEditorInit(const idDict* spawnArgs) {
+void    ParticleEditorInit(const idDict *spawnArgs) {
     common->Printf("The Particle Editor only runs on Win32\n");
 }
 void    ParticleEditorShutdown(void) {}
 void    ParticleEditorRun(void) {}
 
-void    ScriptEditorInit(const idDict* spawnArgs) {
+void    ScriptEditorInit(const idDict *spawnArgs) {
     common->Printf("The Script Editor only runs on Win32\n");
 }
 void    ScriptEditorShutdown(void) {}
 void    ScriptEditorRun(void) {}
 
-void    DeclBrowserInit(const idDict* spawnArgs) {
+void    DeclBrowserInit(const idDict *spawnArgs) {
     common->Printf("The Declaration Browser only runs on Win32\n");
 }
 void    DeclBrowserShutdown(void) {}
@@ -79,26 +79,26 @@ void    GUIEditorInit(void) {
 }
 void    GUIEditorShutdown(void) {}
 void    GUIEditorRun(void) {}
-bool    GUIEditorHandleMessage(void* msg) {
+bool    GUIEditorHandleMessage(void *msg) {
     return false;
 }
 
 void    DebuggerClientLaunch(void) {}
-void    DebuggerClientInit(const char* cmdline) {
+void    DebuggerClientInit(const char *cmdline) {
     common->Printf("The Script Debugger Client only runs on Win32\n");
 }
 bool    DebuggerServerInit(void) {
     return false;
 }
 void    DebuggerServerShutdown(void) {}
-void    DebuggerServerPrint(const char* text) {}
-void    DebuggerServerCheckBreakpoint(idInterpreter* interpreter, idProgram* program, int instructionPointer) {}
+void    DebuggerServerPrint(const char *text) {}
+void    DebuggerServerCheckBreakpoint(idInterpreter *interpreter, idProgram *program, int instructionPointer) {}
 
-void    PDAEditorInit(const idDict* spawnArgs) {
+void    PDAEditorInit(const idDict *spawnArgs) {
     common->Printf("The PDA editor only runs on Win32\n");
 }
 
 void    MaterialEditorInit() {
     common->Printf("The Material editor only runs on Win32\n");
 }
-void    MaterialEditorPrintConsole(const char* text) {}
+void    MaterialEditorPrintConsole(const char *text) {}

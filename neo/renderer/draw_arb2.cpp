@@ -54,7 +54,7 @@ static void GL_SelectTextureNoClient(int unit) {
 RB_ARB2_DrawInteraction
 ==================
 */
-void    RB_ARB2_DrawInteraction(const drawInteraction_t* din) {
+void    RB_ARB2_DrawInteraction(const drawInteraction_t *din) {
     // load all the vertex program parameters
     qglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, PP_LIGHT_ORIGIN, din->localLightOrigin.ToFloatPtr());
     qglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, PP_VIEW_ORIGIN, din->localViewOrigin.ToFloatPtr());
@@ -133,7 +133,7 @@ RB_ARB2_CreateDrawInteractions
 
 =============
 */
-void RB_ARB2_CreateDrawInteractions(const drawSurf_t* surf) {
+void RB_ARB2_CreateDrawInteractions(const drawSurf_t *surf) {
     if (!surf) {
         return;
     }
@@ -183,7 +183,7 @@ void RB_ARB2_CreateDrawInteractions(const drawSurf_t* surf) {
         // perform setup here that will not change over multiple interaction passes
 
         // set the vertex pointers
-        idDrawVert*  ac = (idDrawVert*)vertexCache.Position(surf->geo->ambientCache);
+        idDrawVert  *ac = (idDrawVert *)vertexCache.Position(surf->geo->ambientCache);
         qglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), ac->color);
         qglVertexAttribPointerARB(11, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->normal.ToFloatPtr());
         qglVertexAttribPointerARB(10, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
@@ -235,7 +235,7 @@ RB_ARB2_DrawInteractions
 ==================
 */
 void RB_ARB2_DrawInteractions(void) {
-    viewLight_t*     vLight;
+    viewLight_t     *vLight;
 
     GL_SelectTexture(0);
     qglDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -356,15 +356,15 @@ void R_LoadARBProgram(int progIndex) {
     int     err;
     idStr   fullPath = "glprogs/";
     fullPath += progs[progIndex].name;
-    char*    fileBuffer;
-    char*    buffer;
-    char*    start = NULL, *end;
+    char    *fileBuffer;
+    char    *buffer;
+    char    *start = NULL, *end;
 
     common->Printf("%s", fullPath.c_str());
 
     // load the program even if we don't support it, so
     // fs_copyfiles can generate cross-platform data dumps
-    fileSystem->ReadFile(fullPath.c_str(), (void**)&fileBuffer, NULL);
+    fileSystem->ReadFile(fullPath.c_str(), (void **)&fileBuffer, NULL);
 
     if (!fileBuffer) {
         common->Printf(": File not found\n");
@@ -372,7 +372,7 @@ void R_LoadARBProgram(int progIndex) {
     }
 
     // copy to stack memory and free
-    buffer = (char*)_alloca(strlen(fileBuffer) + 1);
+    buffer = (char *)_alloca(strlen(fileBuffer) + 1);
     strcpy(buffer, fileBuffer);
     fileSystem->FreeFile(fileBuffer);
 
@@ -430,10 +430,10 @@ void R_LoadARBProgram(int progIndex) {
                         strlen(start), start);
 
     err = qglGetError();
-    qglGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, (GLint*)&ofs);
+    qglGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, (GLint *)&ofs);
 
     if (err == GL_INVALID_OPERATION) {
-        const GLubyte* str = qglGetString(GL_PROGRAM_ERROR_STRING_ARB);
+        const GLubyte *str = qglGetString(GL_PROGRAM_ERROR_STRING_ARB);
         common->Printf("\nGL_PROGRAM_ERROR_STRING_ARB: %s\n", str);
 
         if (ofs < 0) {
@@ -463,7 +463,7 @@ Returns a GL identifier that can be bound to the given target, parsing
 a text file if it hasn't already been loaded.
 ==================
 */
-int R_FindARBProgram(GLenum target, const char* program) {
+int R_FindARBProgram(GLenum target, const char *program) {
     int     i;
     idStr   stripped = program;
 
@@ -502,7 +502,7 @@ int R_FindARBProgram(GLenum target, const char* program) {
 R_ReloadARBPrograms_f
 ==================
 */
-void R_ReloadARBPrograms_f(const idCmdArgs& args) {
+void R_ReloadARBPrograms_f(const idCmdArgs &args) {
     int     i;
 
     common->Printf("----- R_ReloadARBPrograms -----\n");

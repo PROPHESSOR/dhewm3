@@ -56,7 +56,7 @@ idTypeInfoGen::~idTypeInfoGen(void) {
 idTypeInfoGen::GetInheritance
 ================
 */
-int idTypeInfoGen::GetInheritance(const char* typeName) const {
+int idTypeInfoGen::GetInheritance(const char *typeName) const {
     int i;
 
     for (i = 0; i < classes.Num(); i++) {
@@ -77,7 +77,7 @@ int idTypeInfoGen::GetInheritance(const char* typeName) const {
 idTypeInfoGen::EvaluateIntegerString
 ================
 */
-int idTypeInfoGen::EvaluateIntegerString(const idStr& string) {
+int idTypeInfoGen::EvaluateIntegerString(const idStr &string) {
     idParser src;
     idStr evalString;
 
@@ -95,7 +95,7 @@ int idTypeInfoGen::EvaluateIntegerString(const idStr& string) {
 idTypeInfoGen::EvaluateFloatString
 ================
 */
-float idTypeInfoGen::EvaluateFloatString(const idStr& string) {
+float idTypeInfoGen::EvaluateFloatString(const idStr &string) {
     idParser src;
     idStr evalString;
 
@@ -113,7 +113,7 @@ float idTypeInfoGen::EvaluateFloatString(const idStr& string) {
 idTypeInfoGen::FindConstant
 ================
 */
-idConstantInfo* idTypeInfoGen::FindConstant(const char* name) {
+idConstantInfo *idTypeInfoGen::FindConstant(const char *name) {
     int i;
 
     for (i = 0; i < constants.Num(); i++) {
@@ -130,8 +130,8 @@ idConstantInfo* idTypeInfoGen::FindConstant(const char* name) {
 idTypeInfoGen::GetIntegerConstant
 ================
 */
-int idTypeInfoGen::GetIntegerConstant(const char* scope, const char* name, idParser& src) {
-    idConstantInfo* constant = FindConstant(idStr(scope) + name);
+int idTypeInfoGen::GetIntegerConstant(const char *scope, const char *name, idParser &src) {
+    idConstantInfo *constant = FindConstant(idStr(scope) + name);
 
     if (constant == NULL) {
         constant = FindConstant(name);
@@ -150,8 +150,8 @@ int idTypeInfoGen::GetIntegerConstant(const char* scope, const char* name, idPar
 idTypeInfoGen::GetFloatConstant
 ================
 */
-float idTypeInfoGen::GetFloatConstant(const char* scope, const char* name, idParser& src) {
-    idConstantInfo* constant = FindConstant(idStr(scope) + name);
+float idTypeInfoGen::GetFloatConstant(const char *scope, const char *name, idParser &src) {
+    idConstantInfo *constant = FindConstant(idStr(scope) + name);
 
     if (constant == NULL) {
         constant = FindConstant(name);
@@ -170,7 +170,7 @@ float idTypeInfoGen::GetFloatConstant(const char* scope, const char* name, idPar
 idTypeInfoGen::ParseArraySize
 ================
 */
-int idTypeInfoGen::ParseArraySize(const char* scope, idParser& src) {
+int idTypeInfoGen::ParseArraySize(const char *scope, idParser &src) {
     idToken token;
     idStr sizeString, constantString;
     int size, totalSize;
@@ -219,7 +219,7 @@ int idTypeInfoGen::ParseArraySize(const char* scope, idParser& src) {
 idTypeInfoGen::ParseConstantValue
 ================
 */
-void idTypeInfoGen::ParseConstantValue(const char* scope, idParser& src, idStr& value) {
+void idTypeInfoGen::ParseConstantValue(const char *scope, idParser &src, idStr &value) {
     idToken token;
     idStr constantString;
 
@@ -254,10 +254,10 @@ void idTypeInfoGen::ParseConstantValue(const char* scope, idParser& src, idStr& 
 idTypeInfoGen::ParseEnumType
 ================
 */
-idEnumTypeInfo* idTypeInfoGen::ParseEnumType(const char* scope, bool isTemplate, bool typeDef, idParser& src) {
+idEnumTypeInfo *idTypeInfoGen::ParseEnumType(const char *scope, bool isTemplate, bool typeDef, idParser &src) {
     int value;
     idToken token;
-    idEnumTypeInfo* typeInfo;
+    idEnumTypeInfo *typeInfo;
     idEnumValueInfo enumValue;
     idStr valueString;
 
@@ -300,7 +300,7 @@ idEnumTypeInfo* idTypeInfoGen::ParseEnumType(const char* scope, bool isTemplate,
         typeInfo->values.Append(enumValue);
 
         // add a constant for the enum value
-        idConstantInfo* constantInfo = new idConstantInfo;
+        idConstantInfo *constantInfo = new idConstantInfo;
         constantInfo->name = scope + enumValue.name;
         constantInfo->type = "int";
         constantInfo->value = va("%d", value);
@@ -332,9 +332,9 @@ idEnumTypeInfo* idTypeInfoGen::ParseEnumType(const char* scope, bool isTemplate,
 idTypeInfoGen::ParseClassType
 ================
 */
-idClassTypeInfo* idTypeInfoGen::ParseClassType(const char* scope, const char* templateArgs, bool isTemplate, bool typeDef, idParser& src) {
+idClassTypeInfo *idTypeInfoGen::ParseClassType(const char *scope, const char *templateArgs, bool isTemplate, bool typeDef, idParser &src) {
     idToken token;
-    idClassTypeInfo* typeInfo;
+    idClassTypeInfo *typeInfo;
 
     typeInfo = new idClassTypeInfo;
     typeInfo->scope = scope;
@@ -429,11 +429,11 @@ idClassTypeInfo* idTypeInfoGen::ParseClassType(const char* scope, const char* te
 idTypeInfoGen::ParseScope
 ================
 */
-void idTypeInfoGen::ParseScope(const char* scope, bool isTemplate, idParser& src, idClassTypeInfo* typeInfo) {
+void idTypeInfoGen::ParseScope(const char *scope, bool isTemplate, idParser &src, idClassTypeInfo *typeInfo) {
     int indent;
     idToken token;
-    idClassTypeInfo* classInfo;
-    idEnumTypeInfo* enumInfo;
+    idClassTypeInfo *classInfo;
+    idEnumTypeInfo *enumInfo;
     idStr varType;
     bool isConst = false;
     bool isStatic = false;
@@ -743,7 +743,7 @@ void idTypeInfoGen::ParseScope(const char* scope, bool isTemplate, idParser& src
             } else if ((isStatic || isConst) && src.CheckTokenString("=")) {
 
                 // constant
-                idConstantInfo* constantInfo = new idConstantInfo;
+                idConstantInfo *constantInfo = new idConstantInfo;
                 constantInfo->name = scope + token;
                 constantInfo->type = varType;
                 constantInfo->type.StripTrailing(' ');
@@ -841,7 +841,7 @@ void idTypeInfoGen::ParseScope(const char* scope, bool isTemplate, idParser& src
 idTypeInfoGen::AddDefine
 ================
 */
-void idTypeInfoGen::AddDefine(const char* define) {
+void idTypeInfoGen::AddDefine(const char *define) {
     defines.Append(define);
 }
 
@@ -850,10 +850,10 @@ void idTypeInfoGen::AddDefine(const char* define) {
 idTypeInfoGen::CreateTypeInfo
 ================
 */
-void idTypeInfoGen::CreateTypeInfo(const char* path) {
+void idTypeInfoGen::CreateTypeInfo(const char *path) {
     int i, j, inheritance;
     idStr fileName;
-    idFileList* files;
+    idFileList *files;
     idParser src;
 
     common->Printf("Type Info Generator v"TYPE_INFO_GEN_VERSION" (c) 2004 id Software\n");
@@ -878,7 +878,7 @@ void idTypeInfoGen::CreateTypeInfo(const char* path) {
             src.AddDefine(defines[j]);
         }
 
-        idClassTypeInfo* typeInfo = new idClassTypeInfo;
+        idClassTypeInfo *typeInfo = new idClassTypeInfo;
         ParseScope("", false, src, typeInfo);
         delete typeInfo;
 
@@ -921,7 +921,7 @@ void idTypeInfoGen::CreateTypeInfo(const char* path) {
 CleanName
 ================
 */
-void CleanName(idStr& name) {
+void CleanName(idStr &name) {
     name.Replace("::", "_");
     name.Replace(" , ", "_");
     name.Replace("< ", "_");
@@ -934,10 +934,10 @@ void CleanName(idStr& name) {
 idTypeInfoGen::WriteTypeInfo
 ================
 */
-void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
+void idTypeInfoGen::WriteTypeInfo(const char *fileName) const {
     int i, j;
     idStr path, define;
-    idFile* file;
+    idFile *file;
 
     path = fileSystem->RelativePathToOSPath(fileName);
 
@@ -1011,7 +1011,7 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
     file->WriteFloatString("static constantInfo_t constantInfo[] = {\n");
 
     for (i = 0; i < constants.Num(); i++) {
-        idConstantInfo* info = constants[i];
+        idConstantInfo *info = constants[i];
         file->WriteFloatString("\t{ \"%s\", \"%s\", \"%s\" },\n", info->type.c_str(), info->name.c_str(), info->value.c_str());
     }
 
@@ -1020,7 +1020,7 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
 
     // enum values
     for (i = 0; i < enums.Num(); i++) {
-        idEnumTypeInfo* info = enums[i];
+        idEnumTypeInfo *info = enums[i];
 
         idStr typeInfoName = info->scope + info->typeName;
         CleanName(typeInfoName);
@@ -1043,7 +1043,7 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
     file->WriteFloatString("static enumTypeInfo_t enumTypeInfo[] = {\n");
 
     for (i = 0; i < enums.Num(); i++) {
-        idEnumTypeInfo* info = enums[i];
+        idEnumTypeInfo *info = enums[i];
 
         idStr typeName = info->scope + info->typeName;
         idStr typeInfoName = typeName;
@@ -1061,7 +1061,7 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
 
     // class variables
     for (i = 0; i < classes.Num(); i++) {
-        idClassTypeInfo* info = classes[i];
+        idClassTypeInfo *info = classes[i];
 
         idStr typeName = info->scope + info->typeName;
         idStr typeInfoName = typeName;
@@ -1070,8 +1070,8 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
         file->WriteFloatString("static classVariableInfo_t %s_typeInfo[] = {\n", typeInfoName.c_str());
 
         for (j = 0; j < info->variables.Num(); j++) {
-            const char* varName = info->variables[j].name.c_str();
-            const char* varType = info->variables[j].type.c_str();
+            const char *varName = info->variables[j].name.c_str();
+            const char *varType = info->variables[j].type.c_str();
 
             if (info->unnamed || info->isTemplate || info->variables[j].bits != 0) {
                 file->WriteFloatString("//");
@@ -1089,7 +1089,7 @@ void idTypeInfoGen::WriteTypeInfo(const char* fileName) const {
     file->WriteFloatString("static classTypeInfo_t classTypeInfo[] = {\n");
 
     for (i = 0; i < classes.Num(); i++) {
-        idClassTypeInfo* info = classes[i];
+        idClassTypeInfo *info = classes[i];
 
         idStr typeName = info->scope + info->typeName;
         idStr typeInfoName = typeName;

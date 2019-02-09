@@ -65,7 +65,7 @@ typedef enum {
     MSG_WAIT
 } msgBoxType_t;
 
-typedef const char* (*HandleGuiCommand_t)(const char*);
+typedef const char *(*HandleGuiCommand_t)(const char *);
 
 class idSession {
   public:
@@ -101,12 +101,12 @@ class idSession {
     virtual bool    IsMultiplayer() = 0;
 
     // Processes the given event.
-    virtual bool    ProcessEvent(const sysEvent_t* event) = 0;
+    virtual bool    ProcessEvent(const sysEvent_t *event) = 0;
 
     // Activates the main menu
     virtual void    StartMenu(bool playIntro = false) = 0;
 
-    virtual void    SetGUI(idUserInterface* gui, HandleGuiCommand_t handle) = 0;
+    virtual void    SetGUI(idUserInterface *gui, HandleGuiCommand_t handle) = 0;
 
     // Updates gui and dispatched events to it
     virtual void    GuiFrameEvents() = 0;
@@ -115,10 +115,10 @@ class idSession {
     // if MSG_PROMPT and wait, returns the prompt string or NULL if aborted
     // if MSG_CDKEY and want, returns the cd key or NULL if aborted
     // network tells wether one should still run the network loop in a wait dialog
-    virtual const char* MessageBox(msgBoxType_t type, const char* message, const char* title = NULL, bool wait = false, const char* fire_yes = NULL, const char* fire_no = NULL, bool network = false) = 0;
+    virtual const char *MessageBox(msgBoxType_t type, const char *message, const char *title = NULL, bool wait = false, const char *fire_yes = NULL, const char *fire_no = NULL, bool network = false) = 0;
     virtual void    StopBox(void) = 0;
     // monitor this download in a progress box to either abort or completion
-    virtual void    DownloadProgressBox(backgroundDownload_t* bgl, const char* title, int progress_start = 0, int progress_end = 100) = 0;
+    virtual void    DownloadProgressBox(backgroundDownload_t *bgl, const char *title, int progress_start = 0, int progress_end = 100) = 0;
 
     virtual void    SetPlayingSoundWorld() = 0;
 
@@ -132,11 +132,11 @@ class idSession {
     virtual void    WriteCDKey(void) = 0;
 
     // returns NULL for if xp is true and xp key is not valid or not present
-    virtual const char* GetCDKey(bool xp) = 0;
+    virtual const char *GetCDKey(bool xp) = 0;
 
     // check keys for validity when typed in by the user ( with checksum verification )
     // store the new set of keys if they are found valid
-    virtual bool    CheckKey(const char* key, bool netConnect, bool offline_valid[ 2 ]) = 0;
+    virtual bool    CheckKey(const char *key, bool netConnect, bool offline_valid[ 2 ]) = 0;
 
     // verify the current set of keys for validity
     // strict -> keys in state CDKEY_CHECKING state are not ok
@@ -150,23 +150,23 @@ class idSession {
     virtual bool    WaitingForGameAuth(void) = 0;
 
     // got reply from master about the keys. if !valid, auth_msg given
-    virtual void    CDKeysAuthReply(bool valid, const char* auth_msg) = 0;
+    virtual void    CDKeysAuthReply(bool valid, const char *auth_msg) = 0;
 
-    virtual const char* GetCurrentMapName(void) = 0;
+    virtual const char *GetCurrentMapName(void) = 0;
 
     virtual int     GetSaveGameVersion(void) = 0;
 
     // The render world and sound world used for this session.
-    idRenderWorld*  rw;
-    idSoundWorld*   sw;
+    idRenderWorld  *rw;
+    idSoundWorld   *sw;
 
     // The renderer and sound system will write changes to writeDemo.
     // Demos can be recorded and played at the same time when splicing.
-    idDemoFile*     readDemo;
-    idDemoFile*     writeDemo;
+    idDemoFile     *readDemo;
+    idDemoFile     *writeDemo;
     int             renderdemoVersion;
 };
 
-extern  idSession*  session;
+extern  idSession  *session;
 
 #endif /* !__SESSION_H__ */

@@ -35,7 +35,7 @@ class idWinVar;
 class idRegister {
   public:
     idRegister();
-    idRegister(const char* p, int t);
+    idRegister(const char *p, int t);
 
     enum REGTYPE { VEC4 = 0, FLOAT, BOOL, INT, STRING, VEC2, VEC3, RECTANGLE, NUMTYPES } ;
     static int REGCOUNT[NUMTYPES];
@@ -45,24 +45,24 @@ class idRegister {
     idStr               name;
     int                 regCount;
     unsigned short      regs[4];
-    idWinVar*           var;
+    idWinVar           *var;
 
-    void                SetToRegs(float* registers);
-    void                GetFromRegs(float* registers);
-    void                CopyRegs(idRegister* src);
+    void                SetToRegs(float *registers);
+    void                GetFromRegs(float *registers);
+    void                CopyRegs(idRegister *src);
     void                Enable(bool b) {
         enabled = b;
     }
-    void                ReadFromDemoFile(idDemoFile* f);
-    void                WriteToDemoFile(idDemoFile* f);
-    void                WriteToSaveGame(idFile* savefile);
-    void                ReadFromSaveGame(idFile* savefile);
+    void                ReadFromDemoFile(idDemoFile *f);
+    void                WriteToDemoFile(idDemoFile *f);
+    void                WriteToSaveGame(idFile *savefile);
+    void                ReadFromSaveGame(idFile *savefile);
 };
 
 ID_INLINE idRegister::idRegister(void) {
 }
 
-ID_INLINE idRegister::idRegister(const char* p, int t) {
+ID_INLINE idRegister::idRegister(const char *p, int t) {
     name = p;
     type = t;
     assert(t >= 0 && t < NUMTYPES);
@@ -71,7 +71,7 @@ ID_INLINE idRegister::idRegister(const char* p, int t) {
     var = NULL;
 };
 
-ID_INLINE void idRegister::CopyRegs(idRegister* src) {
+ID_INLINE void idRegister::CopyRegs(idRegister *src) {
     regs[0] = src->regs[0];
     regs[1] = src->regs[1];
     regs[2] = src->regs[2];
@@ -84,20 +84,20 @@ class idRegisterList {
     idRegisterList();
     ~idRegisterList();
 
-    void                AddReg(const char* name, int type, idParser* src, idWindow* win, idWinVar* var);
-    void                AddReg(const char* name, int type, idVec4 data, idWindow* win, idWinVar* var);
+    void                AddReg(const char *name, int type, idParser *src, idWindow *win, idWinVar *var);
+    void                AddReg(const char *name, int type, idVec4 data, idWindow *win, idWinVar *var);
 
-    idRegister*         FindReg(const char* name);
-    void                SetToRegs(float* registers);
-    void                GetFromRegs(float* registers);
+    idRegister         *FindReg(const char *name);
+    void                SetToRegs(float *registers);
+    void                GetFromRegs(float *registers);
     void                Reset();
-    void                ReadFromDemoFile(idDemoFile* f);
-    void                WriteToDemoFile(idDemoFile* f);
-    void                WriteToSaveGame(idFile* savefile);
-    void                ReadFromSaveGame(idFile* savefile);
+    void                ReadFromDemoFile(idDemoFile *f);
+    void                WriteToDemoFile(idDemoFile *f);
+    void                WriteToSaveGame(idFile *savefile);
+    void                ReadFromSaveGame(idFile *savefile);
 
   private:
-    idList<idRegister*> regs;
+    idList<idRegister *> regs;
     idHashIndex         regHash;
 };
 

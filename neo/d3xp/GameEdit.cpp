@@ -87,8 +87,8 @@ void idCursor3D::Present(void) {
 
     BecomeInactive(TH_UPDATEVISUALS);
 
-    const idVec3& origin = GetPhysics()->GetOrigin();
-    const idMat3& axis = GetPhysics()->GetAxis();
+    const idVec3 &origin = GetPhysics()->GetOrigin();
+    const idMat3 &axis = GetPhysics()->GetAxis();
     gameRenderWorld->DebugArrow(colorYellow, origin + axis[1] * -5.0f + axis[2] * 5.0f, origin, 2);
     gameRenderWorld->DebugArrow(colorRed, origin, draggedPosition, 2);
 }
@@ -173,11 +173,11 @@ void idDragEntity::StopDrag(void) {
 idDragEntity::Update
 ==============
 */
-void idDragEntity::Update(idPlayer* player) {
+void idDragEntity::Update(idPlayer *player) {
     idVec3 viewPoint, origin;
     idMat3 viewAxis, axis;
     trace_t trace;
-    idEntity* newEnt;
+    idEntity *newEnt;
     idAngles angles;
     jointHandle_t newJoint;
     idStr newBodyName;
@@ -207,8 +207,8 @@ void idDragEntity::Update(idPlayer* player) {
                         newEnt = newEnt->GetBindMaster();
                     }
 
-                    if (newEnt->IsType(idAFEntity_Base::Type) && static_cast<idAFEntity_Base*>(newEnt)->IsActiveAF()) {
-                        idAFEntity_Base* af = static_cast<idAFEntity_Base*>(newEnt);
+                    if (newEnt->IsType(idAFEntity_Base::Type) && static_cast<idAFEntity_Base *>(newEnt)->IsActiveAF()) {
+                        idAFEntity_Base *af = static_cast<idAFEntity_Base *>(newEnt);
 
                         // joint being dragged
                         newJoint = CLIPMODEL_ID_TO_JOINT_HANDLE(trace.c.id);
@@ -242,10 +242,10 @@ void idDragEntity::Update(idPlayer* player) {
                     bodyName = newBodyName;
 
                     if (!cursor) {
-                        cursor = (idCursor3D*)gameLocal.SpawnEntityType(idCursor3D::Type);
+                        cursor = (idCursor3D *)gameLocal.SpawnEntityType(idCursor3D::Type);
                     }
 
-                    idPhysics* phys = dragEnt.GetEntity()->GetPhysics();
+                    idPhysics *phys = dragEnt.GetEntity()->GetPhysics();
                     localPlayerPoint = (trace.c.point - viewPoint) * viewAxis.Transpose();
                     origin = phys->GetOrigin(id);
                     axis = phys->GetAxis(id);
@@ -266,7 +266,7 @@ void idDragEntity::Update(idPlayer* player) {
     }
 
     // if there is an entity selected for dragging
-    idEntity* drag = dragEnt.GetEntity();
+    idEntity *drag = dragEnt.GetEntity();
 
     if (drag) {
 
@@ -280,8 +280,8 @@ void idDragEntity::Update(idPlayer* player) {
 
         cursor->drag.SetDragPosition(cursor->GetPhysics()->GetOrigin());
 
-        renderEntity_t* renderEntity = drag->GetRenderEntity();
-        idAnimator* dragAnimator = drag->GetAnimator();
+        renderEntity_t *renderEntity = drag->GetRenderEntity();
+        idAnimator *dragAnimator = drag->GetAnimator();
 
         if (joint != INVALID_JOINT && renderEntity && dragAnimator) {
             dragAnimator->GetJointTransform(joint, gameLocal.time, cursor->draggedPosition, axis);
@@ -296,7 +296,7 @@ void idDragEntity::Update(idPlayer* player) {
     // if there is a selected entity
     if (selected.GetEntity() && g_dragShowSelection.GetBool()) {
         // draw the bbox of the selected entity
-        renderEntity_t* renderEntity = selected.GetEntity()->GetRenderEntity();
+        renderEntity_t *renderEntity = selected.GetEntity()->GetRenderEntity();
 
         if (renderEntity) {
             gameRenderWorld->DebugBox(colorYellow, idBox(renderEntity->bounds, renderEntity->origin, renderEntity->axis));
@@ -309,7 +309,7 @@ void idDragEntity::Update(idPlayer* player) {
 idDragEntity::SetSelected
 ==============
 */
-void idDragEntity::SetSelected(idEntity* ent) {
+void idDragEntity::SetSelected(idEntity *ent) {
     selected = ent;
     StopDrag();
 }
@@ -335,10 +335,10 @@ void idDragEntity::BindSelected(void) {
     idLexer lexer;
     idToken type, bodyName;
     idStr key, value, bindBodyName;
-    const idKeyValue* kv;
-    idAFEntity_Base* af;
+    const idKeyValue *kv;
+    idAFEntity_Base *af;
 
-    af = static_cast<idAFEntity_Base*>(dragEnt.GetEntity());
+    af = static_cast<idAFEntity_Base *>(dragEnt.GetEntity());
 
     if (!af || !af->IsType(idAFEntity_Base::Type) || !af->IsActiveAF()) {
         return;
@@ -389,10 +389,10 @@ idDragEntity::UnbindSelected
 ==============
 */
 void idDragEntity::UnbindSelected(void) {
-    const idKeyValue* kv;
-    idAFEntity_Base* af;
+    const idKeyValue *kv;
+    idAFEntity_Base *af;
 
-    af = static_cast<idAFEntity_Base*>(selected.GetEntity());
+    af = static_cast<idAFEntity_Base *>(selected.GetEntity());
 
     if (!af || !af->IsType(idAFEntity_Base::Type) || !af->IsActiveAF()) {
         return;
@@ -439,9 +439,9 @@ idEditEntities::idEditEntities(void) {
 idEditEntities::SelectEntity
 =============
 */
-bool idEditEntities::SelectEntity(const idVec3& origin, const idVec3& dir, const idEntity* skip) {
+bool idEditEntities::SelectEntity(const idVec3 &origin, const idVec3 &dir, const idEntity *skip) {
     idVec3      end;
-    idEntity*    ent;
+    idEntity    *ent;
 
     if (!g_editEntityMode.GetInteger() || selectableEntityClasses.Num() == 0) {
         return false;
@@ -484,7 +484,7 @@ bool idEditEntities::SelectEntity(const idVec3& origin, const idVec3& dir, const
 idEditEntities::AddSelectedEntity
 =============
 */
-void idEditEntities::AddSelectedEntity(idEntity* ent) {
+void idEditEntities::AddSelectedEntity(idEntity *ent) {
     ent->fl.selected = true;
     selectedEntities.AddUnique(ent);
 }
@@ -494,7 +494,7 @@ void idEditEntities::AddSelectedEntity(idEntity* ent) {
 idEditEntities::RemoveSelectedEntity
 ==============
 */
-void idEditEntities::RemoveSelectedEntity(idEntity* ent) {
+void idEditEntities::RemoveSelectedEntity(idEntity *ent) {
     if (selectedEntities.Find(ent)) {
         selectedEntities.Remove(ent);
     }
@@ -523,7 +523,7 @@ void idEditEntities::ClearSelectedEntities() {
 idEditEntities::EntityIsSelectable
 =============
 */
-bool idEditEntities::EntityIsSelectable(idEntity* ent, idVec4* color, idStr* text) {
+bool idEditEntities::EntityIsSelectable(idEntity *ent, idVec4 *color, idStr *text) {
     for (int i = 0; i < selectableEntityClasses.Num(); i++) {
         if (ent->GetType() == selectableEntityClasses[i].typeInfo) {
             if (text) {
@@ -562,7 +562,7 @@ idEditEntities::DisplayEntities
 =============
 */
 void idEditEntities::DisplayEntities(void) {
-    idEntity* ent;
+    idEntity *ent;
 
     if (!gameLocal.GetLocalPlayer()) {
         return;
@@ -643,7 +643,7 @@ void idEditEntities::DisplayEntities(void) {
         bool drawArrows = false;
 
         if (ent->GetType() == &idAFEntity_Base::Type) {
-            if (!static_cast<idAFEntity_Base*>(ent)->IsActiveAF()) {
+            if (!static_cast<idAFEntity_Base *>(ent)->IsActiveAF()) {
                 continue;
             }
         } else if (ent->GetType() == &idSound::Type) {
@@ -651,7 +651,7 @@ void idEditEntities::DisplayEntities(void) {
                 drawArrows = true;
             }
 
-            const idSoundShader* ss = declManager->FindSound(ent->spawnArgs.GetString(textKey));
+            const idSoundShader *ss = declManager->FindSound(ent->spawnArgs.GetString(textKey));
 
             if (ss->HasDefaultSound() || ss->base->GetState() == DS_DEFAULTED) {
                 color.Set(1.0f, 0.0f, 1.0f, 1.0f);
@@ -691,7 +691,7 @@ void idEditEntities::DisplayEntities(void) {
         }
 
         if (textKey.Length()) {
-            const char* text = ent->spawnArgs.GetString(textKey);
+            const char *text = ent->spawnArgs.GetString(textKey);
 
             if (viewTextBounds.ContainsPoint(ent->GetPhysics()->GetOrigin())) {
                 gameRenderWorld->DrawText(text, ent->GetPhysics()->GetOrigin() + idVec3(0, 0, 12), 0.25, colorWhite, axis, 1);
@@ -710,7 +710,7 @@ void idEditEntities::DisplayEntities(void) {
 */
 
 idGameEdit          gameEditLocal;
-idGameEdit*         gameEdit = &gameEditLocal;
+idGameEdit         *gameEdit = &gameEditLocal;
 
 
 /*
@@ -718,9 +718,9 @@ idGameEdit*         gameEdit = &gameEditLocal;
 idGameEdit::GetSelectedEntities
 =============
 */
-int idGameEdit::GetSelectedEntities(idEntity* list[], int max) {
+int idGameEdit::GetSelectedEntities(idEntity *list[], int max) {
     int num = 0;
-    idEntity* ent;
+    idEntity *ent;
 
     for (ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
         if (ent->fl.selected) {
@@ -741,7 +741,7 @@ idGameEdit::TriggerSelected
 =============
 */
 void idGameEdit::TriggerSelected() {
-    idEntity* ent;
+    idEntity *ent;
 
     for (ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
         if (ent->fl.selected) {
@@ -756,7 +756,7 @@ idGameEdit::ClearEntitySelection
 ================
 */
 void idGameEdit::ClearEntitySelection() {
-    idEntity* ent;
+    idEntity *ent;
 
     for (ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
         ent->fl.selected = false;
@@ -770,7 +770,7 @@ void idGameEdit::ClearEntitySelection() {
 idGameEdit::AddSelectedEntity
 ================
 */
-void idGameEdit::AddSelectedEntity(idEntity* ent) {
+void idGameEdit::AddSelectedEntity(idEntity *ent) {
     if (ent) {
         gameLocal.editEntities->AddSelectedEntity(ent);
     }
@@ -781,7 +781,7 @@ void idGameEdit::AddSelectedEntity(idEntity* ent) {
 idGameEdit::FindEntityDefDict
 ================
 */
-const idDict* idGameEdit::FindEntityDefDict(const char* name, bool makeDefault) const {
+const idDict *idGameEdit::FindEntityDefDict(const char *name, bool makeDefault) const {
     return gameLocal.FindEntityDefDict(name, makeDefault);
 }
 
@@ -790,7 +790,7 @@ const idDict* idGameEdit::FindEntityDefDict(const char* name, bool makeDefault) 
 idGameEdit::SpawnEntityDef
 ================
 */
-void idGameEdit::SpawnEntityDef(const idDict& args, idEntity** ent) {
+void idGameEdit::SpawnEntityDef(const idDict &args, idEntity **ent) {
     gameLocal.SpawnEntityDef(args, ent);
 }
 
@@ -799,7 +799,7 @@ void idGameEdit::SpawnEntityDef(const idDict& args, idEntity** ent) {
 idGameEdit::FindEntity
 ================
 */
-idEntity* idGameEdit::FindEntity(const char* name) const {
+idEntity *idGameEdit::FindEntity(const char *name) const {
     return gameLocal.FindEntity(name);
 }
 
@@ -810,7 +810,7 @@ idGameEdit::GetUniqueEntityName
 generates a unique name for a given classname
 =============
 */
-const char* idGameEdit::GetUniqueEntityName(const char* classname) const {
+const char *idGameEdit::GetUniqueEntityName(const char *classname) const {
     int         id;
     static char name[1024];
 
@@ -833,7 +833,7 @@ const char* idGameEdit::GetUniqueEntityName(const char* classname) const {
 idGameEdit::EntityGetOrigin
 ================
 */
-void  idGameEdit::EntityGetOrigin(idEntity* ent, idVec3& org) const {
+void  idGameEdit::EntityGetOrigin(idEntity *ent, idVec3 &org) const {
     if (ent) {
         org = ent->GetPhysics()->GetOrigin();
     }
@@ -844,7 +844,7 @@ void  idGameEdit::EntityGetOrigin(idEntity* ent, idVec3& org) const {
 idGameEdit::EntityGetAxis
 ================
 */
-void idGameEdit::EntityGetAxis(idEntity* ent, idMat3& axis) const {
+void idGameEdit::EntityGetAxis(idEntity *ent, idMat3 &axis) const {
     if (ent) {
         axis = ent->GetPhysics()->GetAxis();
     }
@@ -855,7 +855,7 @@ void idGameEdit::EntityGetAxis(idEntity* ent, idMat3& axis) const {
 idGameEdit::EntitySetOrigin
 ================
 */
-void idGameEdit::EntitySetOrigin(idEntity* ent, const idVec3& org) {
+void idGameEdit::EntitySetOrigin(idEntity *ent, const idVec3 &org) {
     if (ent) {
         ent->SetOrigin(org);
     }
@@ -866,7 +866,7 @@ void idGameEdit::EntitySetOrigin(idEntity* ent, const idVec3& org) {
 idGameEdit::EntitySetAxis
 ================
 */
-void idGameEdit::EntitySetAxis(idEntity* ent, const idMat3& axis) {
+void idGameEdit::EntitySetAxis(idEntity *ent, const idMat3 &axis) {
     if (ent) {
         ent->SetAxis(axis);
     }
@@ -877,7 +877,7 @@ void idGameEdit::EntitySetAxis(idEntity* ent, const idMat3& axis) {
 idGameEdit::EntitySetColor
 ================
 */
-void idGameEdit::EntitySetColor(idEntity* ent, const idVec3 color) {
+void idGameEdit::EntitySetColor(idEntity *ent, const idVec3 color) {
     if (ent) {
         ent->SetColor(color);
     }
@@ -888,7 +888,7 @@ void idGameEdit::EntitySetColor(idEntity* ent, const idVec3 color) {
 idGameEdit::EntityTranslate
 ================
 */
-void idGameEdit::EntityTranslate(idEntity* ent, const idVec3& org) {
+void idGameEdit::EntityTranslate(idEntity *ent, const idVec3 &org) {
     if (ent) {
         ent->GetPhysics()->Translate(org);
     }
@@ -899,7 +899,7 @@ void idGameEdit::EntityTranslate(idEntity* ent, const idVec3& org) {
 idGameEdit::EntityGetSpawnArgs
 ================
 */
-const idDict* idGameEdit::EntityGetSpawnArgs(idEntity* ent) const {
+const idDict *idGameEdit::EntityGetSpawnArgs(idEntity *ent) const {
     if (ent) {
         return &ent->spawnArgs;
     }
@@ -912,7 +912,7 @@ const idDict* idGameEdit::EntityGetSpawnArgs(idEntity* ent) const {
 idGameEdit::EntityUpdateChangeableSpawnArgs
 ================
 */
-void idGameEdit::EntityUpdateChangeableSpawnArgs(idEntity* ent, const idDict* dict) {
+void idGameEdit::EntityUpdateChangeableSpawnArgs(idEntity *ent, const idDict *dict) {
     if (ent) {
         ent->UpdateChangeableSpawnArgs(dict);
     }
@@ -923,10 +923,10 @@ void idGameEdit::EntityUpdateChangeableSpawnArgs(idEntity* ent, const idDict* di
 idGameEdit::EntityChangeSpawnArgs
 ================
 */
-void idGameEdit::EntityChangeSpawnArgs(idEntity* ent, const idDict* newArgs) {
+void idGameEdit::EntityChangeSpawnArgs(idEntity *ent, const idDict *newArgs) {
     if (ent) {
         for (int i = 0 ; i < newArgs->GetNumKeyVals() ; i ++) {
-            const idKeyValue* kv = newArgs->GetKeyVal(i);
+            const idKeyValue *kv = newArgs->GetKeyVal(i);
 
             if (kv->GetValue().Length() > 0) {
                 ent->spawnArgs.Set(kv->GetKey() ,kv->GetValue());
@@ -942,7 +942,7 @@ void idGameEdit::EntityChangeSpawnArgs(idEntity* ent, const idDict* newArgs) {
 idGameEdit::EntityUpdateVisuals
 ================
 */
-void idGameEdit::EntityUpdateVisuals(idEntity* ent) {
+void idGameEdit::EntityUpdateVisuals(idEntity *ent) {
     if (ent) {
         ent->UpdateVisuals();
     }
@@ -953,7 +953,7 @@ void idGameEdit::EntityUpdateVisuals(idEntity* ent) {
 idGameEdit::EntitySetModel
 ================
 */
-void idGameEdit::EntitySetModel(idEntity* ent, const char* val) {
+void idGameEdit::EntitySetModel(idEntity *ent, const char *val) {
     if (ent) {
         ent->spawnArgs.Set("model", val);
         ent->SetModel(val);
@@ -965,7 +965,7 @@ void idGameEdit::EntitySetModel(idEntity* ent, const char* val) {
 idGameEdit::EntityStopSound
 ================
 */
-void idGameEdit::EntityStopSound(idEntity* ent) {
+void idGameEdit::EntityStopSound(idEntity *ent) {
     if (ent) {
         ent->StopSound(SND_CHANNEL_ANY, false);
     }
@@ -976,7 +976,7 @@ void idGameEdit::EntityStopSound(idEntity* ent) {
 idGameEdit::EntityDelete
 ================
 */
-void idGameEdit::EntityDelete(idEntity* ent) {
+void idGameEdit::EntityDelete(idEntity *ent) {
     delete ent;
 }
 
@@ -994,7 +994,7 @@ bool idGameEdit::PlayerIsValid() const {
 idGameEdit::PlayerGetOrigin
 ================
 */
-void idGameEdit::PlayerGetOrigin(idVec3& org) const {
+void idGameEdit::PlayerGetOrigin(idVec3 &org) const {
     org = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin();
 }
 
@@ -1003,7 +1003,7 @@ void idGameEdit::PlayerGetOrigin(idVec3& org) const {
 idGameEdit::PlayerGetAxis
 ================
 */
-void idGameEdit::PlayerGetAxis(idMat3& axis) const {
+void idGameEdit::PlayerGetAxis(idMat3 &axis) const {
     axis = gameLocal.GetLocalPlayer()->GetPhysics()->GetAxis();
 }
 
@@ -1012,7 +1012,7 @@ void idGameEdit::PlayerGetAxis(idMat3& axis) const {
 idGameEdit::PlayerGetViewAngles
 ================
 */
-void idGameEdit::PlayerGetViewAngles(idAngles& angles) const {
+void idGameEdit::PlayerGetViewAngles(idAngles &angles) const {
     angles = gameLocal.GetLocalPlayer()->viewAngles;
 }
 
@@ -1021,7 +1021,7 @@ void idGameEdit::PlayerGetViewAngles(idAngles& angles) const {
 idGameEdit::PlayerGetEyePosition
 ================
 */
-void idGameEdit::PlayerGetEyePosition(idVec3& org) const {
+void idGameEdit::PlayerGetEyePosition(idVec3 &org) const {
     org = gameLocal.GetLocalPlayer()->GetEyePosition();
 }
 
@@ -1031,11 +1031,11 @@ void idGameEdit::PlayerGetEyePosition(idVec3& org) const {
 idGameEdit::MapGetEntityDict
 ================
 */
-const idDict* idGameEdit::MapGetEntityDict(const char* name) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+const idDict *idGameEdit::MapGetEntityDict(const char *name) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile && name && *name) {
-        idMapEntity* mapent = mapFile->FindEntity(name);
+        idMapEntity *mapent = mapFile->FindEntity(name);
 
         if (mapent) {
             return &mapent->epairs;
@@ -1050,8 +1050,8 @@ const idDict* idGameEdit::MapGetEntityDict(const char* name) const {
 idGameEdit::MapSave
 ================
 */
-void idGameEdit::MapSave(const char* path) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapSave(const char *path) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile) {
         mapFile->Write((path) ? path : mapFile->GetName(), ".map");
@@ -1063,11 +1063,11 @@ void idGameEdit::MapSave(const char* path) const {
 idGameEdit::MapSetEntityKeyVal
 ================
 */
-void idGameEdit::MapSetEntityKeyVal(const char* name, const char* key, const char* val) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapSetEntityKeyVal(const char *name, const char *key, const char *val) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile && name && *name) {
-        idMapEntity* mapent = mapFile->FindEntity(name);
+        idMapEntity *mapent = mapFile->FindEntity(name);
 
         if (mapent) {
             mapent->epairs.Set(key, val);
@@ -1080,17 +1080,17 @@ void idGameEdit::MapSetEntityKeyVal(const char* name, const char* key, const cha
 idGameEdit::MapCopyDictToEntity
 ================
 */
-void idGameEdit::MapCopyDictToEntity(const char* name, const idDict* dict) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapCopyDictToEntity(const char *name, const idDict *dict) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile && name && *name) {
-        idMapEntity* mapent = mapFile->FindEntity(name);
+        idMapEntity *mapent = mapFile->FindEntity(name);
 
         if (mapent) {
             for (int i = 0; i < dict->GetNumKeyVals(); i++) {
-                const idKeyValue* kv = dict->GetKeyVal(i);
-                const char* key = kv->GetKey();
-                const char* val = kv->GetValue();
+                const idKeyValue *kv = dict->GetKeyVal(i);
+                const char *key = kv->GetKey();
+                const char *val = kv->GetValue();
                 mapent->epairs.Set(key, val);
             }
         }
@@ -1104,16 +1104,16 @@ void idGameEdit::MapCopyDictToEntity(const char* name, const idDict* dict) const
 idGameEdit::MapGetUniqueMatchingKeyVals
 ================
 */
-int idGameEdit::MapGetUniqueMatchingKeyVals(const char* key, const char* list[], int max) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+int idGameEdit::MapGetUniqueMatchingKeyVals(const char *key, const char *list[], int max) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
     int count = 0;
 
     if (mapFile) {
         for (int i = 0; i < mapFile->GetNumEntities(); i++) {
-            idMapEntity* ent = mapFile->GetEntity(i);
+            idMapEntity *ent = mapFile->GetEntity(i);
 
             if (ent) {
-                const char* k = ent->epairs.GetString(key);
+                const char *k = ent->epairs.GetString(key);
 
                 if (k && *k && count < max) {
                     list[count++] = k;
@@ -1130,11 +1130,11 @@ int idGameEdit::MapGetUniqueMatchingKeyVals(const char* key, const char* list[],
 idGameEdit::MapAddEntity
 ================
 */
-void idGameEdit::MapAddEntity(const idDict* dict) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapAddEntity(const idDict *dict) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile) {
-        idMapEntity* ent = new idMapEntity();
+        idMapEntity *ent = new idMapEntity();
         ent->epairs = *dict;
         mapFile->AddEntity(ent);
     }
@@ -1145,11 +1145,11 @@ void idGameEdit::MapAddEntity(const idDict* dict) const {
 idGameEdit::MapRemoveEntity
 ================
 */
-void idGameEdit::MapRemoveEntity(const char* name) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapRemoveEntity(const char *name) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile) {
-        idMapEntity* ent = mapFile->FindEntity(name);
+        idMapEntity *ent = mapFile->FindEntity(name);
 
         if (ent) {
             mapFile->RemoveEntity(ent);
@@ -1163,15 +1163,15 @@ void idGameEdit::MapRemoveEntity(const char* name) const {
 idGameEdit::MapGetEntitiesMatchignClassWithString
 ================
 */
-int idGameEdit::MapGetEntitiesMatchingClassWithString(const char* classname, const char* match, const char* list[], const int max) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+int idGameEdit::MapGetEntitiesMatchingClassWithString(const char *classname, const char *match, const char *list[], const int max) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
     int count = 0;
 
     if (mapFile) {
         int entCount = mapFile->GetNumEntities();
 
         for (int i = 0 ; i < entCount; i++) {
-            idMapEntity* ent = mapFile->GetEntity(i);
+            idMapEntity *ent = mapFile->GetEntity(i);
 
             if (ent) {
                 idStr work = ent->epairs.GetString("classname");
@@ -1200,11 +1200,11 @@ int idGameEdit::MapGetEntitiesMatchingClassWithString(const char* classname, con
 idGameEdit::MapEntityTranslate
 ================
 */
-void idGameEdit::MapEntityTranslate(const char* name, const idVec3& v) const {
-    idMapFile* mapFile = gameLocal.GetLevelMap();
+void idGameEdit::MapEntityTranslate(const char *name, const idVec3 &v) const {
+    idMapFile *mapFile = gameLocal.GetLevelMap();
 
     if (mapFile && name && *name) {
-        idMapEntity* mapent = mapFile->FindEntity(name);
+        idMapEntity *mapent = mapFile->FindEntity(name);
 
         if (mapent) {
             idVec3 origin;

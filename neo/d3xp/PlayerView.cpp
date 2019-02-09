@@ -96,9 +96,9 @@ idPlayerView::idPlayerView() {
 idPlayerView::Save
 ==============
 */
-void idPlayerView::Save(idSaveGame* savefile) const {
+void idPlayerView::Save(idSaveGame *savefile) const {
     int i;
-    const screenBlob_t* blob;
+    const screenBlob_t *blob;
 
     blob = &screenBlobs[ 0 ];
 
@@ -156,9 +156,9 @@ void idPlayerView::Save(idSaveGame* savefile) const {
 idPlayerView::Restore
 ==============
 */
-void idPlayerView::Restore(idRestoreGame* savefile) {
+void idPlayerView::Restore(idRestoreGame *savefile) {
     int i;
-    screenBlob_t* blob;
+    screenBlob_t *blob;
 
     blob = &screenBlobs[ 0 ];
 
@@ -199,7 +199,7 @@ void idPlayerView::Restore(idRestoreGame* savefile) {
 
     savefile->ReadAngles(shakeAng);
 
-    savefile->ReadObject(reinterpret_cast<idClass*&>(player));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(player));
     savefile->ReadRenderView(view);
 
     #ifdef _D3XP
@@ -216,7 +216,7 @@ void idPlayerView::Restore(idRestoreGame* savefile) {
 idPlayerView::SetPlayerEntity
 ==============
 */
-void idPlayerView::SetPlayerEntity(idPlayer* playerEnt) {
+void idPlayerView::SetPlayerEntity(idPlayer *playerEnt) {
     player = playerEnt;
 }
 
@@ -244,8 +244,8 @@ void idPlayerView::ClearEffects() {
 idPlayerView::GetScreenBlob
 ==============
 */
-screenBlob_t* idPlayerView::GetScreenBlob() {
-    screenBlob_t*    oldest = &screenBlobs[0];
+screenBlob_t *idPlayerView::GetScreenBlob() {
+    screenBlob_t    *oldest = &screenBlobs[0];
 
     for (int i = 1 ; i < MAX_SCREEN_BLOBS ; i++) {
         if (screenBlobs[i].finishTime < oldest->finishTime) {
@@ -264,7 +264,7 @@ LocalKickDir is the direction of force in the player's coordinate system,
 which will determine the head kick direction
 ==============
 */
-void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict* damageDef) {
+void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict *damageDef) {
     //
     // double vision effect
     //
@@ -321,11 +321,11 @@ void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict* damageDef) {
     float   blobTime = damageDef->GetFloat("blob_time");
 
     if (blobTime) {
-        screenBlob_t*    blob = GetScreenBlob();
+        screenBlob_t    *blob = GetScreenBlob();
         blob->startFadeTime = gameLocal.slow.time;
         blob->finishTime = gameLocal.slow.time + blobTime * g_blobTime.GetFloat() * ((float)gameLocal.msec / USERCMD_MSEC);
 
-        const char* materialName = damageDef->GetString("mtr_blob");
+        const char *materialName = damageDef->GetString("mtr_blob");
         blob->material = declManager->FindMaterial(materialName);
         blob->x = damageDef->GetFloat("blob_x");
         blob->x += (gameLocal.random.RandomInt()&63) - 32;
@@ -402,7 +402,7 @@ idPlayerView::WeaponFireFeedback
 Called when a weapon fires, generates head twitches, etc
 ==================
 */
-void idPlayerView::WeaponFireFeedback(const idDict* weaponDef) {
+void idPlayerView::WeaponFireFeedback(const idDict *weaponDef) {
     int     recoilTime;
 
     recoilTime = weaponDef->GetInt("recoilTime");
@@ -481,7 +481,7 @@ idAngles idPlayerView::AngleOffset() const {
 idPlayerView::SingleView
 ==================
 */
-void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
+void idPlayerView::SingleView(idUserInterface *hud, const renderView_t *view) {
 
     // normal rendering
     if (!view) {
@@ -552,7 +552,7 @@ void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
     // draw screen blobs
     if (!pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool()) {
         for (int i = 0 ; i < MAX_SCREEN_BLOBS ; i++) {
-            screenBlob_t*    blob = &screenBlobs[i];
+            screenBlob_t    *blob = &screenBlobs[i];
 
             if (blob->finishTime <= gameLocal.slow.time) {
                 continue;
@@ -616,7 +616,7 @@ void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
 
     // test a single material drawn over everything
     if (g_testPostProcess.GetString()[0]) {
-        const idMaterial* mtr = declManager->FindMaterial(g_testPostProcess.GetString(), false);
+        const idMaterial *mtr = declManager->FindMaterial(g_testPostProcess.GetString(), false);
 
         if (!mtr) {
             common->Printf("Material not found.\n");
@@ -718,8 +718,8 @@ void idPlayerView::ScreenFade() {
 idPlayerView::RenderPlayerView
 ===================
 */
-void idPlayerView::RenderPlayerView(idUserInterface* hud) {
-    const renderView_t* view = player->GetRenderView();
+void idPlayerView::RenderPlayerView(idUserInterface *hud) {
+    const renderView_t *view = player->GetRenderView();
 
     SingleView(hud, view);
     ScreenFade();
@@ -737,7 +737,7 @@ idPlayerView::WarpVision
 ===================
 */
 int idPlayerView::AddWarp(idVec3 worldOrigin, float centerx, float centery, float initialRadius, float durationMsec) {
-    FullscreenFX_Warp* fx = (FullscreenFX_Warp*)(fxManager->FindFX("warp"));
+    FullscreenFX_Warp *fx = (FullscreenFX_Warp *)(fxManager->FindFX("warp"));
 
     if (fx) {
         fx->EnableGrabber(true);
@@ -748,7 +748,7 @@ int idPlayerView::AddWarp(idVec3 worldOrigin, float centerx, float centery, floa
 }
 
 void idPlayerView::FreeWarp(int id) {
-    FullscreenFX_Warp* fx = (FullscreenFX_Warp*)(fxManager->FindFX("warp"));
+    FullscreenFX_Warp *fx = (FullscreenFX_Warp *)(fxManager->FindFX("warp"));
 
     if (fx) {
         fx->EnableGrabber(false);
@@ -830,7 +830,7 @@ bool FxFader::SetTriggerState(bool active) {
 FxFader::Save
 ==================
 */
-void FxFader::Save(idSaveGame* savefile) {
+void FxFader::Save(idSaveGame *savefile) {
     savefile->WriteInt(time);
     savefile->WriteInt(state);
     savefile->WriteFloat(alpha);
@@ -842,7 +842,7 @@ void FxFader::Save(idSaveGame* savefile) {
 FxFader::Restore
 ==================
 */
-void FxFader::Restore(idRestoreGame* savefile) {
+void FxFader::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(time);
     savefile->ReadInt(state);
     savefile->ReadFloat(alpha);
@@ -858,7 +858,7 @@ void FxFader::Restore(idRestoreGame* savefile) {
 FullscreenFX_Helltime::Save
 ==================
 */
-void FullscreenFX::Save(idSaveGame* savefile) {
+void FullscreenFX::Save(idSaveGame *savefile) {
     fader.Save(savefile);
 }
 
@@ -867,7 +867,7 @@ void FullscreenFX::Save(idSaveGame* savefile) {
 FullscreenFX_Helltime::Restore
 ==================
 */
-void FullscreenFX::Restore(idRestoreGame* savefile) {
+void FullscreenFX::Restore(idRestoreGame *savefile) {
     fader.Restore(savefile);
 }
 
@@ -907,7 +907,7 @@ FullscreenFX_Helltime::DetermineLevel
 ==================
 */
 int FullscreenFX_Helltime::DetermineLevel() {
-    idPlayer* player;
+    idPlayer *player;
     int testfx = g_testHelltimeFX.GetInteger();
 
     // for testing purposes
@@ -956,7 +956,7 @@ bool FullscreenFX_Helltime::Active() {
 FullscreenFX_Helltime::AccumPass
 ==================
 */
-void FullscreenFX_Helltime::AccumPass(const renderView_t* view) {
+void FullscreenFX_Helltime::AccumPass(const renderView_t *view) {
     idVec2 shiftScale;
     int level = DetermineLevel();
 
@@ -1007,7 +1007,7 @@ void FullscreenFX_Helltime::HighQuality() {
 FullscreenFX_Helltime::Restore
 ==================
 */
-void FullscreenFX_Helltime::Restore(idRestoreGame* savefile) {
+void FullscreenFX_Helltime::Restore(idRestoreGame *savefile) {
     FullscreenFX::Restore(savefile);
 
     // latch the clear flag
@@ -1038,7 +1038,7 @@ FullscreenFX_Multiplayer::DetermineLevel
 ==================
 */
 int FullscreenFX_Multiplayer::DetermineLevel() {
-    idPlayer* player;
+    idPlayer *player;
     int testfx = g_testMultiplayerFX.GetInteger();
 
     // for testing purposes
@@ -1089,7 +1089,7 @@ bool FullscreenFX_Multiplayer::Active() {
 FullscreenFX_Multiplayer::AccumPass
 ==================
 */
-void FullscreenFX_Multiplayer::AccumPass(const renderView_t* view) {
+void FullscreenFX_Multiplayer::AccumPass(const renderView_t *view) {
     idVec2 shiftScale;
     int level = DetermineLevel();
 
@@ -1140,7 +1140,7 @@ void FullscreenFX_Multiplayer::HighQuality() {
 FullscreenFX_Multiplayer::Restore
 ==================
 */
-void FullscreenFX_Multiplayer::Restore(idRestoreGame* savefile) {
+void FullscreenFX_Multiplayer::Restore(idRestoreGame *savefile) {
     FullscreenFX::Restore(savefile);
 
     // latch the clear flag
@@ -1180,7 +1180,7 @@ bool FullscreenFX_Warp::Active() {
 FullscreenFX_Warp::Save
 ==================
 */
-void FullscreenFX_Warp::Save(idSaveGame* savefile) {
+void FullscreenFX_Warp::Save(idSaveGame *savefile) {
     FullscreenFX::Save(savefile);
 
     savefile->WriteBool(grabberEnabled);
@@ -1192,7 +1192,7 @@ void FullscreenFX_Warp::Save(idSaveGame* savefile) {
 FullscreenFX_Warp::Restore
 ==================
 */
-void FullscreenFX_Warp::Restore(idRestoreGame* savefile) {
+void FullscreenFX_Warp::Restore(idRestoreGame *savefile) {
     FullscreenFX::Restore(savefile);
 
     savefile->ReadBool(grabberEnabled);
@@ -1333,7 +1333,7 @@ FullscreenFX_EnviroSuit::Active
 ==================
 */
 bool FullscreenFX_EnviroSuit::Active() {
-    idPlayer* player;
+    idPlayer *player;
 
     player = fxman->GetPlayer();
 
@@ -1389,7 +1389,7 @@ FullscreenFX_DoubleVision::HighQuality
 void FullscreenFX_DoubleVision::HighQuality() {
     int offset = fxman->GetPlayerView()->dvFinishTime - gameLocal.fast.time;
     float   scale = offset * g_dvAmplitude.GetFloat();
-    idPlayer* player;
+    idPlayer *player;
     idVec2 shiftScale;
 
     // for testing purposes
@@ -1454,7 +1454,7 @@ FullscreenFX_InfluenceVision::Active
 ==================
 */
 bool FullscreenFX_InfluenceVision::Active() {
-    idPlayer* player;
+    idPlayer *player;
 
     player = fxman->GetPlayer();
 
@@ -1473,7 +1473,7 @@ FullscreenFX_InfluenceVision::HighQuality
 void FullscreenFX_InfluenceVision::HighQuality() {
     float distance = 0.0f;
     float pct = 1.0f;
-    idPlayer* player;
+    idPlayer *player;
     idVec2 shiftScale;
 
     shiftScale = fxman->GetShiftScale();
@@ -1522,7 +1522,7 @@ FullscreenFX_Bloom::Active
 ==================
 */
 bool FullscreenFX_Bloom::Active() {
-    idPlayer* player;
+    idPlayer *player;
 
     player = fxman->GetPlayer();
 
@@ -1541,7 +1541,7 @@ FullscreenFX_Bloom::HighQuality
 void FullscreenFX_Bloom::HighQuality() {
     float shift, delta;
     idVec2 shiftScale;
-    idPlayer* player;
+    idPlayer *player;
     int num;
 
     shift = 1;
@@ -1614,7 +1614,7 @@ void FullscreenFX_Bloom::HighQuality() {
 FullscreenFX_Bloom::Save
 ==================
 */
-void FullscreenFX_Bloom::Save(idSaveGame* savefile) {
+void FullscreenFX_Bloom::Save(idSaveGame *savefile) {
     FullscreenFX::Save(savefile);
     savefile->WriteFloat(currentIntensity);
     savefile->WriteFloat(targetIntensity);
@@ -1625,7 +1625,7 @@ void FullscreenFX_Bloom::Save(idSaveGame* savefile) {
 FullscreenFX_Bloom::Restore
 ==================
 */
-void FullscreenFX_Bloom::Restore(idRestoreGame* savefile) {
+void FullscreenFX_Bloom::Restore(idRestoreGame *savefile) {
     FullscreenFX::Restore(savefile);
     savefile->ReadFloat(currentIntensity);
     savefile->ReadFloat(targetIntensity);
@@ -1662,7 +1662,7 @@ FullscreenFXManager::~FullscreenFXManager() {
 FullscreenFXManager::FindFX
 ==================
 */
-FullscreenFX* FullscreenFXManager::FindFX(idStr name) {
+FullscreenFX *FullscreenFXManager::FindFX(idStr name) {
     for (int i = 0; i < fx.Num(); i++) {
         if (fx[i]->GetName() == name) {
             return fx[i];
@@ -1678,7 +1678,7 @@ FullscreenFXManager::CreateFX
 ==================
 */
 void FullscreenFXManager::CreateFX(idStr name, idStr fxtype, int fade) {
-    FullscreenFX* pfx = NULL;
+    FullscreenFX *pfx = NULL;
 
     if (fxtype == "helltime") {
         pfx = new FullscreenFX_Helltime;
@@ -1712,7 +1712,7 @@ void FullscreenFXManager::CreateFX(idStr name, idStr fxtype, int fade) {
 FullscreenFXManager::Initialize
 ==================
 */
-void FullscreenFXManager::Initialize(idPlayerView* pv) {
+void FullscreenFXManager::Initialize(idPlayerView *pv) {
     // set the playerview
     playerView = pv;
     blendBackMaterial = declManager->FindMaterial("textures/smf/blendBack");
@@ -1756,12 +1756,12 @@ void FullscreenFXManager::Blendback(float alpha) {
 FullscreenFXManager::Save
 ==================
 */
-void FullscreenFXManager::Save(idSaveGame* savefile) {
+void FullscreenFXManager::Save(idSaveGame *savefile) {
     savefile->WriteBool(highQualityMode);
     savefile->WriteVec2(shiftScale);
 
     for (int i = 0; i < fx.Num(); i++) {
-        FullscreenFX* pfx = fx[i];
+        FullscreenFX *pfx = fx[i];
         pfx->Save(savefile);
     }
 }
@@ -1771,12 +1771,12 @@ void FullscreenFXManager::Save(idSaveGame* savefile) {
 FullscreenFXManager::Restore
 ==================
 */
-void FullscreenFXManager::Restore(idRestoreGame* savefile) {
+void FullscreenFXManager::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(highQualityMode);
     savefile->ReadVec2(shiftScale);
 
     for (int i = 0; i < fx.Num(); i++) {
-        FullscreenFX* pfx = fx[i];
+        FullscreenFX *pfx = fx[i];
         pfx->Restore(savefile);
     }
 }
@@ -1795,7 +1795,7 @@ void FullscreenFXManager::CaptureCurrentRender() {
 FullscreenFXManager::Process
 ==================
 */
-void FullscreenFXManager::Process(const renderView_t* view) {
+void FullscreenFXManager::Process(const renderView_t *view) {
     bool allpass = false;
 
     if (g_testFullscreenFX.GetInteger() == -2) {
@@ -1833,7 +1833,7 @@ void FullscreenFXManager::Process(const renderView_t* view) {
 
     // do the process
     for (int i = 0; i < fx.Num(); i++) {
-        FullscreenFX* pfx = fx[i];
+        FullscreenFX *pfx = fx[i];
         bool drawIt = false;
 
         // determine if we need to draw

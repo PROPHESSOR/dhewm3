@@ -57,13 +57,13 @@ void idListWindow::CommonInit() {
     multipleSel = false;
 }
 
-idListWindow::idListWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idListWindow::idListWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idListWindow::idListWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idListWindow::idListWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -93,9 +93,9 @@ bool idListWindow::IsSelected(int index) {
     return (currentSel.FindIndex(index) >= 0);
 }
 
-const char* idListWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idListWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
     // need to call this to allow proper focus and capturing on embedded children
-    const char* ret = idWindow::HandleEvent(event, updateVisuals);
+    const char *ret = idWindow::HandleEvent(event, updateVisuals);
 
     float vert = GetMaxCharHeight();
     int numVisibleLines = textRect.h / vert;
@@ -247,7 +247,7 @@ const char* idListWindow::HandleEvent(const sysEvent_t* event, bool* updateVisua
 }
 
 
-bool idListWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idListWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "horizontal") == 0) {
         horizontal = src->ParseBool();
         return true;
@@ -297,7 +297,7 @@ bool idListWindow::ParseInternalVar(const char* _name, idParser* src) {
 
     if (idStr::Icmp(strName.Left(4), "mtr_") == 0) {
         idStr matName;
-        const idMaterial* mat;
+        const idMaterial *mat;
 
         ParseString(src, matName);
         mat = declManager->FindMaterial(matName);
@@ -314,7 +314,7 @@ bool idListWindow::ParseInternalVar(const char* _name, idParser* src) {
     return idWindow::ParseInternalVar(_name, src);
 }
 
-idWinVar* idListWindow::GetWinVarByName(const char* _name, bool fixup, drawWin_t** owner) {
+idWinVar *idListWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner) {
     return idWindow::GetWinVarByName(_name, fixup, owner);
 }
 
@@ -466,16 +466,16 @@ This is the same as in idEditWindow
 ================
 */
 void idListWindow::InitScroller(bool horizontal) {
-    const char* thumbImage = "guis/assets/scrollbar_thumb.tga";
-    const char* barImage = "guis/assets/scrollbarv.tga";
-    const char* scrollerName = "_scrollerWinV";
+    const char *thumbImage = "guis/assets/scrollbar_thumb.tga";
+    const char *barImage = "guis/assets/scrollbarv.tga";
+    const char *scrollerName = "_scrollerWinV";
 
     if (horizontal) {
         barImage = "guis/assets/scrollbarh.tga";
         scrollerName = "_scrollerWinH";
     }
 
-    const idMaterial* mat = declManager->FindMaterial(barImage);
+    const idMaterial *mat = declManager->FindMaterial(barImage);
     mat->SetSort(SS_GUI);
     sizeBias = mat->GetImageWidth();
 
@@ -568,8 +568,8 @@ void idListWindow::Draw(int time, float x, float y) {
                     dc->DrawText(work, scale, tabInfo[tab].align, color, rect, false, -1);
                 } else if (tabInfo[tab].type == TAB_TYPE_ICON) {
 
-                    const idMaterial**    hashMat;
-                    const idMaterial*    iconMat;
+                    const idMaterial    **hashMat;
+                    const idMaterial    *iconMat;
 
                     // leaving the icon name empty doesn't draw anything
                     if (work[0] != '\0') {
@@ -631,7 +631,7 @@ void idListWindow::Draw(int time, float x, float y) {
     }
 }
 
-void idListWindow::Activate(bool activate, idStr& act) {
+void idListWindow::Activate(bool activate, idStr &act) {
     idWindow::Activate(activate, act);
 
     if (activate) {
@@ -639,7 +639,7 @@ void idListWindow::Activate(bool activate, idStr& act) {
     }
 }
 
-void idListWindow::HandleBuddyUpdate(idWindow* buddy) {
+void idListWindow::HandleBuddyUpdate(idWindow *buddy) {
     top = scroller->GetValue();
 }
 

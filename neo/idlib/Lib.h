@@ -53,18 +53,18 @@ class idFileSystem;
 
 class idLib {
   public:
-    static class idSys*         sys;
-    static class idCommon*      common;
-    static class idCVarSystem*  cvarSystem;
-    static class idFileSystem*  fileSystem;
+    static class idSys         *sys;
+    static class idCommon      *common;
+    static class idCVarSystem  *cvarSystem;
+    static class idFileSystem  *fileSystem;
     static int                  frameNumber;
 
     static void                 Init(void);
     static void                 ShutDown(void);
 
     // wrapper to idCommon functions
-    static void                 Error(const char* fmt, ...);
-    static void                 Warning(const char* fmt, ...);
+    static void                 Error(const char *fmt, ...);
+    static void                 Warning(const char *fmt, ...);
 };
 
 
@@ -98,10 +98,10 @@ extern  idVec4 colorMdGrey;
 extern  idVec4 colorDkGrey;
 
 // packs color floats in the range [0,1] into an integer
-dword   PackColor(const idVec3& color);
-void    UnpackColor(const dword color, idVec3& unpackedColor);
-dword   PackColor(const idVec4& color);
-void    UnpackColor(const dword color, idVec4& unpackedColor);
+dword   PackColor(const idVec3 &color);
+void    UnpackColor(const dword color, idVec3 &unpackedColor);
+dword   PackColor(const idVec4 &color);
+void    UnpackColor(const dword color, idVec4 &unpackedColor);
 
 // little/big endian conversion
 short   BigShort(short l);
@@ -110,20 +110,20 @@ int     BigInt(int l);
 int     LittleInt(int l);
 float   BigFloat(float l);
 float   LittleFloat(float l);
-void    BigRevBytes(void* bp, int elsize, int elcount);
-void    LittleRevBytes(void* bp, int elsize, int elcount);
-void    LittleBitField(void* bp, int elsize);
+void    BigRevBytes(void *bp, int elsize, int elcount);
+void    LittleRevBytes(void *bp, int elsize, int elcount);
+void    LittleBitField(void *bp, int elsize);
 void    Swap_Init(void);
 
 bool    Swap_IsBigEndian(void);
 
 // for base64
-void    SixtetsForInt(byte* out, int src);
-int     IntForSixtets(byte* in);
+void    SixtetsForInt(byte *out, int src);
+int     IntForSixtets(byte *in);
 
 
 #ifdef _DEBUG
-    void AssertFailed(const char* file, int line, const char* expression);
+    void AssertFailed(const char *file, int line, const char *expression);
     #undef assert
     #define assert( X )     if ( X ) { } else AssertFailed( __FILE__, __LINE__, #X )
 #endif
@@ -132,7 +132,7 @@ class idException {
   public:
     char error[MAX_STRING_CHARS];
 
-    idException(const char* text = "") {
+    idException(const char *text = "") {
         strcpy(error, text);
     }
 };

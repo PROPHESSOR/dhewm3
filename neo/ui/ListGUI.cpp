@@ -69,7 +69,7 @@ int idListGUILocal::GetNumSelections() {
 idListGUILocal::GetSelection
 ====================
 */
-int idListGUILocal::GetSelection(char* s, int size, int _sel) const {
+int idListGUILocal::GetSelection(char *s, int size, int _sel) const {
     if (s) {
         s[ 0 ] = '\0';
     }
@@ -108,7 +108,7 @@ void idListGUILocal::SetSelection(int sel) {
 idListGUILocal::Add
 ====================
 */
-void idListGUILocal::Add(int id, const idStr& s) {
+void idListGUILocal::Add(int id, const idStr &s) {
     int i = m_ids.FindIndex(id);
 
     if (i == -1) {
@@ -126,7 +126,7 @@ void idListGUILocal::Add(int id, const idStr& s) {
 idListGUILocal::Push
 ====================
 */
-void idListGUILocal::Push(const idStr& s) {
+void idListGUILocal::Push(const idStr &s) {
     Append(s);
     m_ids.Append(m_ids.Num());
     StateChanged();

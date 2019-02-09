@@ -95,7 +95,7 @@ idItem::~idItem() {
 idItem::Save
 ================
 */
-void idItem::Save(idSaveGame* savefile) const {
+void idItem::Save(idSaveGame *savefile) const {
 
     savefile->WriteVec3(orgOrigin);
     savefile->WriteBool(spin);
@@ -115,7 +115,7 @@ void idItem::Save(idSaveGame* savefile) const {
 idItem::Restore
 ================
 */
-void idItem::Restore(idRestoreGame* savefile) {
+void idItem::Restore(idRestoreGame *savefile) {
 
     savefile->ReadVec3(orgOrigin);
     savefile->ReadBool(spin);
@@ -137,7 +137,7 @@ void idItem::Restore(idRestoreGame* savefile) {
 idItem::UpdateRenderEntity
 ================
 */
-bool idItem::UpdateRenderEntity(renderEntity_s* renderEntity, const renderView_t* renderView) const {
+bool idItem::UpdateRenderEntity(renderEntity_s *renderEntity, const renderView_t *renderView) const {
 
     if (lastRenderViewTime == renderView->time) {
         return false;
@@ -198,15 +198,15 @@ bool idItem::UpdateRenderEntity(renderEntity_s* renderEntity, const renderView_t
 idItem::ModelCallback
 ================
 */
-bool idItem::ModelCallback(renderEntity_t* renderEntity, const renderView_t* renderView) {
-    const idItem* ent;
+bool idItem::ModelCallback(renderEntity_t *renderEntity, const renderView_t *renderView) {
+    const idItem *ent;
 
     // this may be triggered by a model trace or other non-view related source
     if (!renderView) {
         return false;
     }
 
-    ent = static_cast<idItem*>(gameLocal.entities[ renderEntity->entityNum ]);
+    ent = static_cast<idItem *>(gameLocal.entities[ renderEntity->entityNum ]);
 
     if (!ent) {
         gameLocal.Error("idItem::ModelCallback: callback with NULL game entity");
@@ -277,7 +277,7 @@ idItem::Spawn
 */
 void idItem::Spawn(void) {
     idStr       giveTo;
-    idEntity*   ent;
+    idEntity   *ent;
     float       tsize;
 
     if (spawnArgs.GetBool("dropToFloor")) {
@@ -331,9 +331,9 @@ void idItem::Spawn(void) {
 idItem::GetAttributes
 ================
 */
-void idItem::GetAttributes(idDict& attributes) {
+void idItem::GetAttributes(idDict &attributes) {
     int                 i;
-    const idKeyValue*    arg;
+    const idKeyValue    *arg;
 
     for (i = 0; i < spawnArgs.GetNumKeyVals(); i++) {
         arg = spawnArgs.GetKeyVal(i);
@@ -349,7 +349,7 @@ void idItem::GetAttributes(idDict& attributes) {
 idItem::GiveToPlayer
 ================
 */
-bool idItem::GiveToPlayer(idPlayer* player) {
+bool idItem::GiveToPlayer(idPlayer *player) {
     if (player == NULL) {
         return false;
     }
@@ -366,7 +366,7 @@ bool idItem::GiveToPlayer(idPlayer* player) {
 idItem::Pickup
 ================
 */
-bool idItem::Pickup(idPlayer* player) {
+bool idItem::Pickup(idPlayer *player) {
 
     if (!GiveToPlayer(player)) {
         return false;
@@ -403,7 +403,7 @@ bool idItem::Pickup(idPlayer* player) {
     }
 
     if (respawn && !dropped && !no_respawn) {
-        const char* sfx = spawnArgs.GetString("fxRespawn");
+        const char *sfx = spawnArgs.GetString("fxRespawn");
 
         if (sfx && *sfx) {
             PostEventSec(&EV_RespawnFx, respawn - 0.5f);
@@ -441,7 +441,7 @@ void idItem::ClientPredictionThink(void) {
 idItem::WriteFromSnapshot
 ================
 */
-void idItem::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idItem::WriteToSnapshot(idBitMsgDelta &msg) const {
     msg.WriteBits(IsHidden(), 1);
 }
 
@@ -450,7 +450,7 @@ void idItem::WriteToSnapshot(idBitMsgDelta& msg) const {
 idItem::ReadFromSnapshot
 ================
 */
-void idItem::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idItem::ReadFromSnapshot(const idBitMsgDelta &msg) {
     if (msg.ReadBits(1)) {
         Hide();
     } else {
@@ -463,7 +463,7 @@ void idItem::ReadFromSnapshot(const idBitMsgDelta& msg) {
 idItem::ClientReceiveEvent
 ================
 */
-bool idItem::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
+bool idItem::ClientReceiveEvent(int event, int time, const idBitMsg &msg) {
 
     switch (event) {
         case EVENT_PICKUP: {
@@ -522,7 +522,7 @@ void idItem::Event_DropToFloor(void) {
 idItem::Event_Touch
 ================
 */
-void idItem::Event_Touch(idEntity* other, trace_t* trace) {
+void idItem::Event_Touch(idEntity *other, trace_t *trace) {
     if (!other->IsType(idPlayer::Type)) {
         return;
     }
@@ -531,7 +531,7 @@ void idItem::Event_Touch(idEntity* other, trace_t* trace) {
         return;
     }
 
-    Pickup(static_cast<idPlayer*>(other));
+    Pickup(static_cast<idPlayer *>(other));
 }
 
 /*
@@ -539,7 +539,7 @@ void idItem::Event_Touch(idEntity* other, trace_t* trace) {
 idItem::Event_Trigger
 ================
 */
-void idItem::Event_Trigger(idEntity* activator) {
+void idItem::Event_Trigger(idEntity *activator) {
 
     if (!canPickUp && spawnArgs.GetBool("triggerFirst")) {
         canPickUp = true;
@@ -547,7 +547,7 @@ void idItem::Event_Trigger(idEntity* activator) {
     }
 
     if (activator && activator->IsType(idPlayer::Type)) {
-        Pickup(static_cast<idPlayer*>(activator));
+        Pickup(static_cast<idPlayer *>(activator));
     }
 }
 
@@ -581,7 +581,7 @@ void idItem::Event_RespawnFx(void) {
         ServerSendEvent(EVENT_RESPAWNFX, NULL, false, -1);
     }
 
-    const char* sfx = spawnArgs.GetString("fxRespawn");
+    const char *sfx = spawnArgs.GetString("fxRespawn");
 
     if (sfx && *sfx) {
         idEntityFx::StartFx(sfx, NULL, NULL, this, true);
@@ -620,7 +620,7 @@ idItemPowerup::idItemPowerup() {
 idItemPowerup::Save
 ================
 */
-void idItemPowerup::Save(idSaveGame* savefile) const {
+void idItemPowerup::Save(idSaveGame *savefile) const {
     savefile->WriteInt(time);
     savefile->WriteInt(type);
 }
@@ -630,7 +630,7 @@ void idItemPowerup::Save(idSaveGame* savefile) const {
 idItemPowerup::Restore
 ================
 */
-void idItemPowerup::Restore(idRestoreGame* savefile) {
+void idItemPowerup::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(time);
     savefile->ReadInt(type);
 }
@@ -650,7 +650,7 @@ void idItemPowerup::Spawn(void) {
 idItemPowerup::GiveToPlayer
 ================
 */
-bool idItemPowerup::GiveToPlayer(idPlayer* player) {
+bool idItemPowerup::GiveToPlayer(idPlayer *player) {
     if (player->spectating) {
         return false;
     }
@@ -688,7 +688,7 @@ idObjective::idObjective() {
 idObjective::Save
 ================
 */
-void idObjective::Save(idSaveGame* savefile) const {
+void idObjective::Save(idSaveGame *savefile) const {
     savefile->WriteVec3(playerPos);
 }
 
@@ -697,7 +697,7 @@ void idObjective::Save(idSaveGame* savefile) const {
 idObjective::Restore
 ================
 */
-void idObjective::Restore(idRestoreGame* savefile) {
+void idObjective::Restore(idRestoreGame *savefile) {
     savefile->ReadVec3(playerPos);
     PostEventMS(&EV_CamShot, 250);
 }
@@ -718,7 +718,7 @@ idObjective::Event_Screenshot
 ================
 */
 void idObjective::Event_CamShot() {
-    const char* camName;
+    const char *camName;
     idStr shotName = gameLocal.GetMapName();
     shotName.StripFileExtension();
     shotName += "/";
@@ -726,10 +726,10 @@ void idObjective::Event_CamShot() {
     shotName.SetFileExtension(".tga");
 
     if (spawnArgs.GetString("camShot", "", &camName)) {
-        idEntity* ent = gameLocal.FindEntity(camName);
+        idEntity *ent = gameLocal.FindEntity(camName);
 
         if (ent && ent->cameraTarget) {
-            const renderView_t* view = ent->cameraTarget->GetRenderView();
+            const renderView_t *view = ent->cameraTarget->GetRenderView();
             renderView_t fullView = *view;
             fullView.width = SCREEN_WIDTH;
             fullView.height = SCREEN_HEIGHT;
@@ -747,8 +747,8 @@ void idObjective::Event_CamShot() {
 idObjective::Event_Trigger
 ================
 */
-void idObjective::Event_Trigger(idEntity* activator) {
-    idPlayer* player = gameLocal.GetLocalPlayer();
+void idObjective::Event_Trigger(idEntity *activator) {
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
 
@@ -789,7 +789,7 @@ idObjective::Event_GetPlayerPos
 ================
 */
 void idObjective::Event_GetPlayerPos() {
-    idPlayer* player = gameLocal.GetLocalPlayer();
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
         playerPos = player->GetPhysics()->GetOrigin();
@@ -802,8 +802,8 @@ void idObjective::Event_GetPlayerPos() {
 idObjective::Event_HideObjective
 ================
 */
-void idObjective::Event_HideObjective(idEntity* e) {
-    idPlayer* player = gameLocal.GetLocalPlayer();
+void idObjective::Event_HideObjective(idEntity *e) {
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
         idVec3 v = player->GetPhysics()->GetOrigin() - playerPos;
@@ -841,7 +841,7 @@ void idVideoCDItem::Spawn(void) {
 idVideoCDItem::GiveToPlayer
 ================
 */
-bool idVideoCDItem::GiveToPlayer(idPlayer* player) {
+bool idVideoCDItem::GiveToPlayer(idPlayer *player) {
     idStr str = spawnArgs.GetString("video");
 
     if (player && str.Length()) {
@@ -867,8 +867,8 @@ END_CLASS
 idPDAItem::GiveToPlayer
 ================
 */
-bool idPDAItem::GiveToPlayer(idPlayer* player) {
-    const char* str = spawnArgs.GetString("pda_name");
+bool idPDAItem::GiveToPlayer(idPlayer *player) {
+    const char *str = spawnArgs.GetString("pda_name");
 
     if (player) {
         player->GivePDA(str, &spawnArgs);
@@ -917,7 +917,7 @@ idMoveableItem::~idMoveableItem() {
 idMoveableItem::Save
 ================
 */
-void idMoveableItem::Save(idSaveGame* savefile) const {
+void idMoveableItem::Save(idSaveGame *savefile) const {
     savefile->WriteStaticObject(physicsObj);
 
     savefile->WriteClipModel(trigger);
@@ -931,7 +931,7 @@ void idMoveableItem::Save(idSaveGame* savefile) const {
 idMoveableItem::Restore
 ================
 */
-void idMoveableItem::Restore(idRestoreGame* savefile) {
+void idMoveableItem::Restore(idRestoreGame *savefile) {
     savefile->ReadStaticObject(physicsObj);
     RestorePhysics(&physicsObj);
 
@@ -998,10 +998,10 @@ void idMoveableItem::Spawn(void) {
 
     smoke = NULL;
     smokeTime = 0;
-    const char* smokeName = spawnArgs.GetString("smoke_trail");
+    const char *smokeName = spawnArgs.GetString("smoke_trail");
 
     if (*smokeName != '\0') {
-        smoke = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, smokeName));
+        smoke = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, smokeName));
         smokeTime = gameLocal.time;
         BecomeActive(TH_UPDATEPARTICLES);
     }
@@ -1036,7 +1036,7 @@ void idMoveableItem::Think(void) {
 idMoveableItem::Pickup
 ================
 */
-bool idMoveableItem::Pickup(idPlayer* player) {
+bool idMoveableItem::Pickup(idPlayer *player) {
     bool ret = idItem::Pickup(player);
 
     if (ret) {
@@ -1051,9 +1051,9 @@ bool idMoveableItem::Pickup(idPlayer* player) {
 idMoveableItem::DropItem
 ================
 */
-idEntity* idMoveableItem::DropItem(const char* classname, const idVec3& origin, const idMat3& axis, const idVec3& velocity, int activateDelay, int removeDelay) {
+idEntity *idMoveableItem::DropItem(const char *classname, const idVec3 &origin, const idMat3 &axis, const idVec3 &velocity, int activateDelay, int removeDelay) {
     idDict args;
-    idEntity* item;
+    idEntity *item;
 
     args.Set("classname", classname);
     args.Set("dropped", "1");
@@ -1107,16 +1107,16 @@ idMoveableItem::DropItems
   where <X> is an aribtrary string.
 ================
 */
-void idMoveableItem::DropItems(idAnimatedEntity*  ent, const char* type, idList<idEntity*>* list) {
-    const idKeyValue* kv;
-    const char* skinName, *c, *jointName;
+void idMoveableItem::DropItems(idAnimatedEntity  *ent, const char *type, idList<idEntity *> *list) {
+    const idKeyValue *kv;
+    const char *skinName, *c, *jointName;
     idStr key, key2;
     idVec3 origin;
     idMat3 axis;
     idAngles angles;
-    const idDeclSkin* skin;
+    const idDeclSkin *skin;
     jointHandle_t joint;
-    idEntity* item;
+    idEntity *item;
 
     // drop all items
     kv = ent->spawnArgs.MatchPrefix(va("def_drop%sItem", type), NULL);
@@ -1177,7 +1177,7 @@ void idMoveableItem::DropItems(idAnimatedEntity*  ent, const char* type, idList<
 idMoveableItem::WriteToSnapshot
 ======================
 */
-void idMoveableItem::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idMoveableItem::WriteToSnapshot(idBitMsgDelta &msg) const {
     physicsObj.WriteToSnapshot(msg);
 }
 
@@ -1186,7 +1186,7 @@ void idMoveableItem::WriteToSnapshot(idBitMsgDelta& msg) const {
 idMoveableItem::ReadFromSnapshot
 ======================
 */
-void idMoveableItem::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idMoveableItem::ReadFromSnapshot(const idBitMsgDelta &msg) {
     physicsObj.ReadFromSnapshot(msg);
 
     if (msg.HasChanged()) {
@@ -1199,12 +1199,12 @@ void idMoveableItem::ReadFromSnapshot(const idBitMsgDelta& msg) {
 idMoveableItem::Gib
 ============
 */
-void idMoveableItem::Gib(const idVec3& dir, const char* damageDefName) {
+void idMoveableItem::Gib(const idVec3 &dir, const char *damageDefName) {
     // spawn smoke puff
-    const char* smokeName = spawnArgs.GetString("smoke_gib");
+    const char *smokeName = spawnArgs.GetString("smoke_gib");
 
     if (*smokeName != '\0') {
-        const idDeclParticle* smoke = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, smokeName));
+        const idDeclParticle *smoke = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, smokeName));
         gameLocal.smokeParticles->EmitSmoke(smoke, gameLocal.time, gameLocal.random.CRandomFloat(), renderEntity.origin, renderEntity.axis);
     }
 
@@ -1226,7 +1226,7 @@ void idMoveableItem::Event_DropToFloor(void) {
 idMoveableItem::Event_Gib
 ============
 */
-void idMoveableItem::Event_Gib(const char* damageDefName) {
+void idMoveableItem::Event_Gib(const char *damageDefName) {
     Gib(idVec3(0, 0, 1), damageDefName);
 }
 
@@ -1246,8 +1246,8 @@ END_CLASS
 idMoveablePDAItem::GiveToPlayer
 ================
 */
-bool idMoveablePDAItem::GiveToPlayer(idPlayer* player) {
-    const char* str = spawnArgs.GetString("pda_name");
+bool idMoveablePDAItem::GiveToPlayer(idPlayer *player) {
+    const char *str = spawnArgs.GetString("pda_name");
 
     if (player) {
         player->GivePDA(str, &spawnArgs);
@@ -1281,8 +1281,8 @@ void idItemRemover::Spawn(void) {
 idItemRemover::RemoveItem
 ================
 */
-void idItemRemover::RemoveItem(idPlayer* player) {
-    const char* remove;
+void idItemRemover::RemoveItem(idPlayer *player) {
+    const char *remove;
 
     remove = spawnArgs.GetString("remove");
     player->RemoveInventoryItem(remove);
@@ -1293,9 +1293,9 @@ void idItemRemover::RemoveItem(idPlayer* player) {
 idItemRemover::Event_Trigger
 ================
 */
-void idItemRemover::Event_Trigger(idEntity* activator) {
+void idItemRemover::Event_Trigger(idEntity *activator) {
     if (activator->IsType(idPlayer::Type)) {
-        RemoveItem(static_cast<idPlayer*>(activator));
+        RemoveItem(static_cast<idPlayer *>(activator));
     }
 }
 
@@ -1327,7 +1327,7 @@ idObjectiveComplete::idObjectiveComplete() {
 idObjectiveComplete::Save
 ================
 */
-void idObjectiveComplete::Save(idSaveGame* savefile) const {
+void idObjectiveComplete::Save(idSaveGame *savefile) const {
     savefile->WriteVec3(playerPos);
 }
 
@@ -1336,7 +1336,7 @@ void idObjectiveComplete::Save(idSaveGame* savefile) const {
 idObjectiveComplete::Restore
 ================
 */
-void idObjectiveComplete::Restore(idRestoreGame* savefile) {
+void idObjectiveComplete::Restore(idRestoreGame *savefile) {
     savefile->ReadVec3(playerPos);
 }
 
@@ -1355,12 +1355,12 @@ void idObjectiveComplete::Spawn(void) {
 idObjectiveComplete::Event_Trigger
 ================
 */
-void idObjectiveComplete::Event_Trigger(idEntity* activator) {
+void idObjectiveComplete::Event_Trigger(idEntity *activator) {
     if (!spawnArgs.GetBool("objEnabled")) {
         return;
     }
 
-    idPlayer* player = gameLocal.GetLocalPlayer();
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
         RemoveItem(player);
@@ -1383,7 +1383,7 @@ idObjectiveComplete::Event_GetPlayerPos
 ================
 */
 void idObjectiveComplete::Event_GetPlayerPos() {
-    idPlayer* player = gameLocal.GetLocalPlayer();
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
         playerPos = player->GetPhysics()->GetOrigin();
@@ -1396,8 +1396,8 @@ void idObjectiveComplete::Event_GetPlayerPos() {
 idObjectiveComplete::Event_HideObjective
 ================
 */
-void idObjectiveComplete::Event_HideObjective(idEntity* e) {
-    idPlayer* player = gameLocal.GetLocalPlayer();
+void idObjectiveComplete::Event_HideObjective(idEntity *e) {
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player) {
         idVec3 v = player->GetPhysics()->GetOrigin();

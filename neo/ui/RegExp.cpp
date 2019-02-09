@@ -42,7 +42,7 @@ int idRegister::REGCOUNT[NUMTYPES] = {4, 1, 1, 1, 0, 2, 3, 4};
 idRegister::SetToRegs
 ====================
 */
-void idRegister::SetToRegs(float* registers) {
+void idRegister::SetToRegs(float *registers) {
     int i;
     idVec4 v;
     idVec2 v2;
@@ -55,25 +55,25 @@ void idRegister::SetToRegs(float* registers) {
 
     switch (type) {
         case VEC4: {
-                v = *static_cast<idWinVec4*>(var);
+                v = *static_cast<idWinVec4 *>(var);
                 break;
             }
 
         case RECTANGLE: {
-                rect = *static_cast<idWinRectangle*>(var);
+                rect = *static_cast<idWinRectangle *>(var);
                 v = rect.ToVec4();
                 break;
             }
 
         case VEC2: {
-                v2 = *static_cast<idWinVec2*>(var);
+                v2 = *static_cast<idWinVec2 *>(var);
                 v[0] = v2[0];
                 v[1] = v2[1];
                 break;
             }
 
         case VEC3: {
-                v3 = *static_cast<idWinVec3*>(var);
+                v3 = *static_cast<idWinVec3 *>(var);
                 v[0] = v3[0];
                 v[1] = v3[1];
                 v[2] = v3[2];
@@ -81,17 +81,17 @@ void idRegister::SetToRegs(float* registers) {
             }
 
         case FLOAT: {
-                v[0] = *static_cast<idWinFloat*>(var);
+                v[0] = *static_cast<idWinFloat *>(var);
                 break;
             }
 
         case INT: {
-                v[0] = *static_cast<idWinInt*>(var);
+                v[0] = *static_cast<idWinInt *>(var);
                 break;
             }
 
         case BOOL: {
-                v[0] = *static_cast<idWinBool*>(var);
+                v[0] = *static_cast<idWinBool *>(var);
                 break;
             }
 
@@ -111,7 +111,7 @@ void idRegister::SetToRegs(float* registers) {
 idRegister::GetFromRegs
 =================
 */
-void idRegister::GetFromRegs(float* registers) {
+void idRegister::GetFromRegs(float *registers) {
     idVec4 v;
     idRectangle rect;
 
@@ -125,7 +125,7 @@ void idRegister::GetFromRegs(float* registers) {
 
     switch (type) {
         case VEC4: {
-                *dynamic_cast<idWinVec4*>(var) = v;
+                *dynamic_cast<idWinVec4 *>(var) = v;
                 break;
             }
 
@@ -134,32 +134,32 @@ void idRegister::GetFromRegs(float* registers) {
                 rect.y = v.y;
                 rect.w = v.z;
                 rect.h = v.w;
-                *static_cast<idWinRectangle*>(var) = rect;
+                *static_cast<idWinRectangle *>(var) = rect;
                 break;
             }
 
         case VEC2: {
-                *static_cast<idWinVec2*>(var) = v.ToVec2();
+                *static_cast<idWinVec2 *>(var) = v.ToVec2();
                 break;
             }
 
         case VEC3: {
-                *static_cast<idWinVec3*>(var) = v.ToVec3();
+                *static_cast<idWinVec3 *>(var) = v.ToVec3();
                 break;
             }
 
         case FLOAT: {
-                *static_cast<idWinFloat*>(var) = v[0];
+                *static_cast<idWinFloat *>(var) = v[0];
                 break;
             }
 
         case INT: {
-                *static_cast<idWinInt*>(var) = v[0];
+                *static_cast<idWinInt *>(var) = v[0];
                 break;
             }
 
         case BOOL: {
-                *static_cast<idWinBool*>(var) = (v[0] != 0.0f);
+                *static_cast<idWinBool *>(var) = (v[0] != 0.0f);
                 break;
             }
 
@@ -175,7 +175,7 @@ void idRegister::GetFromRegs(float* registers) {
 idRegister::ReadFromDemoFile
 =================
 */
-void idRegister::ReadFromDemoFile(idDemoFile* f) {
+void idRegister::ReadFromDemoFile(idDemoFile *f) {
     f->ReadBool(enabled);
     f->ReadShort(type);
     f->ReadInt(regCount);
@@ -192,7 +192,7 @@ void idRegister::ReadFromDemoFile(idDemoFile* f) {
 idRegister::WriteToDemoFile
 =================
 */
-void idRegister::WriteToDemoFile(idDemoFile* f) {
+void idRegister::WriteToDemoFile(idDemoFile *f) {
     f->WriteBool(enabled);
     f->WriteShort(type);
     f->WriteInt(regCount);
@@ -209,7 +209,7 @@ void idRegister::WriteToDemoFile(idDemoFile* f) {
 idRegister::WriteToSaveGame
 =================
 */
-void idRegister::WriteToSaveGame(idFile* savefile) {
+void idRegister::WriteToSaveGame(idFile *savefile) {
     int len;
 
     savefile->Write(&enabled, sizeof(enabled));
@@ -229,7 +229,7 @@ void idRegister::WriteToSaveGame(idFile* savefile) {
 idRegister::ReadFromSaveGame
 ================
 */
-void idRegister::ReadFromSaveGame(idFile* savefile) {
+void idRegister::ReadFromSaveGame(idFile *savefile) {
     int len;
 
     savefile->Read(&enabled, sizeof(enabled));
@@ -249,11 +249,11 @@ void idRegister::ReadFromSaveGame(idFile* savefile) {
 idRegisterList::AddReg
 ====================
 */
-void idRegisterList::AddReg(const char* name, int type, idVec4 data, idWindow* win, idWinVar* var) {
+void idRegisterList::AddReg(const char *name, int type, idVec4 data, idWindow *win, idWinVar *var) {
     if (FindReg(name) == NULL) {
         assert(type >= 0 && type < idRegister::NUMTYPES);
         int numRegs = idRegister::REGCOUNT[type];
-        idRegister* reg = new idRegister(name, type);
+        idRegister *reg = new idRegister(name, type);
         reg->var = var;
 
         for (int i = 0; i < numRegs; i++) {
@@ -270,8 +270,8 @@ void idRegisterList::AddReg(const char* name, int type, idVec4 data, idWindow* w
 idRegisterList::AddReg
 ====================
 */
-void idRegisterList::AddReg(const char* name, int type, idParser* src, idWindow* win, idWinVar* var) {
-    idRegister* reg;
+void idRegisterList::AddReg(const char *name, int type, idParser *src, idWindow *win, idWinVar *var) {
+    idRegister *reg;
 
     reg = FindReg(name);
 
@@ -327,7 +327,7 @@ void idRegisterList::AddReg(const char* name, int type, idParser* src, idWindow*
 idRegisterList::GetFromRegs
 ====================
 */
-void idRegisterList::GetFromRegs(float* registers) {
+void idRegisterList::GetFromRegs(float *registers) {
     for (int i = 0; i < regs.Num(); i++) {
         regs[i]->GetFromRegs(registers);
     }
@@ -339,7 +339,7 @@ idRegisterList::SetToRegs
 ====================
 */
 
-void idRegisterList::SetToRegs(float* registers) {
+void idRegisterList::SetToRegs(float *registers) {
     int i;
 
     for (i = 0; i < regs.Num(); i++) {
@@ -352,7 +352,7 @@ void idRegisterList::SetToRegs(float* registers) {
 idRegisterList::FindReg
 ====================
 */
-idRegister* idRegisterList::FindReg(const char* name) {
+idRegister *idRegisterList::FindReg(const char *name) {
     int hash = regHash.GenerateKey(name, false);
 
     for (int i = regHash.First(hash); i != -1; i = regHash.Next(i)) {
@@ -379,14 +379,14 @@ void idRegisterList::Reset() {
 idRegisterList::ReadFromSaveGame
 ====================
 */
-void idRegisterList::ReadFromDemoFile(idDemoFile* f) {
+void idRegisterList::ReadFromDemoFile(idDemoFile *f) {
     int c;
 
     f->ReadInt(c);
     regs.DeleteContents(true);
 
     for (int i = 0; i < c; i++) {
-        idRegister* reg = new idRegister;
+        idRegister *reg = new idRegister;
         reg->ReadFromDemoFile(f);
         regs.Append(reg);
     }
@@ -397,7 +397,7 @@ void idRegisterList::ReadFromDemoFile(idDemoFile* f) {
 idRegisterList::ReadFromSaveGame
 ====================
 */
-void idRegisterList::WriteToDemoFile(idDemoFile* f) {
+void idRegisterList::WriteToDemoFile(idDemoFile *f) {
     int c = regs.Num();
 
     f->WriteInt(c);
@@ -412,7 +412,7 @@ void idRegisterList::WriteToDemoFile(idDemoFile* f) {
 idRegisterList::WriteToSaveGame
 =====================
 */
-void idRegisterList::WriteToSaveGame(idFile* savefile) {
+void idRegisterList::WriteToSaveGame(idFile *savefile) {
     int i, num;
 
     num = regs.Num();
@@ -428,7 +428,7 @@ void idRegisterList::WriteToSaveGame(idFile* savefile) {
 idRegisterList::ReadFromSaveGame
 ====================
 */
-void idRegisterList::ReadFromSaveGame(idFile* savefile) {
+void idRegisterList::ReadFromSaveGame(idFile *savefile) {
     int i, num;
 
     savefile->Read(&num, sizeof(num));

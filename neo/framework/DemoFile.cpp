@@ -67,7 +67,7 @@ idDemoFile::~idDemoFile() {
 idDemoFile::AllocCompressor
 ================
 */
-idCompressor* idDemoFile::AllocCompressor(int type) {
+idCompressor *idDemoFile::AllocCompressor(int type) {
     switch (type) {
         case 0:
             return idCompressor::AllocNoCompression();
@@ -89,7 +89,7 @@ idCompressor* idDemoFile::AllocCompressor(int type) {
 idDemoFile::OpenForReading
 ================
 */
-bool idDemoFile::OpenForReading(const char* fileName) {
+bool idDemoFile::OpenForReading(const char *fileName) {
     static const int magicLen = sizeof(DEMO_MAGIC) / sizeof(DEMO_MAGIC[0]);
     char magicBuffer[magicLen];
     int compression;
@@ -106,10 +106,10 @@ bool idDemoFile::OpenForReading(const char* fileName) {
     fileLength = f->Length();
 
     if (com_preloadDemos.GetBool()) {
-        fileImage = (byte*)Mem_Alloc(fileLength);
+        fileImage = (byte *)Mem_Alloc(fileLength);
         f->Read(fileImage, fileLength);
         fileSystem->CloseFile(f);
-        f = new idFile_Memory(va("preloaded(%s)", fileName), (const char*)fileImage, fileLength);
+        f = new idFile_Memory(va("preloaded(%s)", fileName), (const char *)fileImage, fileLength);
     }
 
     if (com_logDemos.GetBool()) {
@@ -140,7 +140,7 @@ bool idDemoFile::OpenForReading(const char* fileName) {
 idDemoFile::SetLog
 ================
 */
-void idDemoFile::SetLog(bool b, const char* p) {
+void idDemoFile::SetLog(bool b, const char *p) {
     log = b;
 
     if (p) {
@@ -153,7 +153,7 @@ void idDemoFile::SetLog(bool b, const char* p) {
 idDemoFile::Log
 ================
 */
-void idDemoFile::Log(const char* p) {
+void idDemoFile::Log(const char *p) {
     if (fLog && p && *p) {
         fLog->Write(p, strlen(p));
     }
@@ -164,7 +164,7 @@ void idDemoFile::Log(const char* p) {
 idDemoFile::OpenForWriting
 ================
 */
-bool idDemoFile::OpenForWriting(const char* fileName) {
+bool idDemoFile::OpenForWriting(const char *fileName) {
     Close();
 
     f = fileSystem->OpenFileWrite(fileName);
@@ -227,11 +227,11 @@ void idDemoFile::Close() {
 idDemoFile::ReadHashString
 ================
 */
-const char* idDemoFile::ReadHashString() {
+const char *idDemoFile::ReadHashString() {
     int     index;
 
     if (log && fLog) {
-        const char* text = va("%s > Reading hash string\n", logStr.c_str());
+        const char *text = va("%s > Reading hash string\n", logStr.c_str());
         fLog->Write(text, strlen(text));
     }
 
@@ -239,7 +239,7 @@ const char* idDemoFile::ReadHashString() {
 
     if (index == -1) {
         // read a new string for the table
-        idStr*   str = new idStr;
+        idStr   *str = new idStr;
 
         idStr data;
         ReadString(data);
@@ -263,9 +263,9 @@ const char* idDemoFile::ReadHashString() {
 idDemoFile::WriteHashString
 ================
 */
-void idDemoFile::WriteHashString(const char* str) {
+void idDemoFile::WriteHashString(const char *str) {
     if (log && fLog) {
-        const char* text = va("%s > Writing hash string\n", logStr.c_str());
+        const char *text = va("%s > Writing hash string\n", logStr.c_str());
         fLog->Write(text, strlen(text));
     }
 
@@ -278,7 +278,7 @@ void idDemoFile::WriteHashString(const char* str) {
     }
 
     // add it to our table and the demo table
-    idStr*   copy = new idStr(str);
+    idStr   *copy = new idStr(str);
 //common->Printf( "hash:%i = %s\n", demoStrings.Num(), str );
     demoStrings.Append(copy);
     int cmd = -1;
@@ -291,7 +291,7 @@ void idDemoFile::WriteHashString(const char* str) {
 idDemoFile::ReadDict
 ================
 */
-void idDemoFile::ReadDict(idDict& dict) {
+void idDemoFile::ReadDict(idDict &dict) {
     int i, c;
     idStr key, val;
 
@@ -310,7 +310,7 @@ void idDemoFile::ReadDict(idDict& dict) {
 idDemoFile::WriteDict
 ================
 */
-void idDemoFile::WriteDict(const idDict& dict) {
+void idDemoFile::WriteDict(const idDict &dict) {
     int i, c;
 
     c = dict.GetNumKeyVals();
@@ -327,11 +327,11 @@ void idDemoFile::WriteDict(const idDict& dict) {
  idDemoFile::Read
  ================
  */
-int idDemoFile::Read(void* buffer, int len) {
+int idDemoFile::Read(void *buffer, int len) {
     int read = compressor->Read(buffer, len);
 
     if (read == 0 && len >= 4) {
-        *(demoSystem_t*)buffer = DS_FINISHED;
+        *(demoSystem_t *)buffer = DS_FINISHED;
     }
 
     return read;
@@ -342,6 +342,6 @@ int idDemoFile::Read(void* buffer, int len) {
  idDemoFile::Write
  ================
  */
-int idDemoFile::Write(const void* buffer, int len) {
+int idDemoFile::Write(const void *buffer, int len) {
     return compressor->Write(buffer, len);
 }

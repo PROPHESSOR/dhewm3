@@ -52,12 +52,12 @@ class idParticleParm {
         from = to = 0.0f;
     }
 
-    const idDeclTable*      table;
+    const idDeclTable      *table;
     float                   from;
     float                   to;
 
-    float                   Eval(float frac, idRandom& rand) const;
-    float                   Integrate(float frac, idRandom& rand) const;
+    float                   Eval(float frac, idRandom &rand) const;
+    float                   Integrate(float frac, idRandom &rand) const;
 };
 
 
@@ -94,8 +94,8 @@ typedef struct renderEntity_s renderEntity_t;
 typedef struct renderView_s renderView_t;
 
 typedef struct {
-    const renderEntity_t*   renderEnt;          // for shaderParms, etc
-    const renderView_t*     renderView;
+    const renderEntity_t   *renderEnt;          // for shaderParms, etc
+    const renderView_t     *renderView;
     int                     index;              // particle number in the system
     float                   frac;               // 0.0 to 1.0
     idRandom                random;
@@ -120,23 +120,23 @@ class idParticleStage {
     void                    Default();
     virtual int             NumQuadsPerParticle() const;    // includes trails and cross faded animations
     // returns the number of verts created, which will range from 0 to 4*NumQuadsPerParticle()
-    virtual int             CreateParticle(particleGen_t* g, idDrawVert* verts) const;
+    virtual int             CreateParticle(particleGen_t *g, idDrawVert *verts) const;
 
-    void                    ParticleOrigin(particleGen_t* g, idVec3& origin) const;
-    int                     ParticleVerts(particleGen_t* g, const idVec3 origin, idDrawVert* verts) const;
-    void                    ParticleTexCoords(particleGen_t* g, idDrawVert* verts) const;
-    void                    ParticleColors(particleGen_t* g, idDrawVert* verts) const;
+    void                    ParticleOrigin(particleGen_t *g, idVec3 &origin) const;
+    int                     ParticleVerts(particleGen_t *g, const idVec3 origin, idDrawVert *verts) const;
+    void                    ParticleTexCoords(particleGen_t *g, idDrawVert *verts) const;
+    void                    ParticleColors(particleGen_t *g, idDrawVert *verts) const;
 
-    const char*             GetCustomPathName();
-    const char*             GetCustomPathDesc();
+    const char             *GetCustomPathName();
+    const char             *GetCustomPathDesc();
     int                     NumCustomPathParms();
-    void                    SetCustomPathType(const char* p);
-    void                    operator=(const idParticleStage& src);
+    void                    SetCustomPathType(const char *p);
+    void                    operator=(const idParticleStage &src);
 
 
     //------------------------------
 
-    const idMaterial*       material;
+    const idMaterial       *material;
 
     int                     totalParticles;     // total number of particles, although some may be invisible at a given time
     float                   cycles;             // allows things to oneShot ( 1 cycle ) or run for a set number of cycles
@@ -206,24 +206,24 @@ class idDeclParticle : public idDecl {
   public:
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
 
-    bool                    Save(const char* fileName = NULL);
+    bool                    Save(const char *fileName = NULL);
 
-    idList<idParticleStage*>stages;
+    idList<idParticleStage *>stages;
     idBounds                bounds;
     float                   depthHack;
 
   private:
     bool                    RebuildTextSource(void);
-    void                    GetStageBounds(idParticleStage* stage);
-    idParticleStage*        ParseParticleStage(idLexer& src);
-    void                    ParseParms(idLexer& src, float* parms, int maxParms);
-    void                    ParseParametric(idLexer& src, idParticleParm* parm);
-    void                    WriteStage(idFile* f, idParticleStage* stage);
-    void                    WriteParticleParm(idFile* f, idParticleParm* parm, const char* name);
+    void                    GetStageBounds(idParticleStage *stage);
+    idParticleStage        *ParseParticleStage(idLexer &src);
+    void                    ParseParms(idLexer &src, float *parms, int maxParms);
+    void                    ParseParametric(idLexer &src, idParticleParm *parm);
+    void                    WriteStage(idFile *f, idParticleStage *stage);
+    void                    WriteParticleParm(idFile *f, idParticleParm *parm, const char *name);
 };
 
 #endif /* !__DECLPARTICLE_H__ */

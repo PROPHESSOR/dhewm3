@@ -101,7 +101,7 @@ idGrabber::~idGrabber(void) {
 idGrabber::Save
 ==============
 */
-void idGrabber::Save(idSaveGame* savefile) const {
+void idGrabber::Save(idSaveGame *savefile) const {
 
     dragEnt.Save(savefile);
     savefile->WriteStaticObject(drag);
@@ -135,7 +135,7 @@ void idGrabber::Save(idSaveGame* savefile) const {
 idGrabber::Restore
 ==============
 */
-void idGrabber::Restore(idRestoreGame* savefile) {
+void idGrabber::Restore(idRestoreGame *savefile) {
     //Spawn the beams
     Initialize();
 
@@ -165,8 +165,8 @@ void idGrabber::Restore(idRestoreGame* savefile) {
     savefile->ReadInt(savedContents);
     savefile->ReadInt(savedClipmask);
 
-    savefile->ReadObject(reinterpret_cast<idClass*&>(beam));
-    savefile->ReadObject(reinterpret_cast<idClass*&>(beamTarget));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(beam));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(beamTarget));
 
     savefile->ReadInt(warpId);
 }
@@ -183,7 +183,7 @@ void idGrabber::Initialize(void) {
         if (!beamTarget) {
             args.SetVector("origin", vec3_origin);
             args.SetBool("start_off", true);
-            beamTarget = (idBeam*)gameLocal.SpawnEntityType(idBeam::Type, &args);
+            beamTarget = (idBeam *)gameLocal.SpawnEntityType(idBeam::Type, &args);
         }
 
         if (!beam) {
@@ -194,7 +194,7 @@ void idGrabber::Initialize(void) {
             args.Set("width", "6");
             args.Set("skin", "textures/smf/flareSizeable");
             args.Set("_color", "0.0235 0.843 0.969 0.2");
-            beam = (idBeam*)gameLocal.SpawnEntityType(idBeam::Type, &args);
+            beam = (idBeam *)gameLocal.SpawnEntityType(idBeam::Type, &args);
             beam->SetShaderParm(6, 1.0f);
         }
 
@@ -222,9 +222,9 @@ void idGrabber::SetDragDistance(float dist) {
 idGrabber::StartDrag
 ==============
 */
-void idGrabber::StartDrag(idEntity* grabEnt, int id) {
+void idGrabber::StartDrag(idEntity *grabEnt, int id) {
     int clipModelId = id;
-    idPlayer* thePlayer = owner.GetEntity();
+    idPlayer *thePlayer = owner.GetEntity();
 
     holdingAF = false;
     dragFailTime = gameLocal.slow.time;
@@ -254,7 +254,7 @@ void idGrabber::StartDrag(idEntity* grabEnt, int id) {
 
     // Handle specific class types
     if (grabEnt->IsType(idProjectile::Type)) {
-        idProjectile* p = (idProjectile*)grabEnt;
+        idProjectile *p = (idProjectile *)grabEnt;
 
         p->CatchProjectile(thePlayer, "_catch");
 
@@ -271,7 +271,7 @@ void idGrabber::StartDrag(idEntity* grabEnt, int id) {
         grabEnt->GetPhysics()->SetClipMask(CONTENTS_SOLID|CONTENTS_BODY);
 
     } else if (grabEnt->IsType(idExplodingBarrel::Type)) {
-        idExplodingBarrel* ebarrel = static_cast<idExplodingBarrel*>(grabEnt);
+        idExplodingBarrel *ebarrel = static_cast<idExplodingBarrel *>(grabEnt);
 
         ebarrel->StartBurning();
 
@@ -280,7 +280,7 @@ void idGrabber::StartDrag(idEntity* grabEnt, int id) {
         clipModelId = 0;
 
         if (grabbableAI(grabEnt->spawnArgs.GetString("classname"))) {
-            idAI* aiEnt = static_cast<idAI*>(grabEnt);
+            idAI *aiEnt = static_cast<idAI *>(grabEnt);
 
             aiEnt->StartRagdoll();
         }
@@ -289,7 +289,7 @@ void idGrabber::StartDrag(idEntity* grabEnt, int id) {
     }
 
     // Get the current physics object to manipulate
-    idPhysics* phys = grabEnt->GetPhysics();
+    idPhysics *phys = grabEnt->GetPhysics();
 
     // Turn off gravity on object
     saveGravity = phys->GetGravity();
@@ -315,7 +315,7 @@ idGrabber::StopDrag
 ==============
 */
 void idGrabber::StopDrag(bool dropOnly) {
-    idPlayer* thePlayer = owner.GetEntity();
+    idPlayer *thePlayer = owner.GetEntity();
 
     if (beam) {
         beam->Hide();
@@ -326,7 +326,7 @@ void idGrabber::StopDrag(bool dropOnly) {
     }
 
     if (dragEnt.IsValid()) {
-        idEntity* ent = dragEnt.GetEntity();
+        idEntity *ent = dragEnt.GetEntity();
 
         // set grabbed state for networking
         ent->SetGrabbedState(false);
@@ -343,11 +343,11 @@ void idGrabber::StopDrag(bool dropOnly) {
         ent->timeGroup = TIME_GROUP1;
 
         if (holdingAF) {
-            idAFEntity_Gibbable* af = static_cast<idAFEntity_Gibbable*>(ent);
-            idPhysics_AF*    af_Phys = static_cast<idPhysics_AF*>(af->GetPhysics());
+            idAFEntity_Gibbable *af = static_cast<idAFEntity_Gibbable *>(ent);
+            idPhysics_AF    *af_Phys = static_cast<idPhysics_AF *>(af->GetPhysics());
 
             if (grabbableAI(ent->spawnArgs.GetString("classname"))) {
-                idAI* aiEnt = static_cast<idAI*>(ent);
+                idAI *aiEnt = static_cast<idAI *>(ent);
 
                 aiEnt->Damage(thePlayer, thePlayer, vec3_origin, "damage_suicide", 1.0f, INVALID_JOINT);
             }
@@ -367,7 +367,7 @@ void idGrabber::StopDrag(bool dropOnly) {
             thePlayer->StartSoundShader(declManager->FindSound("grabber_maindrop"), SND_CHANNEL_WEAPON, 0, false, NULL);
 
             if (ent->IsType(idExplodingBarrel::Type)) {
-                idExplodingBarrel* ebarrel = static_cast<idExplodingBarrel*>(ent);
+                idExplodingBarrel *ebarrel = static_cast<idExplodingBarrel *>(ent);
 
                 ebarrel->SetStability(true);
                 ebarrel->StopBurning();
@@ -379,7 +379,7 @@ void idGrabber::StopDrag(bool dropOnly) {
 
             // Orient projectiles away from the player
             if (ent->IsType(idProjectile::Type)) {
-                idPlayer* player = owner.GetEntity();
+                idPlayer *player = owner.GetEntity();
                 idAngles ang = player->firstPersonViewAxis[0].ToAngles();
 
                 ang.pitch += 90.f;
@@ -392,12 +392,12 @@ void idGrabber::StopDrag(bool dropOnly) {
 
             } else if (ent->IsType(idMoveable::Type)) {
                 // Turn on damage for this object
-                idMoveable* obj = static_cast<idMoveable*>(ent);
+                idMoveable *obj = static_cast<idMoveable *>(ent);
                 obj->EnableDamage(true, 2.5f);
                 obj->SetAttacker(thePlayer);
 
                 if (ent->IsType(idExplodingBarrel::Type)) {
-                    idExplodingBarrel* ebarrel = static_cast<idExplodingBarrel*>(ent);
+                    idExplodingBarrel *ebarrel = static_cast<idExplodingBarrel *>(ent);
                     ebarrel->SetStability(false);
                 }
 
@@ -425,9 +425,9 @@ void idGrabber::StopDrag(bool dropOnly) {
 idGrabber::Update
 ==============
 */
-int idGrabber::Update(idPlayer* player, bool hide) {
+int idGrabber::Update(idPlayer *player, bool hide) {
     trace_t trace;
-    idEntity* newEnt;
+    idEntity *newEnt;
 
     // pause before allowing refire
     if (lastFiredTime + FIRING_DELAY > gameLocal.time) {
@@ -450,7 +450,7 @@ int idGrabber::Update(idPlayer* player, bool hide) {
         bool abort = !dragEnt.IsValid();
 
         if (!abort && dragEnt.GetEntity()->IsType(idProjectile::Type)) {
-            idProjectile* proj = (idProjectile*)dragEnt.GetEntity();
+            idProjectile *proj = (idProjectile *)dragEnt.GetEntity();
 
             if (proj->GetProjectileState() >= 3) {
                 abort = true;
@@ -505,7 +505,7 @@ int idGrabber::Update(idPlayer* player, bool hide) {
                 bool validAF = true;
 
                 if (newEnt->IsType(idAFEntity_Gibbable::Type)) {
-                    idAFEntity_Gibbable* afEnt = static_cast<idAFEntity_Gibbable*>(newEnt);
+                    idAFEntity_Gibbable *afEnt = static_cast<idAFEntity_Gibbable *>(newEnt);
 
                     if (grabbableAI(newEnt->spawnArgs.GetString("classname"))) {
                         // Make sure it's also active
@@ -542,7 +542,7 @@ int idGrabber::Update(idPlayer* player, bool hide) {
 
     // if there is an entity selected for dragging
     if (dragEnt.GetEntity() && allow) {
-        idPhysics* entPhys = dragEnt.GetEntity()->GetPhysics();
+        idPhysics *entPhys = dragEnt.GetEntity()->GetPhysics();
         idVec3 goalPos;
 
         // If the player lets go of attack, or time is up
@@ -663,14 +663,14 @@ void idGrabber::UpdateBeams(void) {
     jointHandle_t   muzzle_joint;
     idVec3  muzzle_origin;
     idMat3  muzzle_axis;
-    renderEntity_t* re;
+    renderEntity_t *re;
 
     if (!beam) {
         return;
     }
 
     if (dragEnt.IsValid()) {
-        idPlayer* thePlayer = owner.GetEntity();
+        idPlayer *thePlayer = owner.GetEntity();
 
         if (beamTarget) {
             beamTarget->SetOrigin(dragEnt.GetEntity()->GetPhysics()->GetAbsBounds().GetCenter());
@@ -733,7 +733,7 @@ void idGrabber::ApplyShake(void) {
 idGrabber::grabbableAI
 ==============
 */
-bool idGrabber::grabbableAI(const char* aiName) {
+bool idGrabber::grabbableAI(const char *aiName) {
     // skip "monster_"
     aiName += 8;
 

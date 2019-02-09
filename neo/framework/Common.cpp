@@ -124,8 +124,8 @@ bool            com_editorActive;       //  true if an editor has focus
 #endif
 
 #ifdef __DOOM_DLL__
-    idGame*         game = NULL;
-    idGameEdit*     gameEdit = NULL;
+    idGame         *game = NULL;
+    idGameEdit     *gameEdit = NULL;
 #endif
 
 // writes si_version to the config file - in a kinda obfuscated way
@@ -135,34 +135,34 @@ class idCommonLocal : public idCommon {
   public:
     idCommonLocal(void);
 
-    virtual void                Init(int argc, char** argv);
+    virtual void                Init(int argc, char **argv);
     virtual void                Shutdown(void);
     virtual void                Quit(void);
     virtual bool                IsInitialized(void) const;
     virtual void                Frame(void);
     virtual void                GUIFrame(bool execCmd, bool network);
     virtual void                Async(void);
-    virtual void                StartupVariable(const char* match, bool once);
-    virtual void                InitTool(const toolFlag_t tool, const idDict* dict);
+    virtual void                StartupVariable(const char *match, bool once);
+    virtual void                InitTool(const toolFlag_t tool, const idDict *dict);
     virtual void                ActivateTool(bool active);
-    virtual void                WriteConfigToFile(const char* filename);
-    virtual void                WriteFlaggedCVarsToFile(const char* filename, int flags, const char* setCmd);
-    virtual void                BeginRedirect(char* buffer, int buffersize, void (*flush)(const char*));
+    virtual void                WriteConfigToFile(const char *filename);
+    virtual void                WriteFlaggedCVarsToFile(const char *filename, int flags, const char *setCmd);
+    virtual void                BeginRedirect(char *buffer, int buffersize, void (*flush)(const char *));
     virtual void                EndRedirect(void);
     virtual void                SetRefreshOnPrint(bool set);
-    virtual void                Printf(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual void                VPrintf(const char* fmt, va_list arg);
-    virtual void                DPrintf(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual void                Warning(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual void                DWarning(const char* fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                Printf(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                VPrintf(const char *fmt, va_list arg);
+    virtual void                DPrintf(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                Warning(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                DWarning(const char *fmt, ...) id_attribute((format(printf,2,3)));
     virtual void                PrintWarnings(void);
-    virtual void                ClearWarnings(const char* reason);
-    virtual void                Error(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual void                FatalError(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual const idLangDict*   GetLanguageDict(void);
+    virtual void                ClearWarnings(const char *reason);
+    virtual void                Error(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                FatalError(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual const idLangDict   *GetLanguageDict(void);
 
-    virtual const char*         KeysFromBinding(const char* bind);
-    virtual const char*         BindingFromKey(const char* key);
+    virtual const char         *KeysFromBinding(const char *bind);
+    virtual const char         *BindingFromKey(const char *key);
 
     virtual int                 ButtonState(int key);
     virtual int                 KeyState(int key);
@@ -174,13 +174,13 @@ class idCommonLocal : public idCommon {
     // When a game DLL is unloaded the callbacks are automatically removed from the Engine
     // so you usually don't have to worry about that; but you can call this with cb = NULL
     // and userArg = NULL to remove a callback manually (e.g. if userArg refers to an object you deleted)
-    virtual bool                SetCallback(idCommon::CallbackType cbt, idCommon::FunctionPointer cb, void* userArg);
+    virtual bool                SetCallback(idCommon::CallbackType cbt, idCommon::FunctionPointer cb, void *userArg);
 
     // returns true if that function is available in this version of dhewm3
     // *out_fnptr will be the function (you'll have to cast it probably)
     // *out_userArg will be an argument you have to pass to the function, if appropriate (else NULL)
     // NOTE: this doesn't do anything yet, but allows to add ugly mod-specific hacks without breaking the Game interface
-    virtual bool                GetAdditionalFunction(idCommon::FunctionType ft, idCommon::FunctionPointer* out_fnptr, void** out_userArg);
+    virtual bool                GetAdditionalFunction(idCommon::FunctionType ft, idCommon::FunctionPointer *out_fnptr, void **out_userArg);
 
     // DG end
 
@@ -189,9 +189,9 @@ class idCommonLocal : public idCommon {
 
     // localization
     void                        InitLanguageDict(void);
-    void                        LocalizeGui(const char* fileName, idLangDict& langDict);
-    void                        LocalizeMapData(const char* fileName, idLangDict& langDict);
-    void                        LocalizeSpecificMapData(const char* fileName, idLangDict& langDict, const idLangDict& replaceArgs);
+    void                        LocalizeGui(const char *fileName, idLangDict &langDict);
+    void                        LocalizeMapData(const char *fileName, idLangDict &langDict);
+    void                        LocalizeSpecificMapData(const char *fileName, idLangDict &langDict, const idLangDict &replaceArgs);
 
     void                        SetMachineSpec(void);
 
@@ -200,7 +200,7 @@ class idCommonLocal : public idCommon {
     void                        InitRenderSystem(void);
     void                        InitSIMD(void);
     bool                        AddStartupCommands(void);
-    void                        ParseCommandLine(int argc, char** argv);
+    void                        ParseCommandLine(int argc, char **argv);
     void                        ClearCommandLine(void);
     bool                        SafeMode(void);
     void                        CheckToolMode(void);
@@ -208,10 +208,10 @@ class idCommonLocal : public idCommon {
     void                        DumpWarnings(void);
     void                        SingleAsyncTic(void);
     void                        LoadGameDLL(void);
-    void                        LoadGameDLLbyName(const char* dll, idStr& s);
+    void                        LoadGameDLLbyName(const char *dll, idStr &s);
     void                        UnloadGameDLL(void);
-    void                        PrintLoadingMessage(const char* msg);
-    void                        FilterLangList(idStrList* list, idStr lang);
+    void                        PrintLoadingMessage(const char *msg);
+    void                        FilterLangList(idStrList *list, idStr lang);
 
     bool                        com_fullyInitialized;
     bool                        com_refreshOnPrint;     // update the screen every print for dmap
@@ -219,9 +219,9 @@ class idCommonLocal : public idCommon {
 
     char                        errorMessage[MAX_PRINT_MSG_SIZE];
 
-    char*                       rd_buffer;
+    char                       *rd_buffer;
     int                         rd_buffersize;
-    void (*rd_flush)(const char* buffer);
+    void (*rd_flush)(const char *buffer);
 
     idStr                       warningCaption;
     idStrList                   warningList;
@@ -232,14 +232,14 @@ class idCommonLocal : public idCommon {
     idLangDict                  languageDict;
 
     #ifdef ID_WRITE_VERSION
-    idCompressor*               config_compressor;
+    idCompressor               *config_compressor;
     #endif
 
     SDL_TimerID                 async_timer;
 };
 
 idCommonLocal   commonLocal;
-idCommon*       common = &commonLocal;
+idCommon       *common = &commonLocal;
 
 /*
 ==================
@@ -271,7 +271,7 @@ idCommonLocal::idCommonLocal(void) {
 idCommonLocal::BeginRedirect
 ==================
 */
-void idCommonLocal::BeginRedirect(char* buffer, int buffersize, void (*flush)(const char*)) {
+void idCommonLocal::BeginRedirect(char *buffer, int buffersize, void (*flush)(const char *)) {
     if (!buffer || !buffersize || !flush) {
         return;
     }
@@ -347,7 +347,7 @@ idCommonLocal::VPrintf
 A raw string should NEVER be passed as fmt, because of "%f" type crashes.
 ==================
 */
-void idCommonLocal::VPrintf(const char* fmt, va_list args) {
+void idCommonLocal::VPrintf(const char *fmt, va_list args) {
     char        msg[MAX_PRINT_MSG_SIZE];
     int         timeLength;
 
@@ -452,7 +452,7 @@ Both client and server can use this, and it will output to the appropriate place
 A raw string should NEVER be passed as fmt, because of "%f" type crashers.
 ==================
 */
-void idCommonLocal::Printf(const char* fmt, ...) {
+void idCommonLocal::Printf(const char *fmt, ...) {
     va_list argptr;
     va_start(argptr, fmt);
     VPrintf(fmt, argptr);
@@ -466,7 +466,7 @@ idCommonLocal::DPrintf
 prints message that only shows up if the "developer" cvar is set
 ==================
 */
-void idCommonLocal::DPrintf(const char* fmt, ...) {
+void idCommonLocal::DPrintf(const char *fmt, ...) {
     va_list     argptr;
     char        msg[MAX_PRINT_MSG_SIZE];
 
@@ -495,7 +495,7 @@ idCommonLocal::DWarning
 prints warning message in yellow that only shows up if the "developer" cvar is set
 ==================
 */
-void idCommonLocal::DWarning(const char* fmt, ...) {
+void idCommonLocal::DWarning(const char *fmt, ...) {
     va_list     argptr;
     char        msg[MAX_PRINT_MSG_SIZE];
 
@@ -518,7 +518,7 @@ idCommonLocal::Warning
 prints WARNING %s and adds the warning message to a queue to be printed later on
 ==================
 */
-void idCommonLocal::Warning(const char* fmt, ...) {
+void idCommonLocal::Warning(const char *fmt, ...) {
     va_list     argptr;
     char        msg[MAX_PRINT_MSG_SIZE];
 
@@ -569,7 +569,7 @@ void idCommonLocal::PrintWarnings(void) {
 idCommonLocal::ClearWarnings
 ==================
 */
-void idCommonLocal::ClearWarnings(const char* reason) {
+void idCommonLocal::ClearWarnings(const char *reason) {
     warningCaption = reason;
     warningList.Clear();
 }
@@ -581,7 +581,7 @@ idCommonLocal::DumpWarnings
 */
 void idCommonLocal::DumpWarnings(void) {
     int         i;
-    idFile*      warningFile;
+    idFile      *warningFile;
 
     if (!warningList.Num()) {
         return;
@@ -631,7 +631,7 @@ void idCommonLocal::DumpWarnings(void) {
 idCommonLocal::Error
 ==================
 */
-void idCommonLocal::Error(const char* fmt, ...) {
+void idCommonLocal::Error(const char *fmt, ...) {
     va_list     argptr;
     static int  lastErrorTime;
     static int  errorCount;
@@ -729,7 +729,7 @@ idCommonLocal::FatalError
 Dump out of the game to a system dialog
 ==================
 */
-void idCommonLocal::FatalError(const char* fmt, ...) {
+void idCommonLocal::FatalError(const char *fmt, ...) {
     va_list     argptr;
 
     // if we got a recursive error, make it fatal
@@ -822,7 +822,7 @@ idCmdArgs   com_consoleLines[MAX_CONSOLE_LINES];
 idCommonLocal::ParseCommandLine
 ==================
 */
-void idCommonLocal::ParseCommandLine(int argc, char** argv) {
+void idCommonLocal::ParseCommandLine(int argc, char **argv) {
     int i;
 
     com_numConsoleLines = 0;
@@ -921,9 +921,9 @@ before the filesystem is started, but all other sets should
 be after execing the config and default.
 ==================
 */
-void idCommonLocal::StartupVariable(const char* match, bool once) {
+void idCommonLocal::StartupVariable(const char *match, bool once) {
     int         i;
-    const char* s;
+    const char *s;
 
     i = 0;
 
@@ -996,7 +996,7 @@ bool idCommonLocal::AddStartupCommands(void) {
 idCommonLocal::InitTool
 =================
 */
-void idCommonLocal::InitTool(const toolFlag_t tool, const idDict* dict) {
+void idCommonLocal::InitTool(const toolFlag_t tool, const idDict *dict) {
     #ifdef ID_ALLOW_TOOLS
 
     if (tool & EDITOR_SOUND) {
@@ -1029,8 +1029,8 @@ void idCommonLocal::ActivateTool(bool active) {
 idCommonLocal::WriteFlaggedCVarsToFile
 ==================
 */
-void idCommonLocal::WriteFlaggedCVarsToFile(const char* filename, int flags, const char* setCmd) {
-    idFile* f;
+void idCommonLocal::WriteFlaggedCVarsToFile(const char *filename, int flags, const char *setCmd) {
+    idFile *f;
 
     f = fileSystem->OpenFileWrite(filename, "fs_configpath");
 
@@ -1048,11 +1048,11 @@ void idCommonLocal::WriteFlaggedCVarsToFile(const char* filename, int flags, con
 idCommonLocal::WriteConfigToFile
 ==================
 */
-void idCommonLocal::WriteConfigToFile(const char* filename) {
-    idFile* f;
+void idCommonLocal::WriteConfigToFile(const char *filename) {
+    idFile *f;
     #ifdef ID_WRITE_VERSION
     ID_TIME_T t;
-    char* curtime;
+    char *curtime;
     idStr runtag;
     idFile_Memory compressed("compressed");
     idBase64 out;
@@ -1073,7 +1073,7 @@ void idCommonLocal::WriteConfigToFile(const char* filename) {
     config_compressor->Init(&compressed, true, 8);
     config_compressor->Write(runtag.c_str(), runtag.Length());
     config_compressor->FinishCompress();
-    out.Encode((const byte*)compressed.GetDataPtr(), compressed.Length());
+    out.Encode((const byte *)compressed.GetDataPtr(), compressed.Length());
     f->Printf("// %s\n", out.c_str());
     #endif
 
@@ -1119,7 +1119,7 @@ KeysFromBinding()
 Returns the key bound to the command
 ===============
 */
-const char* idCommonLocal::KeysFromBinding(const char* bind) {
+const char *idCommonLocal::KeysFromBinding(const char *bind) {
     return idKeyInput::KeysFromBinding(bind);
 }
 
@@ -1129,7 +1129,7 @@ BindingFromKey()
 Returns the binding bound to key
 ===============
 */
-const char* idCommonLocal::BindingFromKey(const char* key) {
+const char *idCommonLocal::BindingFromKey(const char *key) {
     return idKeyInput::BindingFromKey(key);
 }
 
@@ -1163,7 +1163,7 @@ Com_Editor_f
   we can start the editor dynamically, but we won't ever get back
 ==================
 */
-static void Com_Editor_f(const idCmdArgs& args) {
+static void Com_Editor_f(const idCmdArgs &args) {
     RadiantInit();
 }
 
@@ -1172,7 +1172,7 @@ static void Com_Editor_f(const idCmdArgs& args) {
 Com_ScriptDebugger_f
 =============
 */
-static void Com_ScriptDebugger_f(const idCmdArgs& args) {
+static void Com_ScriptDebugger_f(const idCmdArgs &args) {
     // Make sure it wasnt on the command line
     if (!(com_editors & EDITOR_DEBUGGER)) {
         common->Printf("Script debugger is currently disabled\n");
@@ -1185,7 +1185,7 @@ static void Com_ScriptDebugger_f(const idCmdArgs& args) {
 Com_EditGUIs_f
 =============
 */
-static void Com_EditGUIs_f(const idCmdArgs& args) {
+static void Com_EditGUIs_f(const idCmdArgs &args) {
     GUIEditorInit();
 }
 
@@ -1194,7 +1194,7 @@ static void Com_EditGUIs_f(const idCmdArgs& args) {
 Com_MaterialEditor_f
 =============
 */
-static void Com_MaterialEditor_f(const idCmdArgs& args) {
+static void Com_MaterialEditor_f(const idCmdArgs &args) {
     // Turn off sounds
     soundSystem->SetMute(true);
     MaterialEditorInit();
@@ -1208,7 +1208,7 @@ idCmdSystemLocal::PrintMemInfo_f
 This prints out memory debugging data
 ============
 */
-static void PrintMemInfo_f(const idCmdArgs& args) {
+static void PrintMemInfo_f(const idCmdArgs &args) {
     MemInfo_t mi;
 
     memset(&mi, 0, sizeof(mi));
@@ -1229,7 +1229,7 @@ static void PrintMemInfo_f(const idCmdArgs& args) {
     common->Printf(" Used asset memory: %s bytes\n", idStr::FormatNumber(mi.assetTotals).c_str());
 
     // write overview file
-    idFile* f;
+    idFile *f;
 
     f = fileSystem->OpenFileAppend("maps/printmeminfo.txt");
 
@@ -1249,7 +1249,7 @@ static void PrintMemInfo_f(const idCmdArgs& args) {
 Com_EditLights_f
 ==================
 */
-static void Com_EditLights_f(const idCmdArgs& args) {
+static void Com_EditLights_f(const idCmdArgs &args) {
     LightEditorInit(NULL);
     cvarSystem->SetCVarInteger("g_editEntityMode", 1);
 }
@@ -1259,7 +1259,7 @@ static void Com_EditLights_f(const idCmdArgs& args) {
 Com_EditSounds_f
 ==================
 */
-static void Com_EditSounds_f(const idCmdArgs& args) {
+static void Com_EditSounds_f(const idCmdArgs &args) {
     SoundEditorInit(NULL);
     cvarSystem->SetCVarInteger("g_editEntityMode", 2);
 }
@@ -1269,7 +1269,7 @@ static void Com_EditSounds_f(const idCmdArgs& args) {
 Com_EditDecls_f
 ==================
 */
-static void Com_EditDecls_f(const idCmdArgs& args) {
+static void Com_EditDecls_f(const idCmdArgs &args) {
     DeclBrowserInit(NULL);
 }
 
@@ -1278,7 +1278,7 @@ static void Com_EditDecls_f(const idCmdArgs& args) {
 Com_EditAFs_f
 ==================
 */
-static void Com_EditAFs_f(const idCmdArgs& args) {
+static void Com_EditAFs_f(const idCmdArgs &args) {
     AFEditorInit(NULL);
 }
 
@@ -1287,7 +1287,7 @@ static void Com_EditAFs_f(const idCmdArgs& args) {
 Com_EditParticles_f
 ==================
 */
-static void Com_EditParticles_f(const idCmdArgs& args) {
+static void Com_EditParticles_f(const idCmdArgs &args) {
     ParticleEditorInit(NULL);
 }
 
@@ -1296,7 +1296,7 @@ static void Com_EditParticles_f(const idCmdArgs& args) {
 Com_EditScripts_f
 ==================
 */
-static void Com_EditScripts_f(const idCmdArgs& args) {
+static void Com_EditScripts_f(const idCmdArgs &args) {
     ScriptEditorInit(NULL);
 }
 
@@ -1305,7 +1305,7 @@ static void Com_EditScripts_f(const idCmdArgs& args) {
 Com_EditPDAs_f
 ==================
 */
-static void Com_EditPDAs_f(const idCmdArgs& args) {
+static void Com_EditPDAs_f(const idCmdArgs &args) {
     PDAEditorInit(NULL);
 }
 #endif // ID_ALLOW_TOOLS
@@ -1317,7 +1317,7 @@ Com_Error_f
 Just throw a fatal error to test error shutdown procedures.
 ==================
 */
-static void Com_Error_f(const idCmdArgs& args) {
+static void Com_Error_f(const idCmdArgs &args) {
     if (!com_developer.GetBool()) {
         commonLocal.Printf("error may only be used in developer mode\n");
         return;
@@ -1337,7 +1337,7 @@ Com_Freeze_f
 Just freeze in place for a given number of seconds to test error recovery.
 ==================
 */
-static void Com_Freeze_f(const idCmdArgs& args) {
+static void Com_Freeze_f(const idCmdArgs &args) {
     float   s;
     int     start, now;
 
@@ -1371,7 +1371,7 @@ Com_Crash_f
 A way to force a bus error for development reasons
 =================
 */
-static void Com_Crash_f(const idCmdArgs& args) {
+static void Com_Crash_f(const idCmdArgs &args) {
     if (!com_developer.GetBool()) {
         commonLocal.Printf("crash may only be used in developer mode\n");
         return;
@@ -1380,7 +1380,7 @@ static void Com_Crash_f(const idCmdArgs& args) {
     #ifdef __GNUC__
     __builtin_trap();
     #else
-    * (int*) 0 = 0x12345678;
+    * (int *) 0 = 0x12345678;
     #endif
 }
 
@@ -1389,7 +1389,7 @@ static void Com_Crash_f(const idCmdArgs& args) {
 Com_Quit_f
 =================
 */
-static void Com_Quit_f(const idCmdArgs& args) {
+static void Com_Quit_f(const idCmdArgs &args) {
     commonLocal.Quit();
 }
 
@@ -1400,7 +1400,7 @@ Com_WriteConfig_f
 Write the config file to a specific name
 ===============
 */
-void Com_WriteConfig_f(const idCmdArgs& args) {
+void Com_WriteConfig_f(const idCmdArgs &args) {
     idStr   filename;
 
     if (args.Argc() != 2) {
@@ -1419,7 +1419,7 @@ void Com_WriteConfig_f(const idCmdArgs& args) {
 Com_SetMachineSpecs_f
 =================
 */
-void Com_SetMachineSpec_f(const idCmdArgs& args) {
+void Com_SetMachineSpec_f(const idCmdArgs &args) {
     commonLocal.SetMachineSpec();
 }
 
@@ -1429,10 +1429,10 @@ Com_ExecMachineSpecs_f
 =================
 */
 #ifdef MACOS_X
-    void OSX_GetVideoCard(int& outVendorId, int& outDeviceId);
-    bool OSX_GetCPUIdentification(int& cpuId, bool& oldArchitecture);
+    void OSX_GetVideoCard(int &outVendorId, int &outDeviceId);
+    bool OSX_GetCPUIdentification(int &cpuId, bool &oldArchitecture);
 #endif
-void Com_ExecMachineSpec_f(const idCmdArgs& args) {
+void Com_ExecMachineSpec_f(const idCmdArgs &args) {
     if (com_machineSpec.GetInteger() == 3) {
         cvarSystem->SetCVarInteger("image_anisotropy", 1, CVAR_ARCHIVE);
         cvarSystem->SetCVarInteger("image_lodbias", 0, CVAR_ARCHIVE);
@@ -1545,7 +1545,7 @@ void Com_ExecMachineSpec_f(const idCmdArgs& args) {
 Com_ReloadEngine_f
 =================
 */
-void Com_ReloadEngine_f(const idCmdArgs& args) {
+void Com_ReloadEngine_f(const idCmdArgs &args) {
     bool menu = false;
 
     if (!commonLocal.IsInitialized()) {
@@ -1583,7 +1583,7 @@ void Com_ReloadEngine_f(const idCmdArgs& args) {
 idCommonLocal::GetLanguageDict
 ===============
 */
-const idLangDict* idCommonLocal::GetLanguageDict(void) {
+const idLangDict *idCommonLocal::GetLanguageDict(void) {
     return &languageDict;
 }
 
@@ -1592,7 +1592,7 @@ const idLangDict* idCommonLocal::GetLanguageDict(void) {
 idCommonLocal::FilterLangList
 ===============
 */
-void idCommonLocal::FilterLangList(idStrList* list, idStr lang) {
+void idCommonLocal::FilterLangList(idStrList *list, idStr lang) {
 
     idStr temp;
 
@@ -1621,7 +1621,7 @@ void idCommonLocal::InitLanguageDict(void) {
     //we are going to load all files that begin with the language name
     //similar to the way pak files work. So you can place english001.lang
     //to add new strings to the english language dictionary
-    idFileList* langFiles;
+    idFileList *langFiles;
     langFiles =  fileSystem->ListFilesTree("strings", ".lang", true);
 
     idStrList langList = langFiles->GetList();
@@ -1656,7 +1656,7 @@ void idCommonLocal::InitLanguageDict(void) {
 idCommonLocal::LocalizeSpecificMapData
 ===============
 */
-void idCommonLocal::LocalizeSpecificMapData(const char* fileName, idLangDict& langDict, const idLangDict& replaceArgs) {
+void idCommonLocal::LocalizeSpecificMapData(const char *fileName, idLangDict &langDict, const idLangDict &replaceArgs) {
     idStr out, ws, work;
 
     idMapFile map;
@@ -1665,12 +1665,12 @@ void idCommonLocal::LocalizeSpecificMapData(const char* fileName, idLangDict& la
         int count = map.GetNumEntities();
 
         for (int i = 0; i < count; i++) {
-            idMapEntity* ent = map.GetEntity(i);
+            idMapEntity *ent = map.GetEntity(i);
 
             if (ent) {
                 for (int j = 0; j < replaceArgs.GetNumKeyVals(); j++) {
-                    const idLangKeyValue* kv = replaceArgs.GetKeyVal(j);
-                    const char* temp = ent->epairs.GetString(kv->key);
+                    const idLangKeyValue *kv = replaceArgs.GetKeyVal(j);
+                    const char *temp = ent->epairs.GetString(kv->key);
 
                     if (temp && *temp) {
                         idStr val = kv->value;
@@ -1692,13 +1692,13 @@ void idCommonLocal::LocalizeSpecificMapData(const char* fileName, idLangDict& la
 idCommonLocal::LocalizeMapData
 ===============
 */
-void idCommonLocal::LocalizeMapData(const char* fileName, idLangDict& langDict) {
-    const char* buffer = NULL;
+void idCommonLocal::LocalizeMapData(const char *fileName, idLangDict &langDict) {
+    const char *buffer = NULL;
     idLexer src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
     common->SetRefreshOnPrint(true);
 
-    if (fileSystem->ReadFile(fileName, (void**)&buffer) > 0) {
+    if (fileSystem->ReadFile(fileName, (void **)&buffer) > 0) {
         src.LoadMemory(buffer, strlen(buffer), fileName);
 
         if (src.IsLoaded()) {
@@ -1731,7 +1731,7 @@ void idCommonLocal::LocalizeMapData(const char* fileName, idLangDict& langDict) 
             }
         }
 
-        fileSystem->FreeFile((void*)buffer);
+        fileSystem->FreeFile((void *)buffer);
     }
 
     common->SetRefreshOnPrint(false);
@@ -1742,9 +1742,9 @@ void idCommonLocal::LocalizeMapData(const char* fileName, idLangDict& langDict) 
 idCommonLocal::LocalizeGui
 ===============
 */
-void idCommonLocal::LocalizeGui(const char* fileName, idLangDict& langDict) {
+void idCommonLocal::LocalizeGui(const char *fileName, idLangDict &langDict) {
     idStr out, ws, work;
-    const char* buffer = NULL;
+    const char *buffer = NULL;
     out.Empty();
     int k;
     char ch;
@@ -1753,11 +1753,11 @@ void idCommonLocal::LocalizeGui(const char* fileName, idLangDict& langDict) {
     char nl = 'n';
     idLexer src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
-    if (fileSystem->ReadFile(fileName, (void**)&buffer) > 0) {
+    if (fileSystem->ReadFile(fileName, (void **)&buffer) > 0) {
         src.LoadMemory(buffer, strlen(buffer), fileName);
 
         if (src.IsLoaded()) {
-            idFile* outFile = fileSystem->OpenFileWrite(fileName);
+            idFile *outFile = fileSystem->OpenFileWrite(fileName);
             common->Printf("Processing %s\n", fileName);
             session->UpdateScreen();
             idToken token;
@@ -1836,7 +1836,7 @@ void idCommonLocal::LocalizeGui(const char* fileName, idLangDict& langDict) {
             fileSystem->CloseFile(outFile);
         }
 
-        fileSystem->FreeFile((void*)buffer);
+        fileSystem->FreeFile((void *)buffer);
     }
 }
 
@@ -1845,18 +1845,18 @@ void idCommonLocal::LocalizeGui(const char* fileName, idLangDict& langDict) {
 ReloadLanguage_f
 =================
 */
-void Com_ReloadLanguage_f(const idCmdArgs& args) {
+void Com_ReloadLanguage_f(const idCmdArgs &args) {
     commonLocal.InitLanguageDict();
 }
 
 typedef idHashTable<idStrList> ListHash;
-void LoadMapLocalizeData(ListHash& listHash) {
+void LoadMapLocalizeData(ListHash &listHash) {
 
     idStr fileName = "map_localize.cfg";
-    const char* buffer = NULL;
+    const char *buffer = NULL;
     idLexer src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
-    if (fileSystem->ReadFile(fileName, (void**)&buffer) > 0) {
+    if (fileSystem->ReadFile(fileName, (void **)&buffer) > 0) {
         src.LoadMemory(buffer, strlen(buffer), fileName);
 
         if (src.IsLoaded()) {
@@ -1883,18 +1883,18 @@ void LoadMapLocalizeData(ListHash& listHash) {
             }
         }
 
-        fileSystem->FreeFile((void*)buffer);
+        fileSystem->FreeFile((void *)buffer);
     }
 
 }
 
-void LoadGuiParmExcludeList(idStrList& list) {
+void LoadGuiParmExcludeList(idStrList &list) {
 
     idStr fileName = "guiparm_exclude.cfg";
-    const char* buffer = NULL;
+    const char *buffer = NULL;
     idLexer src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
-    if (fileSystem->ReadFile(fileName, (void**)&buffer) > 0) {
+    if (fileSystem->ReadFile(fileName, (void **)&buffer) > 0) {
         src.LoadMemory(buffer, strlen(buffer), fileName);
 
         if (src.IsLoaded()) {
@@ -1908,11 +1908,11 @@ void LoadGuiParmExcludeList(idStrList& list) {
             }
         }
 
-        fileSystem->FreeFile((void*)buffer);
+        fileSystem->FreeFile((void *)buffer);
     }
 }
 
-bool TestMapVal(idStr& str) {
+bool TestMapVal(idStr &str) {
     //Already Localized?
     if (str.Find("#str_") != -1) {
         return false;
@@ -1921,7 +1921,7 @@ bool TestMapVal(idStr& str) {
     return true;
 }
 
-bool TestGuiParm(const char* parm, const char* value, idStrList& excludeList) {
+bool TestGuiParm(const char *parm, const char *value, idStrList &excludeList) {
 
     idStr testVal = value;
 
@@ -1952,7 +1952,7 @@ bool TestGuiParm(const char* parm, const char* value, idStrList& excludeList) {
     return true;
 }
 
-void GetFileList(const char* dir, const char* ext, idStrList& list) {
+void GetFileList(const char *dir, const char *ext, idStrList &list) {
 
     //Recurse Subdirectories
     idStrList dirList;
@@ -1976,7 +1976,7 @@ void GetFileList(const char* dir, const char* ext, idStrList& list) {
     }
 }
 
-int LocalizeMap(const char* mapName, idLangDict& langDict, ListHash& listHash, idStrList& excludeList, bool writeFile) {
+int LocalizeMap(const char *mapName, idLangDict &langDict, ListHash &listHash, idStrList &excludeList, bool writeFile) {
 
     common->Printf("Localizing Map '%s'\n", mapName);
 
@@ -1988,7 +1988,7 @@ int LocalizeMap(const char* mapName, idLangDict& langDict, ListHash& listHash, i
         int count = map.GetNumEntities();
 
         for (int j = 0; j < count; j++) {
-            idMapEntity* ent = map.GetEntity(j);
+            idMapEntity *ent = map.GetEntity(j);
 
             if (ent) {
 
@@ -1997,7 +1997,7 @@ int LocalizeMap(const char* mapName, idLangDict& langDict, ListHash& listHash, i
                 //Hack: for info_location
                 bool hasLocation = false;
 
-                idStrList* list;
+                idStrList *list;
                 listHash.Get(classname, &list);
 
                 if (list) {
@@ -2036,7 +2036,7 @@ int LocalizeMap(const char* mapName, idLangDict& langDict, ListHash& listHash, i
                 }
 
                 //Localize the gui_parms
-                const idKeyValue* kv = ent->epairs.MatchPrefix("gui_parm");
+                const idKeyValue *kv = ent->epairs.MatchPrefix("gui_parm");
 
                 while (kv) {
                     if (TestGuiParm(kv->GetKey(), kv->GetValue(), excludeList)) {
@@ -2070,7 +2070,7 @@ int LocalizeMap(const char* mapName, idLangDict& langDict, ListHash& listHash, i
 LocalizeMaps_f
 =================
 */
-void Com_LocalizeMaps_f(const idCmdArgs& args) {
+void Com_LocalizeMaps_f(const idCmdArgs &args) {
     if (args.Argc() < 2) {
         common->Printf("Usage: localizeMaps <count | dictupdate | all> <map>\n");
         return;
@@ -2142,7 +2142,7 @@ void Com_LocalizeMaps_f(const idCmdArgs& args) {
 LocalizeGuis_f
 =================
 */
-void Com_LocalizeGuis_f(const idCmdArgs& args) {
+void Com_LocalizeGuis_f(const idCmdArgs &args) {
 
     if (args.Argc() != 2) {
         common->Printf("Usage: localizeGuis <all | gui>\n");
@@ -2158,7 +2158,7 @@ void Com_LocalizeGuis_f(const idCmdArgs& args) {
         strTable.SetBaseID(com_product_lang_ext.GetInteger()*100000);
     }
 
-    idFileList* files;
+    idFileList *files;
 
     if (idStr::Icmp(args.Argv(1), "all") == 0) {
         idStr game = cvarSystem->GetCVarString("fs_game");
@@ -2194,12 +2194,12 @@ void Com_LocalizeGuis_f(const idCmdArgs& args) {
     strTable.Save(filename);
 }
 
-void Com_LocalizeGuiParmsTest_f(const idCmdArgs& args) {
+void Com_LocalizeGuiParmsTest_f(const idCmdArgs &args) {
 
     common->SetRefreshOnPrint(true);
 
-    idFile* localizeFile = fileSystem->OpenFileWrite("gui_parm_localize.csv");
-    idFile* noLocalizeFile = fileSystem->OpenFileWrite("gui_parm_nolocalize.csv");
+    idFile *localizeFile = fileSystem->OpenFileWrite("gui_parm_localize.csv");
+    idFile *noLocalizeFile = fileSystem->OpenFileWrite("gui_parm_nolocalize.csv");
 
     idStrList excludeList;
     LoadGuiParmExcludeList(excludeList);
@@ -2218,10 +2218,10 @@ void Com_LocalizeGuiParmsTest_f(const idCmdArgs& args) {
             int count = map.GetNumEntities();
 
             for (int j = 0; j < count; j++) {
-                idMapEntity* ent = map.GetEntity(j);
+                idMapEntity *ent = map.GetEntity(j);
 
                 if (ent) {
-                    const idKeyValue* kv = ent->epairs.MatchPrefix("gui_parm");
+                    const idKeyValue *kv = ent->epairs.MatchPrefix("gui_parm");
 
                     while (kv) {
                         if (TestGuiParm(kv->GetKey(), kv->GetValue(), excludeList)) {
@@ -2246,7 +2246,7 @@ void Com_LocalizeGuiParmsTest_f(const idCmdArgs& args) {
 }
 
 
-void Com_LocalizeMapsTest_f(const idCmdArgs& args) {
+void Com_LocalizeMapsTest_f(const idCmdArgs &args) {
 
     ListHash listHash;
     LoadMapLocalizeData(listHash);
@@ -2254,7 +2254,7 @@ void Com_LocalizeMapsTest_f(const idCmdArgs& args) {
 
     common->SetRefreshOnPrint(true);
 
-    idFile* localizeFile = fileSystem->OpenFileWrite("map_localize.csv");
+    idFile *localizeFile = fileSystem->OpenFileWrite("map_localize.csv");
 
     idStrList files;
     GetFileList("z:/d3xp/d3xp/maps/game", "*.map", files);
@@ -2270,7 +2270,7 @@ void Com_LocalizeMapsTest_f(const idCmdArgs& args) {
             int count = map.GetNumEntities();
 
             for (int j = 0; j < count; j++) {
-                idMapEntity* ent = map.GetEntity(j);
+                idMapEntity *ent = map.GetEntity(j);
 
                 if (ent) {
 
@@ -2290,7 +2290,7 @@ void Com_LocalizeMapsTest_f(const idCmdArgs& args) {
                     //Hack: for info_location
                     bool hasLocation = false;
 
-                    idStrList* list;
+                    idStrList *list;
                     listHash.Get(classname, &list);
 
                     if (list) {
@@ -2340,7 +2340,7 @@ void Com_LocalizeMapsTest_f(const idCmdArgs& args) {
 Com_StartBuild_f
 =================
 */
-void Com_StartBuild_f(const idCmdArgs& args) {
+void Com_StartBuild_f(const idCmdArgs &args) {
     globalImages->StartBuild();
 }
 
@@ -2349,7 +2349,7 @@ void Com_StartBuild_f(const idCmdArgs& args) {
 Com_FinishBuild_f
 =================
 */
-void Com_FinishBuild_f(const idCmdArgs& args) {
+void Com_FinishBuild_f(const idCmdArgs &args) {
     if (game) {
         game->CacheDictionaryMedia(NULL);
     }
@@ -2362,7 +2362,7 @@ void Com_FinishBuild_f(const idCmdArgs& args) {
 Com_Help_f
 ==============
 */
-void Com_Help_f(const idCmdArgs& args) {
+void Com_Help_f(const idCmdArgs &args) {
     common->Printf("\nCommonly used commands:\n");
     common->Printf("  spawnServer      - start the server.\n");
     common->Printf("  disconnect       - shut down the server.\n");
@@ -2476,7 +2476,7 @@ void idCommonLocal::InitRenderSystem(void) {
 idCommonLocal::PrintLoadingMessage
 =================
 */
-void idCommonLocal::PrintLoadingMessage(const char* msg) {
+void idCommonLocal::PrintLoadingMessage(const char *msg) {
     if (!(msg && *msg)) {
         return;
     }
@@ -2552,7 +2552,7 @@ void idCommonLocal::Frame(void) {
         idLib::frameNumber = com_frameNumber;
     }
 
-    catch (idException&) {
+    catch (idException &) {
         return;         // an ERP_DROP was thrown
     }
 }
@@ -2612,7 +2612,7 @@ void idCommonLocal::SingleAsyncTic(void) {
     // critical data structures
     Sys_EnterCriticalSection();
 
-    asyncStats_t* stat = &com_asyncStats[com_ticNumber & (MAX_ASYNC_STATS-1)];
+    asyncStats_t *stat = &com_asyncStats[com_ticNumber & (MAX_ASYNC_STATS-1)];
     memset(stat, 0, sizeof(*stat));
     stat->milliseconds = Sys_Milliseconds();
     stat->deltaMsec = stat->milliseconds - com_asyncStats[(com_ticNumber - 1) & (MAX_ASYNC_STATS-1)].milliseconds;
@@ -2691,7 +2691,7 @@ idCommonLocal::LoadGameDLLbyName
 Helper for LoadGameDLL() to make it less painfull to try different dll names.
 =================
 */
-void idCommonLocal::LoadGameDLLbyName(const char* dll, idStr& s) {
+void idCommonLocal::LoadGameDLLbyName(const char *dll, idStr &s) {
     s.CapLength(0);
 
     // try next to the binary first (build tree)
@@ -2741,7 +2741,7 @@ idCommonLocal::LoadGameDLL
 */
 void idCommonLocal::LoadGameDLL(void) {
     #ifdef __DOOM_DLL__
-    const char*      fs_game;
+    const char      *fs_game;
     char            dll[MAX_OSPATH];
     idStr           s;
 
@@ -2879,7 +2879,7 @@ void idCommonLocal::SetMachineSpec(void) {
     }
 }
 
-static unsigned int AsyncTimer(unsigned int interval, void*) {
+static unsigned int AsyncTimer(unsigned int interval, void *) {
     common->Async();
     Sys_TriggerEvent(TRIGGER_EVENT_ONE);
 
@@ -2898,12 +2898,12 @@ static unsigned int AsyncTimer(unsigned int interval, void*) {
     #include "../sys/win32/win_local.h" // for Conbuf_AppendText()
 #endif // _WIN32
 
-static bool checkForHelp(int argc, char** argv) {
-    const char* helpArgs[] = { "--help", "-h", "-help", "-?", "/?" };
+static bool checkForHelp(int argc, char **argv) {
+    const char *helpArgs[] = { "--help", "-h", "-help", "-?", "/?" };
     const int numHelpArgs = sizeof(helpArgs)/sizeof(helpArgs[0]);
 
     for (int i=0; i<argc; ++i) {
-        const char* arg = argv[i];
+        const char *arg = argv[i];
 
         for (int h=0; h<numHelpArgs; ++h) {
             if (idStr::Icmp(arg, helpArgs[h]) == 0) {
@@ -2971,7 +2971,7 @@ static bool checkForHelp(int argc, char** argv) {
 idCommonLocal::Init
 =================
 */
-void idCommonLocal::Init(int argc, char** argv) {
+void idCommonLocal::Init(int argc, char **argv) {
 
     if (checkForHelp(argc, argv)) {
         // game has been started with --help (or similar), usage message has been shown => quit
@@ -3101,7 +3101,7 @@ void idCommonLocal::Init(int argc, char** argv) {
         com_fullyInitialized = true;
     }
 
-    catch (idException&) {
+    catch (idException &) {
         Sys_Error("Error during initialization");
     }
 
@@ -3187,7 +3187,7 @@ void idCommonLocal::InitGame(void) {
     // force r_fullscreen 0 if running a tool
     CheckToolMode();
 
-    idFile* file = fileSystem->OpenExplicitFileRead(fileSystem->RelativePathToOSPath(CONFIG_SPEC, "fs_configpath"));
+    idFile *file = fileSystem->OpenExplicitFileRead(fileSystem->RelativePathToOSPath(CONFIG_SPEC, "fs_configpath"));
     bool sysDetect = (file == NULL);
 
     if (file) {
@@ -3310,7 +3310,7 @@ idCommonLocal::ShutdownGame
 void idCommonLocal::ShutdownGame(bool reloading) {
 
     // kill sound first
-    idSoundWorld* sw = soundSystem->GetPlayingSoundWorld();
+    idSoundWorld *sw = soundSystem->GetPlayingSoundWorld();
 
     if (sw) {
         sw->StopAllSounds();
@@ -3365,7 +3365,7 @@ void idCommonLocal::ShutdownGame(bool reloading) {
 // When a game DLL is unloaded the callbacks are automatically removed from the Engine
 // so you usually don't have to worry about that; but you can call this with cb = NULL
 // and userArg = NULL to remove a callback manually (e.g. if userArg refers to an object you deleted)
-bool idCommonLocal::SetCallback(idCommon::CallbackType cbt, idCommon::FunctionPointer cb, void* userArg) {
+bool idCommonLocal::SetCallback(idCommon::CallbackType cbt, idCommon::FunctionPointer cb, void *userArg) {
     switch (cbt) {
         case idCommon::CB_ReloadImages:
             gameCallbacks.reloadImagesCB = (idGameCallbacks::ReloadImagesCallback)cb;
@@ -3385,7 +3385,7 @@ static bool isDemo(void) {
 // returns true if that function is available in this version of dhewm3
 // *out_fnptr will be the function (you'll have to cast it probably)
 // *out_userArg will be an argument you have to pass to the function, if appropriate (else NULL)
-bool idCommonLocal::GetAdditionalFunction(idCommon::FunctionType ft, idCommon::FunctionPointer* out_fnptr, void** out_userArg) {
+bool idCommonLocal::GetAdditionalFunction(idCommon::FunctionType ft, idCommon::FunctionPointer *out_fnptr, void **out_userArg) {
     if (out_userArg != NULL) {
         *out_userArg = NULL;
     }

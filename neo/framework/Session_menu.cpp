@@ -46,7 +46,7 @@ idCVar  idSessionLocal::gui_configServerRate("gui_configServerRate", "0", CVAR_G
 idSessionLocal::GetActiveMenu
 ==============
 */
-idUserInterface* idSessionLocal::GetActiveMenu(void) {
+idUserInterface *idSessionLocal::GetActiveMenu(void) {
     return guiActive;
 }
 
@@ -92,7 +92,7 @@ void idSessionLocal::StartMenu(bool playIntro) {
 idSessionLocal::SetGUI
 =================
 */
-void idSessionLocal::SetGUI(idUserInterface* gui, HandleGuiCommand_t handle) {
+void idSessionLocal::SetGUI(idUserInterface *gui, HandleGuiCommand_t handle) {
     guiActive = gui;
     guiHandle = handle;
 
@@ -142,7 +142,7 @@ void idSessionLocal::ExitMenu(void) {
 idListSaveGameCompare
 ===============
 */
-ID_INLINE int idListSaveGameCompare(const fileTIME_T* a, const fileTIME_T* b) {
+ID_INLINE int idListSaveGameCompare(const fileTIME_T *a, const fileTIME_T *b) {
     return b->timeStamp - a->timeStamp;
 }
 
@@ -151,9 +151,9 @@ ID_INLINE int idListSaveGameCompare(const fileTIME_T* a, const fileTIME_T* b) {
 idSessionLocal::GetSaveGameList
 ===============
 */
-void idSessionLocal::GetSaveGameList(idStrList& fileList, idList<fileTIME_T>& fileTimes) {
+void idSessionLocal::GetSaveGameList(idStrList &fileList, idList<fileTIME_T> &fileTimes) {
     int i;
-    idFileList* files;
+    idFileList *files;
 
     // NOTE: no fs_game_base for savegames
     idStr game = cvarSystem->GetCVarString("fs_game");
@@ -237,7 +237,7 @@ idSessionLocal::SetModsMenuGuiVars
 */
 void idSessionLocal::SetModsMenuGuiVars(void) {
     int i;
-    idModList* list = fileSystem->ListMods();
+    idModList *list = fileSystem->ListMods();
 
     modsList.SetNum(list->GetNumMods());
 
@@ -345,9 +345,9 @@ void idSessionLocal::SetMainMenuGuiVars(void) {
 idSessionLocal::HandleSaveGameMenuCommands
 ==============
 */
-bool idSessionLocal::HandleSaveGameMenuCommand(idCmdArgs& args, int& icmd) {
+bool idSessionLocal::HandleSaveGameMenuCommand(idCmdArgs &args, int &icmd) {
 
-    const char* cmd = args.Argv(icmd-1);
+    const char *cmd = args.Argv(icmd-1);
 
     if (!idStr::Icmp(cmd, "loadGame")) {
         int choice = guiActive->State().GetInt("loadgame_sel_0");
@@ -360,7 +360,7 @@ bool idSessionLocal::HandleSaveGameMenuCommand(idCmdArgs& args, int& icmd) {
     }
 
     if (!idStr::Icmp(cmd, "saveGame")) {
-        const char* saveGameName = guiActive->State().GetString("saveGameName");
+        const char *saveGameName = guiActive->State().GetString("saveGameName");
 
         if (saveGameName && saveGameName[0]) {
 
@@ -372,7 +372,7 @@ bool idSessionLocal::HandleSaveGameMenuCommand(idCmdArgs& args, int& icmd) {
                 saveFileName.SetFileExtension(".save");
 
                 idStr game = cvarSystem->GetCVarString("fs_game");
-                idFile* file;
+                idFile *file;
 
                 if (game.Length()) {
                     file = fileSystem->OpenFileRead(saveFileName, true, game);
@@ -431,7 +431,7 @@ bool idSessionLocal::HandleSaveGameMenuCommand(idCmdArgs& args, int& icmd) {
         int choice = guiActive->State().GetInt("loadgame_sel_0");
 
         if (choice >= 0 && choice < loadGameList.Num()) {
-            const idMaterial* material;
+            const idMaterial *material;
 
             idStr saveName, description, screenshot;
             idLexer src(LEXFL_NOERRORS|LEXFL_NOSTRINGCONCAT);
@@ -492,7 +492,7 @@ idSessionLocal::HandleRestartMenuCommands
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::HandleRestartMenuCommands(const char* menuCommand) {
+void idSessionLocal::HandleRestartMenuCommands(const char *menuCommand) {
     // execute the command from the menu
     int icmd;
     idCmdArgs args;
@@ -500,7 +500,7 @@ void idSessionLocal::HandleRestartMenuCommands(const char* menuCommand) {
     args.TokenizeString(menuCommand, false);
 
     for (icmd = 0; icmd < args.Argc();) {
-        const char* cmd = args.Argv(icmd++);
+        const char *cmd = args.Argv(icmd++);
 
         if (HandleSaveGameMenuCommand(args, icmd)) {
             continue;
@@ -544,7 +544,7 @@ idSessionLocal::HandleIntroMenuCommands
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::HandleIntroMenuCommands(const char* menuCommand) {
+void idSessionLocal::HandleIntroMenuCommands(const char *menuCommand) {
     // execute the command from the menu
     int i;
     idCmdArgs args;
@@ -552,7 +552,7 @@ void idSessionLocal::HandleIntroMenuCommands(const char* menuCommand) {
     args.TokenizeString(menuCommand, false);
 
     for (i = 0; i < args.Argc();) {
-        const char* cmd = args.Argv(i++);
+        const char *cmd = args.Argv(i++);
 
         if (!idStr::Icmp(cmd, "startGame")) {
             menuSoundWorld->ClearAllSoundEmitters();
@@ -589,7 +589,7 @@ idSessionLocal::HandleMainMenuCommands
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
+void idSessionLocal::HandleMainMenuCommands(const char *menuCommand) {
     // execute the command from the menu
     int icmd;
     idCmdArgs args;
@@ -597,7 +597,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
     args.TokenizeString(menuCommand, false);
 
     for (icmd = 0; icmd < args.Argc();) {
-        const char* cmd = args.Argv(icmd++);
+        const char *cmd = args.Argv(icmd++);
 
         if (HandleSaveGameMenuCommand(args, icmd)) {
             continue;
@@ -710,7 +710,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
         }
 
         if (!idStr::Icmp(cmd, "MAPScan")) {
-            const char* gametype = cvarSystem->GetCVarString("si_gameType");
+            const char *gametype = cvarSystem->GetCVarString("si_gameType");
 
             if (gametype == NULL || *gametype == 0 || idStr::Icmp(gametype, "singleplayer") == 0) {
                 gametype = "Deathmatch";
@@ -718,7 +718,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
 
             int i, num;
             idStr si_map = cvarSystem->GetCVarString("si_map");
-            const idDict* dict;
+            const idDict *dict;
 
             guiMainMenu_MapList->Clear();
             guiMainMenu_MapList->SetSelection(0);
@@ -728,7 +728,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
                 dict = fileSystem->GetMapDecl(i);
 
                 if (dict && dict->GetBool(gametype)) {
-                    const char* mapName = dict->GetString("name");
+                    const char *mapName = dict->GetString("name");
 
                     if (mapName[ 0 ] == '\0') {
                         mapName = dict->GetString("path");
@@ -760,7 +760,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
 
         if (!idStr::Icmp(cmd, "click_mapList")) {
             int mapNum = guiMainMenu_MapList->GetSelection(NULL, 0);
-            const idDict* dict = fileSystem->GetMapDecl(mapNum);
+            const idDict *dict = fileSystem->GetMapDecl(mapNum);
 
             if (dict) {
                 cvarSystem->SetCVarString("si_map", dict->GetString("path"));
@@ -771,7 +771,7 @@ void idSessionLocal::HandleMainMenuCommands(const char* menuCommand) {
         }
 
         if (!idStr::Icmp(cmd, "inetConnect")) {
-            const char*  s = guiMainMenu->State().GetString("inetGame");
+            const char  *s = guiMainMenu->State().GetString("inetGame");
 
             if (!s || s[0] == 0) {
                 // don't put the menu away if there isn't a valid selection
@@ -1128,7 +1128,7 @@ idSessionLocal::HandleChatMenuCommands
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::HandleChatMenuCommands(const char* menuCommand) {
+void idSessionLocal::HandleChatMenuCommands(const char *menuCommand) {
     // execute the command from the menu
     int i;
     idCmdArgs args;
@@ -1136,7 +1136,7 @@ void idSessionLocal::HandleChatMenuCommands(const char* menuCommand) {
     args.TokenizeString(menuCommand, false);
 
     for (i = 0; i < args.Argc();) {
-        const char* cmd = args.Argv(i++);
+        const char *cmd = args.Argv(i++);
 
         if (idStr::Icmp(cmd, "chatactive") == 0) {
             //chat.chatMode = CHAT_GLOBAL;
@@ -1168,13 +1168,13 @@ idSessionLocal::HandleInGameCommands
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::HandleInGameCommands(const char* menuCommand) {
+void idSessionLocal::HandleInGameCommands(const char *menuCommand) {
     // execute the command from the menu
     idCmdArgs args;
 
     args.TokenizeString(menuCommand, false);
 
-    const char* cmd = args.Argv(0);
+    const char *cmd = args.Argv(0);
 
     if (!idStr::Icmp(cmd, "close")) {
         if (guiActive) {
@@ -1192,7 +1192,7 @@ void idSessionLocal::HandleInGameCommands(const char* menuCommand) {
 idSessionLocal::DispatchCommand
 ==============
 */
-void idSessionLocal::DispatchCommand(idUserInterface* gui, const char* menuCommand, bool doIngame) {
+void idSessionLocal::DispatchCommand(idUserInterface *gui, const char *menuCommand, bool doIngame) {
 
     if (!gui) {
         gui = guiActive;
@@ -1210,7 +1210,7 @@ void idSessionLocal::DispatchCommand(idUserInterface* gui, const char* menuComma
     } else if (gui == guiRestartMenu) {
         HandleRestartMenuCommands(menuCommand);
     } else if (game && guiActive && guiActive->State().GetBool("gameDraw")) {
-        const char* cmd = game->HandleGuiCommands(menuCommand);
+        const char *cmd = game->HandleGuiCommands(menuCommand);
 
         if (!cmd) {
             guiActive = NULL;
@@ -1241,8 +1241,8 @@ idSessionLocal::MenuEvent
 Executes any commands returned by the gui
 ==============
 */
-void idSessionLocal::MenuEvent(const sysEvent_t* event) {
-    const char*  menuCommand;
+void idSessionLocal::MenuEvent(const sysEvent_t *event) {
+    const char  *menuCommand;
 
     if (guiActive == NULL) {
         return;
@@ -1268,9 +1268,9 @@ idSessionLocal::GuiFrameEvents
 =================
 */
 void idSessionLocal::GuiFrameEvents() {
-    const char*  cmd;
+    const char  *cmd;
     sysEvent_t  ev;
-    idUserInterface* gui;
+    idUserInterface *gui;
 
     // stop generating move and button commands when a local console or menu is active
     // running here so SP, async networking and no game all go through it
@@ -1331,7 +1331,7 @@ bool idSessionLocal::BoxDialogSanityCheck(void) {
 idSessionLocal::MessageBox
 =================
 */
-const char* idSessionLocal::MessageBox(msgBoxType_t type, const char* message, const char* title, bool wait, const char* fire_yes, const char* fire_no, bool network) {
+const char *idSessionLocal::MessageBox(msgBoxType_t type, const char *message, const char *title, bool wait, const char *fire_yes, const char *fire_no, bool network) {
 
     common->DPrintf("MessageBox: %s - %s\n", title ? title : "", message ? message : "");
 
@@ -1497,7 +1497,7 @@ const char* idSessionLocal::MessageBox(msgBoxType_t type, const char* message, c
 idSessionLocal::DownloadProgressBox
 =================
 */
-void idSessionLocal::DownloadProgressBox(backgroundDownload_t* bgl, const char* title, int progress_start, int progress_end) {
+void idSessionLocal::DownloadProgressBox(backgroundDownload_t *bgl, const char *title, int progress_start, int progress_end) {
     int dlnow = 0, dltotal = 0;
     int startTime = Sys_Milliseconds();
     int lapsed;
@@ -1599,7 +1599,7 @@ void idSessionLocal::StopBox() {
 idSessionLocal::HandleMsgCommands
 =================
 */
-void idSessionLocal::HandleMsgCommands(const char* menuCommand) {
+void idSessionLocal::HandleMsgCommands(const char *menuCommand) {
     assert(guiActive == guiMsg);
 
     // "stop" works even on first frame
@@ -1638,12 +1638,12 @@ idSessionLocal::HandleNoteCommands
 */
 #define NOTEDATFILE "C:/notenumber.dat"
 
-void idSessionLocal::HandleNoteCommands(const char* menuCommand) {
+void idSessionLocal::HandleNoteCommands(const char *menuCommand) {
     guiActive = NULL;
 
     if (idStr::Icmp(menuCommand,  "note") == 0 && mapSpawned) {
 
-        idFile* file = NULL;
+        idFile *file = NULL;
 
         for (int tries = 0; tries < 10; tries++) {
             file = fileSystem->OpenExplicitFileRead(NOTEDATFILE);
@@ -1666,8 +1666,8 @@ void idSessionLocal::HandleNoteCommands(const char* menuCommand) {
         idStr str, noteNum, shotName, workName, fileName = "viewnotes/";
         idStrList fileList;
 
-        const char* severity = NULL;
-        const char* p = guiTakeNotes->State().GetString("notefile");
+        const char *severity = NULL;
+        const char *p = guiTakeNotes->State().GetString("notefile");
 
         if (p == NULL || *p == '\0') {
             p = cvarSystem->GetCVarString("ui_name");
@@ -1684,8 +1684,8 @@ void idSessionLocal::HandleNoteCommands(const char* menuCommand) {
 
             fileName += severity;
 
-            const idDecl* mapDecl = declManager->FindType(DECL_ENTITYDEF, mapSpawnData.serverInfo.GetString("si_map"), false);
-            const idDeclEntityDef* mapInfo = static_cast<const idDeclEntityDef*>(mapDecl);
+            const idDecl *mapDecl = declManager->FindType(DECL_ENTITYDEF, mapSpawnData.serverInfo.GetString("si_map"), false);
+            const idDeclEntityDef *mapInfo = static_cast<const idDeclEntityDef *>(mapDecl);
 
             if (mapInfo) {
                 fileName += mapInfo->dict.GetString("devname");

@@ -48,13 +48,13 @@ void R_LoadImage( const char *name, byte **pic, int *width, int *height, bool ma
 R_WriteTGA
 ================
 */
-void R_WriteTGA(const char* filename, const byte* data, int width, int height, bool flipVertical) {
-    byte*    buffer;
+void R_WriteTGA(const char *filename, const byte *data, int width, int height, bool flipVertical) {
+    byte    *buffer;
     int     i;
     int     bufferSize = width*height*4 + 18;
     int     imgStart = 18;
 
-    buffer = (byte*)Mem_Alloc(bufferSize);
+    buffer = (byte *)Mem_Alloc(bufferSize);
     memset(buffer, 0, 18);
     buffer[2] = 2;      // uncompressed type
     buffer[12] = width&255;
@@ -86,14 +86,14 @@ void R_WriteTGA(const char* filename, const byte* data, int width, int height, b
 R_WritePalTGA
 ================
 */
-void R_WritePalTGA(const char* filename, const byte* data, const byte* palette, int width, int height, bool flipVertical) {
-    byte*    buffer;
+void R_WritePalTGA(const char *filename, const byte *data, const byte *palette, int width, int height, bool flipVertical) {
+    byte    *buffer;
     int     i;
     int     bufferSize = (width * height) + (256 * 3) + 18;
     int     palStart = 18;
     int     imgStart = 18 + (256 * 3);
 
-    buffer = (byte*)Mem_Alloc(bufferSize);
+    buffer = (byte *)Mem_Alloc(bufferSize);
     memset(buffer, 0, 18);
     buffer[1] = 1;      // color map type
     buffer[2] = 1;      // uncompressed color mapped image
@@ -128,9 +128,9 @@ void R_WritePalTGA(const char* filename, const byte* data, const byte* palette, 
 }
 
 
-static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp);
-static void LoadTGA(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp);
-static void LoadJPG(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp);
+static void LoadBMP(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp);
+static void LoadTGA(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp);
+static void LoadJPG(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp);
 
 
 /*
@@ -207,15 +207,15 @@ typedef struct {
 LoadBMP
 ==============
 */
-static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp) {
+static void LoadBMP(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp) {
     int     columns, rows, numPixels;
-    byte*    pixbuf;
+    byte    *pixbuf;
     int     row, column;
-    byte*    buf_p;
-    byte*    buffer;
+    byte    *buf_p;
+    byte    *buffer;
     int     length;
     BMPHeader_t bmpHeader;
-    byte*        bmpRGBA;
+    byte        *bmpRGBA;
 
     if (!pic) {
         fileSystem->ReadFile(name, NULL, timestamp);
@@ -227,7 +227,7 @@ static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TI
     //
     // load the file
     //
-    length = fileSystem->ReadFile(name, (void**)&buffer, timestamp);
+    length = fileSystem->ReadFile(name, (void **)&buffer, timestamp);
 
     if (!buffer) {
         return;
@@ -237,33 +237,33 @@ static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TI
 
     bmpHeader.id[0] = *buf_p++;
     bmpHeader.id[1] = *buf_p++;
-    bmpHeader.fileSize = LittleInt(* (int*) buf_p);
+    bmpHeader.fileSize = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.reserved0 = LittleInt(* (int*) buf_p);
+    bmpHeader.reserved0 = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.bitmapDataOffset = LittleInt(* (int*) buf_p);
+    bmpHeader.bitmapDataOffset = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.bitmapHeaderSize = LittleInt(* (int*) buf_p);
+    bmpHeader.bitmapHeaderSize = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.width = LittleInt(* (int*) buf_p);
+    bmpHeader.width = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.height = LittleInt(* (int*) buf_p);
+    bmpHeader.height = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.planes = LittleShort(* (short*) buf_p);
+    bmpHeader.planes = LittleShort(* (short *) buf_p);
     buf_p += 2;
-    bmpHeader.bitsPerPixel = LittleShort(* (short*) buf_p);
+    bmpHeader.bitsPerPixel = LittleShort(* (short *) buf_p);
     buf_p += 2;
-    bmpHeader.compression = LittleInt(* (int*) buf_p);
+    bmpHeader.compression = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.bitmapDataSize = LittleInt(* (int*) buf_p);
+    bmpHeader.bitmapDataSize = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.hRes = LittleInt(* (int*) buf_p);
+    bmpHeader.hRes = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.vRes = LittleInt(* (int*) buf_p);
+    bmpHeader.vRes = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.colors = LittleInt(* (int*) buf_p);
+    bmpHeader.colors = LittleInt(* (int *) buf_p);
     buf_p += 4;
-    bmpHeader.importantColors = LittleInt(* (int*) buf_p);
+    bmpHeader.importantColors = LittleInt(* (int *) buf_p);
     buf_p += 4;
 
     memcpy(bmpHeader.palette, buf_p, sizeof(bmpHeader.palette));
@@ -305,7 +305,7 @@ static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TI
         *height = rows;
     }
 
-    bmpRGBA = (byte*)R_StaticAlloc(numPixels * 4);
+    bmpRGBA = (byte *)R_StaticAlloc(numPixels * 4);
     *pic = bmpRGBA;
 
 
@@ -327,7 +327,7 @@ static void LoadBMP(const char* name, byte** pic, int* width, int* height, ID_TI
                     break;
 
                 case 16:
-                    shortPixel = * (unsigned short*) pixbuf;
+                    shortPixel = * (unsigned short *) pixbuf;
                     pixbuf += 2;
                     *pixbuf++ = (shortPixel & (31 << 10)) >> 7;
                     *pixbuf++ = (shortPixel & (31 << 5)) >> 2;
@@ -382,14 +382,14 @@ PCX LOADING
 LoadPCX
 ==============
 */
-static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width, int* height,
-                    ID_TIME_T* timestamp) {
-    byte*    raw;
-    pcx_t*   pcx;
+static void LoadPCX(const char *filename, byte **pic, byte **palette, int *width, int *height,
+                    ID_TIME_T *timestamp) {
+    byte    *raw;
+    pcx_t   *pcx;
     int     x, y;
     int     len;
     int     dataByte, runLength;
-    byte*    out, *pix;
+    byte    *out, *pix;
     int     xmax, ymax;
 
     if (!pic) {
@@ -403,7 +403,7 @@ static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width
     //
     // load the file
     //
-    len = fileSystem->ReadFile(filename, (void**)&raw, timestamp);
+    len = fileSystem->ReadFile(filename, (void **)&raw, timestamp);
 
     if (!raw) {
         return;
@@ -412,7 +412,7 @@ static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width
     //
     // parse the PCX file
     //
-    pcx = (pcx_t*)raw;
+    pcx = (pcx_t *)raw;
     raw = &pcx->data;
 
     xmax = LittleShort(pcx->xmax);
@@ -428,15 +428,15 @@ static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width
         return;
     }
 
-    out = (byte*)R_StaticAlloc((ymax+1) * (xmax+1));
+    out = (byte *)R_StaticAlloc((ymax+1) * (xmax+1));
 
     *pic = out;
 
     pix = out;
 
     if (palette) {
-        *palette = (byte*)R_StaticAlloc(768);
-        memcpy(*palette, (byte*)pcx + len - 768, 768);
+        *palette = (byte *)R_StaticAlloc(768);
+        memcpy(*palette, (byte *)pcx + len - 768, 768);
     }
 
     if (width) {
@@ -467,7 +467,7 @@ static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width
 
     }
 
-    if (raw - (byte*)pcx > len) {
+    if (raw - (byte *)pcx > len) {
         common->Printf("PCX file %s was malformed", filename);
         R_StaticFree(*pic);
         *pic = NULL;
@@ -482,11 +482,11 @@ static void LoadPCX(const char* filename, byte** pic, byte** palette, int* width
 LoadPCX32
 ==============
 */
-static void LoadPCX32(const char* filename, byte** pic, int* width, int* height, ID_TIME_T* timestamp) {
-    byte*    palette;
-    byte*    pic8;
+static void LoadPCX32(const char *filename, byte **pic, int *width, int *height, ID_TIME_T *timestamp) {
+    byte    *palette;
+    byte    *pic8;
     int     i, c, p;
-    byte*    pic32;
+    byte    *pic32;
 
     if (!pic) {
         fileSystem->ReadFile(filename, NULL, timestamp);
@@ -501,7 +501,7 @@ static void LoadPCX32(const char* filename, byte** pic, int* width, int* height,
     }
 
     c = (*width) * (*height);
-    pic32 = *pic = (byte*)R_StaticAlloc(4 * c);
+    pic32 = *pic = (byte *)R_StaticAlloc(4 * c);
 
     for (i = 0 ; i < c ; i++) {
         p = pic8[i];
@@ -529,14 +529,14 @@ TARGA LOADING
 LoadTGA
 =============
 */
-static void LoadTGA(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp) {
+static void LoadTGA(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp) {
     int     columns, rows, numPixels, fileSize, numBytes;
-    byte*    pixbuf;
+    byte    *pixbuf;
     int     row, column;
-    byte*    buf_p;
-    byte*    buffer;
+    byte    *buf_p;
+    byte    *buffer;
     TargaHeader targa_header;
-    byte*        targa_rgba;
+    byte        *targa_rgba;
 
     if (!pic) {
         fileSystem->ReadFile(name, NULL, timestamp);
@@ -548,7 +548,7 @@ static void LoadTGA(const char* name, byte** pic, int* width, int* height, ID_TI
     //
     // load the file
     //
-    fileSize = fileSystem->ReadFile(name, (void**)&buffer, timestamp);
+    fileSize = fileSystem->ReadFile(name, (void **)&buffer, timestamp);
 
     if (!buffer) {
         return;
@@ -560,18 +560,18 @@ static void LoadTGA(const char* name, byte** pic, int* width, int* height, ID_TI
     targa_header.colormap_type = *buf_p++;
     targa_header.image_type = *buf_p++;
 
-    targa_header.colormap_index = LittleShort(*(short*)buf_p);
+    targa_header.colormap_index = LittleShort(*(short *)buf_p);
     buf_p += 2;
-    targa_header.colormap_length = LittleShort(*(short*)buf_p);
+    targa_header.colormap_length = LittleShort(*(short *)buf_p);
     buf_p += 2;
     targa_header.colormap_size = *buf_p++;
-    targa_header.x_origin = LittleShort(*(short*)buf_p);
+    targa_header.x_origin = LittleShort(*(short *)buf_p);
     buf_p += 2;
-    targa_header.y_origin = LittleShort(*(short*)buf_p);
+    targa_header.y_origin = LittleShort(*(short *)buf_p);
     buf_p += 2;
-    targa_header.width = LittleShort(*(short*)buf_p);
+    targa_header.width = LittleShort(*(short *)buf_p);
     buf_p += 2;
-    targa_header.height = LittleShort(*(short*)buf_p);
+    targa_header.height = LittleShort(*(short *)buf_p);
     buf_p += 2;
     targa_header.pixel_size = *buf_p++;
     targa_header.attributes = *buf_p++;
@@ -608,7 +608,7 @@ static void LoadTGA(const char* name, byte** pic, int* width, int* height, ID_TI
         *height = rows;
     }
 
-    targa_rgba = (byte*)R_StaticAlloc(numPixels*4);
+    targa_rgba = (byte *)R_StaticAlloc(numPixels*4);
     *pic = targa_rgba;
 
     if (targa_header.id_length != 0) {
@@ -780,7 +780,7 @@ breakOut:
 LoadJPG
 =============
 */
-static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* height, ID_TIME_T* timestamp) {
+static void LoadJPG(const char *filename, unsigned char **pic, int *width, int *height, ID_TIME_T *timestamp) {
     /* This struct contains the JPEG decompression parameters and pointers to
      * working space (which is allocated as needed by the JPEG library).
      */
@@ -801,9 +801,9 @@ static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* 
     /* More stuff */
     JSAMPARRAY buffer;        /* Output row buffer */
     int row_stride;       /* physical row width in output buffer */
-    unsigned char* out;
-    byte*  fbuffer;
-    byte*  bbuf;
+    unsigned char *out;
+    byte  *fbuffer;
+    byte  *bbuf;
 
     /* In this example we want to open the input file before doing anything else,
      * so that the setjmp() error recovery below can assume the file is open.
@@ -818,7 +818,7 @@ static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* 
     }
 
     int len;
-    idFile* f;
+    idFile *f;
 
     f = fileSystem->OpenFileRead(filename);
 
@@ -837,7 +837,7 @@ static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* 
         return; // just getting timestamp
     }
 
-    fbuffer = (byte*)Mem_ClearedAlloc(len + 4096);
+    fbuffer = (byte *)Mem_ClearedAlloc(len + 4096);
     f->Read(fbuffer, len);
     fileSystem->CloseFile(f);
 
@@ -893,7 +893,7 @@ static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* 
                          filename, cinfo.output_components);
     }
 
-    out = (byte*)R_StaticAlloc(cinfo.output_width*cinfo.output_height*4);
+    out = (byte *)R_StaticAlloc(cinfo.output_width*cinfo.output_height*4);
 
     *pic = out;
     *width = cinfo.output_width;
@@ -918,7 +918,7 @@ static void LoadJPG(const char* filename, unsigned char** pic, int* width, int* 
     // clear all the alphas to 255
     {
         int   i, j;
-        byte*    buf;
+        byte    *buf;
 
         buf = *pic;
 
@@ -981,7 +981,7 @@ If pic is NULL, the image won't actually be loaded, it will just find the
 timestamp.
 =================
 */
-void R_LoadImage(const char* cname, byte** pic, int* width, int* height, ID_TIME_T* timestamp, bool makePowerOf2) {
+void R_LoadImage(const char *cname, byte **pic, int *width, int *height, ID_TIME_T *timestamp, bool makePowerOf2) {
     idStr name = cname;
 
     if (pic) {
@@ -1039,7 +1039,7 @@ void R_LoadImage(const char* cname, byte** pic, int* width, int* height, ID_TIME
     if (pic && *pic && makePowerOf2) {
         int     w, h;
         int     scaled_width, scaled_height;
-        byte*    resampledBuffer;
+        byte    *resampledBuffer;
 
         w = *width;
         h = *height;
@@ -1076,15 +1076,15 @@ R_LoadCubeImages
 Loads six files with proper extensions
 =======================
 */
-bool R_LoadCubeImages(const char* imgName, cubeFiles_t extensions, byte* pics[6], int* outSize, ID_TIME_T* timestamp) {
+bool R_LoadCubeImages(const char *imgName, cubeFiles_t extensions, byte *pics[6], int *outSize, ID_TIME_T *timestamp) {
     int     i, j;
-    const char*  cameraSides[6] =  { "_forward.tga", "_back.tga", "_left.tga", "_right.tga",
+    const char  *cameraSides[6] =  { "_forward.tga", "_back.tga", "_left.tga", "_right.tga",
                                      "_up.tga", "_down.tga"
                                    };
-    const char*  axisSides[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
+    const char  *axisSides[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
                                    "_pz.tga", "_nz.tga"
                                  };
-    const char**  sides;
+    const char  **sides;
     char    fullName[MAX_IMAGE_NAME];
     int     width, height, size = 0;
 

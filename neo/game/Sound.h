@@ -45,16 +45,16 @@ class idSound : public idEntity {
 
     idSound(void);
 
-    void            Save(idSaveGame* savefile) const;
-    void            Restore(idRestoreGame* savefile);
+    void            Save(idSaveGame *savefile) const;
+    void            Restore(idRestoreGame *savefile);
 
-    virtual void    UpdateChangeableSpawnArgs(const idDict* source);
+    virtual void    UpdateChangeableSpawnArgs(const idDict *source);
 
     void            Spawn(void);
 
-    void            ToggleOnOff(idEntity* other, idEntity* activator);
+    void            ToggleOnOff(idEntity *other, idEntity *activator);
     void            Think(void);
-    void            SetSound(const char* sound, int channel = SND_CHANNEL_ANY);
+    void            SetSound(const char *sound, int channel = SND_CHANNEL_ANY);
 
     virtual void    ShowEditingDialog(void);
 
@@ -68,7 +68,7 @@ class idSound : public idEntity {
     idAngles        shakeRotate;
     int             playingUntilTime;
 
-    void            Event_Trigger(idEntity* activator);
+    void            Event_Trigger(idEntity *activator);
     void            Event_Timer(void);
     void            Event_On(void);
     void            Event_Off(void);

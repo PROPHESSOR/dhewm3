@@ -104,7 +104,7 @@ class usercmd_t {
 
   public:
     void        ByteSwap();                     // on big endian systems, byte swap the shorts and ints
-    bool        operator==(const usercmd_t& rhs) const;
+    bool        operator==(const usercmd_t &rhs) const;
 };
 
 typedef enum {
@@ -144,16 +144,16 @@ class idUsercmdGen {
     virtual void        UsercmdInterrupt(void) = 0;
 
     // Set a value that can safely be referenced by UsercmdInterrupt() for each key binding.
-    virtual int         CommandStringUsercmdData(const char* cmdString) = 0;
+    virtual int         CommandStringUsercmdData(const char *cmdString) = 0;
 
     // Returns the number of user commands.
     virtual int         GetNumUserCommands(void) = 0;
 
     // Returns the name of a user command via index.
-    virtual const char* GetUserCommandName(int index) = 0;
+    virtual const char *GetUserCommandName(int index) = 0;
 
     // Continuously modified, never reset. For full screen guis.
-    virtual void        MouseState(int* x, int* y, int* button, bool* down) = 0;
+    virtual void        MouseState(int *x, int *y, int *button, bool *down) = 0;
 
     // Directly sample a button.
     virtual int         ButtonState(int key) = 0;
@@ -165,6 +165,6 @@ class idUsercmdGen {
     virtual usercmd_t   GetDirectUsercmd(void) = 0;
 };
 
-extern idUsercmdGen* usercmdGen;
+extern idUsercmdGen *usercmdGen;
 
 #endif /* !__USERCMDGEN_H__ */

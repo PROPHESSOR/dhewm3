@@ -38,7 +38,7 @@ idToken::NumberValue
 */
 void idToken::NumberValue(void) {
     int i, pow, div, c;
-    const char* p;
+    const char *p;
     double m;
 
     assert(type == TT_NUMBER);
@@ -51,13 +51,13 @@ void idToken::NumberValue(void) {
         if (subtype & (TT_INFINITE | TT_INDEFINITE | TT_NAN)) {
             if (subtype & TT_INFINITE) {             // 1.#INF
                 unsigned int inf = 0x7f800000;
-                floatvalue = (double) *(float*)&inf;
+                floatvalue = (double) *(float *)&inf;
             } else if (subtype & TT_INDEFINITE) {    // 1.#IND
                 unsigned int ind = 0xffc00000;
-                floatvalue = (double) *(float*)&ind;
+                floatvalue = (double) *(float *)&ind;
             } else if (subtype & TT_NAN) {           // 1.#QNAN
                 unsigned int nan = 0x7fc00000;
-                floatvalue = (double) *(float*)&nan;
+                floatvalue = (double) *(float *)&nan;
             }
         } else {
             while (*p && *p != '.' && *p != 'e') {

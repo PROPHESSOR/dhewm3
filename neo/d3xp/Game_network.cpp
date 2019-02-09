@@ -137,7 +137,7 @@ void idGameLocal::InitClientDeclRemap(int clientNum) {
         // pre-initialize the remap with non-implicit decls, all non-implicit decls are always going
         // to be in order and in sync between server and client because of the decl manager checksum
         for (i = 0; i < num; i++) {
-            const idDecl* decl = declManager->DeclByIndex((declType_t) type, i, false);
+            const idDecl *decl = declManager->DeclByIndex((declType_t) type, i, false);
 
             if (decl->IsImplicit()) {
                 // once the first implicit decl is found all remaining decls are considered implicit as well
@@ -173,7 +173,7 @@ void idGameLocal::ServerSendDeclRemapToClient(int clientNum, declType_t type, in
         return;
     }
 
-    const idDecl* decl = declManager->DeclByIndex(type, index, false);
+    const idDecl *decl = declManager->DeclByIndex(type, index, false);
 
     if (decl == NULL) {
         gameLocal.Error("server tried to remap bad %s decl index %d", declManager->GetDeclNameFromType(type), index);
@@ -257,7 +257,7 @@ int idGameLocal::ClientRemapDecl(declType_t type, int index) {
 idGameLocal::ServerAllowClient
 ================
 */
-allowReply_t idGameLocal::ServerAllowClient(int numClients, const char* IP, const char* guid, const char* password, char reason[ MAX_STRING_CHARS ]) {
+allowReply_t idGameLocal::ServerAllowClient(int numClients, const char *IP, const char *guid, const char *password, char reason[ MAX_STRING_CHARS ]) {
     reason[0] = '\0';
 
     if (serverInfo.GetInt("si_pure") && !mpGame.IsPureReady()) {
@@ -279,7 +279,7 @@ allowReply_t idGameLocal::ServerAllowClient(int numClients, const char* IP, cons
         return ALLOW_YES;
     }
 
-    const char* pass = cvarSystem->GetCVarString("g_password");
+    const char *pass = cvarSystem->GetCVarString("g_password");
 
     if (pass[ 0 ] == '\0') {
         common->Warning("si_usepass is set but g_password is empty");
@@ -303,7 +303,7 @@ allowReply_t idGameLocal::ServerAllowClient(int numClients, const char* IP, cons
 idGameLocal::ServerClientConnect
 ================
 */
-void idGameLocal::ServerClientConnect(int clientNum, const char* guid) {
+void idGameLocal::ServerClientConnect(int clientNum, const char *guid) {
     // make sure no parasite entity is left
     if (entities[ clientNum ]) {
         common->DPrintf("ServerClientConnect: remove old player entity\n");
@@ -397,7 +397,7 @@ void idGameLocal::ServerWriteInitialReliableMessages(int clientNum) {
     int         i;
     idBitMsg    outMsg;
     byte        msgBuf[MAX_GAME_MESSAGE_SIZE];
-    entityNetEvent_t* event;
+    entityNetEvent_t *event;
 
     // spawn players
     for (i = 0; i < MAX_CLIENTS; i++) {
@@ -451,8 +451,8 @@ void idGameLocal::ServerWriteInitialReliableMessages(int clientNum) {
 idGameLocal::SaveEntityNetworkEvent
 ================
 */
-void idGameLocal::SaveEntityNetworkEvent(const idEntity* ent, int eventId, const idBitMsg* msg) {
-    entityNetEvent_t* event;
+void idGameLocal::SaveEntityNetworkEvent(const idEntity *ent, int eventId, const idBitMsg *msg) {
+    entityNetEvent_t *event;
 
     event = savedEventQueue.Alloc();
     event->spawnId = GetSpawnId(ent);
@@ -475,8 +475,8 @@ idGameLocal::FreeSnapshotsOlderThanSequence
 ================
 */
 void idGameLocal::FreeSnapshotsOlderThanSequence(int clientNum, int sequence) {
-    snapshot_t* snapshot, *lastSnapshot, *nextSnapshot;
-    entityState_t* state;
+    snapshot_t *snapshot, *lastSnapshot, *nextSnapshot;
+    entityState_t *state;
 
     for (lastSnapshot = NULL, snapshot = clientSnapshots[clientNum]; snapshot; snapshot = nextSnapshot) {
         nextSnapshot = snapshot->next;
@@ -506,8 +506,8 @@ idGameLocal::ApplySnapshot
 ================
 */
 bool idGameLocal::ApplySnapshot(int clientNum, int sequence) {
-    snapshot_t* snapshot, *lastSnapshot, *nextSnapshot;
-    entityState_t* state;
+    snapshot_t *snapshot, *lastSnapshot, *nextSnapshot;
+    entityState_t *state;
 
     FreeSnapshotsOlderThanSequence(clientNum, sequence);
 
@@ -546,7 +546,7 @@ bool idGameLocal::ApplySnapshot(int clientNum, int sequence) {
 idGameLocal::WriteGameStateToSnapshot
 ================
 */
-void idGameLocal::WriteGameStateToSnapshot(idBitMsgDelta& msg) const {
+void idGameLocal::WriteGameStateToSnapshot(idBitMsgDelta &msg) const {
     int i;
 
     for (i = 0; i < MAX_GLOBAL_SHADER_PARMS; i++) {
@@ -561,7 +561,7 @@ void idGameLocal::WriteGameStateToSnapshot(idBitMsgDelta& msg) const {
 idGameLocal::ReadGameStateFromSnapshot
 ================
 */
-void idGameLocal::ReadGameStateFromSnapshot(const idBitMsgDelta& msg) {
+void idGameLocal::ReadGameStateFromSnapshot(const idBitMsgDelta &msg) {
     int i;
 
     for (i = 0; i < MAX_GLOBAL_SHADER_PARMS; i++) {
@@ -578,24 +578,24 @@ idGameLocal::ServerWriteSnapshot
   Write a snapshot of the current game state for the given client.
 ================
 */
-void idGameLocal::ServerWriteSnapshot(int clientNum, int sequence, idBitMsg& msg, byte* clientInPVS, int numPVSClients) {
+void idGameLocal::ServerWriteSnapshot(int clientNum, int sequence, idBitMsg &msg, byte *clientInPVS, int numPVSClients) {
     int i, msgSize, msgWriteBit;
-    idPlayer* player, *spectated = NULL;
-    idEntity* ent;
+    idPlayer *player, *spectated = NULL;
+    idEntity *ent;
     pvsHandle_t pvsHandle;
     idBitMsgDelta deltaMsg;
-    snapshot_t* snapshot;
-    entityState_t* base, *newBase;
+    snapshot_t *snapshot;
+    entityState_t *base, *newBase;
     int numSourceAreas, sourceAreas[ idEntity::MAX_PVS_AREAS ];
 
-    player = static_cast<idPlayer*>(entities[ clientNum ]);
+    player = static_cast<idPlayer *>(entities[ clientNum ]);
 
     if (!player) {
         return;
     }
 
     if (player->spectating && player->spectator != clientNum && entities[ player->spectator ]) {
-        spectated = static_cast< idPlayer* >(entities[ player->spectator ]);
+        spectated = static_cast< idPlayer * >(entities[ player->spectator ]);
     } else {
         spectated = player;
     }
@@ -621,7 +621,7 @@ void idGameLocal::ServerWriteSnapshot(int clientNum, int sequence, idBitMsg& msg
     // Add portalSky areas to PVS
     if (portalSkyEnt.GetEntity()) {
         pvsHandle_t otherPVS, newPVS;
-        idEntity* skyEnt = portalSkyEnt.GetEntity();
+        idEntity *skyEnt = portalSkyEnt.GetEntity();
 
         otherPVS = gameLocal.pvs.SetupCurrentPVS(skyEnt->GetPVSAreas(), skyEnt->GetNumPVSAreas());
         newPVS = gameLocal.pvs.MergeCurrentPVS(pvsHandle, otherPVS);
@@ -732,7 +732,7 @@ void idGameLocal::ServerWriteSnapshot(int clientNum, int sequence, idBitMsg& msg
     deltaMsg.Init(base ? &base->state : NULL, &newBase->state, &msg);
 
     if (player->spectating && player->spectator != player->entityNumber && gameLocal.entities[ player->spectator ] && gameLocal.entities[ player->spectator ]->IsType(idPlayer::Type)) {
-        static_cast< idPlayer* >(gameLocal.entities[ player->spectator ])->WritePlayerStateToSnapshot(deltaMsg);
+        static_cast< idPlayer * >(gameLocal.entities[ player->spectator ])->WritePlayerStateToSnapshot(deltaMsg);
     } else {
         player->WritePlayerStateToSnapshot(deltaMsg);
     }
@@ -758,7 +758,7 @@ bool idGameLocal::ServerApplySnapshot(int clientNum, int sequence) {
 idGameLocal::NetworkEventWarning
 ================
 */
-void idGameLocal::NetworkEventWarning(const entityNetEvent_t* event, const char* fmt, ...) {
+void idGameLocal::NetworkEventWarning(const entityNetEvent_t *event, const char *fmt, ...) {
     char buf[1024];
     int length = 0;
     va_list argptr;
@@ -781,8 +781,8 @@ idGameLocal::ServerProcessEntityNetworkEventQueue
 ================
 */
 void idGameLocal::ServerProcessEntityNetworkEventQueue(void) {
-    idEntity*            ent;
-    entityNetEvent_t*    event;
+    idEntity            *ent;
+    entityNetEvent_t    *event;
     idBitMsg            eventMsg;
 
     while (eventQueue.Start()) {
@@ -809,7 +809,7 @@ void idGameLocal::ServerProcessEntityNetworkEventQueue(void) {
             }
         }
 
-        entityNetEvent_t* freedEvent id_attribute((unused)) = eventQueue.Dequeue();
+        entityNetEvent_t *freedEvent id_attribute((unused)) = eventQueue.Dequeue();
         assert(freedEvent == event);
         eventQueue.Free(event);
     }
@@ -820,7 +820,7 @@ void idGameLocal::ServerProcessEntityNetworkEventQueue(void) {
 idGameLocal::ServerSendChatMessage
 ================
 */
-void idGameLocal::ServerSendChatMessage(int to, const char* name, const char* text) {
+void idGameLocal::ServerSendChatMessage(int to, const char *name, const char *text) {
     idBitMsg outMsg;
     byte msgBuf[ MAX_GAME_MESSAGE_SIZE ];
 
@@ -841,7 +841,7 @@ void idGameLocal::ServerSendChatMessage(int to, const char* name, const char* te
 idGameLocal::ServerProcessReliableMessage
 ================
 */
-void idGameLocal::ServerProcessReliableMessage(int clientNum, const idBitMsg& msg) {
+void idGameLocal::ServerProcessReliableMessage(int clientNum, const idBitMsg &msg) {
     int id;
 
     id = msg.ReadByte();
@@ -899,7 +899,7 @@ void idGameLocal::ServerProcessReliableMessage(int clientNum, const idBitMsg& ms
             #endif
 
         case GAME_RELIABLE_MESSAGE_EVENT: {
-                entityNetEvent_t* event;
+                entityNetEvent_t *event;
 
                 // allocate new event
                 event = eventQueue.Alloc();
@@ -938,17 +938,17 @@ idGameLocal::ClientShowSnapshot
 */
 void idGameLocal::ClientShowSnapshot(int clientNum) const {
     int baseBits;
-    idEntity* ent;
-    idPlayer* player;
+    idEntity *ent;
+    idPlayer *player;
     idMat3 viewAxis;
     idBounds viewBounds;
-    entityState_t* base;
+    entityState_t *base;
 
     if (!net_clientShowSnapshot.GetInteger()) {
         return;
     }
 
-    player = static_cast<idPlayer*>(entities[clientNum]);
+    player = static_cast<idPlayer *>(entities[clientNum]);
 
     if (!player) {
         return;
@@ -963,7 +963,7 @@ void idGameLocal::ClientShowSnapshot(int clientNum) const {
             continue;
         }
 
-        const idBounds& entBounds = ent->GetPhysics()->GetAbsBounds();
+        const idBounds &entBounds = ent->GetPhysics()->GetAbsBounds();
 
         if (!entBounds.IntersectsBounds(viewBounds)) {
             continue;
@@ -997,7 +997,7 @@ void idGameLocal::UpdateLagometer(int aheadOfServer, int dupeUsercmds) {
     int i, j, ahead;
 
     for (i = 0; i < LAGO_HEIGHT; i++) {
-        memmove((byte*)lagometer + LAGO_WIDTH * 4 * i, (byte*)lagometer + LAGO_WIDTH * 4 * i + 4, (LAGO_WIDTH - 1) * 4);
+        memmove((byte *)lagometer + LAGO_WIDTH * 4 * i, (byte *)lagometer + LAGO_WIDTH * 4 * i + 4, (LAGO_WIDTH - 1) * 4);
     }
 
     j = LAGO_WIDTH - 1;
@@ -1037,25 +1037,25 @@ void idGameLocal::UpdateLagometer(int aheadOfServer, int dupeUsercmds) {
 idGameLocal::ClientReadSnapshot
 ================
 */
-void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int gameFrame, const int gameTime, const int dupeUsercmds, const int aheadOfServer, const idBitMsg& msg) {
+void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int gameFrame, const int gameTime, const int dupeUsercmds, const int aheadOfServer, const idBitMsg &msg) {
     int             i, typeNum, entityDefNumber, numBitsRead;
-    idTypeInfo*      typeInfo;
-    idEntity*        ent;
-    idPlayer*        player, *spectated;
+    idTypeInfo      *typeInfo;
+    idEntity        *ent;
+    idPlayer        *player, *spectated;
     pvsHandle_t     pvsHandle;
     idDict          args;
-    const char*      classname;
+    const char      *classname;
     idBitMsgDelta   deltaMsg;
-    snapshot_t*      snapshot;
-    entityState_t*   base, *newBase;
+    snapshot_t      *snapshot;
+    entityState_t   *base, *newBase;
     int             spawnId;
     int             numSourceAreas, sourceAreas[ idEntity::MAX_PVS_AREAS ];
-    idWeapon*        weap;
+    idWeapon        *weap;
 
     if (net_clientLagOMeter.GetBool() && renderSystem) {
         UpdateLagometer(aheadOfServer, dupeUsercmds);
 
-        if (!renderSystem->UploadImage(LAGO_IMAGE, (byte*)lagometer, LAGO_IMG_WIDTH, LAGO_IMG_HEIGHT)) {
+        if (!renderSystem->UploadImage(LAGO_IMAGE, (byte *)lagometer, LAGO_IMG_WIDTH, LAGO_IMG_HEIGHT)) {
             common->Printf("lagometer: UploadImage failed. turning off net_clientLagOMeter\n");
             net_clientLagOMeter.SetBool(false);
         }
@@ -1189,7 +1189,7 @@ void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int game
         #endif
     }
 
-    player = static_cast<idPlayer*>(entities[clientNum]);
+    player = static_cast<idPlayer *>(entities[clientNum]);
 
     if (!player) {
         return;
@@ -1199,7 +1199,7 @@ void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int game
     player->SetSelfSmooth(dupeUsercmds > 2);
 
     if (player->spectating && player->spectator != clientNum && entities[ player->spectator ]) {
-        spectated = static_cast< idPlayer* >(entities[ player->spectator ]);
+        spectated = static_cast< idPlayer * >(entities[ player->spectator ]);
     } else {
         spectated = player;
     }
@@ -1214,7 +1214,7 @@ void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int game
     // Add portalSky areas to PVS
     if (portalSkyEnt.GetEntity()) {
         pvsHandle_t otherPVS, newPVS;
-        idEntity* skyEnt = portalSkyEnt.GetEntity();
+        idEntity *skyEnt = portalSkyEnt.GetEntity();
 
         otherPVS = gameLocal.pvs.SetupCurrentPVS(skyEnt->GetPVSAreas(), skyEnt->GetNumPVSAreas());
         newPVS = gameLocal.pvs.MergeCurrentPVS(pvsHandle, otherPVS);
@@ -1306,7 +1306,7 @@ void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int game
 
         base->state.BeginReading();
 
-        deltaMsg.Init(&base->state, NULL, (const idBitMsg*)NULL);
+        deltaMsg.Init(&base->state, NULL, (const idBitMsg *)NULL);
 
         spawnId = deltaMsg.ReadBits(32 - GENTITYNUM_BITS);
         typeNum = deltaMsg.ReadBits(idClass::GetTypeNumBits());
@@ -1344,8 +1344,8 @@ void idGameLocal::ClientReadSnapshot(int clientNum, int sequence, const int game
     deltaMsg.Init(base ? &base->state : NULL, &newBase->state, &msg);
 
     if (player->spectating && player->spectator != player->entityNumber && gameLocal.entities[ player->spectator ] && gameLocal.entities[ player->spectator ]->IsType(idPlayer::Type)) {
-        static_cast< idPlayer* >(gameLocal.entities[ player->spectator ])->ReadPlayerStateFromSnapshot(deltaMsg);
-        weap = static_cast< idPlayer* >(gameLocal.entities[ player->spectator ])->weapon.GetEntity();
+        static_cast< idPlayer * >(gameLocal.entities[ player->spectator ])->ReadPlayerStateFromSnapshot(deltaMsg);
+        weap = static_cast< idPlayer * >(gameLocal.entities[ player->spectator ])->weapon.GetEntity();
 
         if (weap && (weap->GetRenderEntity()->bounds[0] == weap->GetRenderEntity()->bounds[1])) {
             // update the weapon's viewmodel bounds so that the model doesn't flicker in the spectator's view
@@ -1380,8 +1380,8 @@ idGameLocal::ClientProcessEntityNetworkEventQueue
 ================
 */
 void idGameLocal::ClientProcessEntityNetworkEventQueue(void) {
-    idEntity*            ent;
-    entityNetEvent_t*    event;
+    idEntity            *ent;
+    entityNetEvent_t    *event;
     idBitMsg            eventMsg;
 
     while (eventQueue.Start()) {
@@ -1412,7 +1412,7 @@ void idGameLocal::ClientProcessEntityNetworkEventQueue(void) {
             }
         }
 
-        entityNetEvent_t* freedEvent id_attribute((unused)) = eventQueue.Dequeue();
+        entityNetEvent_t *freedEvent id_attribute((unused)) = eventQueue.Dequeue();
         assert(freedEvent == event);
         eventQueue.Free(event);
     }
@@ -1423,9 +1423,9 @@ void idGameLocal::ClientProcessEntityNetworkEventQueue(void) {
 idGameLocal::ClientProcessReliableMessage
 ================
 */
-void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& msg) {
+void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg &msg) {
     int         id, line;
-    idPlayer*    p;
+    idPlayer    *p;
     idDict      backupSI;
 
     InitLocalClient(clientNum);
@@ -1446,7 +1446,7 @@ void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& ms
                 index = msg.ReadInt();
                 msg.ReadString(name, sizeof(name));
 
-                const idDecl* decl = declManager->FindType((declType_t)type, name, false);
+                const idDecl *decl = declManager->FindType((declType_t)type, name, false);
 
                 if (decl != NULL) {
                     if (index >= clientDeclRemap[clientNum][type].Num()) {
@@ -1506,7 +1506,7 @@ void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& ms
                 int index = gameLocal.ClientRemapDecl(DECL_SOUND, msg.ReadInt());
 
                 if (index >= 0 && index < declManager->GetNumDecls(DECL_SOUND)) {
-                    const idSoundShader* shader = declManager->SoundByIndex(index);
+                    const idSoundShader *shader = declManager->SoundByIndex(index);
                     mpGame.PlayGlobalSound(-1, SND_COUNT, shader->GetName());
                 }
 
@@ -1523,7 +1523,7 @@ void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& ms
             }
 
         case GAME_RELIABLE_MESSAGE_EVENT: {
-                entityNetEvent_t* event;
+                entityNetEvent_t *event;
 
                 // allocate new event
                 event = eventQueue.Alloc();
@@ -1572,7 +1572,7 @@ void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& ms
 
         case GAME_RELIABLE_MESSAGE_TOURNEYLINE: {
                 line = msg.ReadByte();
-                p = static_cast< idPlayer* >(entities[ clientNum ]);
+                p = static_cast< idPlayer * >(entities[ clientNum ]);
 
                 if (!p) {
                     break;
@@ -1639,14 +1639,14 @@ void idGameLocal::ClientProcessReliableMessage(int clientNum, const idBitMsg& ms
 idGameLocal::ClientPrediction
 ================
 */
-gameReturn_t idGameLocal::ClientPrediction(int clientNum, const usercmd_t* clientCmds, bool lastPredictFrame) {
-    idEntity* ent;
-    idPlayer* player;
+gameReturn_t idGameLocal::ClientPrediction(int clientNum, const usercmd_t *clientCmds, bool lastPredictFrame) {
+    idEntity *ent;
+    idPlayer *player;
     gameReturn_t ret;
 
     ret.sessionCommand[ 0 ] = '\0';
 
-    player = static_cast<idPlayer*>(entities[clientNum]);
+    player = static_cast<idPlayer *>(entities[clientNum]);
 
     if (!player) {
         return ret;
@@ -1709,9 +1709,9 @@ gameReturn_t idGameLocal::ClientPrediction(int clientNum, const usercmd_t* clien
 idGameLocal::Tokenize
 ===============
 */
-void idGameLocal::Tokenize(idStrList& out, const char* in) {
+void idGameLocal::Tokenize(idStrList &out, const char *in) {
     char buf[ MAX_STRING_CHARS ];
-    char* token, *next;
+    char *token, *next;
 
     idStr::Copynz(buf, in, MAX_STRING_CHARS);
     token = buf;
@@ -1739,7 +1739,7 @@ void idGameLocal::Tokenize(idStrList& out, const char* in) {
 idGameLocal::DownloadRequest
 ===============
 */
-bool idGameLocal::DownloadRequest(const char* IP, const char* guid, const char* paks, char urls[ MAX_STRING_CHARS ]) {
+bool idGameLocal::DownloadRequest(const char *IP, const char *guid, const char *paks, char urls[ MAX_STRING_CHARS ]) {
     if (!cvarSystem->GetCVarInteger("net_serverDownload")) {
         return false;
     }
@@ -1806,8 +1806,8 @@ bool idGameLocal::DownloadRequest(const char* IP, const char* guid, const char* 
 idEventQueue::Alloc
 ===============
 */
-entityNetEvent_t* idEventQueue::Alloc() {
-    entityNetEvent_t* event = eventAllocator.Alloc();
+entityNetEvent_t *idEventQueue::Alloc() {
+    entityNetEvent_t *event = eventAllocator.Alloc();
     event->prev = NULL;
     event->next = NULL;
     return event;
@@ -1818,7 +1818,7 @@ entityNetEvent_t* idEventQueue::Alloc() {
 idEventQueue::Free
 ===============
 */
-void idEventQueue::Free(entityNetEvent_t* event) {
+void idEventQueue::Free(entityNetEvent_t *event) {
     // should only be called on an unlinked event!
     assert(!event->next && !event->prev);
     eventAllocator.Free(event);
@@ -1849,8 +1849,8 @@ void idEventQueue::Init(void) {
 idEventQueue::Dequeue
 ===============
 */
-entityNetEvent_t* idEventQueue::Dequeue(void) {
-    entityNetEvent_t* event = start;
+entityNetEvent_t *idEventQueue::Dequeue(void) {
+    entityNetEvent_t *event = start;
 
     if (!event) {
         return NULL;
@@ -1875,8 +1875,8 @@ entityNetEvent_t* idEventQueue::Dequeue(void) {
 idEventQueue::RemoveLast
 ===============
 */
-entityNetEvent_t* idEventQueue::RemoveLast(void) {
-    entityNetEvent_t* event = end;
+entityNetEvent_t *idEventQueue::RemoveLast(void) {
+    entityNetEvent_t *event = end;
 
     if (!event) {
         return NULL;
@@ -1901,12 +1901,12 @@ entityNetEvent_t* idEventQueue::RemoveLast(void) {
 idEventQueue::Enqueue
 ===============
 */
-void idEventQueue::Enqueue(entityNetEvent_t* event, outOfOrderBehaviour_t behaviour) {
+void idEventQueue::Enqueue(entityNetEvent_t *event, outOfOrderBehaviour_t behaviour) {
     if (behaviour == OUTOFORDER_DROP) {
         // go backwards through the queue and determine if there are
         // any out-of-order events
         while (end && end->time > event->time) {
-            entityNetEvent_t* outOfOrder = RemoveLast();
+            entityNetEvent_t *outOfOrder = RemoveLast();
             common->DPrintf("WARNING: new event with id %d ( time %d ) caused removal of event with id %d ( time %d ), game time = %d.\n", event->event, event->time, outOfOrder->event, outOfOrder->time, gameLocal.time);
             Free(outOfOrder);
         }
@@ -1914,7 +1914,7 @@ void idEventQueue::Enqueue(entityNetEvent_t* event, outOfOrderBehaviour_t behavi
         // NOT TESTED -- sorting out of order packets hasn't been
         //               tested yet... wasn't strictly necessary for
         //               the patch fix.
-        entityNetEvent_t* cur = end;
+        entityNetEvent_t *cur = end;
 
         // iterate until we find a time < the new event's
         while (cur && cur->time > event->time) {

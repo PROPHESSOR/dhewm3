@@ -40,7 +40,7 @@ static autoComplete_t   globalAutoComplete;
 FindMatches
 ===============
 */
-static void FindMatches(const char* s) {
+static void FindMatches(const char *s) {
     int     i;
 
     if (idStr::Icmpn(s, globalAutoComplete.completionString, strlen(globalAutoComplete.completionString)) != 0) {
@@ -70,7 +70,7 @@ static void FindMatches(const char* s) {
 FindIndexMatch
 ===============
 */
-static void FindIndexMatch(const char* s) {
+static void FindIndexMatch(const char *s) {
 
     if (idStr::Icmpn(s, globalAutoComplete.completionString, strlen(globalAutoComplete.completionString)) != 0) {
         return;
@@ -88,7 +88,7 @@ static void FindIndexMatch(const char* s) {
 PrintMatches
 ===============
 */
-static void PrintMatches(const char* s) {
+static void PrintMatches(const char *s) {
     if (idStr::Icmpn(s, globalAutoComplete.currentMatch, strlen(globalAutoComplete.currentMatch)) == 0) {
         common->Printf("    %s\n", s);
     }
@@ -99,7 +99,7 @@ static void PrintMatches(const char* s) {
 PrintCvarMatches
 ===============
 */
-static void PrintCvarMatches(const char* s) {
+static void PrintCvarMatches(const char *s) {
     if (idStr::Icmpn(s, globalAutoComplete.currentMatch, strlen(globalAutoComplete.currentMatch)) == 0) {
         common->Printf("    %s" S_COLOR_WHITE " = \"%s\"\n", s, cvarSystem->GetCVarString(s));
     }
@@ -512,7 +512,7 @@ idEditField::Paste
 ===============
 */
 void idEditField::Paste(void) {
-    char*    cbd;
+    char    *cbd;
     int     pasteLen, i;
 
     cbd = Sys_GetClipboardData();
@@ -536,7 +536,7 @@ void idEditField::Paste(void) {
 idEditField::GetBuffer
 ===============
 */
-char* idEditField::GetBuffer(void) {
+char *idEditField::GetBuffer(void) {
     return buffer;
 }
 
@@ -545,7 +545,7 @@ char* idEditField::GetBuffer(void) {
 idEditField::SetBuffer
 ===============
 */
-void idEditField::SetBuffer(const char* buf) {
+void idEditField::SetBuffer(const char *buf) {
     Clear();
     idStr::Copynz(buffer, buf, sizeof(buffer));
     SetCursor(strlen(buffer));
@@ -556,7 +556,7 @@ void idEditField::SetBuffer(const char* buf) {
 idEditField::Draw
 ===============
 */
-void idEditField::Draw(int x, int y, int width, bool showCursor, const idMaterial* shader) {
+void idEditField::Draw(int x, int y, int width, bool showCursor, const idMaterial *shader) {
     int     len;
     int     drawLen;
     int     prestep;

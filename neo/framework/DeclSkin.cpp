@@ -53,7 +53,7 @@ void idDeclSkin::FreeData(void) {
 idDeclSkin::Parse
 ================
 */
-bool idDeclSkin::Parse(const char* text, const int textLength) {
+bool idDeclSkin::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token, token2;
 
@@ -127,7 +127,7 @@ bool idDeclSkin::SetDefaultText(void) {
 idDeclSkin::DefaultDefinition
 ================
 */
-const char* idDeclSkin::DefaultDefinition(void) const {
+const char *idDeclSkin::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "\"*\"\t\"_default\"\n"
@@ -148,7 +148,7 @@ const int idDeclSkin::GetNumModelAssociations(void) const {
 idDeclSkin::GetAssociatedModel
 ================
 */
-const char* idDeclSkin::GetAssociatedModel(int index) const {
+const char *idDeclSkin::GetAssociatedModel(int index) const {
     if (index >= 0 && index < associatedModels.Num()) {
         return associatedModels[ index ];
     }
@@ -161,7 +161,7 @@ const char* idDeclSkin::GetAssociatedModel(int index) const {
 RemapShaderBySkin
 ===============
 */
-const idMaterial* idDeclSkin::RemapShaderBySkin(const idMaterial* shader) const {
+const idMaterial *idDeclSkin::RemapShaderBySkin(const idMaterial *shader) const {
     int     i;
 
     if (!shader) {
@@ -174,7 +174,7 @@ const idMaterial* idDeclSkin::RemapShaderBySkin(const idMaterial* shader) const 
     }
 
     for (i = 0; i < mappings.Num() ; i++) {
-        const skinMapping_t* map = &mappings[i];
+        const skinMapping_t *map = &mappings[i];
 
         // NULL = wildcard match
         if (!map->from || map->from == shader) {

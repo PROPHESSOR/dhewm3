@@ -31,7 +31,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "renderer/Model_local.h"
 
-static const char* parametricParticle_SnapshotName = "_ParametricParticle_Snapshot_";
+static const char *parametricParticle_SnapshotName = "_ParametricParticle_Snapshot_";
 
 /*
 ====================
@@ -47,9 +47,9 @@ idRenderModelPrt::idRenderModelPrt() {
 idRenderModelPrt::InitFromFile
 ====================
 */
-void idRenderModelPrt::InitFromFile(const char* fileName) {
+void idRenderModelPrt::InitFromFile(const char *fileName) {
     name = fileName;
-    particleSystem = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, fileName));
+    particleSystem = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, fileName));
 }
 
 /*
@@ -59,7 +59,7 @@ idRenderModelPrt::TouchData
 */
 void idRenderModelPrt::TouchData(void) {
     // Ensure our particle system is added to the list of referenced decls
-    particleSystem = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, name));
+    particleSystem = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, name));
 }
 
 /*
@@ -67,8 +67,8 @@ void idRenderModelPrt::TouchData(void) {
 idRenderModelPrt::InstantiateDynamicModel
 ====================
 */
-idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEntity_s* renderEntity, const struct viewDef_s* viewDef, idRenderModel* cachedModel) {
-    idRenderModelStatic* staticModel;
+idRenderModel *idRenderModelPrt::InstantiateDynamicModel(const struct renderEntity_s *renderEntity, const struct viewDef_s *viewDef, idRenderModel *cachedModel) {
+    idRenderModelStatic *staticModel;
 
     if (cachedModel && !r_useCachedDynamicModels.GetBool()) {
         delete cachedModel;
@@ -96,10 +96,10 @@ idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEnti
 
     if (cachedModel != NULL) {
 
-        assert(dynamic_cast<idRenderModelStatic*>(cachedModel) != NULL);
+        assert(dynamic_cast<idRenderModelStatic *>(cachedModel) != NULL);
         assert(idStr::Icmp(cachedModel->Name(), parametricParticle_SnapshotName) == 0);
 
-        staticModel = static_cast<idRenderModelStatic*>(cachedModel);
+        staticModel = static_cast<idRenderModelStatic *>(cachedModel);
 
     } else {
 
@@ -115,7 +115,7 @@ idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEnti
     g.axis.Identity();
 
     for (int stageNum = 0; stageNum < particleSystem->stages.Num(); stageNum++) {
-        idParticleStage* stage = particleSystem->stages[stageNum];
+        idParticleStage *stage = particleSystem->stages[stageNum];
 
         if (!stage->material) {
             continue;
@@ -142,7 +142,7 @@ idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEnti
         int count = stage->totalParticles * stage->NumQuadsPerParticle();
 
         int surfaceNum;
-        modelSurface_t* surf;
+        modelSurface_t *surf;
 
         if (staticModel->FindSurfaceWithId(stageNum, surfaceNum)) {
             surf = &staticModel->surfaces[surfaceNum];
@@ -158,7 +158,7 @@ idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEnti
         }
 
         int numVerts = 0;
-        idDrawVert* verts = surf->geometry->verts;
+        idDrawVert *verts = surf->geometry->verts;
 
         for (int index = 0; index < stage->totalParticles; index++) {
             g.index = index;
@@ -224,7 +224,7 @@ idRenderModel* idRenderModelPrt::InstantiateDynamicModel(const struct renderEnti
 
         // build the indexes
         int numIndexes = 0;
-        glIndex_t* indexes = surf->geometry->indexes;
+        glIndex_t *indexes = surf->geometry->indexes;
 
         for (int i = 0; i < numVerts; i += 4) {
             indexes[numIndexes+0] = i;
@@ -260,7 +260,7 @@ dynamicModel_t idRenderModelPrt::IsDynamicModel() const {
 idRenderModelPrt::Bounds
 ====================
 */
-idBounds idRenderModelPrt::Bounds(const struct renderEntity_s* ent) const {
+idBounds idRenderModelPrt::Bounds(const struct renderEntity_s *ent) const {
     return particleSystem->bounds;
 }
 

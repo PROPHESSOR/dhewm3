@@ -48,14 +48,14 @@ If you have questions concerning this license or the applicable additional terms
 // working variables used during parsing
 typedef struct {
     bool            verbose;
-    maModel_t*       model;
-    maObject_t*      currentObject;
+    maModel_t       *model;
+    maObject_t      *currentObject;
 } ma_t;
 
 static ma_t maGlobal;
 
 
-void MA_ParseNodeHeader(idParser& parser, maNodeHeader_t* header) {
+void MA_ParseNodeHeader(idParser &parser, maNodeHeader_t *header) {
 
     memset(header, 0, sizeof(maNodeHeader_t));
 
@@ -78,7 +78,7 @@ void MA_ParseNodeHeader(idParser& parser, maNodeHeader_t* header) {
     }
 }
 
-bool MA_ParseHeaderIndex(maAttribHeader_t* header, int& minIndex, int& maxIndex, const char* headerType, const char* skipString) {
+bool MA_ParseHeaderIndex(maAttribHeader_t *header, int &minIndex, int &maxIndex, const char *headerType, const char *skipString) {
 
     idParser miniParse;
     idToken token;
@@ -106,7 +106,7 @@ bool MA_ParseHeaderIndex(maAttribHeader_t* header, int& minIndex, int& maxIndex,
     return true;
 }
 
-bool MA_ParseAttribHeader(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseAttribHeader(idParser &parser, maAttribHeader_t *header) {
 
     idToken token;
 
@@ -127,7 +127,7 @@ bool MA_ParseAttribHeader(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ReadVec3(idParser& parser, idVec3& vec) {
+bool MA_ReadVec3(idParser &parser, idVec3 &vec) {
     idToken token;
 
     if (!parser.SkipUntilString("double3")) {
@@ -143,7 +143,7 @@ bool MA_ReadVec3(idParser& parser, idVec3& vec) {
     return true;
 }
 
-bool IsNodeComplete(idToken& token) {
+bool IsNodeComplete(idToken &token) {
     if (!token.Icmp("createNode") || !token.Icmp("connectAttr") || !token.Icmp("select")) {
         return true;
     }
@@ -151,14 +151,14 @@ bool IsNodeComplete(idToken& token) {
     return false;
 }
 
-bool MA_ParseTransform(idParser& parser) {
+bool MA_ParseTransform(idParser &parser) {
 
     maNodeHeader_t  header;
-    maTransform_t*  transform;
+    maTransform_t  *transform;
     memset(&header, 0, sizeof(header));
 
     //Allocate room for the transform
-    transform = (maTransform_t*)Mem_Alloc(sizeof(maTransform_t));
+    transform = (maTransform_t *)Mem_Alloc(sizeof(maTransform_t));
     memset(transform, 0, sizeof(maTransform_t));
     transform->scale.x = transform->scale.y = transform->scale.z = 1;
 
@@ -199,7 +199,7 @@ bool MA_ParseTransform(idParser& parser) {
 
     if (header.parent[0] != 0) {
         //Find the parent
-        maTransform_t** parent;
+        maTransform_t **parent;
         maGlobal.model->transforms.Get(header.parent, &parent);
 
         if (parent) {
@@ -212,15 +212,15 @@ bool MA_ParseTransform(idParser& parser) {
     return true;
 }
 
-bool MA_ParseVertex(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseVertex(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
     if (!pMesh->vertexes) {
         pMesh->numVertexes = header->size; // XXX: +1?
-        pMesh->vertexes = (idVec3*)Mem_Alloc(sizeof(idVec3) * pMesh->numVertexes);
+        pMesh->vertexes = (idVec3 *)Mem_Alloc(sizeof(idVec3) * pMesh->numVertexes);
     }
 
     //Get the start and end index for this attribute
@@ -241,9 +241,9 @@ bool MA_ParseVertex(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ParseVertexTransforms(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseVertexTransforms(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
@@ -253,7 +253,7 @@ bool MA_ParseVertexTransforms(idParser& parser, maAttribHeader_t* header) {
         }
 
         pMesh->numVertTransforms = header->size;
-        pMesh->vertTransforms = (idVec4*)Mem_Alloc(sizeof(idVec4) * pMesh->numVertTransforms);
+        pMesh->vertTransforms = (idVec4 *)Mem_Alloc(sizeof(idVec4) * pMesh->numVertTransforms);
         pMesh->nextVertTransformIndex = 0;
     }
 
@@ -296,15 +296,15 @@ bool MA_ParseVertexTransforms(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ParseEdge(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseEdge(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
     if (!pMesh->edges) {
         pMesh->numEdges = header->size;
-        pMesh->edges = (idVec3*)Mem_Alloc(sizeof(idVec3) * pMesh->numEdges);
+        pMesh->edges = (idVec3 *)Mem_Alloc(sizeof(idVec3) * pMesh->numEdges);
     }
 
     //Get the start and end index for this attribute
@@ -325,15 +325,15 @@ bool MA_ParseEdge(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ParseNormal(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseNormal(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
     if (!pMesh->normals) {
         pMesh->numNormals = header->size;
-        pMesh->normals = (idVec3*)Mem_Alloc(sizeof(idVec3) * pMesh->numNormals);
+        pMesh->normals = (idVec3 *)Mem_Alloc(sizeof(idVec3) * pMesh->numNormals);
     }
 
     //Get the start and end index for this attribute
@@ -382,15 +382,15 @@ bool MA_ParseNormal(idParser& parser, maAttribHeader_t* header) {
 
 
 
-bool MA_ParseFace(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseFace(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
     if (!pMesh->faces) {
         pMesh->numFaces = header->size;
-        pMesh->faces = (maFace_t*)Mem_Alloc(sizeof(maFace_t) * pMesh->numFaces);
+        pMesh->faces = (maFace_t *)Mem_Alloc(sizeof(maFace_t) * pMesh->numFaces);
     }
 
     //Get the start and end index for this attribute
@@ -470,15 +470,15 @@ bool MA_ParseFace(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ParseColor(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseColor(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //Allocate enough space for all the verts if this is the first attribute for verticies
     if (!pMesh->colors) {
         pMesh->numColors = header->size;
-        pMesh->colors = (byte*)Mem_Alloc(sizeof(byte) * pMesh->numColors * 4);
+        pMesh->colors = (byte *)Mem_Alloc(sizeof(byte) * pMesh->numColors * 4);
     }
 
     //Get the start and end index for this attribute
@@ -500,9 +500,9 @@ bool MA_ParseColor(idParser& parser, maAttribHeader_t* header) {
     return true;
 }
 
-bool MA_ParseTVert(idParser& parser, maAttribHeader_t* header) {
+bool MA_ParseTVert(idParser &parser, maAttribHeader_t *header) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     idToken token;
 
     //This is not the texture coordinates. It is just the name so ignore it
@@ -513,7 +513,7 @@ bool MA_ParseTVert(idParser& parser, maAttribHeader_t* header) {
     //Allocate enough space for all the data
     if (!pMesh->tvertexes) {
         pMesh->numTVertexes = header->size;
-        pMesh->tvertexes = (idVec2*)Mem_Alloc(sizeof(idVec2) * pMesh->numTVertexes);
+        pMesh->tvertexes = (idVec2 *)Mem_Alloc(sizeof(idVec2) * pMesh->numTVertexes);
     }
 
     //Get the start and end index for this attribute
@@ -556,7 +556,7 @@ bool MA_ParseTVert(idParser& parser, maAttribHeader_t* header) {
 */
 bool MA_QuickIsVertShared(int faceIndex, int vertIndex) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     int vertNum = pMesh->faces[faceIndex].vertexNum[vertIndex];
 
     for (int i = 0; i < 3; i++) {
@@ -574,9 +574,9 @@ bool MA_QuickIsVertShared(int faceIndex, int vertIndex) {
     return false;
 }
 
-void MA_GetSharedFace(int faceIndex, int vertIndex, int& sharedFace, int& sharedVert) {
+void MA_GetSharedFace(int faceIndex, int vertIndex, int &sharedFace, int &sharedVert) {
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
     int vertNum = pMesh->faces[faceIndex].vertexNum[vertIndex];
 
     sharedFace = -1;
@@ -612,10 +612,10 @@ void MA_GetSharedFace(int faceIndex, int vertIndex, int& sharedFace, int& shared
     }
 }
 
-void MA_ParseMesh(idParser& parser) {
+void MA_ParseMesh(idParser &parser) {
 
-    maObject_t*  object;
-    object = (maObject_t*)Mem_Alloc(sizeof(maObject_t));
+    maObject_t  *object;
+    object = (maObject_t *)Mem_Alloc(sizeof(maObject_t));
     memset(object, 0, sizeof(maObject_t));
     maGlobal.model->objects.Append(object);
     maGlobal.currentObject = object;
@@ -629,7 +629,7 @@ void MA_ParseMesh(idParser& parser) {
     //Find my parent
     if (header.parent[0] != 0) {
         //Find the parent
-        maTransform_t** parent;
+        maTransform_t **parent;
         maGlobal.model->transforms.Get(header.parent, &parent);
 
         if (parent) {
@@ -673,7 +673,7 @@ void MA_ParseMesh(idParser& parser) {
     }
 
 
-    maMesh_t* pMesh = &maGlobal.currentObject->mesh;
+    maMesh_t *pMesh = &maGlobal.currentObject->mesh;
 
     //Get the verts from the edge
     for (int i = 0; i < pMesh->numFaces; i++) {
@@ -759,7 +759,7 @@ void MA_ParseMesh(idParser& parser) {
     MA_VERBOSE((va("\tfaces:%d\n",maGlobal.currentObject->mesh.numFaces)));
 }
 
-void MA_ParseFileNode(idParser& parser) {
+void MA_ParseFileNode(idParser &parser) {
 
     //Get the header info from the node
     maNodeHeader_t  header;
@@ -786,8 +786,8 @@ void MA_ParseFileNode(idParser& parser) {
                     parser.ReadToken(&token);
                 }
 
-                maFileNode_t* fileNode;
-                fileNode = (maFileNode_t*)Mem_Alloc(sizeof(maFileNode_t));
+                maFileNode_t *fileNode;
+                fileNode = (maFileNode_t *)Mem_Alloc(sizeof(maFileNode_t));
                 strcpy(fileNode->name, header.name);
                 strcpy(fileNode->path, token.c_str());
 
@@ -799,14 +799,14 @@ void MA_ParseFileNode(idParser& parser) {
     }
 }
 
-void MA_ParseMaterialNode(idParser& parser) {
+void MA_ParseMaterialNode(idParser &parser) {
 
     //Get the header info from the node
     maNodeHeader_t  header;
     MA_ParseNodeHeader(parser, &header);
 
-    maMaterialNode_t* matNode;
-    matNode = (maMaterialNode_t*)Mem_Alloc(sizeof(maMaterialNode_t));
+    maMaterialNode_t *matNode;
+    matNode = (maMaterialNode_t *)Mem_Alloc(sizeof(maMaterialNode_t));
     memset(matNode, 0, sizeof(maMaterialNode_t));
 
     strcpy(matNode->name, header.name);
@@ -814,7 +814,7 @@ void MA_ParseMaterialNode(idParser& parser) {
     maGlobal.model->materialNodes.Set(matNode->name, matNode);
 }
 
-void MA_ParseCreateNode(idParser& parser) {
+void MA_ParseCreateNode(idParser &parser) {
 
     idToken token;
     parser.ReadToken(&token);
@@ -831,14 +831,14 @@ void MA_ParseCreateNode(idParser& parser) {
 }
 
 
-int MA_AddMaterial(const char* materialName) {
+int MA_AddMaterial(const char *materialName) {
 
 
-    maMaterialNode_t**  destNode;
+    maMaterialNode_t  **destNode;
     maGlobal.model->materialNodes.Get(materialName, &destNode);
 
     if (destNode) {
-        maMaterialNode_t* matNode = *destNode;
+        maMaterialNode_t *matNode = *destNode;
 
         //Iterate down the tree until we get a file
         while (matNode && !matNode->file) {
@@ -848,8 +848,8 @@ int MA_AddMaterial(const char* materialName) {
         if (matNode && matNode->file) {
 
             //Got the file
-            maMaterial_t*    material;
-            material = (maMaterial_t*)Mem_Alloc(sizeof(maMaterial_t));
+            maMaterial_t    *material;
+            material = (maMaterial_t *)Mem_Alloc(sizeof(maMaterial_t));
             memset(material, 0, sizeof(maMaterial_t));
 
             //Remove the OS stuff
@@ -866,7 +866,7 @@ int MA_AddMaterial(const char* materialName) {
     return -1;
 }
 
-bool MA_ParseConnectAttr(idParser& parser) {
+bool MA_ParseConnectAttr(idParser &parser) {
 
     idStr temp;
     idStr srcName;
@@ -900,11 +900,11 @@ bool MA_ParseConnectAttr(idParser& parser) {
     if (srcType.Find("oc") != -1) {
 
         //Is this attribute a material node attribute
-        maMaterialNode_t**  matNode;
+        maMaterialNode_t  **matNode;
         maGlobal.model->materialNodes.Get(srcName, &matNode);
 
         if (matNode) {
-            maMaterialNode_t**  destNode;
+            maMaterialNode_t  **destNode;
             maGlobal.model->materialNodes.Get(destName, &destNode);
 
             if (destNode) {
@@ -913,11 +913,11 @@ bool MA_ParseConnectAttr(idParser& parser) {
         }
 
         //Is this attribute a file node
-        maFileNode_t** fileNode;
+        maFileNode_t **fileNode;
         maGlobal.model->fileNodes.Get(srcName, &fileNode);
 
         if (fileNode) {
-            maMaterialNode_t**  destNode;
+            maMaterialNode_t  **destNode;
             maGlobal.model->materialNodes.Get(destName, &destNode);
 
             if (destNode) {
@@ -941,14 +941,14 @@ bool MA_ParseConnectAttr(idParser& parser) {
 }
 
 
-void MA_BuildScale(idMat4& mat, float x, float y, float z) {
+void MA_BuildScale(idMat4 &mat, float x, float y, float z) {
     mat.Identity();
     mat[0][0] = x;
     mat[1][1] = y;
     mat[2][2] = z;
 }
 
-void MA_BuildAxisRotation(idMat4& mat, float ang, int axis) {
+void MA_BuildAxisRotation(idMat4 &mat, float ang, int axis) {
 
     float sinAng = idMath::Sin(ang);
     float cosAng = idMath::Cos(ang);
@@ -979,11 +979,11 @@ void MA_BuildAxisRotation(idMat4& mat, float ang, int axis) {
     }
 }
 
-void MA_ApplyTransformation(maModel_t* model) {
+void MA_ApplyTransformation(maModel_t *model) {
 
     for (int i = 0; i < model->objects.Num(); i++) {
-        maMesh_t* mesh = &model->objects[i]->mesh;
-        maTransform_t* transform = mesh->transform;
+        maMesh_t *mesh = &model->objects[i]->mesh;
+        maTransform_t *transform = mesh->transform;
 
 
 
@@ -1031,7 +1031,7 @@ void MA_ApplyTransformation(maModel_t* model) {
 MA_Parse
 =================
 */
-maModel_t* MA_Parse(const char* buffer, const char* filename, bool verbose) {
+maModel_t *MA_Parse(const char *buffer, const char *filename, bool verbose) {
     memset(&maGlobal, 0, sizeof(maGlobal));
 
     maGlobal.verbose = verbose;
@@ -1080,12 +1080,12 @@ maModel_t* MA_Parse(const char* buffer, const char* filename, bool verbose) {
 MA_Load
 =================
 */
-maModel_t* MA_Load(const char* fileName) {
-    char* buf;
+maModel_t *MA_Load(const char *fileName) {
+    char *buf;
     ID_TIME_T timeStamp;
-    maModel_t* ma;
+    maModel_t *ma;
 
-    fileSystem->ReadFile(fileName, (void**)&buf, &timeStamp);
+    fileSystem->ReadFile(fileName, (void **)&buf, &timeStamp);
 
     if (!buf) {
         return NULL;
@@ -1094,7 +1094,7 @@ maModel_t* MA_Load(const char* fileName) {
     try {
         ma = MA_Parse(buf, fileName, false);
         ma->timeStamp = timeStamp;
-    } catch (idException& e) {
+    } catch (idException &e) {
         common->Warning("%s", e.error);
 
         if (maGlobal.model) {
@@ -1114,11 +1114,11 @@ maModel_t* MA_Load(const char* fileName) {
 MA_Free
 =================
 */
-void MA_Free(maModel_t* ma) {
+void MA_Free(maModel_t *ma) {
     int                 i;
-    maObject_t*          obj;
-    maMesh_t*            mesh;
-    maMaterial_t*        material;
+    maObject_t          *obj;
+    maMesh_t            *mesh;
+    maMaterial_t        *material;
 
     if (!ma) {
         return;
@@ -1170,7 +1170,7 @@ void MA_Free(maModel_t* ma) {
 
     ma->materials.Clear();
 
-    maTransform_t** trans;
+    maTransform_t **trans;
 
     for (i = 0; i < ma->transforms.Num(); i++) {
         trans = ma->transforms.GetIndex(i);
@@ -1180,7 +1180,7 @@ void MA_Free(maModel_t* ma) {
     ma->transforms.Clear();
 
 
-    maFileNode_t** fileNode;
+    maFileNode_t **fileNode;
 
     for (i = 0; i < ma->fileNodes.Num(); i++) {
         fileNode = ma->fileNodes.GetIndex(i);
@@ -1189,7 +1189,7 @@ void MA_Free(maModel_t* ma) {
 
     ma->fileNodes.Clear();
 
-    maMaterialNode_t** matNode;
+    maMaterialNode_t **matNode;
 
     for (i = 0; i < ma->materialNodes.Num(); i++) {
         matNode = ma->materialNodes.GetIndex(i);

@@ -36,7 +36,7 @@ struct idGSWinVar {
         var = NULL;
         own = false;
     }
-    idWinVar* var;
+    idWinVar *var;
     bool own;
 };
 
@@ -50,13 +50,13 @@ class idGuiScript {
     idGuiScript();
     ~idGuiScript();
 
-    bool Parse(idParser* src);
-    void Execute(idWindow* win) {
+    bool Parse(idParser *src);
+    void Execute(idWindow *win) {
         if (handler) {
             handler(win, &parms);
         }
     }
-    void FixupParms(idWindow* win);
+    void FixupParms(idWindow *win);
     size_t Size() {
         int sz = sizeof(*this);
 
@@ -67,21 +67,21 @@ class idGuiScript {
         return sz;
     }
 
-    void WriteToSaveGame(idFile* savefile);
-    void ReadFromSaveGame(idFile* savefile);
+    void WriteToSaveGame(idFile *savefile);
+    void ReadFromSaveGame(idFile *savefile);
 
   protected:
     int conditionReg;
-    idGuiScriptList* ifList;
-    idGuiScriptList* elseList;
+    idGuiScriptList *ifList;
+    idGuiScriptList *elseList;
     idList<idGSWinVar> parms;
-    void (*handler)(idWindow* window, idList<idGSWinVar>* src);
+    void (*handler)(idWindow *window, idList<idGSWinVar> *src);
 
 };
 
 
 class idGuiScriptList {
-    idList<idGuiScript*> list;
+    idList<idGuiScript *> list;
   public:
     idGuiScriptList() {
         list.SetGranularity(4);
@@ -89,8 +89,8 @@ class idGuiScriptList {
     ~idGuiScriptList() {
         list.DeleteContents(true);
     };
-    void Execute(idWindow* win);
-    void Append(idGuiScript* gs) {
+    void Execute(idWindow *win);
+    void Append(idGuiScript *gs) {
         list.Append(gs);
     }
     size_t Size() {
@@ -102,12 +102,12 @@ class idGuiScriptList {
 
         return sz;
     }
-    void FixupParms(idWindow* win);
-    void ReadFromDemoFile(class idDemoFile* f) {};
-    void WriteToDemoFile(class idDemoFile* f) {};
+    void FixupParms(idWindow *win);
+    void ReadFromDemoFile(class idDemoFile *f) {};
+    void WriteToDemoFile(class idDemoFile *f) {};
 
-    void WriteToSaveGame(idFile* savefile);
-    void ReadFromSaveGame(idFile* savefile);
+    void WriteToSaveGame(idFile *savefile);
+    void ReadFromSaveGame(idFile *savefile);
 };
 
 #endif // __GUISCRIPT_H

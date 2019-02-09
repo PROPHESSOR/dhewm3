@@ -79,17 +79,17 @@ class idPlayerStart : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
-    virtual bool        ClientReceiveEvent(int event, int time, const idBitMsg& msg);
+    virtual bool        ClientReceiveEvent(int event, int time, const idBitMsg &msg);
 
   private:
     int                 teleportStage;
 
-    void                Event_TeleportPlayer(idEntity* activator);
-    void                Event_TeleportStage(idEntity* player);
-    void                TeleportPlayer(idPlayer* player);
+    void                Event_TeleportPlayer(idEntity *activator);
+    void                Event_TeleportStage(idEntity *player);
+    void                TeleportPlayer(idPlayer *player);
 };
 
 
@@ -110,15 +110,15 @@ class idActivator : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Think(void);
 
   private:
     bool                stay_on;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -137,7 +137,7 @@ class idPathCorner : public idEntity {
 
     static void         DrawDebugInfo(void);
 
-    static idPathCorner* RandomPath(const idEntity* source, const idEntity* ignore);
+    static idPathCorner *RandomPath(const idEntity *source, const idEntity *ignore);
 
   private:
     void                Event_RandomPath(void);
@@ -158,11 +158,11 @@ class idDamagable : public idEntity {
 
     idDamagable(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
-    void                Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
+    void                Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
 
     #ifdef _D3XP
     virtual void        Hide(void);
@@ -173,8 +173,8 @@ class idDamagable : public idEntity {
     int                 count;
     int                 nextTriggerTime;
 
-    void                BecomeBroken(idEntity* activator);
-    void                Event_BecomeBroken(idEntity* activator);
+    void                BecomeBroken(idEntity *activator);
+    void                Event_BecomeBroken(idEntity *activator);
     void                Event_RestoreDamagable(void);
 };
 
@@ -194,7 +194,7 @@ class idExplodable : public idEntity {
     void                Spawn(void);
 
   private:
-    void                Event_Explode(idEntity* activator);
+    void                Event_Explode(idEntity *activator);
 };
 
 
@@ -215,8 +215,8 @@ class idSpring : public idEntity {
     virtual void        Think(void);
 
   private:
-    idEntity*           ent1;
-    idEntity*           ent2;
+    idEntity           *ent1;
+    idEntity           *ent2;
     int                 id1;
     int                 id2;
     idVec3              p1;
@@ -239,8 +239,8 @@ class idForceField : public idEntity {
   public:
     CLASS_PROTOTYPE(idForceField);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
@@ -251,7 +251,7 @@ class idForceField : public idEntity {
 
     void                Toggle(void);
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_Toggle(void);
     void                Event_FindTargets(void);
 };
@@ -272,13 +272,13 @@ class idAnimated : public idAFEntity_Gibbable {
     idAnimated();
     ~idAnimated();
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     void                    Spawn(void);
     virtual bool            LoadAF(void);
     bool                    StartRagdoll(void);
-    virtual bool            GetPhysicsToSoundTransform(idVec3& origin, idMat3& axis);
+    virtual bool            GetPhysicsToSoundTransform(idVec3 &origin, idMat3 &axis);
 
   private:
     int                     num_anims;
@@ -291,15 +291,15 @@ class idAnimated : public idAFEntity_Gibbable {
 
     void                    PlayNextAnim(void);
 
-    void                    Event_Activate(idEntity* activator);
+    void                    Event_Activate(idEntity *activator);
     void                    Event_Start(void);
     void                    Event_StartRagdoll(void);
     void                    Event_AnimDone(int animIndex);
     void                    Event_Footstep(void);
-    void                    Event_LaunchMissiles(const char* projectilename, const char* sound, const char* launchjoint, const char* targetjoint, int numshots, int framedelay);
+    void                    Event_LaunchMissiles(const char *projectilename, const char *sound, const char *launchjoint, const char *targetjoint, int numshots, int framedelay);
     void                    Event_LaunchMissilesUpdate(int launchjoint, int targetjoint, int numshots, int framedelay);
     #ifdef _D3XP
-    void                    Event_SetAnimation(const char* animName);
+    void                    Event_SetAnimation(const char *animName);
     void                    Event_GetAnimationLength();
     #endif
 };
@@ -319,21 +319,21 @@ class idStaticEntity : public idEntity {
 
     idStaticEntity(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
     void                ShowEditingDialog(void);
     virtual void        Hide(void);
     virtual void        Show(void);
-    void                Fade(const idVec4& to, float fadeTime);
+    void                Fade(const idVec4 &to, float fadeTime);
     virtual void        Think(void);
 
-    virtual void        WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void        ReadFromSnapshot(const idBitMsgDelta& msg);
+    virtual void        WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void        ReadFromSnapshot(const idBitMsgDelta &msg);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
     int                 spawnTime;
     bool                active;
@@ -359,14 +359,14 @@ class idFuncEmitter : public idStaticEntity {
 
     idFuncEmitter(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
-    virtual void        WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void        ReadFromSnapshot(const idBitMsgDelta& msg);
+    virtual void        WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void        ReadFromSnapshot(const idBitMsgDelta &msg);
 
   private:
     bool                hidden;
@@ -390,15 +390,15 @@ class idFuncSmoke : public idEntity {
 
     void                    Spawn(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     virtual void            Think(void);
-    void                    Event_Activate(idEntity* activator);
+    void                    Event_Activate(idEntity *activator);
 
   private:
     int                     smokeTime;
-    const idDeclParticle*   smoke;
+    const idDeclParticle   *smoke;
     bool                    restart;
 };
 
@@ -420,7 +420,7 @@ class idFuncSplat : public idFuncEmitter {
     void                Spawn(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_Splat();
 };
 
@@ -439,8 +439,8 @@ class idTextEntity : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Think(void);
 
@@ -464,7 +464,7 @@ class idLocationEntity : public idEntity {
 
     void                Spawn(void);
 
-    const char*         GetLocation(void) const;
+    const char         *GetLocation(void) const;
 
   private:
 };
@@ -486,10 +486,10 @@ class idVacuumSeparatorEntity : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
   private:
     qhandle_t           portal;
@@ -521,22 +521,22 @@ class idBeam : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Think(void);
 
-    void                SetMaster(idBeam* masterbeam);
-    void                SetBeamTarget(const idVec3& origin);
+    void                SetMaster(idBeam *masterbeam);
+    void                SetBeamTarget(const idVec3 &origin);
 
     virtual void        Show(void);
 
-    virtual void        WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void        ReadFromSnapshot(const idBitMsgDelta& msg);
+    virtual void        WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void        ReadFromSnapshot(const idBitMsgDelta &msg);
 
   private:
     void                Event_MatchTarget(void);
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
     idEntityPtr<idBeam> target;
     idEntityPtr<idBeam> master;
@@ -559,14 +559,14 @@ class idLiquid : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
-    void                Event_Touch(idEntity* other, trace_t* trace);
+    void                Event_Touch(idEntity *other, trace_t *trace);
 
 
-    idRenderModelLiquid* model;
+    idRenderModelLiquid *model;
 };
 
 
@@ -586,15 +586,15 @@ class idShaking : public idEntity {
 
     void                    Spawn(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
   private:
     idPhysics_Parametric    physicsObj;
     bool                    active;
 
     void                    BeginShaking(void);
-    void                    Event_Activate(idEntity* activator);
+    void                    Event_Activate(idEntity *activator);
 };
 
 
@@ -614,8 +614,8 @@ class idEarthQuake : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Think(void);
 
@@ -629,7 +629,7 @@ class idEarthQuake : public idEntity {
     bool                disabled;
     float               shakeTime;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -649,14 +649,14 @@ class idFuncPortal : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     qhandle_t           portal;
     bool                state;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -675,13 +675,13 @@ class idFuncAASPortal : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     bool                state;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -700,13 +700,13 @@ class idFuncAASObstacle : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     bool                state;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -726,13 +726,13 @@ class idFuncRadioChatter : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     float               time;
-    void                Event_Activate(idEntity* activator);
-    void                Event_ResetRadioHud(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
+    void                Event_ResetRadioHud(idEntity *activator);
 };
 
 
@@ -752,15 +752,15 @@ class idPhantomObjects : public idEntity {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Think(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_Throw(void);
-    void                Event_ShakeObject(idEntity* object, int starttime);
+    void                Event_ShakeObject(idEntity *object, int starttime);
 
     int                 end_time;
     float               throw_time;
@@ -792,11 +792,11 @@ class idShockwave : public idEntity {
     void                Spawn(void);
     void                Think(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
     bool                isActive;
     int                 startTime;
@@ -831,19 +831,19 @@ class idFuncMountedObject : public idEntity {
     void                Spawn(void);
     void                Think(void);
 
-    void                GetAngleRestrictions(int& yaw_min, int& yaw_max, int& pitch);
+    void                GetAngleRestrictions(int &yaw_min, int &yaw_max, int &pitch);
 
   private:
     int                 harc;
     int                 varc;
 
-    void                Event_Touch(idEntity* other, trace_t* trace);
-    void                Event_Activate(idEntity* activator);
+    void                Event_Touch(idEntity *other, trace_t *trace);
+    void                Event_Activate(idEntity *activator);
 
   public:
     bool                isMounted;
-    function_t*         scriptFunction;
-    idPlayer*           mountedPlayer;
+    function_t         *scriptFunction;
+    idPlayer           *mountedPlayer;
 };
 
 
@@ -860,7 +860,7 @@ class idFuncMountedWeapon : public idFuncMountedObject {
   private:
 
     // The actual turret that moves with the player's view
-    idEntity*           turret;
+    idEntity           *turret;
 
     // the muzzle bone's position, used for launching projectiles and trailing smoke
     idVec3              muzzleOrigin;
@@ -869,9 +869,9 @@ class idFuncMountedWeapon : public idFuncMountedObject {
     float               weaponLastFireTime;
     float               weaponFireDelay;
 
-    const idDict*       projectile;
+    const idDict       *projectile;
 
-    const idSoundShader* soundFireWeapon;
+    const idSoundShader *soundFireWeapon;
 
     void                Event_PostSpawn(void);
 };
@@ -892,7 +892,7 @@ class idPortalSky : public idEntity {
 
     void                Spawn(void);
     void                Event_PostSpawn();
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 #endif /* _D3XP */

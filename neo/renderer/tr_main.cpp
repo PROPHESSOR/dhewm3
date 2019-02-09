@@ -96,7 +96,7 @@ void idScreenRect::Expand() {
 idScreenRect::Intersect
 ======================
 */
-void idScreenRect::Intersect(const idScreenRect& rect) {
+void idScreenRect::Intersect(const idScreenRect &rect) {
     if (rect.x1 > x1) {
         x1 = rect.x1;
     }
@@ -119,7 +119,7 @@ void idScreenRect::Intersect(const idScreenRect& rect) {
 idScreenRect::Union
 ======================
 */
-void idScreenRect::Union(const idScreenRect& rect) {
+void idScreenRect::Union(const idScreenRect &rect) {
     if (rect.x1 < x1) {
         x1 = rect.x1;
     }
@@ -142,7 +142,7 @@ void idScreenRect::Union(const idScreenRect& rect) {
 idScreenRect::Equals
 ======================
 */
-bool idScreenRect::Equals(const idScreenRect& rect) const {
+bool idScreenRect::Equals(const idScreenRect &rect) const {
     return (x1 == rect.x1 && x2 == rect.x2 && y1 == rect.y1 && y2 == rect.y2);
 }
 
@@ -160,7 +160,7 @@ bool idScreenRect::IsEmpty() const {
 R_ScreenRectFromViewFrustumBounds
 ======================
 */
-idScreenRect R_ScreenRectFromViewFrustumBounds(const idBounds& bounds) {
+idScreenRect R_ScreenRectFromViewFrustumBounds(const idBounds &bounds) {
     idScreenRect screenRect;
 
     screenRect.x1 = idMath::FtoiFast(0.5f * (1.0f - bounds[1].y) * (tr.viewDef->viewport.x2 - tr.viewDef->viewport.x1));
@@ -181,7 +181,7 @@ idScreenRect R_ScreenRectFromViewFrustumBounds(const idBounds& bounds) {
 R_ShowColoredScreenRect
 ======================
 */
-void R_ShowColoredScreenRect(const idScreenRect& rect, int colorIndex) {
+void R_ShowColoredScreenRect(const idScreenRect &rect, int colorIndex) {
     if (!rect.IsEmpty()) {
         static idVec4 colors[] = { colorRed, colorGreen, colorBlue, colorYellow, colorMagenta, colorCyan, colorWhite, colorPurple };
         tr.viewDef->renderWorld->DebugScreenRect(colors[colorIndex & 7], rect, tr.viewDef);
@@ -201,8 +201,8 @@ void R_ToggleSmpFrame(void) {
     R_FreeDeferredTriSurfs(frameData);
 
     // clear frame-temporary data
-    frameData_t*     frame;
-    frameMemoryBlock_t*  block;
+    frameData_t     *frame;
+    frameMemoryBlock_t  *block;
 
     // update the highwater mark
     R_CountFrameData();
@@ -231,8 +231,8 @@ R_ShutdownFrameData
 =====================
 */
 void R_ShutdownFrameData(void) {
-    frameData_t* frame;
-    frameMemoryBlock_t* block;
+    frameData_t *frame;
+    frameMemoryBlock_t *block;
 
     // free any current data
     frame = frameData;
@@ -243,7 +243,7 @@ void R_ShutdownFrameData(void) {
 
     R_FreeDeferredTriSurfs(frame);
 
-    frameMemoryBlock_t* nextBlock;
+    frameMemoryBlock_t *nextBlock;
 
     for (block = frame->memory ; block ; block = nextBlock) {
         nextBlock = block->next;
@@ -261,15 +261,15 @@ R_InitFrameData
 */
 void R_InitFrameData(void) {
     int size;
-    frameData_t* frame;
-    frameMemoryBlock_t* block;
+    frameData_t *frame;
+    frameMemoryBlock_t *block;
 
     R_ShutdownFrameData();
 
-    frameData = (frameData_t*)Mem_ClearedAlloc(sizeof(*frameData));
+    frameData = (frameData_t *)Mem_ClearedAlloc(sizeof(*frameData));
     frame = frameData;
     size = MEMORY_BLOCK_SIZE;
-    block = (frameMemoryBlock_t*)Mem_Alloc(size + sizeof(*block));
+    block = (frameMemoryBlock_t *)Mem_Alloc(size + sizeof(*block));
 
     if (!block) {
         common->FatalError("R_InitFrameData: Mem_Alloc() failed");
@@ -290,8 +290,8 @@ R_CountFrameData
 ================
 */
 int R_CountFrameData(void) {
-    frameData_t*     frame;
-    frameMemoryBlock_t*  block;
+    frameData_t     *frame;
+    frameMemoryBlock_t  *block;
     int             count;
 
     count = 0;
@@ -318,8 +318,8 @@ int R_CountFrameData(void) {
 R_StaticAlloc
 =================
 */
-void* R_StaticAlloc(int bytes) {
-    void*    buf;
+void *R_StaticAlloc(int bytes) {
+    void    *buf;
 
     tr.pc.c_alloc++;
 
@@ -340,8 +340,8 @@ void* R_StaticAlloc(int bytes) {
 R_ClearedStaticAlloc
 =================
 */
-void* R_ClearedStaticAlloc(int bytes) {
-    void*    buf;
+void *R_ClearedStaticAlloc(int bytes) {
+    void    *buf;
 
     buf = R_StaticAlloc(bytes);
     SIMDProcessor->Memset(buf, 0, bytes);
@@ -353,7 +353,7 @@ void* R_ClearedStaticAlloc(int bytes) {
 R_StaticFree
 =================
 */
-void R_StaticFree(void* data) {
+void R_StaticFree(void *data) {
     tr.pc.c_free++;
     Mem_Free(data);
 }
@@ -383,10 +383,10 @@ The memory is NOT zero filled.
 Should part of this be inlined in a macro?
 ================
 */
-void* R_FrameAlloc(int bytes) {
-    frameData_t*     frame;
-    frameMemoryBlock_t*  block;
-    void*            buf;
+void *R_FrameAlloc(int bytes) {
+    frameData_t     *frame;
+    frameMemoryBlock_t  *block;
+    void            *buf;
 
     bytes = (bytes+16)&~15;
     // see if it can be satisfied in the current block
@@ -408,7 +408,7 @@ void* R_FrameAlloc(int bytes) {
         int     size;
 
         size = MEMORY_BLOCK_SIZE;
-        block = (frameMemoryBlock_t*)Mem_Alloc(size + sizeof(*block));
+        block = (frameMemoryBlock_t *)Mem_Alloc(size + sizeof(*block));
 
         if (!block) {
             common->FatalError("R_FrameAlloc: Mem_Alloc() failed");
@@ -438,8 +438,8 @@ void* R_FrameAlloc(int bytes) {
 R_ClearedFrameAlloc
 ==================
 */
-void* R_ClearedFrameAlloc(int bytes) {
-    void*    r;
+void *R_ClearedFrameAlloc(int bytes) {
+    void    *r;
 
     r = R_FrameAlloc(bytes);
     SIMDProcessor->Memset(r, 0, bytes);
@@ -459,14 +459,14 @@ use either static or frame memory can set function pointers
 to both alloc and free.
 ==================
 */
-void R_FrameFree(void* data) {
+void R_FrameFree(void *data) {
 }
 
 
 
 //==========================================================================
 
-void R_AxisToModelMatrix(const idMat3& axis, const idVec3& origin, float modelMatrix[16]) {
+void R_AxisToModelMatrix(const idMat3 &axis, const idVec3 &origin, float modelMatrix[16]) {
     modelMatrix[0] = axis[0][0];
     modelMatrix[4] = axis[1][0];
     modelMatrix[8] = axis[2][0];
@@ -491,7 +491,7 @@ void R_AxisToModelMatrix(const idMat3& axis, const idVec3& origin, float modelMa
 
 // FIXME: these assume no skewing or scaling transforms
 
-void R_LocalPointToGlobal(const float modelMatrix[16], const idVec3& in, idVec3& out) {
+void R_LocalPointToGlobal(const float modelMatrix[16], const idVec3 &in, idVec3 &out) {
     #if defined(__GNUC__) && defined(__SSE2__)
     __m128 m0, m1, m2, m3;
     __m128 in0, in1, in2;
@@ -532,7 +532,7 @@ void R_LocalPointToGlobal(const float modelMatrix[16], const idVec3& in, idVec3&
     #endif
 }
 
-void R_PointTimesMatrix(const float modelMatrix[16], const idVec4& in, idVec4& out) {
+void R_PointTimesMatrix(const float modelMatrix[16], const idVec4 &in, idVec4 &out) {
     out[0] = in[0] * modelMatrix[0] + in[1] * modelMatrix[4]
              + in[2] * modelMatrix[8] + modelMatrix[12];
     out[1] = in[0] * modelMatrix[1] + in[1] * modelMatrix[5]
@@ -543,7 +543,7 @@ void R_PointTimesMatrix(const float modelMatrix[16], const idVec4& in, idVec4& o
              + in[2] * modelMatrix[11] + modelMatrix[15];
 }
 
-void R_GlobalPointToLocal(const float modelMatrix[16], const idVec3& in, idVec3& out) {
+void R_GlobalPointToLocal(const float modelMatrix[16], const idVec3 &in, idVec3 &out) {
     idVec3  temp;
 
     VectorSubtract(in, &modelMatrix[12], temp);
@@ -553,7 +553,7 @@ void R_GlobalPointToLocal(const float modelMatrix[16], const idVec3& in, idVec3&
     out[2] = DotProduct(temp, &modelMatrix[8]);
 }
 
-void R_LocalVectorToGlobal(const float modelMatrix[16], const idVec3& in, idVec3& out) {
+void R_LocalVectorToGlobal(const float modelMatrix[16], const idVec3 &in, idVec3 &out) {
     out[0] = in[0] * modelMatrix[0] + in[1] * modelMatrix[4]
              + in[2] * modelMatrix[8];
     out[1] = in[0] * modelMatrix[1] + in[1] * modelMatrix[5]
@@ -562,20 +562,20 @@ void R_LocalVectorToGlobal(const float modelMatrix[16], const idVec3& in, idVec3
              + in[2] * modelMatrix[10];
 }
 
-void R_GlobalVectorToLocal(const float modelMatrix[16], const idVec3& in, idVec3& out) {
+void R_GlobalVectorToLocal(const float modelMatrix[16], const idVec3 &in, idVec3 &out) {
     out[0] = DotProduct(in, &modelMatrix[0]);
     out[1] = DotProduct(in, &modelMatrix[4]);
     out[2] = DotProduct(in, &modelMatrix[8]);
 }
 
-void R_GlobalPlaneToLocal(const float modelMatrix[16], const idPlane& in, idPlane& out) {
+void R_GlobalPlaneToLocal(const float modelMatrix[16], const idPlane &in, idPlane &out) {
     out[0] = DotProduct(in, &modelMatrix[0]);
     out[1] = DotProduct(in, &modelMatrix[4]);
     out[2] = DotProduct(in, &modelMatrix[8]);
     out[3] = in[3] + modelMatrix[12] * in[0] + modelMatrix[13] * in[1] + modelMatrix[14] * in[2];
 }
 
-void R_LocalPlaneToGlobal(const float modelMatrix[16], const idPlane& in, idPlane& out) {
+void R_LocalPlaneToGlobal(const float modelMatrix[16], const idPlane &in, idPlane &out) {
     float   offset;
 
     R_LocalVectorToGlobal(modelMatrix, in.Normal(), out.Normal());
@@ -585,7 +585,7 @@ void R_LocalPlaneToGlobal(const float modelMatrix[16], const idPlane& in, idPlan
 }
 
 // transform Z in eye coordinates to window coordinates
-void R_TransformEyeZToWin(float src_z, const float* projectionMatrix, float& dst_z) {
+void R_TransformEyeZToWin(float src_z, const float *projectionMatrix, float &dst_z) {
     float clip_z, clip_w;
 
     // projection
@@ -608,12 +608,12 @@ A fast, conservative center-to-corner culling test
 Returns true if the box is outside the given global frustum, (positive sides are out)
 =================
 */
-bool R_RadiusCullLocalBox(const idBounds& bounds, const float modelMatrix[16], int numPlanes, const idPlane* planes) {
+bool R_RadiusCullLocalBox(const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes) {
     int         i;
     float       d;
     idVec3      worldOrigin;
     float       worldRadius;
-    const idPlane*   frust;
+    const idPlane   *frust;
 
     if (r_useCulling.GetInteger() == 0) {
         return false;
@@ -647,12 +647,12 @@ Can still generate a few false positives when the box is outside a corner.
 Returns true if the box is outside the given global frustum, (positive sides are out)
 =================
 */
-bool R_CornerCullLocalBox(const idBounds& bounds, const float modelMatrix[16], int numPlanes, const idPlane* planes) {
+bool R_CornerCullLocalBox(const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes) {
     int         i, j;
     idVec3      transformed[8];
     float       dists[8];
     idVec3      v;
-    const idPlane* frust;
+    const idPlane *frust;
 
     // we can disable box culling for experimental timing purposes
     if (r_useCulling.GetInteger() < 2) {
@@ -700,7 +700,7 @@ Performs quick test before expensive test
 Returns true if the box is outside the given global frustum, (positive sides are out)
 =================
 */
-bool R_CullLocalBox(const idBounds& bounds, const float modelMatrix[16], int numPlanes, const idPlane* planes) {
+bool R_CullLocalBox(const idBounds &bounds, const float modelMatrix[16], int numPlanes, const idPlane *planes) {
     if (R_RadiusCullLocalBox(bounds, modelMatrix, numPlanes, planes)) {
         return true;
     }
@@ -713,7 +713,7 @@ bool R_CullLocalBox(const idBounds& bounds, const float modelMatrix[16], int num
 R_TransformModelToClip
 ==========================
 */
-void R_TransformModelToClip(const idVec3& src, const float* modelMatrix, const float* projectionMatrix, idPlane& eye, idPlane& dst) {
+void R_TransformModelToClip(const idVec3 &src, const float *modelMatrix, const float *projectionMatrix, idPlane &eye, idPlane &dst) {
     int i;
 
     for (i = 0 ; i < 4 ; i++) {
@@ -740,7 +740,7 @@ R_GlobalToNormalizedDeviceCoordinates
 -1 to 1 range in x, y, and z
 ==========================
 */
-void R_GlobalToNormalizedDeviceCoordinates(const idVec3& global, idVec3& ndc) {
+void R_GlobalToNormalizedDeviceCoordinates(const idVec3 &global, idVec3 &ndc) {
     int     i;
     idPlane view;
     idPlane clip;
@@ -797,7 +797,7 @@ R_TransformClipToDevice
 Clip to normalized device coordinates
 ==========================
 */
-void R_TransformClipToDevice(const idPlane& clip, const viewDef_t* view, idVec3& normalized) {
+void R_TransformClipToDevice(const idPlane &clip, const viewDef_t *view, idVec3 &normalized) {
     normalized[0] = clip[0] / clip[3];
     normalized[1] = clip[1] / clip[3];
     normalized[2] = clip[2] / clip[3];
@@ -865,9 +865,9 @@ R_SetViewMatrix
 Sets up the world to view matrix for a given viewParm
 =================
 */
-void R_SetViewMatrix(viewDef_t* viewDef) {
+void R_SetViewMatrix(viewDef_t *viewDef) {
     idVec3  origin;
-    viewEntity_t* world;
+    viewEntity_t *world;
     float   viewerMatrix[16];
     static float    s_flipMatrix[16] = {
         // convert from our coordinate system (looking down X)
@@ -1051,11 +1051,11 @@ static void R_ConstrainViewFrustum(void) {
     // constrain the view frustum to the total bounds of all visible lights and visible entities
     bounds.Clear();
 
-    for (viewLight_t* vLight = tr.viewDef->viewLights; vLight; vLight = vLight->next) {
+    for (viewLight_t *vLight = tr.viewDef->viewLights; vLight; vLight = vLight->next) {
         bounds.AddBounds(vLight->lightDef->frustumTris->bounds);
     }
 
-    for (viewEntity_t* vEntity = tr.viewDef->viewEntitys; vEntity; vEntity = vEntity->next) {
+    for (viewEntity_t *vEntity = tr.viewDef->viewEntitys; vEntity; vEntity = vEntity->next) {
         bounds.AddBounds(vEntity->entityDef->referenceBounds);
     }
 
@@ -1081,11 +1081,11 @@ R_QsortSurfaces
 
 =======================
 */
-static int R_QsortSurfaces(const void* a, const void* b) {
-    const drawSurf_t*    ea, *eb;
+static int R_QsortSurfaces(const void *a, const void *b) {
+    const drawSurf_t    *ea, *eb;
 
-    ea = *(drawSurf_t**)a;
-    eb = *(drawSurf_t**)b;
+    ea = *(drawSurf_t **)a;
+    eb = *(drawSurf_t **)b;
 
     if (ea->sort < eb->sort) {
         return -1;
@@ -1129,8 +1129,8 @@ a mirror / remote location, or a 3D view on a gui surface.
 Parms will typically be allocated with R_FrameAlloc
 ================
 */
-void R_RenderView(viewDef_t* parms) {
-    viewDef_t*       oldView;
+void R_RenderView(viewDef_t *parms) {
+    viewDef_t       *oldView;
 
     if (parms->renderView.width <= 0 || parms->renderView.height <= 0) {
         return;
@@ -1158,7 +1158,7 @@ void R_RenderView(viewDef_t* parms) {
 
     // identify all the visible portalAreas, and the entityDefs and
     // lightDefs that are in them and pass culling.
-    static_cast<idRenderWorldLocal*>(parms->renderWorld)->FindViewLightsAndEntities();
+    static_cast<idRenderWorldLocal *>(parms->renderWorld)->FindViewLightsAndEntities();
 
     // constrain the view frustum to the view lights and entities
     R_ConstrainViewFrustum();
@@ -1189,7 +1189,7 @@ void R_RenderView(viewDef_t* parms) {
 
     // write everything needed to the demo file
     if (session->writeDemo) {
-        static_cast<idRenderWorldLocal*>(parms->renderWorld)->WriteVisibleDefs(tr.viewDef);
+        static_cast<idRenderWorldLocal *>(parms->renderWorld)->WriteVisibleDefs(tr.viewDef);
     }
 
     // add the rendering commands for this viewDef

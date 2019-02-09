@@ -36,8 +36,8 @@ class idMD5Anim;
 
 class idRenderWindow : public idWindow {
   public:
-    idRenderWindow(idUserInterfaceLocal* gui);
-    idRenderWindow(idDeviceContext* d, idUserInterfaceLocal* gui);
+    idRenderWindow(idUserInterfaceLocal *gui);
+    idRenderWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
     virtual ~idRenderWindow();
 
     virtual void PostParse();
@@ -47,20 +47,20 @@ class idRenderWindow : public idWindow {
     };
 //
 //
-    virtual idWinVar* GetWinVarByName(const char* _name, bool winLookup = false, drawWin_t** owner = NULL);
+    virtual idWinVar *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 //
 
   private:
     void CommonInit();
-    virtual bool ParseInternalVar(const char* name, idParser* src);
+    virtual bool ParseInternalVar(const char *name, idParser *src);
     void Render(int time);
     void PreRender();
     void BuildAnimation(int time);
     renderView_t refdef;
-    idRenderWorld* world;
+    idRenderWorld *world;
     renderEntity_t worldEntity;
     renderLight_t rLight;
-    const idMD5Anim* modelAnim;
+    const idMD5Anim *modelAnim;
 
     qhandle_t   worldModelDef;
     qhandle_t   lightDef;

@@ -42,20 +42,20 @@ bool    initialized = false;
 #define SLOP_VERTEX             0.01f           // merge xyz coordinates this far apart
 #define SLOP_TEXCOORD           0.001f          // merge texture coordinates this far apart
 
-const char* componentNames[ 6 ] = { "Tx", "Ty", "Tz", "Qx", "Qy", "Qz" };
+const char *componentNames[ 6 ] = { "Tx", "Ty", "Tz", "Qx", "Qy", "Qz" };
 
-idSys*          sys = NULL;
-idCommon*       common = NULL;
-idCVarSystem*   cvarSystem = NULL;
+idSys          *sys = NULL;
+idCommon       *common = NULL;
+idCVarSystem   *cvarSystem = NULL;
 
-idCVar*         idCVar::staticVars = NULL;
+idCVar         *idCVar::staticVars = NULL;
 
 /*
 =================
 MayaError
 =================
 */
-void MayaError(const char* fmt, ...) {
+void MayaError(const char *fmt, ...) {
     va_list argptr;
     char    text[ 8192 ];
 
@@ -72,11 +72,11 @@ FS_WriteFloatString
 =================
 */
 #define MAX_PRINT_MSG   4096
-static int WriteFloatString(FILE* file, const char* fmt, ...) {
+static int WriteFloatString(FILE *file, const char *fmt, ...) {
     long i;
     unsigned long u;
     double f;
-    char* str;
+    char *str;
     int index;
     idStr tmp, format;
     va_list argPtr;
@@ -150,7 +150,7 @@ static int WriteFloatString(FILE* file, const char* fmt, ...) {
                         break;
 
                     case 's':
-                        str = va_arg(argPtr, char*);
+                        str = va_arg(argPtr, char *);
                         index += fprintf(file, format.c_str(), str);
                         break;
 
@@ -208,8 +208,8 @@ Returns false if the osPath tree doesn't match any of the existing
 search paths.
 ================
 */
-bool OSPathToRelativePath(const char* osPath, idStr& qpath, const char* game) {
-    char* s, *base;
+bool OSPathToRelativePath(const char *osPath, idStr &qpath, const char *game) {
+    char *s, *base;
 
     // skip a drive letter?
 
@@ -217,12 +217,12 @@ bool OSPathToRelativePath(const char* osPath, idStr& qpath, const char* game) {
     // Ase files from max may have the form of:
     // "//Purgatory/purgatory/doom/base/models/mapobjects/bitch/hologirl.tga"
     // which won't match any of our drive letter based search paths
-    base = (char*)strstr(osPath, BASE_GAMEDIR);
+    base = (char *)strstr(osPath, BASE_GAMEDIR);
 
     // _D3XP added mod support
     if (base == NULL && strlen(game) > 0) {
 
-        base = s = (char*)strstr(osPath, game);
+        base = s = (char *)strstr(osPath, game);
 
         while (s = strstr(s, game)) {
             s += strlen(game);
@@ -257,7 +257,7 @@ bool OSPathToRelativePath(const char* osPath, idStr& qpath, const char* game) {
 ConvertFromIdSpace
 ===============
 */
-idMat3 ConvertFromIdSpace(const idMat3& idmat) {
+idMat3 ConvertFromIdSpace(const idMat3 &idmat) {
     idMat3 mat;
 
     mat[ 0 ][ 0 ] = idmat[ 0 ][ 0 ];
@@ -280,7 +280,7 @@ idMat3 ConvertFromIdSpace(const idMat3& idmat) {
 ConvertFromIdSpace
 ===============
 */
-idVec3 ConvertFromIdSpace(const idVec3& idpos) {
+idVec3 ConvertFromIdSpace(const idVec3 &idpos) {
     idVec3 pos;
 
     pos.x = idpos.x;
@@ -295,7 +295,7 @@ idVec3 ConvertFromIdSpace(const idVec3& idpos) {
 ConvertToIdSpace
 ===============
 */
-idMat3 ConvertToIdSpace(const idMat3& mat) {
+idMat3 ConvertToIdSpace(const idMat3 &mat) {
     idMat3 idmat;
 
     idmat[ 0 ][ 0 ] = mat[ 0 ][ 0 ];
@@ -318,7 +318,7 @@ idMat3 ConvertToIdSpace(const idMat3& mat) {
 ConvertToIdSpace
 ===============
 */
-idVec3 ConvertToIdSpace(const idVec3& pos) {
+idVec3 ConvertToIdSpace(const idVec3 &pos) {
     idVec3 idpos;
 
     idpos.x = pos.x;
@@ -333,7 +333,7 @@ idVec3 ConvertToIdSpace(const idVec3& pos) {
 idVec
 ===============
 */
-idVec3 idVec(const MFloatPoint& point) {
+idVec3 idVec(const MFloatPoint &point) {
     return idVec3(point[ 0 ], point[ 1 ], point[ 2 ]);
 }
 
@@ -342,7 +342,7 @@ idVec3 idVec(const MFloatPoint& point) {
 idVec
 ===============
 */
-idVec3 idVec(const MMatrix& matrix) {
+idVec3 idVec(const MMatrix &matrix) {
     return idVec3(matrix[ 3 ][ 0 ], matrix[ 3 ][ 1 ], matrix[ 3 ][ 2 ]);
 }
 
@@ -351,7 +351,7 @@ idVec3 idVec(const MMatrix& matrix) {
 idMat
 ===============
 */
-idMat3 idMat(const MMatrix& matrix) {
+idMat3 idMat(const MMatrix &matrix) {
     int     j, k;
     idMat3  mat;
 
@@ -369,7 +369,7 @@ idMat3 idMat(const MMatrix& matrix) {
 GetParent
 ===============
 */
-MFnDagNode* GetParent(MFnDagNode* joint) {
+MFnDagNode *GetParent(MFnDagNode *joint) {
     MStatus     status;
     MObject     parentObject;
 
@@ -393,7 +393,7 @@ MFnDagNode* GetParent(MFnDagNode* joint) {
         }
     }
 
-    MFnDagNode* parentNode;
+    MFnDagNode *parentNode;
 
     parentNode = new MFnDagNode(parentObject, &status);
 
@@ -418,8 +418,8 @@ MFnDagNode* GetParent(MFnDagNode* joint) {
 idTokenizer::SetTokens
 ====================
 */
-int idTokenizer::SetTokens(const char* buffer) {
-    const char* cmd;
+int idTokenizer::SetTokens(const char *buffer) {
+    const char *cmd;
 
     Clear();
 
@@ -436,7 +436,7 @@ int idTokenizer::SetTokens(const char* buffer) {
             break;
         }
 
-        idStr& current = tokens.Alloc();
+        idStr &current = tokens.Alloc();
 
         while (*cmd && !isspace(*cmd)) {
             current += *cmd;
@@ -452,7 +452,7 @@ int idTokenizer::SetTokens(const char* buffer) {
 idTokenizer::NextToken
 ====================
 */
-const char* idTokenizer::NextToken(const char* errorstring) {
+const char *idTokenizer::NextToken(const char *errorstring) {
     if (currentToken < tokens.Num()) {
         return tokens[ currentToken++ ];
     }
@@ -477,7 +477,7 @@ const char* idTokenizer::NextToken(const char* errorstring) {
 idExportOptions::Reset
 ====================
 */
-void idExportOptions::Reset(const char* commandline) {
+void idExportOptions::Reset(const char *commandline) {
     scale           = 1.0f;
     type            = WRITE_MESH;
     startframe      = -1;
@@ -515,11 +515,11 @@ void idExportOptions::Reset(const char* commandline) {
 idExportOptions::idExportOptions
 ====================
 */
-idExportOptions::idExportOptions(const char* commandline, const char* ospath) {
+idExportOptions::idExportOptions(const char *commandline, const char *ospath) {
     idStr       token;
     idNamePair  joints;
     int         i;
-    idAnimGroup* group;
+    idAnimGroup *group;
     idStr       sourceDir;
     idStr       destDir;
 
@@ -741,10 +741,10 @@ idExportOptions::idExportOptions(const char* commandline, const char* ospath) {
 idExportOptions::jointInExportGroup
 ====================
 */
-bool idExportOptions::jointInExportGroup(const char* jointname) {
+bool idExportOptions::jointInExportGroup(const char *jointname) {
     int         i;
     int         j;
-    idAnimGroup* group;
+    idAnimGroup *group;
 
     if (!exportgroups.Num()) {
         // if we don't have any groups specified as export then export every joint
@@ -795,7 +795,7 @@ idExportJoint::idExportJoint() {
     baseFrame.t.Zero();
 }
 
-idExportJoint& idExportJoint::operator=(const idExportJoint& other) {
+idExportJoint &idExportJoint::operator=(const idExportJoint &other) {
     name        = other.name;
     realname    = other.realname;
     longname    = other.longname;
@@ -879,7 +879,7 @@ void idExportMesh::ShareVerts(void) {
     }
 }
 
-void idExportMesh::Merge(idExportMesh* mesh) {
+void idExportMesh::Merge(idExportMesh *mesh) {
     int i;
     int numverts;
     int numtris;
@@ -925,12 +925,12 @@ void idExportMesh::Merge(idExportMesh* mesh) {
     }
 }
 
-void idExportMesh::GetBounds(idBounds& bounds) const {
+void idExportMesh::GetBounds(idBounds &bounds) const {
     int                     i;
     int                     j;
     idVec3                  pos;
-    const exportWeight_t*    weight;
-    const exportVertex_t*    vert;
+    const exportWeight_t    *weight;
+    const exportVertex_t    *vert;
 
     bounds.Clear();
 
@@ -979,8 +979,8 @@ ID_INLINE idExportModel::~idExportModel() {
     meshes.DeleteContents(true);
 }
 
-idExportJoint* idExportModel::FindJointReal(const char* name) {
-    idExportJoint*   joint;
+idExportJoint *idExportModel::FindJointReal(const char *name) {
+    idExportJoint   *joint;
     int             i;
 
     joint = joints.Ptr();
@@ -994,8 +994,8 @@ idExportJoint* idExportModel::FindJointReal(const char* name) {
     return NULL;
 }
 
-idExportJoint* idExportModel::FindJoint(const char* name) {
-    idExportJoint*   joint;
+idExportJoint *idExportModel::FindJoint(const char *name) {
+    idExportJoint   *joint;
     int             i;
 
     joint = joints.Ptr();
@@ -1009,17 +1009,17 @@ idExportJoint* idExportModel::FindJoint(const char* name) {
     return NULL;
 }
 
-bool idExportModel::WriteMesh(const char* filename, idExportOptions& options) {
+bool idExportModel::WriteMesh(const char *filename, idExportOptions &options) {
     int             i, j;
     int             numMeshes;
-    idExportMesh*    mesh;
-    idExportJoint*   joint;
-    idExportJoint*   parent;
-    idExportJoint*   sibling;
-    FILE*            file;
-    const char*      parentName;
+    idExportMesh    *mesh;
+    idExportJoint   *joint;
+    idExportJoint   *parent;
+    idExportJoint   *sibling;
+    FILE            *file;
+    const char      *parentName;
     int             parentNum;
-    idList<idExportJoint*> jointList;
+    idList<idExportJoint *> jointList;
 
     file = fopen(filename, "w");
 
@@ -1118,7 +1118,7 @@ bool idExportModel::WriteMesh(const char* filename, idExportOptions& options) {
         WriteFloatString(file, "\n\tnumweights %d\n", mesh->weights.Num());
 
         for (j = 0; j < mesh->weights.Num(); j++) {
-            exportWeight_t* weight;
+            exportWeight_t *weight;
 
             weight = &mesh->weights[ j ];
             WriteFloatString(file, "\tweight %d %d %f ( %f %f %f )\n", j,
@@ -1133,15 +1133,15 @@ bool idExportModel::WriteMesh(const char* filename, idExportOptions& options) {
     return true;
 }
 
-bool idExportModel::WriteAnim(const char* filename, idExportOptions& options) {
+bool idExportModel::WriteAnim(const char *filename, idExportOptions &options) {
     int             i, j;
-    idExportJoint*   joint;
-    idExportJoint*   parent;
-    idExportJoint*   sibling;
-    jointFrame_t*    frame;
-    FILE*            file;
+    idExportJoint   *joint;
+    idExportJoint   *parent;
+    idExportJoint   *sibling;
+    jointFrame_t    *frame;
+    FILE            *file;
     int             numAnimatedComponents;
-    idList<idExportJoint*> jointList;
+    idList<idExportJoint *> jointList;
 
     file = fopen(filename, "w");
 
@@ -1330,9 +1330,9 @@ bool idExportModel::WriteAnim(const char* filename, idExportOptions& options) {
     return true;
 }
 
-bool idExportModel::WriteCamera(const char* filename, idExportOptions& options) {
+bool idExportModel::WriteCamera(const char *filename, idExportOptions &options) {
     int     i;
-    FILE*    file;
+    FILE    *file;
 
     file = fopen(filename, "w");
 
@@ -1359,7 +1359,7 @@ bool idExportModel::WriteCamera(const char* filename, idExportOptions& options) 
 
     // write out the frames
     WriteFloatString(file, "\ncamera {\n");
-    cameraFrame_t* frame = camera.Ptr();
+    cameraFrame_t *frame = camera.Ptr();
 
     for (i = 0; i < camera.Num(); i++, frame++) {
         WriteFloatString(file, "\t( %f %f %f ) ( %f %f %f ) %f\n", frame->t.x, frame->t.y, frame->t.z, frame->q[ 0 ], frame->q[ 1 ], frame->q[ 2 ], frame->fov);
@@ -1464,13 +1464,13 @@ void idMayaExport::SetFrame(int num) {
 idMayaExport::PruneJoints
 ===============
 */
-void idMayaExport::PruneJoints(idStrList& keepjoints, idStr& prefix) {
+void idMayaExport::PruneJoints(idStrList &keepjoints, idStr &prefix) {
     int             i;
     int             j;
-    idExportMesh*    mesh;
-    idExportJoint*   joint;
-    idExportJoint*   joint2;
-    idExportJoint*   parent;
+    idExportMesh    *mesh;
+    idExportJoint   *joint;
+    idExportJoint   *joint2;
+    idExportJoint   *parent;
     int             num_weights;
 
     // if we don't have any joints specified to keep, mark the ones used by the meshes as keep
@@ -1581,7 +1581,7 @@ void idMayaExport::FreeDagNodes(void) {
 idMayaExport::GetBindPose
 ===============
 */
-void idMayaExport::GetBindPose(MObject& jointNode, idExportJoint* joint, float scale) {
+void idMayaExport::GetBindPose(MObject &jointNode, idExportJoint *joint, float scale) {
     MStatus             status;
     MFnDependencyNode   fnJoint(jointNode);
     MObject             aBindPose = fnJoint.attribute("bindPose", &status);
@@ -1650,7 +1650,7 @@ void idMayaExport::GetBindPose(MObject& jointNode, idExportJoint* joint, float s
 idMayaExport::GetLocalTransform
 ===============
 */
-void idMayaExport::GetLocalTransform(idExportJoint* joint, idVec3& pos, idMat3& mat) {
+void idMayaExport::GetLocalTransform(idExportJoint *joint, idVec3 &pos, idMat3 &mat) {
     MStatus     status;
     MDagPath    dagPath;
 
@@ -1688,8 +1688,8 @@ void idMayaExport::GetLocalTransform(idExportJoint* joint, idVec3& pos, idMat3& 
 idMayaExport::GetWorldTransform
 ===============
 */
-void idMayaExport::GetWorldTransform(idExportJoint* joint, idVec3& pos, idMat3& mat, float scale) {
-    idExportJoint* parent;
+void idMayaExport::GetWorldTransform(idExportJoint *joint, idVec3 &pos, idMat3 &mat, float scale) {
+    idExportJoint *parent;
 
     GetLocalTransform(joint, pos, mat);
     mat.OrthoNormalizeSelf();
@@ -1716,11 +1716,11 @@ idMayaExport::CreateJoints
 void idMayaExport::CreateJoints(float scale) {
     int             i;
     int             j;
-    idExportJoint*   joint;
-    idExportJoint*   parent;
+    idExportJoint   *joint;
+    idExportJoint   *parent;
     MStatus         status;
     MDagPath        dagPath;
-    MFnDagNode*      parentNode;
+    MFnDagNode      *parentNode;
 
     SetFrame(0);
 
@@ -1815,9 +1815,9 @@ void idMayaExport::CreateJoints(float scale) {
 idMayaExport::RenameJoints
 ===============
 */
-void idMayaExport::RenameJoints(idList<idNamePair>& renamejoints, idStr& prefix) {
+void idMayaExport::RenameJoints(idList<idNamePair> &renamejoints, idStr &prefix) {
     int             i;
-    idExportJoint*   joint;
+    idExportJoint   *joint;
 
     // rename joints that match the prefix
     if (prefix.Length()) {
@@ -1846,12 +1846,12 @@ void idMayaExport::RenameJoints(idList<idNamePair>& renamejoints, idStr& prefix)
 idMayaExport::RemapParents
 ===============
 */
-bool idMayaExport::RemapParents(idList<idNamePair>& remapjoints) {
+bool idMayaExport::RemapParents(idList<idNamePair> &remapjoints) {
     int             i;
-    idExportJoint*   joint;
-    idExportJoint*   parent;
-    idExportJoint*   origin;
-    idExportJoint*   sibling;
+    idExportJoint   *joint;
+    idExportJoint   *parent;
+    idExportJoint   *origin;
+    idExportJoint   *sibling;
 
     for (i = 0; i < remapjoints.Num(); i++) {
         // find joint to reparent
@@ -1917,7 +1917,7 @@ idMayaExport::FindShader
 Find the shading node for the given shading group set node.
 ===============
 */
-MObject idMayaExport::FindShader(MObject& setNode) {
+MObject idMayaExport::FindShader(MObject &setNode) {
     MStatus             status;
     MFnDependencyNode   fnNode(setNode);
     MPlug               shaderPlug;
@@ -1948,7 +1948,7 @@ Find the texture files that apply to the color of each polygon of
 a selected shape if the shape has its polygons organized into sets.
 ===============
 */
-void idMayaExport::GetTextureForMesh(idExportMesh* mesh, MFnDagNode& dagNode) {
+void idMayaExport::GetTextureForMesh(idExportMesh *mesh, MFnDagNode &dagNode) {
     MStatus     status;
     MDagPath    path;
     int         i;
@@ -2060,13 +2060,13 @@ void idMayaExport::GetTextureForMesh(idExportMesh* mesh, MFnDagNode& dagNode) {
 idMayaExport::CopyMesh
 ===============
 */
-idExportMesh* idMayaExport::CopyMesh(MFnSkinCluster& skinCluster, float scale) {
+idExportMesh *idMayaExport::CopyMesh(MFnSkinCluster &skinCluster, float scale) {
     MStatus         status;
     MObjectArray    objarray;
     MObjectArray    outputarray;
     int             nGeom;
     int             i, j, k;
-    idExportMesh*    mesh;
+    idExportMesh    *mesh;
     float           uv_u, uv_v;
     idStr           name, altname;
     int             pos;
@@ -2234,7 +2234,7 @@ idMayaExport::CreateMesh
 */
 void idMayaExport::CreateMesh(float scale) {
     size_t          count;
-    idExportMesh*    mesh;
+    idExportMesh    *mesh;
     MStatus         status;
     exportWeight_t  weight;
     unsigned int    nGeoms;
@@ -2294,14 +2294,14 @@ void idMayaExport::CreateMesh(float scale) {
             MItGeometry gIter(skinPath);
 
             // print out the influence objects
-            idList<idExportJoint*> joints;
-            idExportJoint*           joint;
-            exportVertex_t*          vert;
+            idList<idExportJoint *> joints;
+            idExportJoint           *joint;
+            exportVertex_t          *vert;
 
             joints.Resize(nInfs);
 
             for (size_t kk = 0; kk < nInfs; ++kk) {
-                const char* c;
+                const char *c;
                 MString s;
 
                 s = infs[kk].partialPathName();
@@ -2409,9 +2409,9 @@ combine surfaces with the same shader.
 void idMayaExport::CombineMeshes(void) {
     int                     i, j;
     int                     count;
-    idExportMesh*            mesh;
-    idExportMesh*            combine;
-    idList<idExportMesh*>  oldmeshes;
+    idExportMesh            *mesh;
+    idExportMesh            *combine;
+    idList<idExportMesh *>  oldmeshes;
 
     oldmeshes = model.meshes;
     model.meshes.Clear();
@@ -2457,9 +2457,9 @@ void idMayaExport::CombineMeshes(void) {
 idMayaExport::GetAlignment
 ===============
 */
-void idMayaExport::GetAlignment(idStr& alignName, idMat3& align, float rotate, int startframe) {
+void idMayaExport::GetAlignment(idStr &alignName, idMat3 &align, float rotate, int startframe) {
     idVec3          pos;
-    idExportJoint*   joint;
+    idExportJoint   *joint;
     idAngles        ang(0, rotate, 0);
     idMat3          mat;
 
@@ -2505,7 +2505,7 @@ idMayaExport::GetObjectType
 return the type of the object
 ===============
 */
-const char* idMayaExport::GetObjectType(MObject object) {
+const char *idMayaExport::GetObjectType(MObject object) {
     if (object.isNull()) {
         return "(Null)";
     }
@@ -2530,14 +2530,14 @@ const char* idMayaExport::GetObjectType(MObject object) {
 idMayaExport::GetCameraFov
 ===============
 */
-float idMayaExport::GetCameraFov(idExportJoint* joint) {
+float idMayaExport::GetCameraFov(idExportJoint *joint) {
     int     childCount;
     int     j;
     double  horiz;
     double  focal;
     MStatus status;
-    const char* n1, *n2;
-    MFnDagNode* dagnode;
+    const char *n1, *n2;
+    MFnDagNode *dagnode;
     float   fov;
 
     dagnode = joint->dagnode;
@@ -2570,7 +2570,7 @@ float idMayaExport::GetCameraFov(idExportJoint* joint) {
 idMayaExport::GetCameraFrame
 ===============
 */
-void idMayaExport::GetCameraFrame(idExportJoint* camera, idMat3& align, cameraFrame_t* cam) {
+void idMayaExport::GetCameraFrame(idExportJoint *camera, idMat3 &align, cameraFrame_t *cam) {
     idMat3 mat;
     idMat3 axis;
     idVec3 pos;
@@ -2597,15 +2597,15 @@ void idMayaExport::GetCameraFrame(idExportJoint* camera, idMat3& align, cameraFr
 idMayaExport::CreateCameraAnim
 ===============
 */
-void idMayaExport::CreateCameraAnim(idMat3& align) {
+void idMayaExport::CreateCameraAnim(idMat3 &align) {
     float               start, end;
     MDagPath            dagPath;
     int                 frameNum;
     short               v;
     MStatus             status;
     cameraFrame_t       cam;
-    idExportJoint*       refCam;
-    idExportJoint*       camJoint;
+    idExportJoint       *refCam;
+    idExportJoint       *camJoint;
     idStr               currentCam;
     idStr               newCam;
     MPlug               plug;
@@ -2724,12 +2724,12 @@ void idMayaExport::CreateCameraAnim(idMat3& align) {
 idMayaExport::GetDefaultPose
 ===============
 */
-void idMayaExport::GetDefaultPose(idMat3& align) {
+void idMayaExport::GetDefaultPose(idMat3 &align) {
     float           start;
     MDagPath        dagPath;
     idMat3          jointaxis;
     idVec3          jointpos;
-    idExportJoint*   joint, *parent;
+    idExportJoint   *joint, *parent;
     idBounds        bnds;
     idBounds        meshBounds;
     idList<jointFrame_t> frame;
@@ -2818,17 +2818,17 @@ void idMayaExport::GetDefaultPose(idMat3& align) {
 idMayaExport::CreateAnimation
 ===============
 */
-void idMayaExport::CreateAnimation(idMat3& align) {
+void idMayaExport::CreateAnimation(idMat3 &align) {
     int             i;
     float           start, end;
     MDagPath        dagPath;
     idMat3          jointaxis;
     idVec3          jointpos;
     int             frameNum;
-    idExportJoint*   joint, *parent;
+    idExportJoint   *joint, *parent;
     idBounds        bnds;
     idBounds        meshBounds;
-    jointFrame_t*    frame;
+    jointFrame_t    *frame;
     int             cycleStart;
     idVec3          totalDelta;
     idList<jointFrame_t>    copyFrames;
@@ -3003,13 +3003,13 @@ void idMayaExport::ConvertModel(void) {
     common->Printf("Converting %s to %s...\n", options.src.c_str(), options.dest.c_str());
 
     // see if the destination file exists
-    FILE* file = fopen(options.dest, "r");
+    FILE *file = fopen(options.dest, "r");
 
     if (file) {
         fclose(file);
 
         // make sure we can write to the destination
-        FILE* file = fopen(options.dest, "r+");
+        FILE *file = fopen(options.dest, "r+");
 
         if (!file) {
             MayaError("Unable to write to the file '%s'", options.dest.c_str());
@@ -3121,20 +3121,20 @@ idMayaExport::ConvertToMD3
 void idMayaExport::ConvertToMD3(void) {
     #if 0
     int                 i, j;
-    md3Header_t*         pinmodel;
-    md3Frame_t*          frame;
-    md3Surface_t*        surf;
-    md3Shader_t*         shader;
-    md3Triangle_t*       tri;
-    md3St_t*             st;
-    md3XyzNormal_t*      xyz;
-    md3Tag_t*            tag;
+    md3Header_t         *pinmodel;
+    md3Frame_t          *frame;
+    md3Surface_t        *surf;
+    md3Shader_t         *shader;
+    md3Triangle_t       *tri;
+    md3St_t             *st;
+    md3XyzNormal_t      *xyz;
+    md3Tag_t            *tag;
     int                 version;
     int                 size;
 
     //model_t *mod, int lod, void *buffer, const char *mod_name
 
-    pinmodel = (md3Header_t*)buffer;
+    pinmodel = (md3Header_t *)buffer;
 
     version = LittleInt(pinmodel->version);
 
@@ -3167,7 +3167,7 @@ void idMayaExport::ConvertToMD3(void) {
     }
 
     // swap all the frames
-    frame = (md3Frame_t*)((byte*)mod->md3[lod] + mod->md3[lod]->ofsFrames);
+    frame = (md3Frame_t *)((byte *)mod->md3[lod] + mod->md3[lod]->ofsFrames);
 
     for (i = 0 ; i < mod->md3[lod]->numFrames ; i++, frame++) {
         frame->radius = LittleFloat(frame->radius);
@@ -3180,7 +3180,7 @@ void idMayaExport::ConvertToMD3(void) {
     }
 
     // swap all the tags
-    tag = (md3Tag_t*)((byte*)mod->md3[lod] + mod->md3[lod]->ofsTags);
+    tag = (md3Tag_t *)((byte *)mod->md3[lod] + mod->md3[lod]->ofsTags);
 
     for (i = 0 ; i < mod->md3[lod]->numTags * mod->md3[lod]->numFrames ; i++, tag++) {
         for (j = 0 ; j < 3 ; j++) {
@@ -3192,7 +3192,7 @@ void idMayaExport::ConvertToMD3(void) {
     }
 
     // swap all the surfaces
-    surf = (md3Surface_t*)((byte*)mod->md3[lod] + mod->md3[lod]->ofsSurfaces);
+    surf = (md3Surface_t *)((byte *)mod->md3[lod] + mod->md3[lod]->ofsSurfaces);
 
     for (i = 0 ; i < mod->md3[lod]->numSurfaces ; i++) {
 
@@ -3233,10 +3233,10 @@ void idMayaExport::ConvertToMD3(void) {
         }
 
         // register the shaders
-        shader = (md3Shader_t*)((byte*)surf + surf->ofsShaders);
+        shader = (md3Shader_t *)((byte *)surf + surf->ofsShaders);
 
         for (j = 0 ; j < surf->numShaders ; j++, shader++) {
-            shader_t*    sh;
+            shader_t    *sh;
 
             sh = R_FindShader(shader->name, LIGHTMAP_NONE, qtrue);
 
@@ -3248,7 +3248,7 @@ void idMayaExport::ConvertToMD3(void) {
         }
 
         // swap all the triangles
-        tri = (md3Triangle_t*)((byte*)surf + surf->ofsTriangles);
+        tri = (md3Triangle_t *)((byte *)surf + surf->ofsTriangles);
 
         for (j = 0 ; j < surf->numTriangles ; j++, tri++) {
             LL(tri->indexes[0]);
@@ -3257,7 +3257,7 @@ void idMayaExport::ConvertToMD3(void) {
         }
 
         // swap all the ST
-        st = (md3St_t*)((byte*)surf + surf->ofsSt);
+        st = (md3St_t *)((byte *)surf + surf->ofsSt);
 
         for (j = 0 ; j < surf->numVerts ; j++, st++) {
             st->st[0] = LittleFloat(st->st[0]);
@@ -3265,7 +3265,7 @@ void idMayaExport::ConvertToMD3(void) {
         }
 
         // swap all the XyzNormals
-        xyz = (md3XyzNormal_t*)((byte*)surf + surf->ofsXyzNormals);
+        xyz = (md3XyzNormal_t *)((byte *)surf + surf->ofsXyzNormals);
 
         for (j = 0 ; j < surf->numVerts * surf->numFrames ; j++, xyz++) {
             xyz->xyz[0] = LittleShort(xyz->xyz[0]);
@@ -3277,7 +3277,7 @@ void idMayaExport::ConvertToMD3(void) {
 
 
         // find the next surface
-        surf = (md3Surface_t*)((byte*)surf + surf->ofsEnd);
+        surf = (md3Surface_t *)((byte *)surf + surf->ofsEnd);
     }
 
     return true;
@@ -3312,7 +3312,7 @@ void Maya_Shutdown(void) {
 Maya_ConvertModel
 ===============
 */
-const char* Maya_ConvertModel(const char* ospath, const char* commandline) {
+const char *Maya_ConvertModel(const char *ospath, const char *commandline) {
 
     errorMessage = "Ok";
 
@@ -3323,7 +3323,7 @@ const char* Maya_ConvertModel(const char* ospath, const char* commandline) {
         exportM.ConvertModel();
     }
 
-    catch (idException& exception) {
+    catch (idException &exception) {
         errorMessage = exception.error;
     }
 
@@ -3335,7 +3335,7 @@ const char* Maya_ConvertModel(const char* ospath, const char* commandline) {
 dllEntry
 ===============
 */
-bool dllEntry(int version, idCommon* common, idSys* sys) {
+bool dllEntry(int version, idCommon *common, idSys *sys) {
 
     if (!common || !sys) {
         return false;

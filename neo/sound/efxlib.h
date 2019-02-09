@@ -34,14 +34,14 @@ class idEFXFile {
     idEFXFile();
     ~idEFXFile();
 
-    bool FindEffect(idStr& name, ALuint* effect);
-    bool LoadFile(const char* filename, bool OSPath = false);
+    bool FindEffect(idStr &name, ALuint *effect);
+    bool LoadFile(const char *filename, bool OSPath = false);
     void Clear(void);
 
   private:
-    bool ReadEffect(idLexer& lexer, idSoundEffect* effect);
+    bool ReadEffect(idLexer &lexer, idSoundEffect *effect);
 
-    idList<idSoundEffect*>effects;
+    idList<idSoundEffect *>effects;
 };
 
 #endif // __EFXLIBH

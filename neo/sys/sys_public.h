@@ -81,7 +81,7 @@ struct sysEvent_t {
     int             evValue;
     int             evValue2;
     int             evPtrLength;        // bytes of data pointed to by evPtr, for journaling
-    void*           evPtr;              // this must be manually freed if not NULL
+    void           *evPtr;              // this must be manually freed if not NULL
 };
 
 enum sysPath_t {
@@ -96,20 +96,20 @@ template<class type> class idList;      // for Sys_ListFiles
 
 void            Sys_Init(void);
 void            Sys_Shutdown(void);
-void            Sys_Error(const char* error, ...);
+void            Sys_Error(const char *error, ...);
 void            Sys_Quit(void);
 
 // note that this isn't journaled...
-char*           Sys_GetClipboardData(void);
-void            Sys_SetClipboardData(const char* string);
+char           *Sys_GetClipboardData(void);
+void            Sys_SetClipboardData(const char *string);
 
 // will go to the various text consoles
 // NOT thread safe - never use in the async paths
-void            Sys_Printf(const char* msg, ...)id_attribute((format(printf,1,2)));
+void            Sys_Printf(const char *msg, ...)id_attribute((format(printf,1,2)));
 
 // guaranteed to be thread-safe
-void            Sys_DebugPrintf(const char* fmt, ...)id_attribute((format(printf,1,2)));
-void            Sys_DebugVPrintf(const char* fmt, va_list arg);
+void            Sys_DebugPrintf(const char *fmt, ...)id_attribute((format(printf,1,2)));
+void            Sys_DebugVPrintf(const char *fmt, va_list arg);
 
 // allow game to yield CPU time
 // NOTE: due to SDL_TIMESLICE this is very bad portability karma, and should be completely removed
@@ -135,25 +135,25 @@ void            Sys_FPU_SetDAZ(bool enable);
 int             Sys_GetSystemRam(void);
 
 // returns amount of drive space in path
-int             Sys_GetDriveFreeSpace(const char* path);
+int             Sys_GetDriveFreeSpace(const char *path);
 
 // lock and unlock memory
-bool            Sys_LockMemory(void* ptr, int bytes);
-bool            Sys_UnlockMemory(void* ptr, int bytes);
+bool            Sys_LockMemory(void *ptr, int bytes);
+bool            Sys_UnlockMemory(void *ptr, int bytes);
 
 // set amount of physical work memory
 void            Sys_SetPhysicalWorkMemory(int minBytes, int maxBytes);
 
 // DLL loading, the path should be a fully qualified OS path to the DLL file to be loaded
-uintptr_t       Sys_DLL_Load(const char* dllName);
-void*           Sys_DLL_GetProcAddress(uintptr_t dllHandle, const char* procName);
+uintptr_t       Sys_DLL_Load(const char *dllName);
+void           *Sys_DLL_GetProcAddress(uintptr_t dllHandle, const char *procName);
 void            Sys_DLL_Unload(uintptr_t dllHandle);
 
 // event generation
 void            Sys_GenerateEvents(void);
 sysEvent_t      Sys_GetEvent(void);
 void            Sys_ClearEvents(void);
-char*            Sys_ConsoleInput(void);
+char            *Sys_ConsoleInput(void);
 
 // input is tied to windows, so it needs to be started up and shut down whenever
 // the main window is recreated
@@ -168,12 +168,12 @@ unsigned char   Sys_MapCharForKey(int key);
 
 // keyboard input polling
 int             Sys_PollKeyboardInputEvents(void);
-int             Sys_ReturnKeyboardInputEvent(const int n, int& ch, bool& state);
+int             Sys_ReturnKeyboardInputEvent(const int n, int &ch, bool &state);
 void            Sys_EndKeyboardInputEvents(void);
 
 // mouse input polling
 int             Sys_PollMouseInputEvents(void);
-int             Sys_ReturnMouseInputEvent(const int n, int& action, int& value);
+int             Sys_ReturnMouseInputEvent(const int n, int &action, int &value);
 void            Sys_EndMouseInputEvents(void);
 
 // when the console is down, or the game is about to perform a lengthy
@@ -186,16 +186,16 @@ bool            Sys_IsWindowVisible(void);
 void            Sys_ShowConsole(int visLevel, bool quitOnClose);
 
 
-void            Sys_Mkdir(const char* path);
-ID_TIME_T           Sys_FileTimeStamp(FILE* fp);
+void            Sys_Mkdir(const char *path);
+ID_TIME_T           Sys_FileTimeStamp(FILE *fp);
 // NOTE: do we need to guarantee the same output on all platforms?
-const char*     Sys_TimeStampToStr(ID_TIME_T timeStamp);
+const char     *Sys_TimeStampToStr(ID_TIME_T timeStamp);
 
-bool            Sys_GetPath(sysPath_t type, idStr& path);
+bool            Sys_GetPath(sysPath_t type, idStr &path);
 
 // use fs_debug to verbose Sys_ListFiles
 // returns -1 if directory was not found (the list is cleared)
-int             Sys_ListFiles(const char* directory, const char* extension, idList<class idStr>& list);
+int             Sys_ListFiles(const char *directory, const char *extension, idList<class idStr> &list);
 
 /*
 ==============================================================
@@ -235,9 +235,9 @@ class idPort {
     }
     void        Close();
 
-    bool        GetPacket(netadr_t& from, void* data, int& size, int maxSize);
-    bool        GetPacketBlocking(netadr_t& from, void* data, int& size, int maxSize, int timeout);
-    void        SendPacket(const netadr_t to, const void* data, int size);
+    bool        GetPacket(netadr_t &from, void *data, int &size, int maxSize);
+    bool        GetPacketBlocking(netadr_t &from, void *data, int &size, int maxSize, int timeout);
+    void        SendPacket(const netadr_t to, const void *data, int size);
 
     int         packetsRead;
     int         bytesRead;
@@ -256,15 +256,15 @@ class idTCP {
     virtual     ~idTCP();
 
     // if host is host:port, the value of port is ignored
-    bool        Init(const char* host, short port);
+    bool        Init(const char *host, short port);
     void        Close();
 
     // returns -1 on failure (and closes socket)
     // those are non blocking, can be used for polling
     // there is no buffering, you are not guaranteed to Read or Write everything in a single call
     // (specially on win32, see recv and send documentation)
-    int         Read(void* data, int size);
-    int         Write(void* data, int size);
+    int         Read(void *data, int size);
+    int         Write(void *data, int size);
 
   private:
     netadr_t    address;        // remote address
@@ -275,8 +275,8 @@ class idTCP {
 // can also do DNS resolve if you ask for it.
 // NOTE: DNS resolve is a slow/blocking call, think before you use
 // ( could be exploited for server DoS )
-bool            Sys_StringToNetAdr(const char* s, netadr_t* a, bool doDNSResolve);
-const char*     Sys_NetAdrToString(const netadr_t a);
+bool            Sys_StringToNetAdr(const char *s, netadr_t *a, bool doDNSResolve);
+const char     *Sys_NetAdrToString(const netadr_t a);
 bool            Sys_IsLANAddress(const netadr_t a);
 bool            Sys_CompareNetAdrBase(const netadr_t a, const netadr_t b);
 
@@ -294,20 +294,20 @@ void            Sys_ShutdownNetworking(void);
 
 struct SDL_Thread;
 
-typedef int (*xthread_t)(void*);
+typedef int (*xthread_t)(void *);
 
 typedef struct {
-    const char*      name;
-    SDL_Thread*      threadHandle;
+    const char      *name;
+    SDL_Thread      *threadHandle;
     unsigned int    threadId;
 } xthreadInfo;
 
-void                Sys_CreateThread(xthread_t function, void* parms, xthreadInfo& info, const char* name);
-void                Sys_DestroyThread(xthreadInfo& info);   // sets threadHandle back to 0
+void                Sys_CreateThread(xthread_t function, void *parms, xthreadInfo &info, const char *name);
+void                Sys_DestroyThread(xthreadInfo &info);   // sets threadHandle back to 0
 
 // find the name of the calling thread
 // if index != NULL, set the index in threads array (use -1 for "main" thread)
-const char*         Sys_GetThreadName(int* index = 0);
+const char         *Sys_GetThreadName(int *index = 0);
 
 extern void Sys_InitThreads();
 extern void Sys_ShutdownThreads();
@@ -347,29 +347,29 @@ void                Sys_TriggerEvent(int index = TRIGGER_EVENT_ZERO);
 
 class idSys {
   public:
-    virtual void            DebugPrintf(const char* fmt, ...)id_attribute((format(printf,2,3))) = 0;
-    virtual void            DebugVPrintf(const char* fmt, va_list arg) = 0;
+    virtual void            DebugPrintf(const char *fmt, ...)id_attribute((format(printf,2,3))) = 0;
+    virtual void            DebugVPrintf(const char *fmt, va_list arg) = 0;
 
     virtual unsigned int    GetMilliseconds(void) = 0;
     virtual int             GetProcessorId(void) = 0;
     virtual void            FPU_SetFTZ(bool enable) = 0;
     virtual void            FPU_SetDAZ(bool enable) = 0;
 
-    virtual bool            LockMemory(void* ptr, int bytes) = 0;
-    virtual bool            UnlockMemory(void* ptr, int bytes) = 0;
+    virtual bool            LockMemory(void *ptr, int bytes) = 0;
+    virtual bool            UnlockMemory(void *ptr, int bytes) = 0;
 
-    virtual uintptr_t       DLL_Load(const char* dllName) = 0;
-    virtual void*           DLL_GetProcAddress(uintptr_t dllHandle, const char* procName) = 0;
+    virtual uintptr_t       DLL_Load(const char *dllName) = 0;
+    virtual void           *DLL_GetProcAddress(uintptr_t dllHandle, const char *procName) = 0;
     virtual void            DLL_Unload(uintptr_t dllHandle) = 0;
-    virtual void            DLL_GetFileName(const char* baseName, char* dllName, int maxLength) = 0;
+    virtual void            DLL_GetFileName(const char *baseName, char *dllName, int maxLength) = 0;
 
     virtual sysEvent_t      GenerateMouseButtonEvent(int button, bool down) = 0;
     virtual sysEvent_t      GenerateMouseMoveEvent(int deltax, int deltay) = 0;
 
-    virtual void            OpenURL(const char* url, bool quit) = 0;
-    virtual void            StartProcess(const char* exePath, bool quit) = 0;
+    virtual void            OpenURL(const char *url, bool quit) = 0;
+    virtual void            StartProcess(const char *exePath, bool quit) = 0;
 };
 
-extern idSys*               sys;
+extern idSys               *sys;
 
 #endif /* !__SYS_PUBLIC__ */

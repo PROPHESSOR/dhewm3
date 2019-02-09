@@ -55,7 +55,7 @@ typedef struct {
 StartWritingDemo
 ==============
 */
-void        idRenderWorldLocal::StartWritingDemo(idDemoFile* demo) {
+void        idRenderWorldLocal::StartWritingDemo(idDemoFile *demo) {
     int     i;
 
     // FIXME: we should track the idDemoFile locally, instead of snooping into session for it
@@ -92,7 +92,7 @@ void idRenderWorldLocal::StopWritingDemo() {
 ProcessDemoCommand
 ==============
 */
-bool        idRenderWorldLocal::ProcessDemoCommand(idDemoFile* readDemo, renderView_t* renderView, int* demoTimeOffset) {
+bool        idRenderWorldLocal::ProcessDemoCommand(idDemoFile *readDemo, renderView_t *renderView, int *demoTimeOffset) {
     bool    newMap = false;
 
     if (!readDemo) {
@@ -244,7 +244,7 @@ bool        idRenderWorldLocal::ProcessDemoCommand(idDemoFile* readDemo, renderV
             break;
 
         case DC_DEFINE_MODEL: {
-                idRenderModel*   model = renderModelManager->AllocModel();
+                idRenderModel   *model = renderModelManager->AllocModel();
                 model->ReadFromDemoFile(session->readDemo);
                 // add to model manager, so we can find it
                 renderModelManager->AddModel(model);
@@ -322,7 +322,7 @@ WriteVisibleDefs
 
 ================
 */
-void    idRenderWorldLocal::WriteVisibleDefs(const viewDef_t* viewDef) {
+void    idRenderWorldLocal::WriteVisibleDefs(const viewDef_t *viewDef) {
     // only the main renderWorld writes stuff to demos, not the wipes or
     // menu renders
     if (this != session->rw) {
@@ -330,8 +330,8 @@ void    idRenderWorldLocal::WriteVisibleDefs(const viewDef_t* viewDef) {
     }
 
     // make sure all necessary entities and lights are updated
-    for (viewEntity_t* viewEnt = viewDef->viewEntitys ; viewEnt ; viewEnt = viewEnt->next) {
-        idRenderEntityLocal* ent = viewEnt->entityDef;
+    for (viewEntity_t *viewEnt = viewDef->viewEntitys ; viewEnt ; viewEnt = viewEnt->next) {
+        idRenderEntityLocal *ent = viewEnt->entityDef;
 
         if (ent->archived) {
             // still up to date
@@ -343,8 +343,8 @@ void    idRenderWorldLocal::WriteVisibleDefs(const viewDef_t* viewDef) {
         ent->archived = true;
     }
 
-    for (viewLight_t* viewLight = viewDef->viewLights ; viewLight ; viewLight = viewLight->next) {
-        idRenderLightLocal* light = viewLight->lightDef;
+    for (viewLight_t *viewLight = viewDef->viewLights ; viewLight ; viewLight = viewLight->next) {
+        idRenderLightLocal *light = viewLight->lightDef;
 
         if (light->archived) {
             // still up to date
@@ -363,7 +363,7 @@ void    idRenderWorldLocal::WriteVisibleDefs(const viewDef_t* viewDef) {
 WriteRenderView
 ================
 */
-void    idRenderWorldLocal::WriteRenderView(const renderView_t* renderView) {
+void    idRenderWorldLocal::WriteRenderView(const renderView_t *renderView) {
     int i;
 
     // only the main renderWorld writes stuff to demos, not the wipes or
@@ -451,7 +451,7 @@ void    idRenderWorldLocal::WriteFreeLight(qhandle_t handle) {
 WriteRenderLight
 ================
 */
-void    idRenderWorldLocal::WriteRenderLight(qhandle_t handle, const renderLight_t* light) {
+void    idRenderWorldLocal::WriteRenderLight(qhandle_t handle, const renderLight_t *light) {
 
     // only the main renderWorld writes stuff to demos, not the wipes or
     // menu renders
@@ -578,7 +578,7 @@ void    idRenderWorldLocal::ReadRenderLight() {
 WriteRenderEntity
 ================
 */
-void    idRenderWorldLocal::WriteRenderEntity(qhandle_t handle, const renderEntity_t* ent) {
+void    idRenderWorldLocal::WriteRenderEntity(qhandle_t handle, const renderEntity_t *ent) {
 
     // only the main renderWorld writes stuff to demos, not the wipes or
     // menu renders
@@ -649,7 +649,7 @@ void    idRenderWorldLocal::WriteRenderEntity(qhandle_t handle, const renderEnti
 
     if (ent->numJoints) {
         for (int i = 0; i < ent->numJoints; i++) {
-            float* data = ent->joints[i].ToFloatPtr();
+            float *data = ent->joints[i].ToFloatPtr();
 
             for (int j = 0; j < 12; ++j) {
                 session->writeDemo->WriteFloat(data[j]);
@@ -778,10 +778,10 @@ void    idRenderWorldLocal::ReadRenderEntity() {
     ent.remoteRenderView = NULL;
 
     if (ent.numJoints) {
-        ent.joints = (idJointMat*)Mem_Alloc16(ent.numJoints * sizeof(ent.joints[0]));
+        ent.joints = (idJointMat *)Mem_Alloc16(ent.numJoints * sizeof(ent.joints[0]));
 
         for (int i = 0; i < ent.numJoints; i++) {
-            float* data = ent.joints[i].ToFloatPtr();
+            float *data = ent.joints[i].ToFloatPtr();
 
             for (int j = 0; j < 12; ++j) {
                 session->readDemo->ReadFloat(data[j]);

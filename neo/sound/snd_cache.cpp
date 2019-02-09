@@ -69,7 +69,7 @@ idSoundCache::::GetObject
 returns a single cached object pointer
 ===================
 */
-const idSoundSample* idSoundCache::GetObject(const int index) const {
+const idSoundSample *idSoundCache::GetObject(const int index) const {
     if (index<0 || index>listCache.Num()) {
         return NULL;
     }
@@ -84,7 +84,7 @@ idSoundCache::FindSound
 Adds a sound object to the cache and returns a handle for it.
 ===================
 */
-idSoundSample* idSoundCache::FindSound(const idStr& filename, bool loadOnDemandOnly) {
+idSoundSample *idSoundCache::FindSound(const idStr &filename, bool loadOnDemandOnly) {
     idStr fname;
 
     fname = filename;
@@ -95,7 +95,7 @@ idSoundSample* idSoundCache::FindSound(const idStr& filename, bool loadOnDemandO
 
     // check to see if object is already in cache
     for (int i = 0; i < listCache.Num(); i++) {
-        idSoundSample* def = listCache[i];
+        idSoundSample *def = listCache[i];
 
         if (def && def->name == fname) {
             def->levelLoadReferenced = true;
@@ -109,7 +109,7 @@ idSoundSample* idSoundCache::FindSound(const idStr& filename, bool loadOnDemandO
     }
 
     // create a new entry
-    idSoundSample* def = new idSoundSample;
+    idSoundSample *def = new idSoundSample;
 
     int shandle = listCache.FindNull();
 
@@ -143,7 +143,7 @@ void idSoundCache::ReloadSounds(bool force) {
     int i;
 
     for (i = 0; i < listCache.Num(); i++) {
-        idSoundSample* def = listCache[i];
+        idSoundSample *def = listCache[i];
 
         if (def) {
             def->Reload(force);
@@ -165,7 +165,7 @@ void idSoundCache::BeginLevelLoad() {
     insideLevelLoad = true;
 
     for (int i = 0 ; i < listCache.Num() ; i++) {
-        idSoundSample* sample = listCache[ i ];
+        idSoundSample *sample = listCache[ i ];
 
         if (!sample) {
             continue;
@@ -199,7 +199,7 @@ void idSoundCache::EndLevelLoad() {
     purgeCount = 0;
 
     for (int i = 0 ; i < listCache.Num() ; i++) {
-        idSoundSample*   sample = listCache[ i ];
+        idSoundSample   *sample = listCache[ i ];
 
         if (!sample) {
             continue;
@@ -229,10 +229,10 @@ void idSoundCache::EndLevelLoad() {
 idSoundCache::PrintMemInfo
 ===================
 */
-void idSoundCache::PrintMemInfo(MemInfo_t* mi) {
+void idSoundCache::PrintMemInfo(MemInfo_t *mi) {
     int i, j, num = 0, total = 0;
-    int* sortIndex;
-    idFile* f;
+    int *sortIndex;
+    idFile *f;
 
     f = fileSystem->OpenFileWrite(mi->filebase + "_sounds.txt");
 
@@ -266,7 +266,7 @@ void idSoundCache::PrintMemInfo(MemInfo_t* mi) {
 
     // print next
     for (i = 0; i < num; i++) {
-        idSoundSample* sample = listCache[sortIndex[i]];
+        idSoundSample *sample = listCache[sortIndex[i]];
 
         // this is strange
         if (!sample) {
@@ -356,9 +356,9 @@ void idSoundSample::MakeDefault(void) {
     objectSize = MIXBUFFER_SAMPLES * 2;
     objectMemSize = objectSize * sizeof(short);
 
-    nonCacheData = (byte*)soundCacheAllocator.Alloc(objectMemSize);
+    nonCacheData = (byte *)soundCacheAllocator.Alloc(objectMemSize);
 
-    short* ncd = (short*)nonCacheData;
+    short *ncd = (short *)nonCacheData;
 
     for (i = 0; i < MIXBUFFER_SAMPLES; i ++) {
         v = sin(idMath::PI * 2 * i / 64);
@@ -402,21 +402,21 @@ void idSoundSample::CheckForDownSample(void) {
     }
 
     int shortSamples = objectSize >> 1;
-    short* converted = (short*)soundCacheAllocator.Alloc(shortSamples * sizeof(short));
+    short *converted = (short *)soundCacheAllocator.Alloc(shortSamples * sizeof(short));
 
     if (objectInfo.nChannels == 1) {
         for (int i = 0; i < shortSamples; i++) {
-            converted[i] = ((short*)nonCacheData)[i*2];
+            converted[i] = ((short *)nonCacheData)[i*2];
         }
     } else {
         for (int i = 0; i < shortSamples; i += 2) {
-            converted[i+0] = ((short*)nonCacheData)[i*2+0];
-            converted[i+1] = ((short*)nonCacheData)[i*2+1];
+            converted[i+0] = ((short *)nonCacheData)[i*2+0];
+            converted[i+1] = ((short *)nonCacheData)[i*2+1];
         }
     }
 
     soundCacheAllocator.Free(nonCacheData);
-    nonCacheData = (byte*)converted;
+    nonCacheData = (byte *)converted;
     objectSize >>= 1;
     objectMemSize >>= 1;
     objectInfo.nAvgBytesPerSec >>= 1;
@@ -497,7 +497,7 @@ void idSoundSample::Load(void) {
     objectSize = fh.GetOutputSize();
     objectMemSize = fh.GetMemorySize();
 
-    nonCacheData = (byte*)soundCacheAllocator.Alloc(objectMemSize);
+    nonCacheData = (byte *)soundCacheAllocator.Alloc(objectMemSize);
     fh.Read(nonCacheData, objectMemSize, NULL);
 
     // optionally convert it to 22kHz to save memory
@@ -536,8 +536,8 @@ void idSoundSample::Load(void) {
                 }
 
                 if (alIsBuffer(openalBuffer)) {
-                    idSampleDecoder* decoder = idSampleDecoder::Alloc();
-                    float* destData = (float*)soundCacheAllocator.Alloc((LengthIn44kHzSamples() + 1) * sizeof(float));
+                    idSampleDecoder *decoder = idSampleDecoder::Alloc();
+                    float *destData = (float *)soundCacheAllocator.Alloc((LengthIn44kHzSamples() + 1) * sizeof(float));
 
                     // Decoder *always* outputs 44 kHz data
                     decoder->Decode(this, 0, LengthIn44kHzSamples(), destData);
@@ -546,31 +546,31 @@ void idSoundSample::Load(void) {
                     if (objectInfo.nSamplesPerSec == 11025) {
                         for (int i = 0; i < objectSize; i++) {
                             if (destData[i*4] < -32768.0f) {
-                                ((short*)destData)[i] = -32768;
+                                ((short *)destData)[i] = -32768;
                             } else if (destData[i*4] > 32767.0f) {
-                                ((short*)destData)[i] = 32767;
+                                ((short *)destData)[i] = 32767;
                             } else {
-                                ((short*)destData)[i] = idMath::FtoiFast(destData[i*4]);
+                                ((short *)destData)[i] = idMath::FtoiFast(destData[i*4]);
                             }
                         }
                     } else if (objectInfo.nSamplesPerSec == 22050) {
                         for (int i = 0; i < objectSize; i++) {
                             if (destData[i*2] < -32768.0f) {
-                                ((short*)destData)[i] = -32768;
+                                ((short *)destData)[i] = -32768;
                             } else if (destData[i*2] > 32767.0f) {
-                                ((short*)destData)[i] = 32767;
+                                ((short *)destData)[i] = 32767;
                             } else {
-                                ((short*)destData)[i] = idMath::FtoiFast(destData[i*2]);
+                                ((short *)destData)[i] = idMath::FtoiFast(destData[i*2]);
                             }
                         }
                     } else {
                         for (int i = 0; i < objectSize; i++) {
                             if (destData[i] < -32768.0f) {
-                                ((short*)destData)[i] = -32768;
+                                ((short *)destData)[i] = -32768;
                             } else if (destData[i] > 32767.0f) {
-                                ((short*)destData)[i] = 32767;
+                                ((short *)destData)[i] = 32767;
                             } else {
-                                ((short*)destData)[i] = idMath::FtoiFast(destData[i]);
+                                ((short *)destData)[i] = idMath::FtoiFast(destData[i]);
                             }
                         }
                     }
@@ -585,7 +585,7 @@ void idSoundSample::Load(void) {
                         hardwareBuffer = true;
                     }
 
-                    soundCacheAllocator.Free((byte*)destData);
+                    soundCacheAllocator.Free((byte *)destData);
                     idSampleDecoder::Free(decoder);
                 }
             }
@@ -662,7 +662,7 @@ idSoundSample::FetchFromCache
 Returns true on success.
 ===================
 */
-bool idSoundSample::FetchFromCache(int offset, const byte** output, int* position, int* size, const bool allowIO) {
+bool idSoundSample::FetchFromCache(int offset, const byte **output, int *position, int *size, const bool allowIO) {
     offset &= 0xfffffffe;
 
     if (objectSize == 0 || offset < 0 || offset > objectSize * (int)sizeof(short) || !nonCacheData) {

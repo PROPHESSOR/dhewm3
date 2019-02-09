@@ -45,7 +45,7 @@ idTimerReport::idTimerReport() {
 idTimerReport::SetReportName
 =================
 */
-void idTimerReport::SetReportName(const char* name) {
+void idTimerReport::SetReportName(const char *name) {
     reportName = (name) ? name : "Timer Report";
 }
 
@@ -63,7 +63,7 @@ idTimerReport::~idTimerReport() {
 idTimerReport::AddReport
 =================
 */
-int idTimerReport::AddReport(const char* name) {
+int idTimerReport::AddReport(const char *name) {
     if (name && *name) {
         names.Append(name);
         return timers.Append(new idTimer());
@@ -101,7 +101,7 @@ void idTimerReport::Reset() {
 idTimerReport::AddTime
 =================
 */
-void idTimerReport::AddTime(const char* name, idTimer* time) {
+void idTimerReport::AddTime(const char *name, idTimer *time) {
     assert(timers.Num() == names.Num());
     int i;
 

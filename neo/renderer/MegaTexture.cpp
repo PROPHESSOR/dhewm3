@@ -69,12 +69,12 @@ static byte colors[8][4] = {
     { 255, 255, 255, 255 }
 };
 
-static void R_EmptyLevelImage(idImage* image) {
+static void R_EmptyLevelImage(idImage *image) {
     int c = MAX_LEVEL_WIDTH * MAX_LEVEL_WIDTH;
-    byte*    data = (byte*)_alloca(c*4);
+    byte    *data = (byte *)_alloca(c*4);
 
     for (int i = 0 ; i < c ; i++) {
-        ((int*)data)[i] = fillColor.intVal;
+        ((int *)data)[i] = fillColor.intVal;
     }
 
     // FIXME: this won't live past vid mode changes
@@ -88,7 +88,7 @@ static void R_EmptyLevelImage(idImage* image) {
 InitFromMegaFile
 ====================
 */
-bool idMegaTexture::InitFromMegaFile(const char* fileBase) {
+bool idMegaTexture::InitFromMegaFile(const char *fileBase) {
     idStr   name = "megaTextures/";
     name += fileBase;
     name.StripFileExtension();
@@ -121,7 +121,7 @@ bool idMegaTexture::InitFromMegaFile(const char* fileBase) {
     memset(levels, 0, sizeof(levels));
 
     while (1) {
-        idTextureLevel* level = &levels[numLevels];
+        idTextureLevel *level = &levels[numLevels];
 
         level->mega = this;
         level->tileOffset = tileOffset;
@@ -170,7 +170,7 @@ analyzes xyz and st to create a mapping
 This is not very robust, but works for rectangular grids
 ====================
 */
-void    idMegaTexture::SetMappingForSurface(const srfTriangles_t* tri) {
+void    idMegaTexture::SetMappingForSurface(const srfTriangles_t *tri) {
     if (tri == currentTriMapping) {
         return;
     }
@@ -193,7 +193,7 @@ void    idMegaTexture::SetMappingForSurface(const srfTriangles_t* tri) {
     axis[1].st[1] = 0;
 
     for (int i = 0 ; i < tri->numVerts ; i++) {
-        idDrawVert*  v = &tri->verts[i];
+        idDrawVert  *v = &tri->verts[i];
 
         if (v->st[0] <= origin.st[0] && v->st[1] <= origin.st[1]) {
             origin = *v;
@@ -248,7 +248,7 @@ void idMegaTexture::BindForViewOrigin(const idVec3 viewOrigin) {
             static float    parms[4] = { -2, -2, 0, 1 };    // no contribution
             qglProgramLocalParameter4fvARB(GL_VERTEX_PROGRAM_ARB, i, parms);
         } else {
-            idTextureLevel*  level = &levels[ numLevels-1-i ];
+            idTextureLevel  *level = &levels[ numLevels-1-i ];
 
             if (r_showMegaTexture.GetBool()) {
                 if (i & 1) {
@@ -345,7 +345,7 @@ A local tile will only be mapped to globalTile[ localTile + X * TILE_PER_LEVEL ]
 ====================
 */
 void idTextureLevel::UpdateTile(int localX, int localY, int globalX, int globalY) {
-    idTextureTile*   tile = &tileMap[localX][localY];
+    idTextureTile   *tile = &tileMap[localX][localY];
 
     if (tile->x == globalX && tile->y == globalY) {
         return;
@@ -381,7 +381,7 @@ void idTextureLevel::UpdateTile(int localX, int localY, int globalX, int globalY
 
         for (int x = 0 ; x < 8 ; x++) {
             for (int y = 0 ; y < 8 ; y++) {
-                *(int*)&data[((y + TILE_SIZE/2 - 4) * TILE_SIZE + x + TILE_SIZE/2 - 4) * 4 ] = *(int*)color;
+                *(int *)&data[((y + TILE_SIZE/2 - 4) * TILE_SIZE + x + TILE_SIZE/2 - 4) * 4 ] = *(int *)color;
             }
         }
     }
@@ -401,7 +401,7 @@ void idTextureLevel::UpdateTile(int localX, int localY, int globalX, int globalY
 
         // mip-map in place
         for (int y = 0 ; y < size ; y++) {
-            byte*    in, *in2, *out;
+            byte    *in, *in2, *out;
             in = data + y * size * 16;
             in2 = in + size * 8;
             out = data + y * size * 4;
@@ -496,14 +496,14 @@ typedef struct _TargaHeader {
 } TargaHeader;
 
 
-static byte ReadByte(idFile* f) {
+static byte ReadByte(idFile *f) {
     byte    b;
 
     f->Read(&b, 1);
     return b;
 }
 
-static short ReadShort(idFile* f) {
+static short ReadShort(idFile *f) {
     byte    b[2];
 
     f->Read(&b, 2);
@@ -517,19 +517,19 @@ static short ReadShort(idFile* f) {
 GenerateMegaMipMaps
 ====================
 */
-void    idMegaTexture::GenerateMegaMipMaps(megaTextureHeader_t* header, idFile* outFile) {
+void    idMegaTexture::GenerateMegaMipMaps(megaTextureHeader_t *header, idFile *outFile) {
     outFile->Flush();
 
     // out fileSystem doesn't allow read / write access...
-    idFile*  inFile = fileSystem->OpenFileRead(outFile->GetName());
+    idFile  *inFile = fileSystem->OpenFileRead(outFile->GetName());
 
     int tileOffset = 1;
     int width = header->tilesWide;
     int height = header->tilesHigh;
 
     int     tileSize = header->tileSize * header->tileSize * 4;
-    byte*    oldBlock = (byte*)_alloca(tileSize);
-    byte*    newBlock = (byte*)_alloca(tileSize);
+    byte    *oldBlock = (byte *)_alloca(tileSize);
+    byte    *newBlock = (byte *)_alloca(tileSize);
 
     while (width > 1 || height > 1) {
         int newHeight = (height+1) >> 1;
@@ -571,8 +571,8 @@ void    idMegaTexture::GenerateMegaMipMaps(megaTextureHeader_t* header, idFile* 
                         // mip map the new pixels
                         for (int yyy = 0 ; yyy < TILE_SIZE / 2 ; yyy++) {
                             for (int xxx = 0 ; xxx < TILE_SIZE / 2 ; xxx++) {
-                                byte* in = &oldBlock[(yyy * 2 * TILE_SIZE + xxx * 2) * 4 ];
-                                byte* out = &newBlock[(((TILE_SIZE/2 * yy) + yyy) * TILE_SIZE + (TILE_SIZE/2 * xx) + xxx) * 4 ];
+                                byte *in = &oldBlock[(yyy * 2 * TILE_SIZE + xxx * 2) * 4 ];
+                                byte *out = &newBlock[(((TILE_SIZE/2 * yy) + yyy) * TILE_SIZE + (TILE_SIZE/2 * xx) + xxx) * 4 ];
                                 out[0] = (in[0] + in[4] + in[0+TILE_SIZE*4] + in[4+TILE_SIZE*4]) >> 2;
                                 out[1] = (in[1] + in[5] + in[1+TILE_SIZE*4] + in[5+TILE_SIZE*4]) >> 2;
                                 out[2] = (in[2] + in[6] + in[2+TILE_SIZE*4] + in[6+TILE_SIZE*4]) >> 2;
@@ -605,8 +605,8 @@ GenerateMegaPreview
 Make a 2k x 2k preview image for a mega texture that can be used in modeling programs
 ====================
 */
-void    idMegaTexture::GenerateMegaPreview(const char* fileName) {
-    idFile*  fileHandle = fileSystem->OpenFileRead(fileName);
+void    idMegaTexture::GenerateMegaPreview(const char *fileName) {
+    idFile  *fileHandle = fileSystem->OpenFileRead(fileName);
 
     if (!fileHandle) {
         common->Printf("idMegaTexture: failed to open %s\n", fileName);
@@ -650,8 +650,8 @@ void    idMegaTexture::GenerateMegaPreview(const char* fileName) {
         }
     }
 
-    byte* pic = (byte*)R_StaticAlloc(width * height * tileBytes);
-    byte*    oldBlock = (byte*)_alloca(tileBytes);
+    byte *pic = (byte *)R_StaticAlloc(width * height * tileBytes);
+    byte    *oldBlock = (byte *)_alloca(tileBytes);
 
     for (int y = 0 ; y < height ; y++) {
         for (int x = 0 ; x < width ; x++) {
@@ -681,9 +681,9 @@ MakeMegaTexture_f
 Incrementally load a giant tga file and process into the mega texture block format
 ====================
 */
-void idMegaTexture::MakeMegaTexture_f(const idCmdArgs& args) {
+void idMegaTexture::MakeMegaTexture_f(const idCmdArgs &args) {
     int     columns, fileSize, numBytes;
-    byte*    pixbuf;
+    byte    *pixbuf;
     int     row, column;
     TargaHeader targa_header;
 
@@ -697,14 +697,14 @@ void idMegaTexture::MakeMegaTexture_f(const idCmdArgs& args) {
     name_s.StripFileExtension();
     name_s += ".tga";
 
-    const char*  name = name_s.c_str();
+    const char  *name = name_s.c_str();
 
     //
     // open the file
     //
     common->Printf("Opening %s.\n", name);
     fileSize = fileSystem->ReadFile(name, NULL, NULL);
-    idFile*  file = fileSystem->OpenFileRead(name);
+    idFile  *file = fileSystem->OpenFileRead(name);
 
     if (!file) {
         common->Printf("Couldn't open %s\n", name);
@@ -766,14 +766,14 @@ void idMegaTexture::MakeMegaTexture_f(const idCmdArgs& args) {
                    mtHeader.tilesWide, mtHeader.tilesHigh, mtHeader.tileSize, outName.c_str());
 
     // open the output megatexture file
-    idFile*  out = fileSystem->OpenFileWrite(outName.c_str());
+    idFile  *out = fileSystem->OpenFileWrite(outName.c_str());
 
     out->Write(&mtHeader, sizeof(mtHeader));
     out->Seek(TILE_SIZE * TILE_SIZE * 4, FS_SEEK_SET);
 
     // we will process this one row of tiles at a time, since the entire thing
     // won't fit in memory
-    byte*    targa_rgba = (byte*)R_StaticAlloc(TILE_SIZE * targa_header.width * 4);
+    byte    *targa_rgba = (byte *)R_StaticAlloc(TILE_SIZE * targa_header.width * 4);
 
     int blockRowsRemaining = mtHeader.tilesHigh;
 

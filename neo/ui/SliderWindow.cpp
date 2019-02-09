@@ -57,13 +57,13 @@ void idSliderWindow::CommonInit() {
     verticalFlip = false;
 }
 
-idSliderWindow::idSliderWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idSliderWindow::idSliderWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idSliderWindow::idSliderWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idSliderWindow::idSliderWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -72,7 +72,7 @@ idSliderWindow::~idSliderWindow() {
 
 }
 
-bool idSliderWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idSliderWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "stepsize") == 0 || idStr::Icmp(_name, "step") == 0) {
         stepSize = src->ParseFloat();
         return true;
@@ -112,7 +112,7 @@ bool idSliderWindow::ParseInternalVar(const char* _name, idParser* src) {
     return idWindow::ParseInternalVar(_name, src);
 }
 
-idWinVar* idSliderWindow::GetWinVarByName(const char* _name, bool fixup, drawWin_t** owner) {
+idWinVar *idSliderWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner) {
 
     if (idStr::Icmp(_name, "value") == 0) {
         return &value;
@@ -133,7 +133,7 @@ idWinVar* idSliderWindow::GetWinVarByName(const char* _name, bool fixup, drawWin
     return idWindow::GetWinVarByName(_name, fixup, owner);
 }
 
-const char* idSliderWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idSliderWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
 
     if (!(event->evType == SE_KEY && event->evValue2)) {
         return "";
@@ -166,7 +166,7 @@ const char* idSliderWindow::HandleEvent(const sysEvent_t* event, bool* updateVis
 }
 
 
-void idSliderWindow::SetBuddy(idWindow* buddy) {
+void idSliderWindow::SetBuddy(idWindow *buddy) {
     buddyWin = buddy;
 }
 
@@ -183,7 +183,7 @@ void idSliderWindow::PostParse() {
     InitCvar();
 }
 
-void idSliderWindow::InitWithDefaults(const char* _name, const idRectangle& _rect, const idVec4& _foreColor, const idVec4& _matColor, const char* _background, const char* thumbShader, bool _vertical, bool _scrollbar) {
+void idSliderWindow::InitWithDefaults(const char *_name, const idRectangle &_rect, const idVec4 &_foreColor, const idVec4 &_matColor, const char *_background, const char *thumbShader, bool _vertical, bool _scrollbar) {
     SetInitialState(_name);
     rect = _rect;
     foreColor = _foreColor;
@@ -275,7 +275,7 @@ void idSliderWindow::Draw(int time, float x, float y) {
 }
 
 
-void idSliderWindow::DrawBackground(const idRectangle& _drawRect) {
+void idSliderWindow::DrawBackground(const idRectangle &_drawRect) {
     if (!cvar && !buddyWin) {
         return;
     }
@@ -299,7 +299,7 @@ void idSliderWindow::DrawBackground(const idRectangle& _drawRect) {
     idWindow::DrawBackground(r);
 }
 
-const char* idSliderWindow::RouteMouseCoords(float xd, float yd) {
+const char *idSliderWindow::RouteMouseCoords(float xd, float yd) {
     float pct;
 
     if (!(flags & WIN_CAPTURE)) {
@@ -363,7 +363,7 @@ const char* idSliderWindow::RouteMouseCoords(float xd, float yd) {
 }
 
 
-void idSliderWindow::Activate(bool activate, idStr& act) {
+void idSliderWindow::Activate(bool activate, idStr &act) {
     idWindow::Activate(activate, act);
 
     if (activate) {
@@ -425,7 +425,7 @@ void idSliderWindow::UpdateCvar(bool read, bool force) {
 idSliderWindow::RunNamedEvent
 ============
 */
-void idSliderWindow::RunNamedEvent(const char* eventName) {
+void idSliderWindow::RunNamedEvent(const char *eventName) {
     idStr event, group;
 
     if (!idStr::Cmpn(eventName, "cvar read ", 10)) {

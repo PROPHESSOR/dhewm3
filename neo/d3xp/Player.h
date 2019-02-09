@@ -178,7 +178,7 @@ class idInventory {
     int                     selAudio;
     bool                    pdaOpened;
     bool                    turkeyScore;
-    idList<idDict*>        items;
+    idList<idDict *>        items;
     idStrList               pdas;
     idStrList               pdaSecurity;
     idStrList               videos;
@@ -199,29 +199,29 @@ class idInventory {
     }
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                    // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                    // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                    // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                    // unarchives object from save game file
 
     void                    Clear(void);
-    void                    GivePowerUp(idPlayer* player, int powerup, int msec);
+    void                    GivePowerUp(idPlayer *player, int powerup, int msec);
     void                    ClearPowerUps(void);
-    void                    GetPersistantData(idDict& dict);
-    void                    RestoreInventory(idPlayer* owner, const idDict& dict);
-    bool                    Give(idPlayer* owner, const idDict& spawnArgs, const char* statname, const char* value, int* idealWeapon, bool updateHud);
-    void                    Drop(const idDict& spawnArgs, const char* weapon_classname, int weapon_index);
-    ammo_t                  AmmoIndexForAmmoClass(const char* ammo_classname) const;
-    int                     MaxAmmoForAmmoClass(idPlayer* owner, const char* ammo_classname) const;
-    int                     WeaponIndexForAmmoClass(const idDict& spawnArgs, const char* ammo_classname) const;
-    ammo_t                  AmmoIndexForWeaponClass(const char* weapon_classname, int* ammoRequired);
-    const char*             AmmoPickupNameForIndex(ammo_t ammonum) const;
-    void                    AddPickupName(const char* name, const char* icon, idPlayer* owner);   //_D3XP
+    void                    GetPersistantData(idDict &dict);
+    void                    RestoreInventory(idPlayer *owner, const idDict &dict);
+    bool                    Give(idPlayer *owner, const idDict &spawnArgs, const char *statname, const char *value, int *idealWeapon, bool updateHud);
+    void                    Drop(const idDict &spawnArgs, const char *weapon_classname, int weapon_index);
+    ammo_t                  AmmoIndexForAmmoClass(const char *ammo_classname) const;
+    int                     MaxAmmoForAmmoClass(idPlayer *owner, const char *ammo_classname) const;
+    int                     WeaponIndexForAmmoClass(const idDict &spawnArgs, const char *ammo_classname) const;
+    ammo_t                  AmmoIndexForWeaponClass(const char *weapon_classname, int *ammoRequired);
+    const char             *AmmoPickupNameForIndex(ammo_t ammonum) const;
+    void                    AddPickupName(const char *name, const char *icon, idPlayer *owner);   //_D3XP
 
     int                     HasAmmo(ammo_t type, int amount);
     bool                    UseAmmo(ammo_t type, int amount);
-    int                     HasAmmo(const char* weapon_classname, bool includeClip = false, idPlayer* owner = NULL);             // _D3XP
+    int                     HasAmmo(const char *weapon_classname, bool includeClip = false, idPlayer *owner = NULL);             // _D3XP
 
     #ifdef _D3XP
-    bool                    HasEmptyClipCannotRefill(const char* weapon_classname, idPlayer* owner);
+    bool                    HasEmptyClipCannotRefill(const char *weapon_classname, idPlayer *owner);
     #endif
 
     void                    UpdateArmor(void);
@@ -233,9 +233,9 @@ class idInventory {
     idList<idObjectiveInfo> objectiveNames;
 
     #ifdef _D3XP
-    void                    InitRechargeAmmo(idPlayer* owner);
-    void                    RechargeAmmo(idPlayer* owner);
-    bool                    CanGive(idPlayer* owner, const idDict& spawnArgs, const char* statname, const char* value, int* idealWeapon);
+    void                    InitRechargeAmmo(idPlayer *owner);
+    void                    RechargeAmmo(idPlayer *owner);
+    bool                    CanGive(idPlayer *owner, const idDict &spawnArgs, const char *statname, const char *value, int *idealWeapon);
     #endif
 };
 
@@ -307,8 +307,8 @@ class idPlayer : public idActor {
     idInventory             inventory;
 
     idEntityPtr<idWeapon>   weapon;
-    idUserInterface*        hud;                // MP: is NULL if not local player
-    idUserInterface*        objectiveSystem;
+    idUserInterface        *hud;                // MP: is NULL if not local player
+    idUserInterface        *objectiveSystem;
     bool                    objectiveSystemOpen;
 
     int                     weapon_soulcube;
@@ -390,7 +390,7 @@ class idPlayer : public idActor {
     idDragEntity            dragEntity;
 
     #ifdef _D3XP
-    idFuncMountedObject*    mountedObject;
+    idFuncMountedObject    *mountedObject;
     idEntityPtr<idLight>    enviroSuitLight;
 
     bool                    healthRecharge;
@@ -414,8 +414,8 @@ class idPlayer : public idActor {
     void                    Think(void);
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                    // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                    // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                    // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                    // unarchives object from save game file
 
     virtual void            Hide(void);
     virtual void            Show(void);
@@ -425,17 +425,17 @@ class idPlayer : public idActor {
     virtual void            Restart(void);
     void                    LinkScriptVariables(void);
     void                    SetupWeaponEntity(void);
-    void                    SelectInitialSpawnPoint(idVec3& origin, idAngles& angles);
+    void                    SelectInitialSpawnPoint(idVec3 &origin, idAngles &angles);
     void                    SpawnFromSpawnSpot(void);
-    void                    SpawnToPoint(const idVec3&   spawn_origin, const idAngles& spawn_angles);
+    void                    SpawnToPoint(const idVec3   &spawn_origin, const idAngles &spawn_angles);
     void                    SetClipModel(void);      // spectator mode uses a different bbox size
 
     void                    SavePersistantInfo(void);
     void                    RestorePersistantInfo(void);
-    void                    SetLevelTrigger(const char* levelName, const char* triggerName);
+    void                    SetLevelTrigger(const char *levelName, const char *triggerName);
 
     bool                    UserInfoChanged(bool canModify);
-    idDict*                 GetUserInfo(void);
+    idDict                 *GetUserInfo(void);
     bool                    BalanceTDM(void);
 
     void                    CacheWeapons(void);
@@ -446,73 +446,73 @@ class idPlayer : public idActor {
     bool                    SkipCinematic(void);
 
     void                    UpdateConditions(void);
-    void                    SetViewAngles(const idAngles& angles);
+    void                    SetViewAngles(const idAngles &angles);
 
     // delta view angles to allow movers to rotate the view of the player
-    void                    UpdateDeltaViewAngles(const idAngles& angles);
+    void                    UpdateDeltaViewAngles(const idAngles &angles);
 
-    virtual bool            Collide(const trace_t& collision, const idVec3& velocity);
+    virtual bool            Collide(const trace_t &collision, const idVec3 &velocity);
 
-    virtual void            GetAASLocation(idAAS* aas, idVec3& pos, int& areaNum) const;
-    virtual void            GetAIAimTargets(const idVec3& lastSightPos, idVec3& headPos, idVec3& chestPos);
-    virtual void            DamageFeedback(idEntity* victim, idEntity* inflictor, int& damage);
-    void                    CalcDamagePoints(idEntity* inflictor, idEntity* attacker, const idDict* damageDef,
-            const float damageScale, const int location, int* health, int* armor);
-    virtual void            Damage(idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location);
+    virtual void            GetAASLocation(idAAS *aas, idVec3 &pos, int &areaNum) const;
+    virtual void            GetAIAimTargets(const idVec3 &lastSightPos, idVec3 &headPos, idVec3 &chestPos);
+    virtual void            DamageFeedback(idEntity *victim, idEntity *inflictor, int &damage);
+    void                    CalcDamagePoints(idEntity *inflictor, idEntity *attacker, const idDict *damageDef,
+            const float damageScale, const int location, int *health, int *armor);
+    virtual void            Damage(idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location);
 
     // use exitEntityNum to specify a teleport with private camera view and delayed exit
-    virtual void            Teleport(const idVec3& origin, const idAngles& angles, idEntity* destination);
+    virtual void            Teleport(const idVec3 &origin, const idAngles &angles, idEntity *destination);
 
     void                    Kill(bool delayRespawn, bool nodamage);
-    virtual void            Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
-    void                    StartFxOnBone(const char* fx, const char* bone);
+    virtual void            Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
+    void                    StartFxOnBone(const char *fx, const char *bone);
 
-    renderView_t*           GetRenderView(void);
+    renderView_t           *GetRenderView(void);
     void                    CalculateRenderView(void);   // called every tic by player code
     void                    CalculateFirstPersonView(void);
 
-    void                    DrawHUD(idUserInterface* hud);
+    void                    DrawHUD(idUserInterface *hud);
 
-    void                    WeaponFireFeedback(const idDict* weaponDef);
+    void                    WeaponFireFeedback(const idDict *weaponDef);
 
     float                   DefaultFov(void) const;
     float                   CalcFov(bool honorZoom);
-    void                    CalculateViewWeaponPos(idVec3& origin, idMat3& axis);
+    void                    CalculateViewWeaponPos(idVec3 &origin, idMat3 &axis);
     idVec3                  GetEyePosition(void) const;
-    void                    GetViewPos(idVec3& origin, idMat3& axis) const;
+    void                    GetViewPos(idVec3 &origin, idMat3 &axis) const;
     void                    OffsetThirdPersonView(float angle, float range, float height, bool clip);
 
-    bool                    Give(const char* statname, const char* value);
-    bool                    GiveItem(idItem* item);
-    void                    GiveItem(const char* name);
+    bool                    Give(const char *statname, const char *value);
+    bool                    GiveItem(idItem *item);
+    void                    GiveItem(const char *name);
     void                    GiveHealthPool(float amt);
 
-    bool                    GiveInventoryItem(idDict* item);
-    void                    RemoveInventoryItem(idDict* item);
-    bool                    GiveInventoryItem(const char* name);
-    void                    RemoveInventoryItem(const char* name);
-    idDict*                 FindInventoryItem(const char* name);
+    bool                    GiveInventoryItem(idDict *item);
+    void                    RemoveInventoryItem(idDict *item);
+    bool                    GiveInventoryItem(const char *name);
+    void                    RemoveInventoryItem(const char *name);
+    idDict                 *FindInventoryItem(const char *name);
 
-    void                    GivePDA(const char* pdaName, idDict* item);
-    void                    GiveVideo(const char* videoName, idDict* item);
-    void                    GiveEmail(const char* emailName);
-    void                    GiveSecurity(const char* security);
-    void                    GiveObjective(const char* title, const char* text, const char* screenshot);
-    void                    CompleteObjective(const char* title);
+    void                    GivePDA(const char *pdaName, idDict *item);
+    void                    GiveVideo(const char *videoName, idDict *item);
+    void                    GiveEmail(const char *emailName);
+    void                    GiveSecurity(const char *security);
+    void                    GiveObjective(const char *title, const char *text, const char *screenshot);
+    void                    CompleteObjective(const char *title);
 
     bool                    GivePowerUp(int powerup, int time);
     void                    ClearPowerUps(void);
     bool                    PowerUpActive(int powerup) const;
     float                   PowerUpModifier(int type);
 
-    int                     SlotForWeapon(const char* weaponName);
+    int                     SlotForWeapon(const char *weaponName);
     void                    Reload(void);
     void                    NextWeapon(void);
     void                    NextBestWeapon(void);
     void                    PrevWeapon(void);
     void                    SelectWeapon(int num, bool force);
     void                    DropWeapon(bool died) ;
-    void                    StealWeapon(idPlayer* player);
+    void                    StealWeapon(idPlayer *player);
     void                    AddProjectilesFired(int count);
     void                    AddProjectileHits(int count);
     void                    SetLastHitTime(int time);
@@ -520,11 +520,11 @@ class idPlayer : public idActor {
     void                    RaiseWeapon(void);
     void                    WeaponLoweringCallback(void);
     void                    WeaponRisingCallback(void);
-    void                    RemoveWeapon(const char* weap);
+    void                    RemoveWeapon(const char *weap);
     bool                    CanShowWeaponViewmodel(void) const;
 
     void                    AddAIKill(void);
-    void                    SetSoulCubeProjectile(idProjectile* projectile);
+    void                    SetSoulCubeProjectile(idProjectile *projectile);
 
     void                    AdjustHeartRate(int target, float timeInSecs, float delay, bool force);
     void                    SetCurrentHeartRate(void);
@@ -535,7 +535,7 @@ class idPlayer : public idActor {
     void                    UpdatePowerupHud();
     #endif
 
-    virtual bool            HandleSingleGuiCommand(idEntity* entityGui, idLexer* src);
+    virtual bool            HandleSingleGuiCommand(idEntity *entityGui, idLexer *src);
     bool                    GuiActive(void) {
         return focusGUIent != NULL;
     }
@@ -544,55 +544,55 @@ class idPlayer : public idActor {
     void                    Spectate(bool spectate);
     void                    TogglePDA(void);
     void                    ToggleScoreboard(void);
-    void                    RouteGuiMouse(idUserInterface* gui);
+    void                    RouteGuiMouse(idUserInterface *gui);
     void                    UpdateHud(void);
-    const idDeclPDA*        GetPDA(void) const;
-    const idDeclVideo*      GetVideo(int index);
+    const idDeclPDA        *GetPDA(void) const;
+    const idDeclVideo      *GetVideo(int index);
     void                    SetInfluenceFov(float fov);
-    void                    SetInfluenceView(const char* mtr, const char* skinname, float radius, idEntity* ent);
+    void                    SetInfluenceView(const char *mtr, const char *skinname, float radius, idEntity *ent);
     void                    SetInfluenceLevel(int level);
     int                     GetInfluenceLevel(void) {
         return influenceActive;
     };
-    void                    SetPrivateCameraView(idCamera* camView);
-    idCamera*               GetPrivateCameraView(void) const {
+    void                    SetPrivateCameraView(idCamera *camView);
+    idCamera               *GetPrivateCameraView(void) const {
         return privateCameraView;
     }
     void                    StartFxFov(float duration);
     void                    UpdateHudWeapon(bool flashWeapon = true);
-    void                    UpdateHudStats(idUserInterface* hud);
-    void                    UpdateHudAmmo(idUserInterface* hud);
+    void                    UpdateHudStats(idUserInterface *hud);
+    void                    UpdateHudAmmo(idUserInterface *hud);
     void                    Event_StopAudioLog(void);
     void                    StartAudioLog(void);
     void                    StopAudioLog(void);
-    void                    ShowTip(const char* title, const char* tip, bool autoHide);
+    void                    ShowTip(const char *title, const char *tip, bool autoHide);
     void                    HideTip(void);
     bool                    IsTipVisible(void) {
         return tipUp;
     };
-    void                    ShowObjective(const char* obj);
+    void                    ShowObjective(const char *obj);
     void                    HideObjective(void);
 
     virtual void            ClientPredictionThink(void);
-    virtual void            WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void            ReadFromSnapshot(const idBitMsgDelta& msg);
-    void                    WritePlayerStateToSnapshot(idBitMsgDelta& msg) const;
-    void                    ReadPlayerStateFromSnapshot(const idBitMsgDelta& msg);
+    virtual void            WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void            ReadFromSnapshot(const idBitMsgDelta &msg);
+    void                    WritePlayerStateToSnapshot(idBitMsgDelta &msg) const;
+    void                    ReadPlayerStateFromSnapshot(const idBitMsgDelta &msg);
 
-    virtual bool            ServerReceiveEvent(int event, int time, const idBitMsg& msg);
+    virtual bool            ServerReceiveEvent(int event, int time, const idBitMsg &msg);
 
-    virtual bool            GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis);
-    virtual bool            GetPhysicsToSoundTransform(idVec3& origin, idMat3& axis);
+    virtual bool            GetPhysicsToVisualTransform(idVec3 &origin, idMat3 &axis);
+    virtual bool            GetPhysicsToSoundTransform(idVec3 &origin, idMat3 &axis);
 
-    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg& msg);
+    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg &msg);
     bool                    IsReady(void);
     bool                    IsRespawning(void);
     bool                    IsInTeleport(void);
 
-    idEntity*                GetInfluenceEntity(void) {
+    idEntity                *GetInfluenceEntity(void) {
         return influenceEntity;
     };
-    const idMaterial*        GetInfluenceMaterial(void) {
+    const idMaterial        *GetInfluenceMaterial(void) {
         return influenceMaterial;
     };
     float                   GetInfluenceRadius(void) {
@@ -602,7 +602,7 @@ class idPlayer : public idActor {
     // server side work for in/out of spectate. takes care of spawning it into the world as well
     void                    ServerSpectate(bool spectate);
     // for very specific usage. != GetPhysics()
-    idPhysics*               GetPlayerPhysics(void);
+    idPhysics               *GetPlayerPhysics(void);
     void                    TeleportDeath(int killer);
     void                    SetLeader(bool lead);
     bool                    IsLeader(void);
@@ -622,7 +622,7 @@ class idPlayer : public idActor {
 
     idStr                   GetCurrentWeapon();
 
-    bool                    CanGive(const char* statname, const char* value);
+    bool                    CanGive(const char *statname, const char *value);
 
     void                    StopHelltime(bool quick = true);
     void                    PlayHelltimeStopSound();
@@ -669,8 +669,8 @@ class idPlayer : public idActor {
     bool                    weaponEnabled;
     bool                    showWeaponViewModel;
 
-    const idDeclSkin*       skin;
-    const idDeclSkin*       powerUpSkin;
+    const idDeclSkin       *skin;
+    const idDeclSkin       *powerUpSkin;
     idStr                   baseSkinName;
 
     int                     numProjectilesFired;    // number of projectiles fired
@@ -690,12 +690,12 @@ class idPlayer : public idActor {
 
     float                   influenceFov;
     int                     influenceActive;        // level of influence.. 1 == no gun or hud .. 2 == 1 + no movement
-    idEntity*               influenceEntity;
-    const idMaterial*       influenceMaterial;
+    idEntity               *influenceEntity;
+    const idMaterial       *influenceMaterial;
     float                   influenceRadius;
-    const idDeclSkin*       influenceSkin;
+    const idDeclSkin       *influenceSkin;
 
-    idCamera*               privateCameraView;
+    idCamera               *privateCameraView;
 
     static const int        NUM_LOGGED_VIEW_ANGLES = 64;        // for weapon turning angle offsets
     idAngles                loggedViewAngles[NUM_LOGGED_VIEW_ANGLES];   // [gameLocal.framenum&(LOGGED_VIEW_ANGLES-1)]
@@ -704,13 +704,13 @@ class idPlayer : public idActor {
     int                     currentLoggedAccel;
 
     // if there is a focusGUIent, the attack button will be changed into mouse clicks
-    idEntity*               focusGUIent;
-    idUserInterface*        focusUI;                // focusGUIent->renderEntity.gui, gui2, or gui3
-    idAI*                   focusCharacter;
+    idEntity               *focusGUIent;
+    idUserInterface        *focusUI;                // focusGUIent->renderEntity.gui, gui2, or gui3
+    idAI                   *focusCharacter;
     int                     talkCursor;             // show the state of the focusCharacter (0 == can't talk/dead, 1 == ready to talk, 2 == busy talking)
     int                     focusTime;
-    idAFEntity_Vehicle*     focusVehicle;
-    idUserInterface*        cursor;
+    idAFEntity_Vehicle     *focusVehicle;
+    idUserInterface        *cursor;
 
     // full screen guis track mouse movements directly
     int                     oldMouseX;
@@ -758,7 +758,7 @@ class idPlayer : public idActor {
 
     bool                    selfSmooth;
 
-    void                    LookAtKiller(idEntity* inflictor, idEntity* attacker);
+    void                    LookAtKiller(idEntity *inflictor, idEntity *attacker);
 
     void                    StopFiring(void);
     void                    FireWeapon(void);
@@ -773,8 +773,8 @@ class idPlayer : public idActor {
     idVec3                  GunAcceleratingOffset(void);
 
     void                    UseObjects(void);
-    void                    CrashLand(const idVec3& oldOrigin, const idVec3& oldVelocity);
-    void                    BobCycle(const idVec3& pushVelocity);
+    void                    CrashLand(const idVec3 &oldOrigin, const idVec3 &oldVelocity);
+    void                    BobCycle(const idVec3 &pushVelocity);
     void                    UpdateViewAngles(void);
     void                    EvaluateControls(void);
     void                    AdjustSpeed(void);
@@ -790,14 +790,14 @@ class idPlayer : public idActor {
     void                    ClearFocus(void);
     void                    UpdateFocus(void);
     void                    UpdateLocation(void);
-    idUserInterface*        ActiveGui(void);
+    idUserInterface        *ActiveGui(void);
     void                    UpdatePDAInfo(bool updatePDASel);
-    int                     AddGuiPDAData(const declType_t dataType, const char* listName, const idDeclPDA* src, idUserInterface* gui);
-    void                    ExtractEmailInfo(const idStr& email, const char* scan, idStr& out);
+    int                     AddGuiPDAData(const declType_t dataType, const char *listName, const idDeclPDA *src, idUserInterface *gui);
+    void                    ExtractEmailInfo(const idStr &email, const char *scan, idStr &out);
     void                    UpdateObjectiveInfo(void);
 
     #ifdef _D3XP
-    bool                    WeaponAvailable(const char* name);
+    bool                    WeaponAvailable(const char *name);
     #endif
 
     void                    UseVehicle(void);
@@ -810,7 +810,7 @@ class idPlayer : public idActor {
     void                    Event_DisableWeapon(void);
     void                    Event_GetCurrentWeapon(void);
     void                    Event_GetPreviousWeapon(void);
-    void                    Event_SelectWeapon(const char* weaponName);
+    void                    Event_SelectWeapon(const char *weaponName);
     void                    Event_GetWeaponEntity(void);
     void                    Event_OpenPDA(void);
     void                    Event_PDAAvailable(void);
@@ -821,11 +821,11 @@ class idPlayer : public idActor {
     void                    Event_Gibbed(void);
 
     #ifdef _D3XP //BSM: Event to remove inventory items. Useful with powercells.
-    void                    Event_GiveInventoryItem(const char* name);
-    void                    Event_RemoveInventoryItem(const char* name);
+    void                    Event_GiveInventoryItem(const char *name);
+    void                    Event_RemoveInventoryItem(const char *name);
 
     void                    Event_GetIdealWeapon(void);
-    void                    Event_WeaponAvailable(const char* name);
+    void                    Event_WeaponAvailable(const char *name);
     void                    Event_SetPowerupTime(int powerup, int time);
     void                    Event_IsPowerupActive(int powerup);
     void                    Event_StartWarp();
@@ -843,7 +843,7 @@ ID_INLINE bool idPlayer::IsRespawning(void) {
     return respawning;
 }
 
-ID_INLINE idPhysics* idPlayer::GetPlayerPhysics(void) {
+ID_INLINE idPhysics *idPlayer::GetPlayerPhysics(void) {
     return &physicsObj;
 }
 

@@ -62,10 +62,10 @@ typedef struct {
 
     bool                    colorsParsed;
     bool                    normalsParsed;
-    idVec3*                 vertexes;
-    idVec2*                 tvertexes;
-    idVec3*                 cvertexes;
-    aseFace_t*              faces;
+    idVec3                 *vertexes;
+    idVec2                 *tvertexes;
+    idVec3                 *cvertexes;
+    aseFace_t              *faces;
 } aseMesh_t;
 
 typedef struct {
@@ -82,17 +82,17 @@ typedef struct {
     aseMesh_t               mesh;
 
     // frames are only present with animations
-    idList<aseMesh_t*>      frames;         // aseMesh_t
+    idList<aseMesh_t *>      frames;        // aseMesh_t
 } aseObject_t;
 
 typedef struct aseModel_s {
     ID_TIME_T                   timeStamp;
-    idList<aseMaterial_t*> materials;
-    idList<aseObject_t*>   objects;
+    idList<aseMaterial_t *> materials;
+    idList<aseObject_t *>   objects;
 } aseModel_t;
 
 
-aseModel_t* ASE_Load(const char* fileName);
-void        ASE_Free(aseModel_t* ase);
+aseModel_t *ASE_Load(const char *fileName);
+void        ASE_Free(aseModel_t *ase);
 
 #endif /* !__MODEL_ASE_H__ */

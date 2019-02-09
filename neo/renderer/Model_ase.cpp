@@ -48,17 +48,17 @@ If you have questions concerning this license or the applicable additional terms
 
 // working variables used during parsing
 typedef struct {
-    const char*  buffer;
-    const char*  curpos;
+    const char  *buffer;
+    const char  *curpos;
     int         len;
     char        token[1024];
 
     bool    verbose;
 
-    aseModel_t*  model;
-    aseObject_t* currentObject;
-    aseMesh_t*   currentMesh;
-    aseMaterial_t*   currentMaterial;
+    aseModel_t  *model;
+    aseObject_t *currentObject;
+    aseMesh_t   *currentMesh;
+    aseMaterial_t   *currentMaterial;
     int         currentFace;
     int         currentVertex;
 } ase_t;
@@ -66,7 +66,7 @@ typedef struct {
 static ase_t ase;
 
 
-static aseMesh_t* ASE_GetCurrentMesh(void) {
+static aseMesh_t *ASE_GetCurrentMesh(void) {
     return ase.currentMesh;
 }
 
@@ -113,7 +113,7 @@ static int ASE_GetToken(bool restOfLine) {
     return 1;
 }
 
-static void ASE_ParseBracedBlock(void (*parser)(const char* token)) {
+static void ASE_ParseBracedBlock(void (*parser)(const char *token)) {
     int indent = 0;
 
     while (ASE_GetToken(false)) {
@@ -157,8 +157,8 @@ static void ASE_SkipRestOfLine(void) {
     ASE_GetToken(true);
 }
 
-static void ASE_KeyMAP_DIFFUSE(const char* token) {
-    aseMaterial_t*   material;
+static void ASE_KeyMAP_DIFFUSE(const char *token) {
+    aseMaterial_t   *material;
 
     if (!strcmp(token, "*BITMAP")) {
         idStr   qpath;
@@ -167,7 +167,7 @@ static void ASE_KeyMAP_DIFFUSE(const char* token) {
         ASE_GetToken(false);
 
         // remove the quotes
-        char* s = strstr(ase.token + 1, "\"");
+        char *s = strstr(ase.token + 1, "\"");
 
         if (s) {
             *s = 0;
@@ -203,21 +203,21 @@ static void ASE_KeyMAP_DIFFUSE(const char* token) {
     }
 }
 
-static void ASE_KeyMATERIAL(const char* token) {
+static void ASE_KeyMATERIAL(const char *token) {
     if (!strcmp(token, "*MAP_DIFFUSE")) {
         ASE_ParseBracedBlock(ASE_KeyMAP_DIFFUSE);
     } else {
     }
 }
 
-static void ASE_KeyMATERIAL_LIST(const char* token) {
+static void ASE_KeyMATERIAL_LIST(const char *token) {
     if (!strcmp(token, "*MATERIAL_COUNT")) {
         ASE_GetToken(false);
         VERBOSE(("..num materials: %s\n", ase.token));
     } else if (!strcmp(token, "*MATERIAL")) {
         VERBOSE(("..material %d\n", ase.model->materials.Num()));
 
-        ase.currentMaterial = (aseMaterial_t*)Mem_Alloc(sizeof(aseMaterial_t));
+        ase.currentMaterial = (aseMaterial_t *)Mem_Alloc(sizeof(aseMaterial_t));
         memset(ase.currentMaterial, 0, sizeof(aseMaterial_t));
         ase.currentMaterial->uTiling = 1;
         ase.currentMaterial->vTiling = 1;
@@ -227,7 +227,7 @@ static void ASE_KeyMATERIAL_LIST(const char* token) {
     }
 }
 
-static void ASE_KeyNODE_TM(const char* token) {
+static void ASE_KeyNODE_TM(const char *token) {
     int     i;
 
     if (!strcmp(token, "*TM_ROW0")) {
@@ -253,8 +253,8 @@ static void ASE_KeyNODE_TM(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_VERTEX_LIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyMESH_VERTEX_LIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*MESH_VERTEX")) {
         ASE_GetToken(false);         // skip number
@@ -278,8 +278,8 @@ static void ASE_KeyMESH_VERTEX_LIST(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_FACE_LIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyMESH_FACE_LIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*MESH_FACE")) {
         ASE_GetToken(false);     // skip face number
@@ -319,8 +319,8 @@ static void ASE_KeyMESH_FACE_LIST(const char* token) {
     }
 }
 
-static void ASE_KeyTFACE_LIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyTFACE_LIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*MESH_TFACE")) {
         int a, b, c;
@@ -344,8 +344,8 @@ static void ASE_KeyTFACE_LIST(const char* token) {
     }
 }
 
-static void ASE_KeyCFACE_LIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyCFACE_LIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*MESH_CFACE")) {
         ASE_GetToken(false);
@@ -367,8 +367,8 @@ static void ASE_KeyCFACE_LIST(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_TVERTLIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyMESH_TVERTLIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*MESH_TVERT")) {
         char u[80], v[80], w[80];
@@ -398,8 +398,8 @@ static void ASE_KeyMESH_TVERTLIST(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_CVERTLIST(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyMESH_CVERTLIST(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     pMesh->colorsParsed = true;
 
@@ -425,9 +425,9 @@ static void ASE_KeyMESH_CVERTLIST(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_NORMALS(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
-    aseFace_t*   f;
+static void ASE_KeyMESH_NORMALS(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
+    aseFace_t   *f;
     idVec3      n;
 
     pMesh->normalsParsed = true;
@@ -499,8 +499,8 @@ static void ASE_KeyMESH_NORMALS(const char* token) {
     }
 }
 
-static void ASE_KeyMESH(const char* token) {
-    aseMesh_t* pMesh = ASE_GetCurrentMesh();
+static void ASE_KeyMESH(const char *token) {
+    aseMesh_t *pMesh = ASE_GetCurrentMesh();
 
     if (!strcmp(token, "*TIMEVALUE")) {
         ASE_GetToken(false);
@@ -546,22 +546,22 @@ static void ASE_KeyMESH(const char* token) {
             common->Error("MESH_NUMCVFACES != MESH_NUMFACES");
         }
     } else if (!strcmp(token, "*MESH_VERTEX_LIST")) {
-        pMesh->vertexes = (idVec3*)Mem_Alloc(sizeof(idVec3) * pMesh->numVertexes);
+        pMesh->vertexes = (idVec3 *)Mem_Alloc(sizeof(idVec3) * pMesh->numVertexes);
         ase.currentVertex = 0;
         VERBOSE((".....parsing MESH_VERTEX_LIST\n"));
         ASE_ParseBracedBlock(ASE_KeyMESH_VERTEX_LIST);
     } else if (!strcmp(token, "*MESH_TVERTLIST")) {
         ase.currentVertex = 0;
-        pMesh->tvertexes = (idVec2*)Mem_Alloc(sizeof(idVec2) * pMesh->numTVertexes);
+        pMesh->tvertexes = (idVec2 *)Mem_Alloc(sizeof(idVec2) * pMesh->numTVertexes);
         VERBOSE((".....parsing MESH_TVERTLIST\n"));
         ASE_ParseBracedBlock(ASE_KeyMESH_TVERTLIST);
     } else if (!strcmp(token, "*MESH_CVERTLIST")) {
         ase.currentVertex = 0;
-        pMesh->cvertexes = (idVec3*)Mem_Alloc(sizeof(idVec3) * pMesh->numCVertexes);
+        pMesh->cvertexes = (idVec3 *)Mem_Alloc(sizeof(idVec3) * pMesh->numCVertexes);
         VERBOSE((".....parsing MESH_CVERTLIST\n"));
         ASE_ParseBracedBlock(ASE_KeyMESH_CVERTLIST);
     } else if (!strcmp(token, "*MESH_FACE_LIST")) {
-        pMesh->faces = (aseFace_t*)Mem_Alloc(sizeof(aseFace_t) * pMesh->numFaces);
+        pMesh->faces = (aseFace_t *)Mem_Alloc(sizeof(aseFace_t) * pMesh->numFaces);
         ase.currentFace = 0;
         VERBOSE((".....parsing MESH_FACE_LIST\n"));
         ASE_ParseBracedBlock(ASE_KeyMESH_FACE_LIST);
@@ -592,14 +592,14 @@ static void ASE_KeyMESH(const char* token) {
     }
 }
 
-static void ASE_KeyMESH_ANIMATION(const char* token) {
-    aseMesh_t* mesh;
+static void ASE_KeyMESH_ANIMATION(const char *token) {
+    aseMesh_t *mesh;
 
     // loads a single animation frame
     if (!strcmp(token, "*MESH")) {
         VERBOSE(("...found MESH\n"));
 
-        mesh = (aseMesh_t*)Mem_Alloc(sizeof(aseMesh_t));
+        mesh = (aseMesh_t *)Mem_Alloc(sizeof(aseMesh_t));
         memset(mesh, 0, sizeof(aseMesh_t));
         ase.currentMesh = mesh;
 
@@ -611,8 +611,8 @@ static void ASE_KeyMESH_ANIMATION(const char* token) {
     }
 }
 
-static void ASE_KeyGEOMOBJECT(const char* token) {
-    aseObject_t* object;
+static void ASE_KeyGEOMOBJECT(const char *token) {
+    aseObject_t *object;
 
     object = ase.currentObject;
 
@@ -655,11 +655,11 @@ static void ASE_KeyGEOMOBJECT(const char* token) {
 }
 
 void ASE_ParseGeomObject(void) {
-    aseObject_t* object;
+    aseObject_t *object;
 
     VERBOSE(("GEOMOBJECT"));
 
-    object = (aseObject_t*)Mem_Alloc(sizeof(aseObject_t));
+    object = (aseObject_t *)Mem_Alloc(sizeof(aseObject_t));
     memset(object, 0, sizeof(aseObject_t));
     ase.model->objects.Append(object);
     ase.currentObject = object;
@@ -669,7 +669,7 @@ void ASE_ParseGeomObject(void) {
     ASE_ParseBracedBlock(ASE_KeyGEOMOBJECT);
 }
 
-static void ASE_KeyGROUP(const char* token) {
+static void ASE_KeyGROUP(const char *token) {
     if (!strcmp(token, "*GEOMOBJECT")) {
         ASE_ParseGeomObject();
     }
@@ -680,7 +680,7 @@ static void ASE_KeyGROUP(const char* token) {
 ASE_Parse
 =================
 */
-aseModel_t* ASE_Parse(const char* buffer, bool verbose) {
+aseModel_t *ASE_Parse(const char *buffer, bool verbose) {
     memset(&ase, 0, sizeof(ase));
 
     ase.verbose = verbose;
@@ -728,12 +728,12 @@ aseModel_t* ASE_Parse(const char* buffer, bool verbose) {
 ASE_Load
 =================
 */
-aseModel_t* ASE_Load(const char* fileName) {
-    char* buf;
+aseModel_t *ASE_Load(const char *fileName) {
+    char *buf;
     ID_TIME_T timeStamp;
-    aseModel_t* ase;
+    aseModel_t *ase;
 
-    fileSystem->ReadFile(fileName, (void**)&buf, &timeStamp);
+    fileSystem->ReadFile(fileName, (void **)&buf, &timeStamp);
 
     if (!buf) {
         return NULL;
@@ -752,11 +752,11 @@ aseModel_t* ASE_Load(const char* fileName) {
 ASE_Free
 =================
 */
-void ASE_Free(aseModel_t* ase) {
+void ASE_Free(aseModel_t *ase) {
     int                 i, j;
-    aseObject_t*         obj;
-    aseMesh_t*           mesh;
-    aseMaterial_t*       material;
+    aseObject_t         *obj;
+    aseMesh_t           *mesh;
+    aseMaterial_t       *material;
 
     if (!ase) {
         return;

@@ -44,26 +44,26 @@ If you have questions concerning this license or the applicable additional terms
 class idCompressor : public idFile {
   public:
     // compressor allocation
-    static idCompressor*    AllocNoCompression(void);
-    static idCompressor*    AllocBitStream(void);
-    static idCompressor*    AllocRunLength(void);
-    static idCompressor*    AllocRunLength_ZeroBased(void);
-    static idCompressor*    AllocHuffman(void);
-    static idCompressor*    AllocArithmetic(void);
-    static idCompressor*    AllocLZSS(void);
-    static idCompressor*    AllocLZSS_WordAligned(void);
-    static idCompressor*    AllocLZW(void);
+    static idCompressor    *AllocNoCompression(void);
+    static idCompressor    *AllocBitStream(void);
+    static idCompressor    *AllocRunLength(void);
+    static idCompressor    *AllocRunLength_ZeroBased(void);
+    static idCompressor    *AllocHuffman(void);
+    static idCompressor    *AllocArithmetic(void);
+    static idCompressor    *AllocLZSS(void);
+    static idCompressor    *AllocLZSS_WordAligned(void);
+    static idCompressor    *AllocLZW(void);
 
     // initialization
-    virtual void            Init(idFile* f, bool compress, int wordLength) = 0;
+    virtual void            Init(idFile *f, bool compress, int wordLength) = 0;
     virtual void            FinishCompress(void) = 0;
     virtual float           GetCompressionRatio(void) const = 0;
 
     // common idFile interface
-    virtual const char*     GetName(void) = 0;
-    virtual const char*     GetFullPath(void) = 0;
-    virtual int             Read(void* outData, int outLength) = 0;
-    virtual int             Write(const void* inData, int inLength) = 0;
+    virtual const char     *GetName(void) = 0;
+    virtual const char     *GetFullPath(void) = 0;
+    virtual int             Read(void *outData, int outLength) = 0;
+    virtual int             Write(const void *inData, int inLength) = 0;
     virtual int             Length(void) = 0;
     virtual ID_TIME_T           Timestamp(void) = 0;
     virtual int             Tell(void) = 0;

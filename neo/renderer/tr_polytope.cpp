@@ -40,9 +40,9 @@ Generate vertexes and indexes for a polytope, and optionally returns the polygon
 The positive sides of the planes will be visible.
 =====================
 */
-srfTriangles_t* R_PolytopeSurface(int numPlanes, const idPlane* planes, idWinding** windings) {
+srfTriangles_t *R_PolytopeSurface(int numPlanes, const idPlane *planes, idWinding **windings) {
     int i, j;
-    srfTriangles_t* tri;
+    srfTriangles_t *tri;
     idFixedWinding planeWindings[MAX_POLYTOPE_PLANES];
     int numVerts, numIndexes;
 
@@ -54,13 +54,13 @@ srfTriangles_t* R_PolytopeSurface(int numPlanes, const idPlane* planes, idWindin
     numIndexes = 0;
 
     for (i = 0; i < numPlanes; i++) {
-        const idPlane& plane = planes[i];
-        idFixedWinding& w = planeWindings[i];
+        const idPlane &plane = planes[i];
+        idFixedWinding &w = planeWindings[i];
 
         w.BaseForPlane(plane);
 
         for (j = 0; j < numPlanes; j++) {
-            const idPlane& plane2 = planes[j];
+            const idPlane &plane2 = planes[j];
 
             if (j == i) {
                 continue;
@@ -86,7 +86,7 @@ srfTriangles_t* R_PolytopeSurface(int numPlanes, const idPlane* planes, idWindin
 
     // copy the data from the windings
     for (i = 0; i < numPlanes; i++) {
-        idFixedWinding& w = planeWindings[i];
+        idFixedWinding &w = planeWindings[i];
 
         if (!w.GetNumPoints()) {
             continue;

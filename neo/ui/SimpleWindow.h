@@ -36,39 +36,39 @@ class idDeviceContext;
 class idSimpleWindow;
 
 typedef struct {
-    idWindow* win;
-    idSimpleWindow* simp;
+    idWindow *win;
+    idSimpleWindow *simp;
 } drawWin_t;
 
 class idSimpleWindow {
     friend class idWindow;
   public:
-    idSimpleWindow(idWindow* win);
+    idSimpleWindow(idWindow *win);
     virtual         ~idSimpleWindow();
     void            Redraw(float x, float y);
     void            StateChanged(bool redraw);
 
     idStr           name;
 
-    idWinVar*       GetWinVarByName(const char* _name);
-    intptr_t        GetWinVarOffset(idWinVar* wv, drawWin_t* owner);
+    idWinVar       *GetWinVarByName(const char *_name);
+    intptr_t        GetWinVarOffset(idWinVar *wv, drawWin_t *owner);
     size_t          Size();
 
-    idWindow*       GetParent(void) {
+    idWindow       *GetParent(void) {
         return mParent;
     }
 
-    virtual void    WriteToSaveGame(idFile* savefile);
-    virtual void    ReadFromSaveGame(idFile* savefile);
+    virtual void    WriteToSaveGame(idFile *savefile);
+    virtual void    ReadFromSaveGame(idFile *savefile);
 
   protected:
     void            CalcClientRect(float xofs, float yofs);
     void            SetupTransforms(float x, float y);
-    void            DrawBackground(const idRectangle& drawRect);
-    void            DrawBorderAndCaption(const idRectangle& drawRect);
+    void            DrawBackground(const idRectangle &drawRect);
+    void            DrawBorderAndCaption(const idRectangle &drawRect);
 
-    idUserInterfaceLocal* gui;
-    idDeviceContext* dc;
+    idUserInterfaceLocal *gui;
+    idDeviceContext *dc;
     int             flags;
     idRectangle     drawRect;           // overall rect
     idRectangle     clientRect;         // client area
@@ -95,9 +95,9 @@ class idSimpleWindow {
     idWinVec2       shear;
     idWinBackground backGroundName;
 
-    const idMaterial* background;
+    const idMaterial *background;
 
-    idWindow*       mParent;
+    idWindow       *mParent;
 
     idWinBool   hideCursor;
 };

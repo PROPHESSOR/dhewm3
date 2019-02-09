@@ -73,8 +73,8 @@ class idTokenizer {
         tokens.Clear();
     };
 
-    int                 SetTokens(const char* buffer);
-    const char*          NextToken(const char* errorstring = NULL);
+    int                 SetTokens(const char *buffer);
+    const char          *NextToken(const char *errorstring = NULL);
 
     bool                TokenAvailable(void)   {
         return currentToken < tokens.Num();
@@ -87,14 +87,14 @@ class idTokenizer {
             currentToken--;
         }
     };
-    const char*          GetToken(int index)   {
+    const char          *GetToken(int index)   {
         if ((index >= 0) && (index < tokens.Num())) {
             return tokens[ index ];
         } else {
             return NULL;
         }
     };
-    const char*          CurrentToken(void)    {
+    const char          *CurrentToken(void)    {
         return GetToken(currentToken);
     };
 };
@@ -123,7 +123,7 @@ class idExportOptions {
   private:
     idTokenizer             tokens;
 
-    void                    Reset(const char* commandline);
+    void                    Reset(const char *commandline);
 
   public:
     idStr                   commandLine;
@@ -148,15 +148,15 @@ class idExportOptions {
     idStrList               keepjoints;
     idStrList               skipmeshes;
     idStrList               keepmeshes;
-    idList<idAnimGroup*>   exportgroups;
+    idList<idAnimGroup *>   exportgroups;
     idList<idAnimGroup>     groups;
     float                   rotate;
     float                   jointThreshold;
     int                     cycleStart;
 
-    idExportOptions(const char* commandline, const char* ospath);
+    idExportOptions(const char *commandline, const char *ospath);
 
-    bool                    jointInExportGroup(const char* jointname);
+    bool                    jointInExportGroup(const char *jointname);
 };
 
 /*
@@ -179,7 +179,7 @@ class idExportJoint {
     float                       scale;
     float                       invscale;
 
-    MFnDagNode*                  dagnode;
+    MFnDagNode                  *dagnode;
 
     idHierarchy<idExportJoint>  mayaNode;
     idHierarchy<idExportJoint>  exportNode;
@@ -199,7 +199,7 @@ class idExportJoint {
     int                         depth;
 
     idExportJoint();
-    idExportJoint&               operator=(const idExportJoint& other);
+    idExportJoint               &operator=(const idExportJoint &other);
 };
 
 /*
@@ -211,7 +211,7 @@ misc structures
 */
 
 typedef struct {
-    idExportJoint*           joint;
+    idExportJoint           *joint;
     float                   jointWeight;
     idVec3                  offset;
 } exportWeight_t;
@@ -386,8 +386,8 @@ class idExportMesh {
         keep = true;
     };
     void                        ShareVerts(void);
-    void                        GetBounds(idBounds& bounds) const;
-    void                        Merge(idExportMesh* mesh);
+    void                        GetBounds(idBounds &bounds) const;
+    void                        Merge(idExportMesh *mesh);
 };
 
 /*
@@ -400,7 +400,7 @@ idExportModel
 
 class idExportModel {
   public:
-    idExportJoint*               exportOrigin;
+    idExportJoint               *exportOrigin;
     idList<idExportJoint>       joints;
     idHierarchy<idExportJoint>  mayaHead;
     idHierarchy<idExportJoint>  exportHead;
@@ -408,20 +408,20 @@ class idExportModel {
     idList<cameraFrame_t>       camera;
     idList<idBounds>            bounds;
     idList<jointFrame_t>        jointFrames;
-    idList<jointFrame_t*>      frames;
+    idList<jointFrame_t *>      frames;
     int                         frameRate;
     int                         numFrames;
     int                         skipjoints;
     int                         export_joints;
-    idList<idExportMesh*>      meshes;
+    idList<idExportMesh *>      meshes;
 
     idExportModel();
     ~idExportModel();
-    idExportJoint*               FindJointReal(const char* name);
-    idExportJoint*               FindJoint(const char* name);
-    bool                        WriteMesh(const char* filename, idExportOptions& options);
-    bool                        WriteAnim(const char* filename, idExportOptions& options);
-    bool                        WriteCamera(const char* filename, idExportOptions& options);
+    idExportJoint               *FindJointReal(const char *name);
+    idExportJoint               *FindJoint(const char *name);
+    bool                        WriteMesh(const char *filename, idExportOptions &options);
+    bool                        WriteAnim(const char *filename, idExportOptions &options);
+    bool                        WriteCamera(const char *filename, idExportOptions &options);
 };
 
 /*
@@ -435,7 +435,7 @@ Maya
 class idMayaExport {
   private:
     idExportModel           model;
-    idExportOptions&         options;
+    idExportOptions         &options;
 
     void                    FreeDagNodes(void);
 
@@ -444,35 +444,35 @@ class idMayaExport {
     void                    SetFrame(int num);
 
 
-    void                    GetBindPose(MObject& jointNode, idExportJoint* joint, float scale);
-    void                    GetLocalTransform(idExportJoint* joint, idVec3& pos, idMat3& mat);
-    void                    GetWorldTransform(idExportJoint* joint, idVec3& pos, idMat3& mat, float scale);
+    void                    GetBindPose(MObject &jointNode, idExportJoint *joint, float scale);
+    void                    GetLocalTransform(idExportJoint *joint, idVec3 &pos, idMat3 &mat);
+    void                    GetWorldTransform(idExportJoint *joint, idVec3 &pos, idMat3 &mat, float scale);
 
     void                    CreateJoints(float scale);
-    void                    PruneJoints(idStrList& keepjoints, idStr& prefix);
-    void                    RenameJoints(idList<idNamePair>& renamejoints, idStr& prefix);
-    bool                    RemapParents(idList<idNamePair>& remapjoints);
+    void                    PruneJoints(idStrList &keepjoints, idStr &prefix);
+    void                    RenameJoints(idList<idNamePair> &renamejoints, idStr &prefix);
+    bool                    RemapParents(idList<idNamePair> &remapjoints);
 
-    MObject                 FindShader(MObject& setNode);
-    void                    GetTextureForMesh(idExportMesh* mesh, MFnDagNode& dagNode);
+    MObject                 FindShader(MObject &setNode);
+    void                    GetTextureForMesh(idExportMesh *mesh, MFnDagNode &dagNode);
 
-    idExportMesh*            CopyMesh(MFnSkinCluster& skinCluster, float scale);
+    idExportMesh            *CopyMesh(MFnSkinCluster &skinCluster, float scale);
     void                    CreateMesh(float scale);
     void                    CombineMeshes(void);
 
-    void                    GetAlignment(idStr& alignName, idMat3& align, float rotate, int startframe);
+    void                    GetAlignment(idStr &alignName, idMat3 &align, float rotate, int startframe);
 
-    const char*              GetObjectType(MObject object);
+    const char              *GetObjectType(MObject object);
 
-    float                   GetCameraFov(idExportJoint* joint);
-    void                    GetCameraFrame(idExportJoint* camera, idMat3& align, cameraFrame_t* cam);
-    void                    CreateCameraAnim(idMat3& align);
+    float                   GetCameraFov(idExportJoint *joint);
+    void                    GetCameraFrame(idExportJoint *camera, idMat3 &align, cameraFrame_t *cam);
+    void                    CreateCameraAnim(idMat3 &align);
 
-    void                    GetDefaultPose(idMat3& align);
-    void                    CreateAnimation(idMat3& align);
+    void                    GetDefaultPose(idMat3 &align);
+    void                    CreateAnimation(idMat3 &align);
 
   public:
-    idMayaExport(idExportOptions& exportOptions) : options(exportOptions) { };
+    idMayaExport(idExportOptions &exportOptions) : options(exportOptions) { };
     ~idMayaExport();
 
     void                    ConvertModel(void);

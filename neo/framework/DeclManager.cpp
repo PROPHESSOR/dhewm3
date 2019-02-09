@@ -84,7 +84,7 @@ class idDeclType {
   public:
     idStr                       typeName;
     declType_t                  type;
-    idDecl*                     (*allocator)(void);
+    idDecl                     *(*allocator)(void);
 };
 
 class idDeclFolder {
@@ -103,7 +103,7 @@ class idDeclLocal : public idDeclBase {
   public:
     idDeclLocal();
     virtual                 ~idDeclLocal() {};
-    virtual const char*         GetName(void) const;
+    virtual const char         *GetName(void) const;
     virtual declType_t          GetType(void) const;
     virtual declState_t         GetState(void) const;
     virtual bool                IsImplicit(void) const;
@@ -113,11 +113,11 @@ class idDeclLocal : public idDeclBase {
     virtual void                EnsureNotPurged(void);
     virtual int                 Index(void) const;
     virtual int                 GetLineNum(void) const;
-    virtual const char*         GetFileName(void) const;
+    virtual const char         *GetFileName(void) const;
     virtual size_t              Size(void) const;
-    virtual void                GetText(char* text) const;
+    virtual void                GetText(char *text) const;
     virtual int                 GetTextLength(void) const;
-    virtual void                SetText(const char* text);
+    virtual void                SetText(const char *text);
     virtual bool                ReplaceSourceFileText(void);
     virtual bool                SourceFileChanged(void) const;
     virtual void                MakeDefault(void);
@@ -125,8 +125,8 @@ class idDeclLocal : public idDeclBase {
 
   protected:
     virtual bool                SetDefaultText(void);
-    virtual const char*         DefaultDefinition(void) const;
-    virtual bool                Parse(const char* text, const int textLength);
+    virtual const char         *DefaultDefinition(void) const;
+    virtual bool                Parse(const char *text, const int textLength);
     virtual void                FreeData(void);
     virtual void                List(void) const;
     virtual void                Print(void) const;
@@ -143,16 +143,16 @@ class idDeclLocal : public idDeclBase {
     void                        Purge(void);
 
     // Set textSource possible with compression.
-    void                        SetTextLocal(const char* text, const int length);
+    void                        SetTextLocal(const char *text, const int length);
 
   private:
-    idDecl*                     self;
+    idDecl                     *self;
 
     idStr                       name;                   // name of the decl
-    char*                       textSource;             // decl text definition
+    char                       *textSource;             // decl text definition
     int                         textLength;             // length of textSource
     int                         compressedLength;       // compressed length
-    idDeclFile*                 sourceFile;             // source file in which the decl was defined
+    idDeclFile                 *sourceFile;             // source file in which the decl was defined
     int                         sourceTextOffset;       // offset in source file to decl text
     int                         sourceTextLength;       // length of decl text in source file
     int                         sourceLine;             // this is where the actual declaration token starts
@@ -166,13 +166,13 @@ class idDeclLocal : public idDeclBase {
     bool                        referencedThisLevel;    // set to true when the decl is used for the current level
     bool                        redefinedInReload;      // used during file reloading to make sure a decl that has
     // its source removed will be defaulted
-    idDeclLocal*                nextInFile;             // next decl in the decl file
+    idDeclLocal                *nextInFile;             // next decl in the decl file
 };
 
 class idDeclFile {
   public:
     idDeclFile();
-    idDeclFile(const char* fileName, declType_t defaultType);
+    idDeclFile(const char *fileName, declType_t defaultType);
 
     void                        Reload(bool force);
     int                         LoadAndParse();
@@ -186,7 +186,7 @@ class idDeclFile {
     int                         fileSize;
     int                         numLines;
 
-    idDeclLocal*                decls;
+    idDeclLocal                *decls;
 };
 
 class idDeclManagerLocal : public idDeclManager {
@@ -198,56 +198,56 @@ class idDeclManagerLocal : public idDeclManager {
     virtual void                Reload(bool force);
     virtual void                BeginLevelLoad();
     virtual void                EndLevelLoad();
-    virtual void                RegisterDeclType(const char* typeName, declType_t type, idDecl *(*allocator)(void));
-    virtual void                RegisterDeclFolder(const char* folder, const char* extension, declType_t defaultType);
+    virtual void                RegisterDeclType(const char *typeName, declType_t type, idDecl *(*allocator)(void));
+    virtual void                RegisterDeclFolder(const char *folder, const char *extension, declType_t defaultType);
     virtual int                 GetChecksum(void) const;
     virtual int                 GetNumDeclTypes(void) const;
     virtual int                 GetNumDecls(declType_t type);
-    virtual const char*         GetDeclNameFromType(declType_t type) const;
-    virtual declType_t          GetDeclTypeFromName(const char* typeName) const;
-    virtual const idDecl*       FindType(declType_t type, const char* name, bool makeDefault = true);
-    virtual const idDecl*       DeclByIndex(declType_t type, int index, bool forceParse = true);
+    virtual const char         *GetDeclNameFromType(declType_t type) const;
+    virtual declType_t          GetDeclTypeFromName(const char *typeName) const;
+    virtual const idDecl       *FindType(declType_t type, const char *name, bool makeDefault = true);
+    virtual const idDecl       *DeclByIndex(declType_t type, int index, bool forceParse = true);
 
-    virtual const idDecl*       FindDeclWithoutParsing(declType_t type, const char* name, bool makeDefault = true);
-    virtual void                ReloadFile(const char* filename, bool force);
+    virtual const idDecl       *FindDeclWithoutParsing(declType_t type, const char *name, bool makeDefault = true);
+    virtual void                ReloadFile(const char *filename, bool force);
 
-    virtual void                ListType(const idCmdArgs& args, declType_t type);
-    virtual void                PrintType(const idCmdArgs& args, declType_t type);
+    virtual void                ListType(const idCmdArgs &args, declType_t type);
+    virtual void                PrintType(const idCmdArgs &args, declType_t type);
 
-    virtual idDecl*             CreateNewDecl(declType_t type, const char* name, const char* fileName);
+    virtual idDecl             *CreateNewDecl(declType_t type, const char *name, const char *fileName);
 
     //BSM Added for the material editors rename capabilities
-    virtual bool                RenameDecl(declType_t type, const char* oldName, const char* newName);
+    virtual bool                RenameDecl(declType_t type, const char *oldName, const char *newName);
 
-    virtual void                MediaPrint(const char* fmt, ...) id_attribute((format(printf,2,3)));
-    virtual void                WritePrecacheCommands(idFile* f);
+    virtual void                MediaPrint(const char *fmt, ...) id_attribute((format(printf,2,3)));
+    virtual void                WritePrecacheCommands(idFile *f);
 
-    virtual const idMaterial*       FindMaterial(const char* name, bool makeDefault = true);
-    virtual const idDeclSkin*       FindSkin(const char* name, bool makeDefault = true);
-    virtual const idSoundShader*    FindSound(const char* name, bool makeDefault = true);
+    virtual const idMaterial       *FindMaterial(const char *name, bool makeDefault = true);
+    virtual const idDeclSkin       *FindSkin(const char *name, bool makeDefault = true);
+    virtual const idSoundShader    *FindSound(const char *name, bool makeDefault = true);
 
-    virtual const idMaterial*       MaterialByIndex(int index, bool forceParse = true);
-    virtual const idDeclSkin*       SkinByIndex(int index, bool forceParse = true);
-    virtual const idSoundShader*    SoundByIndex(int index, bool forceParse = true);
+    virtual const idMaterial       *MaterialByIndex(int index, bool forceParse = true);
+    virtual const idDeclSkin       *SkinByIndex(int index, bool forceParse = true);
+    virtual const idSoundShader    *SoundByIndex(int index, bool forceParse = true);
 
   public:
-    static void                 MakeNameCanonical(const char* name, char* result, int maxLength);
-    idDeclLocal*                FindTypeWithoutParsing(declType_t type, const char* name, bool makeDefault = true);
+    static void                 MakeNameCanonical(const char *name, char *result, int maxLength);
+    idDeclLocal                *FindTypeWithoutParsing(declType_t type, const char *name, bool makeDefault = true);
 
-    idDeclType*                 GetDeclType(int type) const {
+    idDeclType                 *GetDeclType(int type) const {
         return declTypes[type];
     }
-    const idDeclFile*           GetImplicitDeclFile(void) const {
+    const idDeclFile           *GetImplicitDeclFile(void) const {
         return &implicitDecls;
     }
 
   private:
-    idList<idDeclType*>        declTypes;
-    idList<idDeclFolder*>      declFolders;
+    idList<idDeclType *>        declTypes;
+    idList<idDeclFolder *>      declFolders;
 
-    idList<idDeclFile*>        loadedFiles;
+    idList<idDeclFile *>        loadedFiles;
     idHashIndex                 hashTables[DECL_MAX_TYPES];
-    idList<idDeclLocal*>       linearLists[DECL_MAX_TYPES];
+    idList<idDeclLocal *>       linearLists[DECL_MAX_TYPES];
     idDeclFile                  implicitDecls;  // this holds all the decls that were created because explicit
     // text definitions were not found. Decls that became default
     // because of a parse error are not in this list.
@@ -258,15 +258,15 @@ class idDeclManagerLocal : public idDeclManager {
     static idCVar               decl_show;
 
   private:
-    static void                 ListDecls_f(const idCmdArgs& args);
-    static void                 ReloadDecls_f(const idCmdArgs& args);
-    static void                 TouchDecl_f(const idCmdArgs& args);
+    static void                 ListDecls_f(const idCmdArgs &args);
+    static void                 ReloadDecls_f(const idCmdArgs &args);
+    static void                 TouchDecl_f(const idCmdArgs &args);
 };
 
 idCVar idDeclManagerLocal::decl_show("decl_show", "0", CVAR_SYSTEM, "set to 1 to print parses, 2 to also print references", 0, 2, idCmdSystem::ArgCompletion_Integer<0,2>);
 
 idDeclManagerLocal  declManagerLocal;
-idDeclManager*      declManager = &declManagerLocal;
+idDeclManager      *declManager = &declManagerLocal;
 
 /*
 ====================================================================================
@@ -281,8 +281,8 @@ const int MAX_HUFFMAN_SYMBOLS   = 256;
 typedef struct huffmanNode_s {
     int                     symbol;
     int                     frequency;
-    struct huffmanNode_s*   next;
-    struct huffmanNode_s*   children[2];
+    struct huffmanNode_s   *next;
+    struct huffmanNode_s   *children[2];
 } huffmanNode_t;
 
 typedef struct huffmanCode_s {
@@ -328,7 +328,7 @@ static int huffmanFrequencies[] = {
 };
 
 static huffmanCode_t huffmanCodes[MAX_HUFFMAN_SYMBOLS];
-static huffmanNode_t* huffmanTree = NULL;
+static huffmanNode_t *huffmanTree = NULL;
 static int totalUncompressedLength = 0;
 static int totalCompressedLength = 0;
 static int maxHuffmanBits = 0;
@@ -352,8 +352,8 @@ void ClearHuffmanFrequencies(void) {
 InsertHuffmanNode
 ================
 */
-huffmanNode_t* InsertHuffmanNode(huffmanNode_t* firstNode, huffmanNode_t* node) {
-    huffmanNode_t* n, *lastNode;
+huffmanNode_t *InsertHuffmanNode(huffmanNode_t *firstNode, huffmanNode_t *node) {
+    huffmanNode_t *n, *lastNode;
 
     lastNode = NULL;
 
@@ -381,7 +381,7 @@ huffmanNode_t* InsertHuffmanNode(huffmanNode_t* firstNode, huffmanNode_t* node) 
 BuildHuffmanCode_r
 ================
 */
-void BuildHuffmanCode_r(huffmanNode_t* node, huffmanCode_t code, huffmanCode_t codes[MAX_HUFFMAN_SYMBOLS]) {
+void BuildHuffmanCode_r(huffmanNode_t *node, huffmanCode_t code, huffmanCode_t codes[MAX_HUFFMAN_SYMBOLS]) {
     if (node->symbol == -1) {
         huffmanCode_t newCode = code;
         assert(code.numBits < sizeof(codes[0].bits) * 8);
@@ -405,7 +405,7 @@ void BuildHuffmanCode_r(huffmanNode_t* node, huffmanCode_t code, huffmanCode_t c
 FreeHuffmanTree_r
 ================
 */
-void FreeHuffmanTree_r(huffmanNode_t* node) {
+void FreeHuffmanTree_r(huffmanNode_t *node) {
     if (node->symbol == -1) {
         FreeHuffmanTree_r(node->children[0]);
         FreeHuffmanTree_r(node->children[1]);
@@ -419,7 +419,7 @@ void FreeHuffmanTree_r(huffmanNode_t* node) {
 HuffmanHeight_r
 ================
 */
-int HuffmanHeight_r(huffmanNode_t* node) {
+int HuffmanHeight_r(huffmanNode_t *node) {
     if (node == NULL) {
         return -1;
     }
@@ -441,7 +441,7 @@ SetupHuffman
 */
 void SetupHuffman(void) {
     int i, height id_attribute((unused));
-    huffmanNode_t* firstNode, *node;
+    huffmanNode_t *firstNode, *node;
     huffmanCode_t code;
 
     firstNode = NULL;
@@ -492,7 +492,7 @@ void ShutdownHuffman(void) {
 HuffmanCompressText
 ================
 */
-int HuffmanCompressText(const char* text, int textLength, byte* compressed, int maxCompressedSize) {
+int HuffmanCompressText(const char *text, int textLength, byte *compressed, int maxCompressedSize) {
     int i, j;
     idBitMsg msg;
 
@@ -502,7 +502,7 @@ int HuffmanCompressText(const char* text, int textLength, byte* compressed, int 
     msg.BeginWriting();
 
     for (i = 0; i < textLength; i++) {
-        const huffmanCode_t& code = huffmanCodes[(unsigned char)text[i]];
+        const huffmanCode_t &code = huffmanCodes[(unsigned char)text[i]];
 
         for (j = 0; j < (code.numBits >> 5); j++) {
             msg.WriteBits(code.bits[j], 32);
@@ -523,10 +523,10 @@ int HuffmanCompressText(const char* text, int textLength, byte* compressed, int 
 HuffmanDecompressText
 ================
 */
-int HuffmanDecompressText(char* text, int textLength, const byte* compressed, int compressedSize) {
+int HuffmanDecompressText(char *text, int textLength, const byte *compressed, int compressedSize) {
     int i, bit;
     idBitMsg msg;
-    huffmanNode_t* node;
+    huffmanNode_t *node;
 
     msg.Init(compressed, compressedSize);
     msg.SetSize(compressedSize);
@@ -552,7 +552,7 @@ int HuffmanDecompressText(char* text, int textLength, const byte* compressed, in
 ListHuffmanFrequencies_f
 ================
 */
-void ListHuffmanFrequencies_f(const idCmdArgs& args) {
+void ListHuffmanFrequencies_f(const idCmdArgs &args) {
     int     i;
     float compression;
     compression = !totalUncompressedLength ? 100 : 100 * totalCompressedLength / totalUncompressedLength;
@@ -583,7 +583,7 @@ void ListHuffmanFrequencies_f(const idCmdArgs& args) {
 idDeclFile::idDeclFile
 ================
 */
-idDeclFile::idDeclFile(const char* fileName, declType_t defaultType) {
+idDeclFile::idDeclFile(const char *fileName, declType_t defaultType) {
     this->fileName = fileName;
     this->defaultType = defaultType;
     this->timestamp = 0;
@@ -644,16 +644,16 @@ int idDeclFile::LoadAndParse() {
     idLexer     src;
     idToken     token;
     int         startMarker;
-    char*       buffer;
+    char       *buffer;
     int         length, size;
     int         sourceLine;
     idStr       name;
-    idDeclLocal* newDecl;
+    idDeclLocal *newDecl;
     bool        reparse;
 
     // load the text
     common->DPrintf("...loading '%s'\n", fileName.c_str());
-    length = fileSystem->ReadFile(fileName, (void**)&buffer, &timestamp);
+    length = fileSystem->ReadFile(fileName, (void **)&buffer, &timestamp);
 
     if (length == -1) {
         common->FatalError("couldn't load %s", fileName.c_str());
@@ -667,7 +667,7 @@ int idDeclFile::LoadAndParse() {
     }
 
     // mark all the defs that were from the last reload of this file
-    for (idDeclLocal* decl = decls; decl; decl = decl->nextInFile) {
+    for (idDeclLocal *decl = decls; decl; decl = decl->nextInFile) {
         decl->redefinedInReload = false;
     }
 
@@ -694,7 +694,7 @@ int idDeclFile::LoadAndParse() {
         numTypes = declManagerLocal.GetNumDeclTypes();
 
         for (i = 0; i < numTypes; i++) {
-            idDeclType* typeInfo = declManagerLocal.GetDeclType(i);
+            idDeclType *typeInfo = declManagerLocal.GetDeclType(i);
 
             if (typeInfo && typeInfo->typeName.Icmp(token) == 0) {
                 identifiedType = (declType_t) typeInfo->type;
@@ -809,7 +809,7 @@ int idDeclFile::LoadAndParse() {
     Mem_Free(buffer);
 
     // any defs that weren't redefinedInReload should now be defaulted
-    for (idDeclLocal* decl = decls ; decl ; decl = decl->nextInFile) {
+    for (idDeclLocal *decl = decls ; decl ; decl = decl->nextInFile) {
         if (decl->redefinedInReload == false) {
             decl->MakeDefault();
             decl->sourceTextOffset = decl->sourceFile->fileSize;
@@ -829,7 +829,7 @@ int idDeclFile::LoadAndParse() {
 ====================================================================================
 */
 
-const char* listDeclStrings[] = { "current", "all", "ever", NULL };
+const char *listDeclStrings[] = { "current", "all", "ever", NULL };
 
 /*
 ===================
@@ -916,7 +916,7 @@ idDeclManagerLocal::Shutdown
 */
 void idDeclManagerLocal::Shutdown(void) {
     int         i, j;
-    idDeclLocal* decl;
+    idDeclLocal *decl;
 
     // free decls
     for (i = 0; i < DECL_MAX_TYPES; i++) {
@@ -977,7 +977,7 @@ void idDeclManagerLocal::BeginLevelLoad() {
         int num = linearLists[i].Num();
 
         for (int j = 0 ; j < num ; j++) {
-            idDeclLocal* decl = linearLists[i][j];
+            idDeclLocal *decl = linearLists[i][j];
             decl->Purge();
         }
     }
@@ -1000,8 +1000,8 @@ void idDeclManagerLocal::EndLevelLoad() {
 idDeclManagerLocal::RegisterDeclType
 ===================
 */
-void idDeclManagerLocal::RegisterDeclType(const char* typeName, declType_t type, idDecl *(*allocator)(void)) {
-    idDeclType* declType;
+void idDeclManagerLocal::RegisterDeclType(const char *typeName, declType_t type, idDecl *(*allocator)(void)) {
+    idDeclType *declType;
 
     if (type < declTypes.Num() && declTypes[(int)type]) {
         common->Warning("idDeclManager::RegisterDeclType: type '%s' already exists", typeName);
@@ -1025,12 +1025,12 @@ void idDeclManagerLocal::RegisterDeclType(const char* typeName, declType_t type,
 idDeclManagerLocal::RegisterDeclFolder
 ===================
 */
-void idDeclManagerLocal::RegisterDeclFolder(const char* folder, const char* extension, declType_t defaultType) {
+void idDeclManagerLocal::RegisterDeclFolder(const char *folder, const char *extension, declType_t defaultType) {
     int i, j;
     idStr fileName;
-    idDeclFolder* declFolder;
-    idFileList* fileList;
-    idDeclFile* df;
+    idDeclFolder *declFolder;
+    idFileList *fileList;
+    idDeclFile *df;
 
     // check whether this folder / extension combination already exists
     for (i = 0; i < declFolders.Num(); i++) {
@@ -1083,7 +1083,7 @@ idDeclManagerLocal::GetChecksum
 */
 int idDeclManagerLocal::GetChecksum(void) const {
     int i, j, total, num;
-    int* checksumData;
+    int *checksumData;
 
     // get the total number of decls
     total = 0;
@@ -1092,7 +1092,7 @@ int idDeclManagerLocal::GetChecksum(void) const {
         total += linearLists[i].Num();
     }
 
-    checksumData = (int*) _alloca16(total * 2 * sizeof(int));
+    checksumData = (int *) _alloca16(total * 2 * sizeof(int));
 
     total = 0;
 
@@ -1107,7 +1107,7 @@ int idDeclManagerLocal::GetChecksum(void) const {
         num = linearLists[i].Num();
 
         for (j = 0; j < num; j++) {
-            idDeclLocal* decl = linearLists[i][j];
+            idDeclLocal *decl = linearLists[i][j];
 
             if (decl->sourceFile == &implicitDecls) {
                 continue;
@@ -1137,7 +1137,7 @@ int idDeclManagerLocal::GetNumDeclTypes(void) const {
 idDeclManagerLocal::GetDeclNameFromType
 ===================
 */
-const char* idDeclManagerLocal::GetDeclNameFromType(declType_t type) const {
+const char *idDeclManagerLocal::GetDeclNameFromType(declType_t type) const {
     int typeIndex = (int)type;
 
     if (typeIndex < 0 || typeIndex >= declTypes.Num() || declTypes[typeIndex] == NULL) {
@@ -1152,7 +1152,7 @@ const char* idDeclManagerLocal::GetDeclNameFromType(declType_t type) const {
 idDeclManagerLocal::GetDeclTypeFromName
 ===================
 */
-declType_t idDeclManagerLocal::GetDeclTypeFromName(const char* typeName) const {
+declType_t idDeclManagerLocal::GetDeclTypeFromName(const char *typeName) const {
     int i;
 
     for (i = 0; i < declTypes.Num(); i++) {
@@ -1171,8 +1171,8 @@ idDeclManagerLocal::FindType
 External users will always cause the decl to be parsed before returning
 =================
 */
-const idDecl* idDeclManagerLocal::FindType(declType_t type, const char* name, bool makeDefault) {
-    idDeclLocal* decl;
+const idDecl *idDeclManagerLocal::FindType(declType_t type, const char *name, bool makeDefault) {
+    idDeclLocal *decl;
 
     if (!name || !name[0]) {
         name = "_emptyName";
@@ -1208,8 +1208,8 @@ const idDecl* idDeclManagerLocal::FindType(declType_t type, const char* name, bo
 idDeclManagerLocal::FindDeclWithoutParsing
 ===============
 */
-const idDecl* idDeclManagerLocal::FindDeclWithoutParsing(declType_t type, const char* name, bool makeDefault) {
-    idDeclLocal* decl;
+const idDecl *idDeclManagerLocal::FindDeclWithoutParsing(declType_t type, const char *name, bool makeDefault) {
+    idDeclLocal *decl;
     decl = FindTypeWithoutParsing(type, name, makeDefault);
 
     if (decl) {
@@ -1224,7 +1224,7 @@ const idDecl* idDeclManagerLocal::FindDeclWithoutParsing(declType_t type, const 
 idDeclManagerLocal::ReloadFile
 ===============
 */
-void idDeclManagerLocal::ReloadFile(const char* filename, bool force) {
+void idDeclManagerLocal::ReloadFile(const char *filename, bool force) {
     for (int i = 0; i < loadedFiles.Num(); i++) {
         if (!loadedFiles[i]->fileName.Icmp(filename)) {
             checksum ^= loadedFiles[i]->checksum;
@@ -1254,7 +1254,7 @@ int idDeclManagerLocal::GetNumDecls(declType_t type) {
 idDeclManagerLocal::DeclByIndex
 ===================
 */
-const idDecl* idDeclManagerLocal::DeclByIndex(declType_t type, int index, bool forceParse) {
+const idDecl *idDeclManagerLocal::DeclByIndex(declType_t type, int index, bool forceParse) {
     int typeIndex = (int)type;
 
     if (typeIndex < 0 || typeIndex >= declTypes.Num() || declTypes[typeIndex] == NULL) {
@@ -1265,7 +1265,7 @@ const idDecl* idDeclManagerLocal::DeclByIndex(declType_t type, int index, bool f
         common->Error("idDeclManager::DeclByIndex: out of range");
     }
 
-    idDeclLocal* decl = linearLists[ typeIndex ][ index ];
+    idDeclLocal *decl = linearLists[ typeIndex ][ index ];
 
     decl->AllocateSelf();
 
@@ -1292,7 +1292,7 @@ Lists every decl declared, even if it hasn't been referenced or parsed
 FIXME: alphabetized, wildcards?
 ===================
 */
-void idDeclManagerLocal::ListType(const idCmdArgs& args, declType_t type) {
+void idDeclManagerLocal::ListType(const idCmdArgs &args, declType_t type) {
     bool all, ever;
 
     if (!idStr::Icmp(args.Argv(1), "all")) {
@@ -1312,7 +1312,7 @@ void idDeclManagerLocal::ListType(const idCmdArgs& args, declType_t type) {
     int count = linearLists[(int)type ].Num();
 
     for (int i = 0 ; i < count ; i++) {
-        idDeclLocal* decl = linearLists[(int)type ][ i ];
+        idDeclLocal *decl = linearLists[(int)type ][ i ];
 
         if (!all && decl->declState == DS_UNPARSED) {
             continue;
@@ -1356,7 +1356,7 @@ void idDeclManagerLocal::ListType(const idCmdArgs& args, declType_t type) {
 idDeclManagerLocal::PrintType
 ===================
 */
-void idDeclManagerLocal::PrintType(const idCmdArgs& args, declType_t type) {
+void idDeclManagerLocal::PrintType(const idCmdArgs &args, declType_t type) {
     // individual decl types may use additional command parameters
     if (args.Argc() < 2) {
         common->Printf("USAGE: Print<decl type> <decl name> [type specific parms]\n");
@@ -1364,7 +1364,7 @@ void idDeclManagerLocal::PrintType(const idCmdArgs& args, declType_t type) {
     }
 
     // look it up, skipping the public path so it won't parse or reference
-    idDeclLocal* decl = FindTypeWithoutParsing(type, args.Argv(1), false);
+    idDeclLocal *decl = FindTypeWithoutParsing(type, args.Argv(1), false);
 
     if (!decl) {
         common->Printf("%s '%s' not found.\n", declTypes[ type ]->typeName.c_str(), args.Argv(1));
@@ -1377,7 +1377,7 @@ void idDeclManagerLocal::PrintType(const idCmdArgs& args, declType_t type) {
     common->Printf("----------\n");
 
     if (decl->textSource != NULL) {
-        char* declText = (char*)_alloca(decl->textLength + 1);
+        char *declText = (char *)_alloca(decl->textLength + 1);
         decl->GetText(declText);
         common->Printf("%s\n", declText);
     } else {
@@ -1419,7 +1419,7 @@ void idDeclManagerLocal::PrintType(const idCmdArgs& args, declType_t type) {
 idDeclManagerLocal::CreateNewDecl
 ===================
 */
-idDecl* idDeclManagerLocal::CreateNewDecl(declType_t type, const char* name, const char* _fileName) {
+idDecl *idDeclManagerLocal::CreateNewDecl(declType_t type, const char *name, const char *_fileName) {
     int typeIndex = (int)type;
     int i, hash;
 
@@ -1444,7 +1444,7 @@ idDecl* idDeclManagerLocal::CreateNewDecl(declType_t type, const char* name, con
         }
     }
 
-    idDeclFile* sourceFile;
+    idDeclFile *sourceFile;
 
     // find existing source file or create a new one
     for (i = 0; i < loadedFiles.Num(); i++) {
@@ -1460,7 +1460,7 @@ idDecl* idDeclManagerLocal::CreateNewDecl(declType_t type, const char* name, con
         loadedFiles.Append(sourceFile);
     }
 
-    idDeclLocal* decl = new idDeclLocal;
+    idDeclLocal *decl = new idDeclLocal;
     decl->name = canonicalName;
     decl->type = type;
     decl->declState = DS_UNPARSED;
@@ -1470,7 +1470,7 @@ idDecl* idDeclManagerLocal::CreateNewDecl(declType_t type, const char* name, con
 
 
     int size = header.Length() + 1 + idStr::Length(canonicalName) + 1 + defaultText.Length();
-    char* declText = (char*) _alloca(size + 1);
+    char *declText = (char *) _alloca(size + 1);
 
     memcpy(declText, header, header.Length());
     declText[header.Length()] = ' ';
@@ -1502,7 +1502,7 @@ idDecl* idDeclManagerLocal::CreateNewDecl(declType_t type, const char* name, con
 idDeclManagerLocal::RenameDecl
 ===============
 */
-bool idDeclManagerLocal::RenameDecl(declType_t type, const char* oldName, const char* newName) {
+bool idDeclManagerLocal::RenameDecl(declType_t type, const char *oldName, const char *newName) {
 
     char canonicalOldName[MAX_STRING_CHARS];
     MakeNameCanonical(oldName, canonicalOldName, sizeof(canonicalOldName));
@@ -1510,7 +1510,7 @@ bool idDeclManagerLocal::RenameDecl(declType_t type, const char* oldName, const 
     char canonicalNewName[MAX_STRING_CHARS];
     MakeNameCanonical(newName, canonicalNewName, sizeof(canonicalNewName));
 
-    idDeclLocal* decl = NULL;
+    idDeclLocal *decl = NULL;
 
     // make sure it already exists
     int typeIndex = (int)type;
@@ -1555,7 +1555,7 @@ idDeclManagerLocal::MediaPrint
 This is just used to nicely indent media caching prints
 ===================
 */
-void idDeclManagerLocal::MediaPrint(const char* fmt, ...) {
+void idDeclManagerLocal::MediaPrint(const char *fmt, ...) {
     if (!decl_show.GetInteger()) {
         return;
     }
@@ -1579,7 +1579,7 @@ void idDeclManagerLocal::MediaPrint(const char* fmt, ...) {
 idDeclManagerLocal::WritePrecacheCommands
 ===================
 */
-void idDeclManagerLocal::WritePrecacheCommands(idFile* f) {
+void idDeclManagerLocal::WritePrecacheCommands(idFile *f) {
     for (int i = 0; i < declTypes.Num(); i++) {
         int num;
 
@@ -1590,7 +1590,7 @@ void idDeclManagerLocal::WritePrecacheCommands(idFile* f) {
         num = linearLists[i].Num();
 
         for (int j = 0 ; j < num ; j++) {
-            idDeclLocal* decl = linearLists[i][j];
+            idDeclLocal *decl = linearLists[i][j];
 
             if (!decl->referencedThisLevel) {
                 continue;
@@ -1606,32 +1606,32 @@ void idDeclManagerLocal::WritePrecacheCommands(idFile* f) {
 
 /********************************************************************/
 
-const idMaterial* idDeclManagerLocal::FindMaterial(const char* name, bool makeDefault) {
-    return static_cast<const idMaterial*>(FindType(DECL_MATERIAL, name, makeDefault));
+const idMaterial *idDeclManagerLocal::FindMaterial(const char *name, bool makeDefault) {
+    return static_cast<const idMaterial *>(FindType(DECL_MATERIAL, name, makeDefault));
 }
 
-const idMaterial* idDeclManagerLocal::MaterialByIndex(int index, bool forceParse) {
-    return static_cast<const idMaterial*>(DeclByIndex(DECL_MATERIAL, index, forceParse));
-}
-
-/********************************************************************/
-
-const idDeclSkin* idDeclManagerLocal::FindSkin(const char* name, bool makeDefault) {
-    return static_cast<const idDeclSkin*>(FindType(DECL_SKIN, name, makeDefault));
-}
-
-const idDeclSkin* idDeclManagerLocal::SkinByIndex(int index, bool forceParse) {
-    return static_cast<const idDeclSkin*>(DeclByIndex(DECL_SKIN, index, forceParse));
+const idMaterial *idDeclManagerLocal::MaterialByIndex(int index, bool forceParse) {
+    return static_cast<const idMaterial *>(DeclByIndex(DECL_MATERIAL, index, forceParse));
 }
 
 /********************************************************************/
 
-const idSoundShader* idDeclManagerLocal::FindSound(const char* name, bool makeDefault) {
-    return static_cast<const idSoundShader*>(FindType(DECL_SOUND, name, makeDefault));
+const idDeclSkin *idDeclManagerLocal::FindSkin(const char *name, bool makeDefault) {
+    return static_cast<const idDeclSkin *>(FindType(DECL_SKIN, name, makeDefault));
 }
 
-const idSoundShader* idDeclManagerLocal::SoundByIndex(int index, bool forceParse) {
-    return static_cast<const idSoundShader*>(DeclByIndex(DECL_SOUND, index, forceParse));
+const idDeclSkin *idDeclManagerLocal::SkinByIndex(int index, bool forceParse) {
+    return static_cast<const idDeclSkin *>(DeclByIndex(DECL_SKIN, index, forceParse));
+}
+
+/********************************************************************/
+
+const idSoundShader *idDeclManagerLocal::FindSound(const char *name, bool makeDefault) {
+    return static_cast<const idSoundShader *>(FindType(DECL_SOUND, name, makeDefault));
+}
+
+const idSoundShader *idDeclManagerLocal::SoundByIndex(int index, bool forceParse) {
+    return static_cast<const idSoundShader *>(DeclByIndex(DECL_SOUND, index, forceParse));
 }
 
 /*
@@ -1639,7 +1639,7 @@ const idSoundShader* idDeclManagerLocal::SoundByIndex(int index, bool forceParse
 idDeclManagerLocal::MakeNameCanonical
 ===================
 */
-void idDeclManagerLocal::MakeNameCanonical(const char* name, char* result, int maxLength) {
+void idDeclManagerLocal::MakeNameCanonical(const char *name, char *result, int maxLength) {
     int i, lastDot;
 
     lastDot = -1;
@@ -1669,7 +1669,7 @@ void idDeclManagerLocal::MakeNameCanonical(const char* name, char* result, int m
 idDeclManagerLocal::ListDecls_f
 ================
 */
-void idDeclManagerLocal::ListDecls_f(const idCmdArgs& args) {
+void idDeclManagerLocal::ListDecls_f(const idCmdArgs &args) {
     int     i, j;
     int     totalDecls = 0;
     int     totalText = 0;
@@ -1701,7 +1701,7 @@ void idDeclManagerLocal::ListDecls_f(const idCmdArgs& args) {
     }
 
     for (i = 0 ; i < declManagerLocal.loadedFiles.Num() ; i++) {
-        idDeclFile*  df = declManagerLocal.loadedFiles[i];
+        idDeclFile  *df = declManagerLocal.loadedFiles[i];
         totalText += df->fileSize;
     }
 
@@ -1719,7 +1719,7 @@ will only reload existing files.
 A reload will never cause anything to be purged.
 ===================
 */
-void idDeclManagerLocal::ReloadDecls_f(const idCmdArgs& args) {
+void idDeclManagerLocal::ReloadDecls_f(const idCmdArgs &args) {
     bool    force;
 
     if (!idStr::Icmp(args.Argv(1), "all")) {
@@ -1742,7 +1742,7 @@ void idDeclManagerLocal::ReloadDecls_f(const idCmdArgs& args) {
 idDeclManagerLocal::TouchDecl_f
 ===================
 */
-void idDeclManagerLocal::TouchDecl_f(const idCmdArgs& args) {
+void idDeclManagerLocal::TouchDecl_f(const idCmdArgs &args) {
     int i;
 
     if (args.Argc() != 3) {
@@ -1770,7 +1770,7 @@ void idDeclManagerLocal::TouchDecl_f(const idCmdArgs& args) {
         return;
     }
 
-    const idDecl* decl = declManagerLocal.FindType((declType_t)i, args.Argv(2), false);
+    const idDecl *decl = declManagerLocal.FindType((declType_t)i, args.Argv(2), false);
 
     if (!decl) {
         common->Printf("%s '%s' not found\n", declManagerLocal.declTypes[i]->typeName.c_str(), args.Argv(2));
@@ -1784,7 +1784,7 @@ idDeclManagerLocal::FindTypeWithoutParsing
 This finds or creats the decl, but does not cause a parse.  This is only used internally.
 ===================
 */
-idDeclLocal* idDeclManagerLocal::FindTypeWithoutParsing(declType_t type, const char* name, bool makeDefault) {
+idDeclLocal *idDeclManagerLocal::FindTypeWithoutParsing(declType_t type, const char *name, bool makeDefault) {
     int typeIndex = (int)type;
     int i, hash;
 
@@ -1814,7 +1814,7 @@ idDeclLocal* idDeclManagerLocal::FindTypeWithoutParsing(declType_t type, const c
         return NULL;
     }
 
-    idDeclLocal* decl = new idDeclLocal;
+    idDeclLocal *decl = new idDeclLocal;
     decl->self = NULL;
     decl->name = canonicalName;
     decl->type = type;
@@ -1872,7 +1872,7 @@ idDeclLocal::idDeclLocal(void) {
 idDeclLocal::GetName
 =================
 */
-const char* idDeclLocal::GetName(void) const {
+const char *idDeclLocal::GetName(void) const {
     return name.c_str();
 }
 
@@ -1955,7 +1955,7 @@ int idDeclLocal::GetLineNum(void) const {
 idDeclLocal::GetFileName
 =================
 */
-const char* idDeclLocal::GetFileName(void) const {
+const char *idDeclLocal::GetFileName(void) const {
     return (sourceFile) ? sourceFile->fileName.c_str() : "*invalid*";
 }
 
@@ -1973,9 +1973,9 @@ size_t idDeclLocal::Size(void) const {
 idDeclLocal::GetText
 =================
 */
-void idDeclLocal::GetText(char* text) const {
+void idDeclLocal::GetText(char *text) const {
     #ifdef USE_COMPRESSED_DECLS
-    HuffmanDecompressText(text, textLength, (byte*)textSource, compressedLength);
+    HuffmanDecompressText(text, textLength, (byte *)textSource, compressedLength);
     #else
     memcpy(text, textSource, textLength+1);
     #endif
@@ -1995,7 +1995,7 @@ int idDeclLocal::GetTextLength(void) const {
 idDeclLocal::SetText
 =================
 */
-void idDeclLocal::SetText(const char* text) {
+void idDeclLocal::SetText(const char *text) {
     SetTextLocal(text, idStr::Length(text));
 }
 
@@ -2004,7 +2004,7 @@ void idDeclLocal::SetText(const char* text) {
 idDeclLocal::SetTextLocal
 =================
 */
-void idDeclLocal::SetTextLocal(const char* text, const int length) {
+void idDeclLocal::SetTextLocal(const char *text, const int length) {
 
     Mem_Free(textSource);
 
@@ -2013,20 +2013,20 @@ void idDeclLocal::SetTextLocal(const char* text, const int length) {
     #ifdef GET_HUFFMAN_FREQUENCIES
 
     for (int i = 0; i < length; i++) {
-        huffmanFrequencies[((const unsigned char*)text)[i]]++;
+        huffmanFrequencies[((const unsigned char *)text)[i]]++;
     }
 
     #endif
 
     #ifdef USE_COMPRESSED_DECLS
     int maxBytesPerCode = (maxHuffmanBits + 7) >> 3;
-    byte* compressed = (byte*)_alloca(length * maxBytesPerCode);
+    byte *compressed = (byte *)_alloca(length * maxBytesPerCode);
     compressedLength = HuffmanCompressText(text, length, compressed, length * maxBytesPerCode);
-    textSource = (char*)Mem_Alloc(compressedLength);
+    textSource = (char *)Mem_Alloc(compressedLength);
     memcpy(textSource, compressed, compressedLength);
     #else
     compressedLength = length;
-    textSource = (char*) Mem_Alloc(length + 1);
+    textSource = (char *) Mem_Alloc(length + 1);
     memcpy(textSource, text, length);
     textSource[length] = '\0';
     #endif
@@ -2040,8 +2040,8 @@ idDeclLocal::ReplaceSourceFileText
 */
 bool idDeclLocal::ReplaceSourceFileText(void) {
     int oldFileLength, newFileLength;
-    char* buffer;
-    idFile* file;
+    char *buffer;
+    idFile *file;
 
     common->Printf("Writing \'%s\' to \'%s\'...\n", GetName(), GetFileName());
 
@@ -2053,7 +2053,7 @@ bool idDeclLocal::ReplaceSourceFileText(void) {
     // get length and allocate buffer to hold the file
     oldFileLength = sourceFile->fileSize;
     newFileLength = oldFileLength - sourceTextLength + textLength;
-    buffer = (char*) Mem_Alloc(Max(newFileLength, oldFileLength));
+    buffer = (char *) Mem_Alloc(Max(newFileLength, oldFileLength));
 
     // read original file
     if (sourceFile->fileSize) {
@@ -2083,7 +2083,7 @@ bool idDeclLocal::ReplaceSourceFileText(void) {
     }
 
     // insert new text
-    char* declText = (char*) _alloca(textLength + 1);
+    char *declText = (char *) _alloca(textLength + 1);
     GetText(declText);
     memmove(buffer + sourceTextOffset + textLength, buffer + sourceTextOffset + sourceTextLength, oldFileLength - sourceTextOffset - sourceTextLength);
     memcpy(buffer + sourceTextOffset, declText, textLength);
@@ -2109,7 +2109,7 @@ bool idDeclLocal::ReplaceSourceFileText(void) {
     Mem_Free(buffer);
 
     // move all decls in the same file
-    for (idDeclLocal* decl = sourceFile->decls; decl; decl = decl->nextInFile) {
+    for (idDeclLocal *decl = sourceFile->decls; decl; decl = decl->nextInFile) {
         if (decl->sourceTextOffset > sourceTextOffset) {
             decl->sourceTextOffset += textLength - sourceTextLength;
         }
@@ -2150,7 +2150,7 @@ idDeclLocal::MakeDefault
 */
 void idDeclLocal::MakeDefault() {
     static int recursionLevel;
-    const char* defaultText;
+    const char *defaultText;
 
     declManagerLocal.MediaPrint("DEFAULTED\n");
     declState = DS_DEFAULTED;
@@ -2191,7 +2191,7 @@ bool idDeclLocal::SetDefaultText(void) {
 idDeclLocal::DefaultDefinition
 =================
 */
-const char* idDeclLocal::DefaultDefinition() const {
+const char *idDeclLocal::DefaultDefinition() const {
     return "{ }";
 }
 
@@ -2200,7 +2200,7 @@ const char* idDeclLocal::DefaultDefinition() const {
 idDeclLocal::Parse
 =================
 */
-bool idDeclLocal::Parse(const char* text, const int textLength) {
+bool idDeclLocal::Parse(const char *text, const int textLength) {
     idLexer src;
 
     src.LoadMemory(text, textLength, GetFileName(), GetLineNum());
@@ -2289,7 +2289,7 @@ void idDeclLocal::ParseLocal(void) {
     declState = DS_PARSED;
 
     // parse
-    char* declText = (char*) _alloca((GetTextLength() + 1) * sizeof(char));
+    char *declText = (char *) _alloca((GetTextLength() + 1) * sizeof(char));
     GetText(declText);
     self->Parse(declText, GetTextLength());
 

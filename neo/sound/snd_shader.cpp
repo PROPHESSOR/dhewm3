@@ -113,7 +113,7 @@ bool idSoundShader::SetDefaultText(void) {
 DefaultDefinition
 ===================
 */
-const char* idSoundShader::DefaultDefinition() const {
+const char *idSoundShader::DefaultDefinition() const {
     return
         "{\n"
         "\t"    "_default.wav\n"
@@ -127,7 +127,7 @@ idSoundShader::Parse
   this is called by the declManager
 ===============
 */
-bool idSoundShader::Parse(const char* text, const int textLength) {
+bool idSoundShader::Parse(const char *text, const int textLength) {
     idLexer src;
 
     src.LoadMemory(text, textLength, GetFileName(), GetLineNum());
@@ -150,7 +150,7 @@ bool idSoundShader::Parse(const char* text, const int textLength) {
 idSoundShader::ParseShader
 ===============
 */
-bool idSoundShader::ParseShader(idLexer& src) {
+bool idSoundShader::ParseShader(idLexer &src) {
     int         i;
     idToken     token;
 
@@ -424,7 +424,7 @@ void idSoundShader::List() const {
     }
 
     for (int k = 0; k < numLeadins ; k++) {
-        const idSoundSample* objectp = leadins[k];
+        const idSoundSample *objectp = leadins[k];
 
         if (objectp) {
             common->Printf("      %5dms %4dKb %s (LEADIN)\n", soundSystemLocal.SamplesToMilliseconds(objectp->LengthIn44kHzSamples()), (objectp->objectMemSize/1024)
@@ -433,7 +433,7 @@ void idSoundShader::List() const {
     }
 
     for (int k = 0; k < numEntries; k++) {
-        const idSoundSample* objectp = entries[k];
+        const idSoundSample *objectp = entries[k];
 
         if (objectp) {
             common->Printf("      %5dms %4dKb %s\n", soundSystemLocal.SamplesToMilliseconds(objectp->LengthIn44kHzSamples()), (objectp->objectMemSize/1024)
@@ -447,7 +447,7 @@ void idSoundShader::List() const {
 idSoundShader::GetAltSound
 ===============
 */
-const idSoundShader* idSoundShader::GetAltSound(void) const {
+const idSoundShader *idSoundShader::GetAltSound(void) const {
     return altSound;
 }
 
@@ -474,7 +474,7 @@ float idSoundShader::GetMaxDistance() const {
 idSoundShader::GetDescription
 ===============
 */
-const char* idSoundShader::GetDescription() const {
+const char *idSoundShader::GetDescription() const {
     return desc;
 }
 
@@ -498,7 +498,7 @@ bool idSoundShader::HasDefaultSound() const {
 idSoundShader::GetParms
 ===============
 */
-const soundShaderParms_t* idSoundShader::GetParms() const {
+const soundShaderParms_t *idSoundShader::GetParms() const {
     return &parms;
 }
 
@@ -516,7 +516,7 @@ int idSoundShader::GetNumSounds() const {
 idSoundShader::GetSound
 ===============
 */
-const char* idSoundShader::GetSound(int index) const {
+const char *idSoundShader::GetSound(int index) const {
     if (index >= 0) {
         if (index < numLeadins) {
             return leadins[index]->name.c_str();

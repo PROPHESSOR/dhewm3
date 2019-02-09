@@ -48,7 +48,7 @@ idDeclFX::Print
 ===============
 */
 void idDeclFX::Print(void) const {
-    const idDeclFX* list = this;
+    const idDeclFX *list = this;
 
     common->Printf("%d events\n", list->events.Num());
 
@@ -111,7 +111,7 @@ void idDeclFX::List(void) const {
 idDeclFX::ParseSingleFXAction
 ================
 */
-void idDeclFX::ParseSingleFXAction(idLexer& src, idFXSingleAction& FXAction) {
+void idDeclFX::ParseSingleFXAction(idLexer &src, idFXSingleAction &FXAction) {
     idToken token;
 
     FXAction.type = -1;
@@ -425,7 +425,7 @@ void idDeclFX::ParseSingleFXAction(idLexer& src, idFXSingleAction& FXAction) {
 idDeclFX::Parse
 ================
 */
-bool idDeclFX::Parse(const char* text, const int textLength) {
+bool idDeclFX::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -471,7 +471,7 @@ bool idDeclFX::Parse(const char* text, const int textLength) {
 idDeclFX::DefaultDefinition
 ===================
 */
-const char* idDeclFX::DefaultDefinition(void) const {
+const char *idDeclFX::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "{\n"

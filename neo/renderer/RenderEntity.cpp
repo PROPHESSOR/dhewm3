@@ -56,10 +56,10 @@ idRenderEntityLocal::idRenderEntityLocal() {
 void idRenderEntityLocal::FreeRenderEntity() {
 }
 
-void idRenderEntityLocal::UpdateRenderEntity(const renderEntity_t* re, bool forceUpdate) {
+void idRenderEntityLocal::UpdateRenderEntity(const renderEntity_t *re, bool forceUpdate) {
 }
 
-void idRenderEntityLocal::GetRenderEntity(renderEntity_t* re) {
+void idRenderEntityLocal::GetRenderEntity(renderEntity_t *re) {
 }
 
 void idRenderEntityLocal::ForceUpdate() {
@@ -69,7 +69,7 @@ int idRenderEntityLocal::GetIndex() {
     return index;
 }
 
-void idRenderEntityLocal::ProjectOverlay(const idPlane localTextureAxis[2], const idMaterial* material) {
+void idRenderEntityLocal::ProjectOverlay(const idPlane localTextureAxis[2], const idMaterial *material) {
 }
 void idRenderEntityLocal::RemoveDecals() {
 }
@@ -105,9 +105,9 @@ idRenderLightLocal::idRenderLightLocal() {
 
 void idRenderLightLocal::FreeRenderLight() {
 }
-void idRenderLightLocal::UpdateRenderLight(const renderLight_t* re, bool forceUpdate) {
+void idRenderLightLocal::UpdateRenderLight(const renderLight_t *re, bool forceUpdate) {
 }
-void idRenderLightLocal::GetRenderLight(renderLight_t* re) {
+void idRenderLightLocal::GetRenderLight(renderLight_t *re) {
 }
 void idRenderLightLocal::ForceUpdate() {
 }

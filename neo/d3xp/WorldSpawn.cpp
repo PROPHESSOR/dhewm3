@@ -54,9 +54,9 @@ idWorldspawn::Spawn
 */
 void idWorldspawn::Spawn(void) {
     idStr               scriptname;
-    idThread*            thread;
-    const function_t*    func;
-    const idKeyValue*    kv;
+    idThread            *thread;
+    const function_t    *func;
+    const idKeyValue    *kv;
 
     assert(gameLocal.world == NULL);
     gameLocal.world = this;
@@ -105,7 +105,7 @@ void idWorldspawn::Spawn(void) {
 idWorldspawn::Save
 =================
 */
-void idWorldspawn::Save(idRestoreGame* savefile) {
+void idWorldspawn::Save(idRestoreGame *savefile) {
 }
 
 /*
@@ -113,7 +113,7 @@ void idWorldspawn::Save(idRestoreGame* savefile) {
 idWorldspawn::Restore
 =================
 */
-void idWorldspawn::Restore(idRestoreGame* savefile) {
+void idWorldspawn::Restore(idRestoreGame *savefile) {
     assert(gameLocal.world == this);
 
     g_gravity.SetFloat(spawnArgs.GetFloat("gravity", va("%f", DEFAULT_GRAVITY)));

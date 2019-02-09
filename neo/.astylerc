@@ -12,8 +12,8 @@
 #--brackets=attach
 --convert-tabs
 --lineend=linux
---align-pointer=type
---align-reference=type
+--align-pointer=name
+--align-reference=name
 --attach-namespaces
 --attach-classes
 #--attach-inline

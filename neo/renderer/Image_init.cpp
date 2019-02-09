@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "framework/GameCallbacks_local.h"
 
-const char* imageFilter[] = {
+const char *imageFilter[] = {
     "GL_LINEAR_MIPMAP_NEAREST",
     "GL_LINEAR_MIPMAP_LINEAR",
     "GL_NEAREST",
@@ -75,7 +75,7 @@ idCVar idImageManager::image_downSizeLimit("image_downSizeLimit", "256", CVAR_RE
 // do this with a pointer, in case we want to make the actual manager
 // a private virtual subclass
 idImageManager  imageManager;
-idImageManager*  globalImages = &imageManager;
+idImageManager  *globalImages = &imageManager;
 
 
 enum IMAGE_CLASSIFICATION {
@@ -92,8 +92,8 @@ enum IMAGE_CLASSIFICATION {
 };
 
 struct imageClassificate_t {
-    const char* rootPath;
-    const char* desc;
+    const char *rootPath;
+    const char *desc;
     int type;
     int maxWidth;
     int maxHeight;
@@ -115,7 +115,7 @@ const imageClassificate_t IC_Info[] = {
 
 
 
-static int ClassifyImage(const char* name) {
+static int ClassifyImage(const char *name) {
     idStr str;
     str = name;
 
@@ -135,7 +135,7 @@ R_RampImage
 Creates a 0-255 ramp image
 ================
 */
-static void R_RampImage(idImage* image) {
+static void R_RampImage(idImage *image) {
     int     x;
     byte    data[256][4];
 
@@ -146,7 +146,7 @@ static void R_RampImage(idImage* image) {
                     data[x][3] = x;
     }
 
-    image->GenerateImage((byte*)data, 256, 1,
+    image->GenerateImage((byte *)data, 256, 1,
                          TF_NEAREST, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
@@ -157,7 +157,7 @@ R_SpecularTableImage
 Creates a ramp that matches our fudged specular calculation
 ================
 */
-static void R_SpecularTableImage(idImage* image) {
+static void R_SpecularTableImage(idImage *image) {
     int     x;
     byte    data[256][4];
 
@@ -184,7 +184,7 @@ static void R_SpecularTableImage(idImage* image) {
                     data[x][3] = b;
     }
 
-    image->GenerateImage((byte*)data, 256, 1,
+    image->GenerateImage((byte *)data, 256, 1,
                          TF_LINEAR, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
@@ -196,7 +196,7 @@ R_Specular2DTableImage
 Create a 2D table that calculates ( reflection dot , specularity )
 ================
 */
-static void R_Specular2DTableImage(idImage* image) {
+static void R_Specular2DTableImage(idImage *image) {
     int     x, y;
     byte    data[256][256][4];
 
@@ -222,7 +222,7 @@ static void R_Specular2DTableImage(idImage* image) {
         }
     }
 
-    image->GenerateImage((byte*)data, 256, 256, TF_LINEAR, false, TR_CLAMP, TD_HIGH_QUALITY);
+    image->GenerateImage((byte *)data, 256, 256, TF_LINEAR, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
 
@@ -235,7 +235,7 @@ Creates a 0-255 ramp image
 ================
 */
 #if 0
-static void R_AlphaRampImage(idImage* image) {
+static void R_AlphaRampImage(idImage *image) {
     int     x;
     byte    data[256][4];
 
@@ -246,7 +246,7 @@ static void R_AlphaRampImage(idImage* image) {
         data[x][3] = x;
     }
 
-    image->GenerateImage((byte*)data, 256, 1,
+    image->GenerateImage((byte *)data, 256, 1,
                          TF_NEAREST, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 #endif
@@ -310,39 +310,39 @@ void idImage::MakeDefault() {
         }
     }
 
-    GenerateImage((byte*)data,
+    GenerateImage((byte *)data,
                   DEFAULT_SIZE, DEFAULT_SIZE,
                   TF_DEFAULT, true, TR_REPEAT, TD_DEFAULT);
 
     defaulted = true;
 }
 
-static void R_DefaultImage(idImage* image) {
+static void R_DefaultImage(idImage *image) {
     image->MakeDefault();
 }
 
-static void R_WhiteImage(idImage* image) {
+static void R_WhiteImage(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
     // solid white texture
     memset(data, 255, sizeof(data));
-    image->GenerateImage((byte*)data, DEFAULT_SIZE, DEFAULT_SIZE,
+    image->GenerateImage((byte *)data, DEFAULT_SIZE, DEFAULT_SIZE,
                          TF_DEFAULT, false, TR_REPEAT, TD_DEFAULT);
 }
 
-static void R_BlackImage(idImage* image) {
+static void R_BlackImage(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
     // solid black texture
     memset(data, 0, sizeof(data));
-    image->GenerateImage((byte*)data, DEFAULT_SIZE, DEFAULT_SIZE,
+    image->GenerateImage((byte *)data, DEFAULT_SIZE, DEFAULT_SIZE,
                          TF_DEFAULT, false, TR_REPEAT, TD_DEFAULT);
 }
 
 
 // the size determines how far away from the edge the blocks start fading
 static const int BORDER_CLAMP_SIZE = 32;
-static void R_BorderClampImage(idImage* image) {
+static void R_BorderClampImage(idImage *image) {
     byte    data[BORDER_CLAMP_SIZE][BORDER_CLAMP_SIZE][4];
 
     // solid white texture with a single pixel black border
@@ -370,7 +370,7 @@ static void R_BorderClampImage(idImage* image) {
                                                                                         data[BORDER_CLAMP_SIZE-1][i][3] = 0;
     }
 
-    image->GenerateImage((byte*)data, BORDER_CLAMP_SIZE, BORDER_CLAMP_SIZE,
+    image->GenerateImage((byte *)data, BORDER_CLAMP_SIZE, BORDER_CLAMP_SIZE,
                          TF_LINEAR /* TF_NEAREST */, false, TR_CLAMP_TO_BORDER, TD_DEFAULT);
 
     if (!glConfig.isInitialized) {
@@ -384,7 +384,7 @@ static void R_BorderClampImage(idImage* image) {
     qglTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
 }
 
-static void R_RGBA8Image(idImage* image) {
+static void R_RGBA8Image(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
     memset(data, 0, sizeof(data));
@@ -393,12 +393,12 @@ static void R_RGBA8Image(idImage* image) {
     data[0][0][2] = 48;
     data[0][0][3] = 96;
 
-    image->GenerateImage((byte*)data, DEFAULT_SIZE, DEFAULT_SIZE,
+    image->GenerateImage((byte *)data, DEFAULT_SIZE, DEFAULT_SIZE,
                          TF_DEFAULT, false, TR_REPEAT, TD_HIGH_QUALITY);
 }
 
 #if 0
-static void R_RGB8Image(idImage* image) {
+static void R_RGB8Image(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
     memset(data, 0, sizeof(data));
@@ -407,12 +407,12 @@ static void R_RGB8Image(idImage* image) {
     data[0][0][2] = 48;
     data[0][0][3] = 255;
 
-    image->GenerateImage((byte*)data, DEFAULT_SIZE, DEFAULT_SIZE,
+    image->GenerateImage((byte *)data, DEFAULT_SIZE, DEFAULT_SIZE,
                          TF_DEFAULT, false, TR_REPEAT, TD_HIGH_QUALITY);
 }
 #endif
 
-static void R_AlphaNotchImage(idImage* image) {
+static void R_AlphaNotchImage(idImage *image) {
     byte    data[2][4];
 
     // this is used for alpha test clip planes
@@ -422,11 +422,11 @@ static void R_AlphaNotchImage(idImage* image) {
     data[1][0] = data[1][1] = data[1][2] = 255;
     data[1][3] = 255;
 
-    image->GenerateImage((byte*)data, 2, 1,
+    image->GenerateImage((byte *)data, 2, 1,
                          TF_NEAREST, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
-static void R_FlatNormalImage(idImage* image) {
+static void R_FlatNormalImage(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
     int     i;
 
@@ -441,11 +441,11 @@ static void R_FlatNormalImage(idImage* image) {
         data[0][i][alpha] = 255;
     }
 
-    image->GenerateImage((byte*)data, 2, 2,
+    image->GenerateImage((byte *)data, 2, 2,
                          TF_DEFAULT, true, TR_REPEAT, TD_HIGH_QUALITY);
 }
 
-static void R_AmbientNormalImage(idImage* image) {
+static void R_AmbientNormalImage(idImage *image) {
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
     int     i;
 
@@ -460,7 +460,7 @@ static void R_AmbientNormalImage(idImage* image) {
         data[0][i][alpha] = 255;
     }
 
-    const byte*  pics[6];
+    const byte  *pics[6];
 
     for (i = 0 ; i < 6 ; i++) {
         pics[i] = data[0][0];
@@ -473,7 +473,7 @@ static void R_AmbientNormalImage(idImage* image) {
 
 #if 0
 static void CreateSquareLight(void) {
-    byte*        buffer;
+    byte        *buffer;
     int         x, y;
     int         dx, dy;
     int         d;
@@ -481,7 +481,7 @@ static void CreateSquareLight(void) {
 
     width = height = 128;
 
-    buffer = (byte*)R_StaticAlloc(128 * 128 * 4);
+    buffer = (byte *)R_StaticAlloc(128 * 128 * 4);
 
     for (x = 0 ; x < 128 ; x++) {
         if (x < 32) {
@@ -526,7 +526,7 @@ static void CreateSquareLight(void) {
 }
 
 static void CreateFlashOff(void) {
-    byte*        buffer;
+    byte        *buffer;
     int         x, y;
     int         d;
     int         width, height;
@@ -534,7 +534,7 @@ static void CreateFlashOff(void) {
     width = 256;
     height = 4;
 
-    buffer = (byte*)R_StaticAlloc(width * height * 4);
+    buffer = (byte *)R_StaticAlloc(width * height * 4);
 
     for (x = 0 ; x < width ; x++) {
         for (y = 0 ; y < height ; y++) {
@@ -628,7 +628,7 @@ void CreatealphaSquareImage(void) {
 /* Given a cube map face index, cube map size, and integer 2D face position,
  * return the cooresponding normalized vector.
  */
-static void getCubeVector(int i, int cubesize, int x, int y, float* vector) {
+static void getCubeVector(int i, int cubesize, int x, int y, float *vector) {
     float s, t, sc, tc, mag;
 
     s = ((float)x + 0.5) / (float)cubesize;
@@ -689,15 +689,15 @@ static void getCubeVector(int i, int cubesize, int x, int y, float* vector) {
  * form a normalized vector matching the per-pixel vector used to
  * access the cube map.
  */
-static void makeNormalizeVectorCubeMap(idImage* image) {
+static void makeNormalizeVectorCubeMap(idImage *image) {
     float vector[3] = { };
     int i, x, y;
-    byte*    pixels[6];
+    byte    *pixels[6];
     int     size;
 
     size = NORMAL_MAP_SIZE;
 
-    pixels[0] = (GLubyte*) Mem_Alloc(size*size*4*6);
+    pixels[0] = (GLubyte *) Mem_Alloc(size*size*4*6);
 
     for (i = 0; i < 6; i++) {
         pixels[i] = pixels[0] + i*size*size*4;
@@ -713,7 +713,7 @@ static void makeNormalizeVectorCubeMap(idImage* image) {
         }
     }
 
-    image->GenerateCubeImage((const byte**)pixels, size,
+    image->GenerateCubeImage((const byte **)pixels, size,
                              TF_LINEAR, false, TD_HIGH_QUALITY);
 
     Mem_Free(pixels[0]);
@@ -729,7 +729,7 @@ R_CreateNoFalloffImage
 This is a solid white texture that is zero clamped.
 ================
 */
-static void R_CreateNoFalloffImage(idImage* image) {
+static void R_CreateNoFalloffImage(idImage *image) {
     int     x,y;
     byte    data[16][FALLOFF_TEXTURE_SIZE][4];
 
@@ -744,7 +744,7 @@ static void R_CreateNoFalloffImage(idImage* image) {
         }
     }
 
-    image->GenerateImage((byte*)data, FALLOFF_TEXTURE_SIZE, 16,
+    image->GenerateImage((byte *)data, FALLOFF_TEXTURE_SIZE, 16,
                          TF_DEFAULT, false, TR_CLAMP_TO_ZERO, TD_HIGH_QUALITY);
 }
 
@@ -759,7 +759,7 @@ third will still be projection based
 */
 const int   FOG_SIZE = 128;
 
-void R_FogImage(idImage* image) {
+void R_FogImage(idImage *image) {
     int     x,y;
     byte    data[FOG_SIZE][FOG_SIZE][4];
     int     b;
@@ -802,7 +802,7 @@ void R_FogImage(idImage* image) {
         }
     }
 
-    image->GenerateImage((byte*)data, FOG_SIZE, FOG_SIZE,
+    image->GenerateImage((byte *)data, FOG_SIZE, FOG_SIZE,
                          TF_LINEAR, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
@@ -890,7 +890,7 @@ Modulate the fog alpha density based on the distance of the
 start and end points to the terminator plane
 ================
 */
-void R_FogEnterImage(idImage* image) {
+void R_FogEnterImage(idImage *image) {
     int     x,y;
     byte    data[FOG_ENTER_SIZE][FOG_ENTER_SIZE][4];
     int     b;
@@ -917,7 +917,7 @@ void R_FogEnterImage(idImage* image) {
     }
 
     // if mipmapped, acutely viewed surfaces fade wrong
-    image->GenerateImage((byte*)data, FOG_ENTER_SIZE, FOG_ENTER_SIZE,
+    image->GenerateImage((byte *)data, FOG_ENTER_SIZE, FOG_ENTER_SIZE,
                          TF_LINEAR, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
@@ -931,7 +931,7 @@ R_QuadraticImage
 static const int    QUADRATIC_WIDTH = 32;
 static const int    QUADRATIC_HEIGHT = 4;
 
-void R_QuadraticImage(idImage* image) {
+void R_QuadraticImage(idImage *image) {
     int     x,y;
     byte    data[QUADRATIC_HEIGHT][QUADRATIC_WIDTH][4];
     int     b;
@@ -964,7 +964,7 @@ void R_QuadraticImage(idImage* image) {
         }
     }
 
-    image->GenerateImage((byte*)data, QUADRATIC_WIDTH, QUADRATIC_HEIGHT,
+    image->GenerateImage((byte *)data, QUADRATIC_WIDTH, QUADRATIC_HEIGHT,
                          TF_DEFAULT, false, TR_CLAMP, TD_HIGH_QUALITY);
 }
 
@@ -972,7 +972,7 @@ void R_QuadraticImage(idImage* image) {
 
 
 typedef struct {
-    const char* name;
+    const char *name;
     int minimize, maximize;
 } filterName_t;
 
@@ -988,8 +988,8 @@ New images will automatically pick up the current values.
 */
 void idImageManager::ChangeTextureFilter(void) {
     int     i;
-    idImage* glt;
-    const char*  string;
+    idImage *glt;
+    const char  *string;
     static const filterName_t textureFilters[] = {
         {"GL_LINEAR_MIPMAP_NEAREST", GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR},
         {"GL_LINEAR_MIPMAP_LINEAR", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR},
@@ -1125,9 +1125,9 @@ New r_texturesize/r_texturedepth variables will take effect on reload
 reloadImages <all>
 ===============
 */
-void R_ReloadImages_f(const idCmdArgs& args) {
+void R_ReloadImages_f(const idCmdArgs &args) {
     int     i;
-    idImage* image;
+    idImage *image;
     bool    all;
     bool    checkPrecompressed;
 
@@ -1161,7 +1161,7 @@ void R_ReloadImages_f(const idCmdArgs& args) {
 }
 
 typedef struct {
-    idImage* image;
+    idImage *image;
     int     size;
 } sortedImage_t;
 
@@ -1171,11 +1171,11 @@ R_QsortImageSizes
 
 =======================
 */
-static int R_QsortImageSizes(const void* a, const void* b) {
-    const sortedImage_t* ea, *eb;
+static int R_QsortImageSizes(const void *a, const void *b) {
+    const sortedImage_t *ea, *eb;
 
-    ea = (sortedImage_t*)a;
-    eb = (sortedImage_t*)b;
+    ea = (sortedImage_t *)a;
+    eb = (sortedImage_t *)b;
 
     if (ea->size > eb->size) {
         return -1;
@@ -1193,9 +1193,9 @@ static int R_QsortImageSizes(const void* a, const void* b) {
 R_ListImages_f
 ===============
 */
-void R_ListImages_f(const idCmdArgs& args) {
+void R_ListImages_f(const idCmdArgs &args) {
     int     i, j, partialSize;
-    idImage* image;
+    idImage *image;
     int     totalSize;
     int     count = 0;
     int     matchTag = 0;
@@ -1251,12 +1251,12 @@ void R_ListImages_f(const idCmdArgs& args) {
         return;
     }
 
-    const char* header = "       -w-- -h-- filt -fmt-- wrap  size --name-------\n";
+    const char *header = "       -w-- -h-- filt -fmt-- wrap  size --name-------\n";
     common->Printf("\n%s", header);
 
     totalSize = 0;
 
-    sortedImage_t*   sortedArray = (sortedImage_t*)alloca(sizeof(sortedImage_t) * globalImages->images.Num());
+    sortedImage_t   *sortedArray = (sortedImage_t *)alloca(sizeof(sortedImage_t) * globalImages->images.Num());
 
     for (i = 0 ; i < globalImages->images.Num() ; i++) {
         image = globalImages->images[ i ];
@@ -1395,7 +1395,7 @@ void idImageManager::SetNormalPalette(void) {
     idVec3  v;
     float   t;
     //byte temptable[768];
-    byte*    temptable = compressedPalette;
+    byte    *temptable = compressedPalette;
     int     compressedToOriginal[16];
 
     // make an ad-hoc separable compression mapping scheme
@@ -1503,8 +1503,8 @@ Allocates an idImage, adds it to the list,
 copies the name, and adds it to the hash chain.
 ==============
 */
-idImage* idImageManager::AllocImage(const char* name) {
-    idImage* image;
+idImage *idImageManager::AllocImage(const char *name) {
+    idImage *image;
     int     hash;
 
     if (strlen(name) >= MAX_IMAGE_NAME) {
@@ -1533,9 +1533,9 @@ with a callback which must work at any time, allowing the OpenGL
 system to be completely regenerated if needed.
 ==================
 */
-idImage* idImageManager::ImageFromFunction(const char* _name, void (*generatorFunction)(idImage* image)) {
+idImage *idImageManager::ImageFromFunction(const char *_name, void (*generatorFunction)(idImage *image)) {
     idStr name;
-    idImage* image;
+    idImage *image;
     int hash;
 
     if (!name) {
@@ -1582,10 +1582,10 @@ Finds or loads the given image, always returning a valid image pointer.
 Loading of the image may be deferred for dynamic loading.
 ==============
 */
-idImage* idImageManager::ImageFromFile(const char* _name, textureFilter_t filter, bool allowDownSize,
+idImage *idImageManager::ImageFromFile(const char *_name, textureFilter_t filter, bool allowDownSize,
                                        textureRepeat_t repeat, textureDepth_t depth, cubeFiles_t cubeMap) {
     idStr name;
-    idImage* image;
+    idImage *image;
     int hash;
 
     if (!_name || !_name[0] || idStr::Icmp(_name, "default") == 0 || idStr::Icmp(_name, "_default") == 0) {
@@ -1741,9 +1741,9 @@ idImage* idImageManager::ImageFromFile(const char* _name, textureFilter_t filter
 idImageManager::GetImage
 ===============
 */
-idImage* idImageManager::GetImage(const char* _name) const {
+idImage *idImageManager::GetImage(const char *_name) const {
     idStr name;
-    idImage* image;
+    idImage *image;
     int hash;
 
     if (!_name || !_name[0] || idStr::Icmp(_name, "default") == 0 || idStr::Icmp(_name, "_default") == 0) {
@@ -1777,7 +1777,7 @@ PurgeAllImages
 */
 void idImageManager::PurgeAllImages() {
     int     i;
-    idImage* image;
+    idImage *image;
 
     for (i = 0; i < images.Num() ; i++) {
         image = images[i];
@@ -1808,7 +1808,7 @@ Used to combine animations of six separate tga files into
 a serials of 6x taller tga files, for preparation to roq compress
 ===============
 */
-void R_CombineCubeImages_f(const idCmdArgs& args) {
+void R_CombineCubeImages_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         common->Printf("usage: combineCubeImages <baseName>\n");
         common->Printf(" combines basename[1-6][0001-9999].tga to basenameCM[0001-9999].tga\n");
@@ -1821,7 +1821,7 @@ void R_CombineCubeImages_f(const idCmdArgs& args) {
 
     for (int frameNum = 1 ; frameNum < 10000 ; frameNum++) {
         char    filename[MAX_IMAGE_NAME];
-        byte*    pics[6];
+        byte    *pics[6];
         int     width, height;
         int     side;
         int     orderRemap[6] = { 1,3,4,2,5,6 };
@@ -1875,7 +1875,7 @@ void R_CombineCubeImages_f(const idCmdArgs& args) {
             break;
         }
 
-        byte*    combined = (byte*)Mem_Alloc(width*height*6*4);
+        byte    *combined = (byte *)Mem_Alloc(width*height*6*4);
 
         for (side = 0 ; side < 6 ; side++) {
             memcpy(combined+width*height*4*side, pics[side], width*height*4);
@@ -1946,7 +1946,7 @@ void idImage::StartBackgroundImageLoad() {
     // purge some images if necessary
     int     totalSize = 0;
 
-    for (idImage* check = globalImages->cacheLRU.cacheUsageNext ; check != &globalImages->cacheLRU ; check = check->cacheUsageNext) {
+    for (idImage *check = globalImages->cacheLRU.cacheUsageNext ; check != &globalImages->cacheLRU ; check = check->cacheUsageNext) {
         totalSize += check->StorageSize();
     }
 
@@ -1954,7 +1954,7 @@ void idImage::StartBackgroundImageLoad() {
 
     while ((totalSize + needed) > globalImages->image_cacheMegs.GetFloat() * 1024 * 1024) {
         // purge the least recently used
-        idImage* check = globalImages->cacheLRU.cacheUsagePrev;
+        idImage *check = globalImages->cacheLRU.cacheUsagePrev;
 
         if (check->texnum != TEXTURE_NOT_LOADED) {
             totalSize -= check->StorageSize();
@@ -1982,17 +1982,17 @@ Do we need to worry about vid_restarts here?
 ==================
 */
 void idImageManager::CompleteBackgroundImageLoads() {
-    idImage* remainingList = NULL;
-    idImage* next;
+    idImage *remainingList = NULL;
+    idImage *next;
 
-    for (idImage* image = backgroundImageLoads ; image ; image = next) {
+    for (idImage *image = backgroundImageLoads ; image ; image = next) {
         next = image->bglNext;
 
         if (image->bgl.completed) {
             numActiveBackgroundImageLoads--;
             fileSystem->CloseFile(image->bgl.f);
             // upload the image
-            image->UploadPrecompressedImage((byte*)image->bgl.file.buffer, image->bgl.file.length);
+            image->UploadPrecompressedImage((byte *)image->bgl.file.buffer, image->bgl.file.length);
             R_StaticFree(image->bgl.file.buffer);
 
             if (image_showBackgroundLoads.GetBool()) {
@@ -2039,7 +2039,7 @@ SumOfUsedImages
 int idImageManager::SumOfUsedImages() {
     int total;
     int i;
-    idImage* image;
+    idImage *image;
 
     total = 0;
 
@@ -2060,7 +2060,7 @@ BindNull
 ===============
 */
 void idImageManager::BindNull() {
-    tmu_t*           tmu;
+    tmu_t           *tmu;
 
     tmu = &backEnd.glState.tmu[backEnd.glState.currenttmu];
 
@@ -2150,7 +2150,7 @@ void idImageManager::BeginLevelLoad() {
     insideLevelLoad = true;
 
     for (int i = 0 ; i < images.Num() ; i++) {
-        idImage* image = images[ i ];
+        idImage *image = images[ i ];
 
         // generator function images are always kept around
         if (image->generatorFunction) {
@@ -2196,7 +2196,7 @@ void idImageManager::EndLevelLoad() {
 
     // purge the ones we don't need
     for (int i = 0 ; i < images.Num() ; i++) {
-        idImage* image = images[ i ];
+        idImage *image = images[ i ];
 
         if (image->generatorFunction) {
             continue;
@@ -2214,7 +2214,7 @@ void idImageManager::EndLevelLoad() {
 
     // load the ones we do need, if we are preloading
     for (int i = 0 ; i < images.Num() ; i++) {
-        idImage* image = images[ i ];
+        idImage *image = images[ i ];
 
         if (image->generatorFunction) {
             continue;
@@ -2254,12 +2254,12 @@ idImageManager::FinishBuild
 ===============
 */
 void idImageManager::FinishBuild(bool removeDups) {
-    idFile* batchFile;
+    idFile *batchFile;
 
     if (removeDups) {
         ddsList.Clear();
-        char* buffer = NULL;
-        fileSystem->ReadFile("makedds.bat", (void**)&buffer);
+        char *buffer = NULL;
+        fileSystem->ReadFile("makedds.bat", (void **)&buffer);
 
         if (buffer) {
             idStr str = buffer;
@@ -2303,7 +2303,7 @@ void idImageManager::FinishBuild(bool removeDups) {
 idImageManager::AddDDSCommand
 ===============
 */
-void idImageManager::AddDDSCommand(const char* cmd) {
+void idImageManager::AddDDSCommand(const char *cmd) {
     int i, key;
 
     if (!(cmd && *cmd)) {
@@ -2328,10 +2328,10 @@ void idImageManager::AddDDSCommand(const char* cmd) {
 idImageManager::PrintMemInfo
 ===============
 */
-void idImageManager::PrintMemInfo(MemInfo_t* mi) {
+void idImageManager::PrintMemInfo(MemInfo_t *mi) {
     int i, j, total = 0;
-    int* sortIndex;
-    idFile* f;
+    int *sortIndex;
+    idFile *f;
 
     f = fileSystem->OpenFileWrite(mi->filebase + "_images.txt");
 
@@ -2358,7 +2358,7 @@ void idImageManager::PrintMemInfo(MemInfo_t* mi) {
 
     // print next
     for (i = 0; i < images.Num(); i++) {
-        idImage* im = images[sortIndex[i]];
+        idImage *im = images[sortIndex[i]];
         int size;
 
         size = im->StorageSize();

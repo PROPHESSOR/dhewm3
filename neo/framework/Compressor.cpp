@@ -42,14 +42,14 @@ class idCompressor_None : public idCompressor {
   public:
     idCompressor_None(void);
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
     float           GetCompressionRatio(void) const;
 
-    const char*     GetName(void);
-    const char*     GetFullPath(void);
-    int             Read(void* outData, int outLength);
-    int             Write(const void* inData, int inLength);
+    const char     *GetName(void);
+    const char     *GetFullPath(void);
+    int             Read(void *outData, int outLength);
+    int             Write(const void *inData, int inLength);
     int             Length(void);
     ID_TIME_T           Timestamp(void);
     int             Tell(void);
@@ -58,7 +58,7 @@ class idCompressor_None : public idCompressor {
     int             Seek(long offset, fsOrigin_t origin);
 
   protected:
-    idFile*         file;
+    idFile         *file;
     bool            compress;
 };
 
@@ -77,7 +77,7 @@ idCompressor_None::idCompressor_None(void) {
 idCompressor_None::Init
 ================
 */
-void idCompressor_None::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_None::Init(idFile *f, bool compress, int wordLength) {
     this->file = f;
     this->compress = compress;
 }
@@ -104,7 +104,7 @@ float idCompressor_None::GetCompressionRatio(void) const {
 idCompressor_None::GetName
 ================
 */
-const char* idCompressor_None::GetName(void) {
+const char *idCompressor_None::GetName(void) {
     if (file) {
         return file->GetName();
     } else {
@@ -117,7 +117,7 @@ const char* idCompressor_None::GetName(void) {
 idCompressor_None::GetFullPath
 ================
 */
-const char* idCompressor_None::GetFullPath(void) {
+const char *idCompressor_None::GetFullPath(void) {
     if (file) {
         return file->GetFullPath();
     } else {
@@ -130,7 +130,7 @@ const char* idCompressor_None::GetFullPath(void) {
 idCompressor_None::Write
 ================
 */
-int idCompressor_None::Write(const void* inData, int inLength) {
+int idCompressor_None::Write(const void *inData, int inLength) {
     if (compress == false || inLength <= 0) {
         return 0;
     }
@@ -143,7 +143,7 @@ int idCompressor_None::Write(const void* inData, int inLength) {
 idCompressor_None::Read
 ================
 */
-int idCompressor_None::Read(void* outData, int outLength) {
+int idCompressor_None::Read(void *outData, int outLength) {
     if (compress == true || outLength <= 0) {
         return 0;
     }
@@ -237,12 +237,12 @@ class idCompressor_BitStream : public idCompressor_None {
   public:
     idCompressor_BitStream(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
     float           GetCompressionRatio(void) const;
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   protected:
     byte            buffer[65536];
@@ -252,21 +252,21 @@ class idCompressor_BitStream : public idCompressor_None {
     int             readLength;
     int             readByte;
     int             readBit;
-    const byte*     readData;
+    const byte     *readData;
 
     int             writeTotalBytes;
     int             writeLength;
     int             writeByte;
     int             writeBit;
-    byte*           writeData;
+    byte           *writeData;
 
   protected:
-    void            InitCompress(const void* inData, const int inLength);
-    void            InitDecompress(void* outData, int outLength);
+    void            InitCompress(const void *inData, const int inLength);
+    void            InitDecompress(void *outData, int outLength);
     void            WriteBits(int value, int numBits);
     int             ReadBits(int numBits);
     void            UnreadBits(int numBits);
-    int             Compare(const byte* src1, int bitPtr1, const byte* src2, int bitPtr2, int maxBits) const;
+    int             Compare(const byte *src1, int bitPtr1, const byte *src2, int bitPtr2, int maxBits) const;
 };
 
 /*
@@ -274,7 +274,7 @@ class idCompressor_BitStream : public idCompressor_None {
 idCompressor_BitStream::Init
 ================
 */
-void idCompressor_BitStream::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_BitStream::Init(idFile *f, bool compress, int wordLength) {
 
     assert(wordLength >= 1 && wordLength <= 32);
 
@@ -300,12 +300,12 @@ void idCompressor_BitStream::Init(idFile* f, bool compress, int wordLength) {
 idCompressor_BitStream::InitCompress
 ================
 */
-ID_INLINE void idCompressor_BitStream::InitCompress(const void* inData, const int inLength) {
+ID_INLINE void idCompressor_BitStream::InitCompress(const void *inData, const int inLength) {
 
     readLength = inLength;
     readByte = 0;
     readBit = 0;
-    readData = (const byte*) inData;
+    readData = (const byte *) inData;
 
     if (!writeLength) {
         writeLength = sizeof(buffer);
@@ -320,7 +320,7 @@ ID_INLINE void idCompressor_BitStream::InitCompress(const void* inData, const in
 idCompressor_BitStream::InitDecompress
 ================
 */
-ID_INLINE void idCompressor_BitStream::InitDecompress(void* outData, int outLength) {
+ID_INLINE void idCompressor_BitStream::InitDecompress(void *outData, int outLength) {
 
     if (!readLength) {
         readLength = file->Read(buffer, sizeof(buffer));
@@ -332,7 +332,7 @@ ID_INLINE void idCompressor_BitStream::InitDecompress(void* outData, int outLeng
     writeLength = outLength;
     writeByte = 0;
     writeBit = 0;
-    writeData = (byte*) outData;
+    writeData = (byte *) outData;
 }
 
 /*
@@ -472,13 +472,13 @@ void idCompressor_BitStream::UnreadBits(int numBits) {
 idCompressor_BitStream::Compare
 ================
 */
-int idCompressor_BitStream::Compare(const byte* src1, int bitPtr1, const byte* src2, int bitPtr2, int maxBits) const {
+int idCompressor_BitStream::Compare(const byte *src1, int bitPtr1, const byte *src2, int bitPtr2, int maxBits) const {
     int i;
 
     // If the two bit pointers are aligned then we can use a faster comparison
     if ((bitPtr1 & 7) == (bitPtr2 & 7) && maxBits > 16) {
-        const byte* p1 = &src1[bitPtr1 >> 3];
-        const byte* p2 = &src2[bitPtr2 >> 3];
+        const byte *p1 = &src1[bitPtr1 >> 3];
+        const byte *p2 = &src2[bitPtr2 >> 3];
 
         int bits = 0;
 
@@ -501,7 +501,7 @@ int idCompressor_BitStream::Compare(const byte* src1, int bitPtr1, const byte* s
         int remain = bitsRemain >> 3;
 
         // Compare the middle bytes as ints
-        while (remain >= 4 && (*(const int*)p1 == *(const int*)p2)) {
+        while (remain >= 4 && (*(const int *)p1 == *(const int *)p2)) {
             p1 += 4;
             p2 += 4;
             remain -= 4;
@@ -550,7 +550,7 @@ int idCompressor_BitStream::Compare(const byte* src1, int bitPtr1, const byte* s
 idCompressor_BitStream::Write
 ================
 */
-int idCompressor_BitStream::Write(const void* inData, int inLength) {
+int idCompressor_BitStream::Write(const void *inData, int inLength) {
     int i;
 
     if (compress == false || inLength <= 0) {
@@ -590,7 +590,7 @@ void idCompressor_BitStream::FinishCompress(void) {
 idCompressor_BitStream::Read
 ================
 */
-int idCompressor_BitStream::Read(void* outData, int outLength) {
+int idCompressor_BitStream::Read(void *outData, int outLength) {
     int i;
 
     if (compress == true || outLength <= 0) {
@@ -635,10 +635,10 @@ class idCompressor_RunLength : public idCompressor_BitStream {
   public:
     idCompressor_RunLength(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   private:
     int             runLengthCode;
@@ -649,7 +649,7 @@ class idCompressor_RunLength : public idCompressor_BitStream {
 idCompressor_RunLength::Init
 ================
 */
-void idCompressor_RunLength::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_RunLength::Init(idFile *f, bool compress, int wordLength) {
     idCompressor_BitStream::Init(f, compress, wordLength);
     runLengthCode = (1 << wordLength) - 1;
 }
@@ -659,7 +659,7 @@ void idCompressor_RunLength::Init(idFile* f, bool compress, int wordLength) {
 idCompressor_RunLength::Write
 ================
 */
-int idCompressor_RunLength::Write(const void* inData, int inLength) {
+int idCompressor_RunLength::Write(const void *inData, int inLength) {
     int bits, nextBits, count;
 
     if (compress == false || inLength <= 0) {
@@ -710,7 +710,7 @@ int idCompressor_RunLength::Write(const void* inData, int inLength) {
 idCompressor_RunLength::Read
 ================
 */
-int idCompressor_RunLength::Read(void* outData, int outLength) {
+int idCompressor_RunLength::Read(void *outData, int outLength) {
     int bits, count;
 
     if (compress == true || outLength <= 0) {
@@ -757,8 +757,8 @@ class idCompressor_RunLength_ZeroBased : public idCompressor_BitStream {
   public:
     idCompressor_RunLength_ZeroBased(void) {}
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   private:
 };
@@ -768,7 +768,7 @@ class idCompressor_RunLength_ZeroBased : public idCompressor_BitStream {
 idCompressor_RunLength_ZeroBased::Write
 ================
 */
-int idCompressor_RunLength_ZeroBased::Write(const void* inData, int inLength) {
+int idCompressor_RunLength_ZeroBased::Write(const void *inData, int inLength) {
     int bits, count;
 
     if (compress == false || inLength <= 0) {
@@ -801,7 +801,7 @@ int idCompressor_RunLength_ZeroBased::Write(const void* inData, int inLength) {
 idCompressor_RunLength_ZeroBased::Read
 ================
 */
-int idCompressor_RunLength_ZeroBased::Read(void* outData, int outLength) {
+int idCompressor_RunLength_ZeroBased::Read(void *outData, int outLength) {
     int bits, count;
 
     if (compress == true || outLength <= 0) {
@@ -845,9 +845,9 @@ const int NYT           = HMAX;             // NYT = Not Yet Transmitted
 const int INTERNAL_NODE = HMAX + 1;         // internal node
 
 typedef struct nodetype {
-    struct nodetype* left, *right, *parent; // tree structure
-    struct nodetype* next, *prev;           // doubly-linked list
-    struct nodetype** head;                 // highest ranked node in block
+    struct nodetype *left, *right, *parent; // tree structure
+    struct nodetype *next, *prev;           // doubly-linked list
+    struct nodetype **head;                 // highest ranked node in block
     int             weight;
     int             symbol;
 } huffmanNode_t;
@@ -856,12 +856,12 @@ class idCompressor_Huffman : public idCompressor_None {
   public:
     idCompressor_Huffman(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
     float           GetCompressionRatio(void) const;
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   private:
     byte            seq[65536];
@@ -874,30 +874,30 @@ class idCompressor_Huffman : public idCompressor_None {
     int             compressedSize;
     int             unCompressedSize;
 
-    huffmanNode_t*  tree;
-    huffmanNode_t*  lhead;
-    huffmanNode_t*  ltail;
-    huffmanNode_t*  loc[HMAX+1];
-    huffmanNode_t** freelist;
+    huffmanNode_t  *tree;
+    huffmanNode_t  *lhead;
+    huffmanNode_t  *ltail;
+    huffmanNode_t  *loc[HMAX+1];
+    huffmanNode_t **freelist;
 
     huffmanNode_t   nodeList[768];
-    huffmanNode_t*  nodePtrs[768];
+    huffmanNode_t  *nodePtrs[768];
 
   private:
     void            AddRef(byte ch);
-    int             Receive(huffmanNode_t* node, int* ch);
-    void            Transmit(int ch, byte* fout);
-    void            PutBit(int bit, byte* fout, int* offset);
-    int             GetBit(byte* fout, int* offset);
+    int             Receive(huffmanNode_t *node, int *ch);
+    void            Transmit(int ch, byte *fout);
+    void            PutBit(int bit, byte *fout, int *offset);
+    int             GetBit(byte *fout, int *offset);
 
-    void            Add_bit(char bit, byte* fout);
+    void            Add_bit(char bit, byte *fout);
     int             Get_bit();
-    huffmanNode_t** Get_ppnode();
-    void            Free_ppnode(huffmanNode_t** ppnode);
-    void            Swap(huffmanNode_t* node1, huffmanNode_t* node2);
-    void            Swaplist(huffmanNode_t* node1, huffmanNode_t* node2);
-    void            Increment(huffmanNode_t* node);
-    void            Send(huffmanNode_t* node, huffmanNode_t* child, byte* fout);
+    huffmanNode_t **Get_ppnode();
+    void            Free_ppnode(huffmanNode_t **ppnode);
+    void            Swap(huffmanNode_t *node1, huffmanNode_t *node2);
+    void            Swaplist(huffmanNode_t *node1, huffmanNode_t *node2);
+    void            Increment(huffmanNode_t *node);
+    void            Send(huffmanNode_t *node, huffmanNode_t *child, byte *fout);
 };
 
 /*
@@ -905,7 +905,7 @@ class idCompressor_Huffman : public idCompressor_None {
 idCompressor_Huffman::Init
 ================
 */
-void idCompressor_Huffman::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_Huffman::Init(idFile *f, bool compress, int wordLength) {
     int i;
 
     this->file = f;
@@ -956,7 +956,7 @@ void idCompressor_Huffman::Init(idFile* f, bool compress, int wordLength) {
 idCompressor_Huffman::PutBit
 ================
 */
-void idCompressor_Huffman::PutBit(int bit, byte* fout, int* offset) {
+void idCompressor_Huffman::PutBit(int bit, byte *fout, int *offset) {
     bloc = *offset;
 
     if ((bloc&7) == 0) {
@@ -973,7 +973,7 @@ void idCompressor_Huffman::PutBit(int bit, byte* fout, int* offset) {
 idCompressor_Huffman::GetBit
 ================
 */
-int idCompressor_Huffman::GetBit(byte* fin, int* offset) {
+int idCompressor_Huffman::GetBit(byte *fin, int *offset) {
     int t;
     bloc = *offset;
     t = (fin[(bloc>>3)] >> (bloc&7)) & 0x1;
@@ -989,7 +989,7 @@ idCompressor_Huffman::Add_bit
   Add a bit to the output file (buffered)
 ================
 */
-void idCompressor_Huffman::Add_bit(char bit, byte* fout) {
+void idCompressor_Huffman::Add_bit(char bit, byte *fout) {
     if ((bloc&7) == 0) {
         fout[(bloc>>3)] = 0;
     }
@@ -1026,14 +1026,14 @@ int idCompressor_Huffman::Get_bit() {
 idCompressor_Huffman::Get_ppnode
 ================
 */
-huffmanNode_t** idCompressor_Huffman::Get_ppnode() {
-    huffmanNode_t** tppnode;
+huffmanNode_t **idCompressor_Huffman::Get_ppnode() {
+    huffmanNode_t **tppnode;
 
     if (!freelist) {
         return &nodePtrs[blocPtrs++];
     } else {
         tppnode = freelist;
-        freelist = (huffmanNode_t**)*tppnode;
+        freelist = (huffmanNode_t **)*tppnode;
         return tppnode;
     }
 }
@@ -1043,8 +1043,8 @@ huffmanNode_t** idCompressor_Huffman::Get_ppnode() {
 idCompressor_Huffman::Free_ppnode
 ================
 */
-void idCompressor_Huffman::Free_ppnode(huffmanNode_t** ppnode) {
-    *ppnode = (huffmanNode_t*)freelist;
+void idCompressor_Huffman::Free_ppnode(huffmanNode_t **ppnode) {
+    *ppnode = (huffmanNode_t *)freelist;
     freelist = ppnode;
 }
 
@@ -1055,8 +1055,8 @@ idCompressor_Huffman::Swap
   Swap the location of the given two nodes in the tree.
 ================
 */
-void idCompressor_Huffman::Swap(huffmanNode_t* node1, huffmanNode_t* node2) {
-    huffmanNode_t* par1, *par2;
+void idCompressor_Huffman::Swap(huffmanNode_t *node1, huffmanNode_t *node2) {
+    huffmanNode_t *par1, *par2;
 
     par1 = node1->parent;
     par2 = node2->parent;
@@ -1092,8 +1092,8 @@ idCompressor_Huffman::Swaplist
   Swap the given two nodes in the linked list (update ranks)
 ================
 */
-void idCompressor_Huffman::Swaplist(huffmanNode_t* node1, huffmanNode_t* node2) {
-    huffmanNode_t* par1;
+void idCompressor_Huffman::Swaplist(huffmanNode_t *node1, huffmanNode_t *node2) {
+    huffmanNode_t *par1;
 
     par1 = node1->next;
     node1->next = node2->next;
@@ -1133,8 +1133,8 @@ void idCompressor_Huffman::Swaplist(huffmanNode_t* node1, huffmanNode_t* node2) 
 idCompressor_Huffman::Increment
 ================
 */
-void idCompressor_Huffman::Increment(huffmanNode_t* node) {
-    huffmanNode_t* lnode;
+void idCompressor_Huffman::Increment(huffmanNode_t *node) {
+    huffmanNode_t *lnode;
 
     if (!node) {
         return;
@@ -1185,7 +1185,7 @@ idCompressor_Huffman::AddRef
 ================
 */
 void idCompressor_Huffman::AddRef(byte ch) {
-    huffmanNode_t* tnode, *tnode2;
+    huffmanNode_t *tnode, *tnode2;
 
     if (loc[ch] == NULL) {   /* if this is the first transmission of this node */
         tnode = &nodeList[blocNode++];
@@ -1267,7 +1267,7 @@ idCompressor_Huffman::Receive
   Get a symbol.
 ================
 */
-int idCompressor_Huffman::Receive(huffmanNode_t* node, int* ch) {
+int idCompressor_Huffman::Receive(huffmanNode_t *node, int *ch) {
     while (node && node->symbol == INTERNAL_NODE) {
         if (Get_bit()) {
             node = node->right;
@@ -1290,7 +1290,7 @@ idCompressor_Huffman::Send
   Send the prefix code for this node.
 ================
 */
-void idCompressor_Huffman::Send(huffmanNode_t* node, huffmanNode_t* child, byte* fout) {
+void idCompressor_Huffman::Send(huffmanNode_t *node, huffmanNode_t *child, byte *fout) {
     if (node->parent) {
         Send(node->parent, node, fout);
     }
@@ -1311,7 +1311,7 @@ idCompressor_Huffman::Transmit
   Send a symbol.
 ================
 */
-void idCompressor_Huffman::Transmit(int ch, byte* fout) {
+void idCompressor_Huffman::Transmit(int ch, byte *fout) {
     int i;
 
     if (loc[ch] == NULL) {
@@ -1331,7 +1331,7 @@ void idCompressor_Huffman::Transmit(int ch, byte* fout) {
 idCompressor_Huffman::Write
 ================
 */
-int idCompressor_Huffman::Write(const void* inData, int inLength) {
+int idCompressor_Huffman::Write(const void *inData, int inLength) {
     int i, ch;
 
     if (compress == false || inLength <= 0) {
@@ -1339,7 +1339,7 @@ int idCompressor_Huffman::Write(const void* inData, int inLength) {
     }
 
     for (i = 0; i < inLength; i++) {
-        ch = ((const byte*)inData)[i];
+        ch = ((const byte *)inData)[i];
         Transmit(ch, seq);               /* Transmit symbol */
         AddRef((byte)ch);                    /* Do update */
         int b = (bloc>>3);
@@ -1381,7 +1381,7 @@ void idCompressor_Huffman::FinishCompress(void) {
 idCompressor_Huffman::Read
 ================
 */
-int idCompressor_Huffman::Read(void* outData, int outLength) {
+int idCompressor_Huffman::Read(void *outData, int outLength) {
     int i, j, ch;
 
     if (compress == true || outLength <= 0) {
@@ -1411,7 +1411,7 @@ int idCompressor_Huffman::Read(void* outData, int outLength) {
             }
         }
 
-        ((byte*)outData)[i] = ch;           /* Write symbol */
+        ((byte *)outData)[i] = ch;          /* Write symbol */
         AddRef((byte) ch);               /* Increment node */
     }
 
@@ -1454,11 +1454,11 @@ class idCompressor_Arithmetic : public idCompressor_BitStream {
   public:
     idCompressor_Arithmetic(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   private:
     typedef struct acProbs_s {
@@ -1485,15 +1485,15 @@ class idCompressor_Arithmetic : public idCompressor_BitStream {
 
   private:
     void            InitProbabilities(void);
-    void            UpdateProbabilities(acSymbol_t* symbol);
+    void            UpdateProbabilities(acSymbol_t *symbol);
     int             ProbabilityForCount(unsigned int count);
 
-    void            CharToSymbol(byte c, acSymbol_t* symbol);
-    void            EncodeSymbol(acSymbol_t* symbol);
+    void            CharToSymbol(byte c, acSymbol_t *symbol);
+    void            EncodeSymbol(acSymbol_t *symbol);
 
-    int             SymbolFromCount(unsigned int count, acSymbol_t* symbol);
+    int             SymbolFromCount(unsigned int count, acSymbol_t *symbol);
     int             GetCurrentCount(void);
-    void            RemoveSymbolFromStream(acSymbol_t* symbol);
+    void            RemoveSymbolFromStream(acSymbol_t *symbol);
 
     void            PutBit(int bit);
     int             GetBit(void);
@@ -1506,7 +1506,7 @@ class idCompressor_Arithmetic : public idCompressor_BitStream {
 idCompressor_Arithmetic::Init
 ================
 */
-void idCompressor_Arithmetic::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_Arithmetic::Init(idFile *f, bool compress, int wordLength) {
     idCompressor_BitStream::Init(f, compress, wordLength);
 
     symbolBuffer    = 0;
@@ -1537,7 +1537,7 @@ void idCompressor_Arithmetic::InitProbabilities(void) {
 idCompressor_Arithmetic::UpdateProbabilities
 ================
 */
-void idCompressor_Arithmetic::UpdateProbabilities(acSymbol_t* symbol) {
+void idCompressor_Arithmetic::UpdateProbabilities(acSymbol_t *symbol) {
     int i, x;
 
     x = symbol->position;
@@ -1615,7 +1615,7 @@ int idCompressor_Arithmetic::ProbabilityForCount(unsigned int count) {
 idCompressor_Arithmetic::SymbolFromCount
 ================
 */
-int idCompressor_Arithmetic::SymbolFromCount(unsigned int count, acSymbol_t* symbol) {
+int idCompressor_Arithmetic::SymbolFromCount(unsigned int count, acSymbol_t *symbol) {
     int p = ProbabilityForCount(count);
     symbol->low = probabilities[ p ].low;
     symbol->high = probabilities[ p ].high;
@@ -1628,7 +1628,7 @@ int idCompressor_Arithmetic::SymbolFromCount(unsigned int count, acSymbol_t* sym
 idCompressor_Arithmetic::RemoveSymbolFromStream
 ================
 */
-void idCompressor_Arithmetic::RemoveSymbolFromStream(acSymbol_t* symbol) {
+void idCompressor_Arithmetic::RemoveSymbolFromStream(acSymbol_t *symbol) {
     int range;
 
     range   = (int)(high - low) + 1;
@@ -1683,7 +1683,7 @@ int idCompressor_Arithmetic::GetBit(void) {
 idCompressor_Arithmetic::EncodeSymbol
 ================
 */
-void idCompressor_Arithmetic::EncodeSymbol(acSymbol_t* symbol) {
+void idCompressor_Arithmetic::EncodeSymbol(acSymbol_t *symbol) {
     unsigned int range;
 
     // rescale high and low for the new symbol.
@@ -1723,7 +1723,7 @@ void idCompressor_Arithmetic::EncodeSymbol(acSymbol_t* symbol) {
 idCompressor_Arithmetic::CharToSymbol
 ================
 */
-void idCompressor_Arithmetic::CharToSymbol(byte c, acSymbol_t* symbol) {
+void idCompressor_Arithmetic::CharToSymbol(byte c, acSymbol_t *symbol) {
     symbol->low         = probabilities[ c ].low;
     symbol->high        = probabilities[ c ].high;
     symbol->position    = c;
@@ -1770,7 +1770,7 @@ void idCompressor_Arithmetic::WriteOverflowBits(void) {
 idCompressor_Arithmetic::Write
 ================
 */
-int idCompressor_Arithmetic::Write(const void* inData, int inLength) {
+int idCompressor_Arithmetic::Write(const void *inData, int inLength) {
     int i, j;
 
     if (compress == false || inLength <= 0) {
@@ -1823,7 +1823,7 @@ void idCompressor_Arithmetic::FinishCompress(void) {
 idCompressor_Arithmetic::Read
 ================
 */
-int idCompressor_Arithmetic::Read(void* outData, int outLength) {
+int idCompressor_Arithmetic::Read(void *outData, int outLength) {
     int i, j;
 
     if (compress == true || outLength <= 0) {
@@ -1893,11 +1893,11 @@ class idCompressor_LZSS : public idCompressor_BitStream {
   public:
     idCompressor_LZSS(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   protected:
     int             offsetBits;
@@ -1912,7 +1912,7 @@ class idCompressor_LZSS : public idCompressor_BitStream {
     int             hashNext[LZSS_BLOCK_SIZE * 8];
 
   protected:
-    bool            FindMatch(int startWord, int startValue, int& wordOffset, int& numWords);
+    bool            FindMatch(int startWord, int startValue, int &wordOffset, int &numWords);
     void            AddToHash(int index, int hash);
     int             GetWordFromBlock(int wordOffset) const;
     virtual void    CompressBlock(void);
@@ -1924,7 +1924,7 @@ class idCompressor_LZSS : public idCompressor_BitStream {
 idCompressor_LZSS::Init
 ================
 */
-void idCompressor_LZSS::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_LZSS::Init(idFile *f, bool compress, int wordLength) {
     idCompressor_BitStream::Init(f, compress, wordLength);
 
     offsetBits = LZSS_OFFSET_BITS;
@@ -1940,7 +1940,7 @@ void idCompressor_LZSS::Init(idFile* f, bool compress, int wordLength) {
 idCompressor_LZSS::FindMatch
 ================
 */
-bool idCompressor_LZSS::FindMatch(int startWord, int startValue, int& wordOffset, int& numWords) {
+bool idCompressor_LZSS::FindMatch(int startWord, int startValue, int &wordOffset, int &numWords) {
     int i, n, hash, bottom, maxBits;
 
     wordOffset = startWord;
@@ -2097,7 +2097,7 @@ void idCompressor_LZSS::DecompressBlock(void) {
 idCompressor_LZSS::Write
 ================
 */
-int idCompressor_LZSS::Write(const void* inData, int inLength) {
+int idCompressor_LZSS::Write(const void *inData, int inLength) {
     int i, n;
 
     if (compress == false || inLength <= 0) {
@@ -2108,12 +2108,12 @@ int idCompressor_LZSS::Write(const void* inData, int inLength) {
         n = LZSS_BLOCK_SIZE - blockSize;
 
         if (inLength - i >= n) {
-            memcpy(block + blockSize, ((const byte*)inData) + i, n);
+            memcpy(block + blockSize, ((const byte *)inData) + i, n);
             blockSize = LZSS_BLOCK_SIZE;
             CompressBlock();
             blockSize = 0;
         } else {
-            memcpy(block + blockSize, ((const byte*)inData) + i, inLength - i);
+            memcpy(block + blockSize, ((const byte *)inData) + i, inLength - i);
             n = inLength - i;
             blockSize += n;
         }
@@ -2144,7 +2144,7 @@ void idCompressor_LZSS::FinishCompress(void) {
 idCompressor_LZSS::Read
 ================
 */
-int idCompressor_LZSS::Read(void* outData, int outLength) {
+int idCompressor_LZSS::Read(void *outData, int outLength) {
     int i, n;
 
     if (compress == true || outLength <= 0) {
@@ -2163,11 +2163,11 @@ int idCompressor_LZSS::Read(void* outData, int outLength) {
         n = blockSize - blockIndex;
 
         if (outLength - i >= n) {
-            memcpy(((byte*)outData) + i, block + blockIndex, n);
+            memcpy(((byte *)outData) + i, block + blockIndex, n);
             DecompressBlock();
             blockIndex = 0;
         } else {
-            memcpy(((byte*)outData) + i, block + blockIndex, outLength - i);
+            memcpy(((byte *)outData) + i, block + blockIndex, outLength - i);
             n = outLength - i;
             blockIndex += n;
         }
@@ -2190,7 +2190,7 @@ class idCompressor_LZSS_WordAligned : public idCompressor_LZSS {
   public:
     idCompressor_LZSS_WordAligned(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
   private:
     virtual void    CompressBlock(void);
     virtual void    DecompressBlock(void);
@@ -2201,7 +2201,7 @@ class idCompressor_LZSS_WordAligned : public idCompressor_LZSS {
 idCompressor_LZSS_WordAligned::Init
 ================
 */
-void idCompressor_LZSS_WordAligned::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_LZSS_WordAligned::Init(idFile *f, bool compress, int wordLength) {
     idCompressor_LZSS::Init(f, compress, wordLength);
 
     offsetBits = 2 * wordLength;
@@ -2335,11 +2335,11 @@ class idCompressor_LZW : public idCompressor_BitStream {
   public:
     idCompressor_LZW(void) {}
 
-    void            Init(idFile* f, bool compress, int wordLength);
+    void            Init(idFile *f, bool compress, int wordLength);
     void            FinishCompress(void);
 
-    int             Write(const void* inData, int inLength);
-    int             Read(void* outData, int outLength);
+    int             Write(const void *inData, int inLength);
+    int             Read(void *outData, int outLength);
 
   protected:
     int             AddToDict(int w, int k);
@@ -2383,7 +2383,7 @@ class idCompressor_LZW : public idCompressor_BitStream {
 idCompressor_LZW::Init
 ================
 */
-void idCompressor_LZW::Init(idFile* f, bool compress, int wordLength) {
+void idCompressor_LZW::Init(idFile *f, bool compress, int wordLength) {
     idCompressor_BitStream::Init(f, compress, wordLength);
 
     for (int i=0; i<LZW_FIRST_CODE; i++) {
@@ -2408,7 +2408,7 @@ void idCompressor_LZW::Init(idFile* f, bool compress, int wordLength) {
 idCompressor_LZW::Read
 ================
 */
-int idCompressor_LZW::Read(void* outData, int outLength) {
+int idCompressor_LZW::Read(void *outData, int outLength) {
     int i, n;
 
     if (compress == true || outLength <= 0) {
@@ -2427,11 +2427,11 @@ int idCompressor_LZW::Read(void* outData, int outLength) {
         n = blockSize - blockIndex;
 
         if (outLength - i >= n) {
-            memcpy(((byte*)outData) + i, block + blockIndex, n);
+            memcpy(((byte *)outData) + i, block + blockIndex, n);
             DecompressBlock();
             blockIndex = 0;
         } else {
-            memcpy(((byte*)outData) + i, block + blockIndex, outLength - i);
+            memcpy(((byte *)outData) + i, block + blockIndex, outLength - i);
             n = outLength - i;
             blockIndex += n;
         }
@@ -2511,7 +2511,7 @@ void idCompressor_LZW::FinishCompress(void) {
 idCompressor_LZW::Write
 ================
 */
-int idCompressor_LZW::Write(const void* inData, int inLength) {
+int idCompressor_LZW::Write(const void *inData, int inLength) {
     int i;
 
     InitCompress(inData, inLength);
@@ -2624,7 +2624,7 @@ void idCompressor_LZW::DecompressBlock() {
 idCompressor::AllocNoCompression
 ================
 */
-idCompressor* idCompressor::AllocNoCompression(void) {
+idCompressor *idCompressor::AllocNoCompression(void) {
     return new idCompressor_None();
 }
 
@@ -2633,7 +2633,7 @@ idCompressor* idCompressor::AllocNoCompression(void) {
 idCompressor::AllocBitStream
 ================
 */
-idCompressor* idCompressor::AllocBitStream(void) {
+idCompressor *idCompressor::AllocBitStream(void) {
     return new idCompressor_BitStream();
 }
 
@@ -2642,7 +2642,7 @@ idCompressor* idCompressor::AllocBitStream(void) {
 idCompressor::AllocRunLength
 ================
 */
-idCompressor* idCompressor::AllocRunLength(void) {
+idCompressor *idCompressor::AllocRunLength(void) {
     return new idCompressor_RunLength();
 }
 
@@ -2651,7 +2651,7 @@ idCompressor* idCompressor::AllocRunLength(void) {
 idCompressor::AllocRunLength_ZeroBased
 ================
 */
-idCompressor* idCompressor::AllocRunLength_ZeroBased(void) {
+idCompressor *idCompressor::AllocRunLength_ZeroBased(void) {
     return new idCompressor_RunLength_ZeroBased();
 }
 
@@ -2660,7 +2660,7 @@ idCompressor* idCompressor::AllocRunLength_ZeroBased(void) {
 idCompressor::AllocHuffman
 ================
 */
-idCompressor* idCompressor::AllocHuffman(void) {
+idCompressor *idCompressor::AllocHuffman(void) {
     return new idCompressor_Huffman();
 }
 
@@ -2669,7 +2669,7 @@ idCompressor* idCompressor::AllocHuffman(void) {
 idCompressor::AllocArithmetic
 ================
 */
-idCompressor* idCompressor::AllocArithmetic(void) {
+idCompressor *idCompressor::AllocArithmetic(void) {
     return new idCompressor_Arithmetic();
 }
 
@@ -2678,7 +2678,7 @@ idCompressor* idCompressor::AllocArithmetic(void) {
 idCompressor::AllocLZSS
 ================
 */
-idCompressor* idCompressor::AllocLZSS(void) {
+idCompressor *idCompressor::AllocLZSS(void) {
     return new idCompressor_LZSS();
 }
 
@@ -2687,7 +2687,7 @@ idCompressor* idCompressor::AllocLZSS(void) {
 idCompressor::AllocLZSS_WordAligned
 ================
 */
-idCompressor* idCompressor::AllocLZSS_WordAligned(void) {
+idCompressor *idCompressor::AllocLZSS_WordAligned(void) {
     return new idCompressor_LZSS_WordAligned();
 }
 
@@ -2696,6 +2696,6 @@ idCompressor* idCompressor::AllocLZSS_WordAligned(void) {
 idCompressor::AllocLZW
 ================
 */
-idCompressor* idCompressor::AllocLZW(void) {
+idCompressor *idCompressor::AllocLZW(void) {
     return new idCompressor_LZW();
 }

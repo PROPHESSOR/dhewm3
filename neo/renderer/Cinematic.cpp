@@ -48,7 +48,7 @@ class idCinematicLocal : public idCinematic {
     idCinematicLocal();
     virtual                 ~idCinematicLocal();
 
-    virtual bool            InitFromFile(const char* qpath, bool looping);
+    virtual bool            InitFromFile(const char *qpath, bool looping);
     virtual cinData_t       ImageForTime(int milliseconds);
     virtual int             AnimationLength();
     virtual void            Close();
@@ -56,10 +56,10 @@ class idCinematicLocal : public idCinematic {
 
   private:
     size_t                  mcomp[256];
-    byte**                  qStatus[2];
+    byte                  **qStatus[2];
     idStr                   fileName;
     int                     CIN_WIDTH, CIN_HEIGHT;
-    idFile*                 iFile;
+    idFile                 *iFile;
     cinStatus_t             status;
     int                     tfps;
     int                     RoQPlayed;
@@ -70,7 +70,7 @@ class idCinematicLocal : public idCinematic {
     int                     samplesPerLine;
     unsigned int            roq_id;
     int                     screenDelta;
-    byte*                   buf;
+    byte                   *buf;
     int                     samplesPerPixel;                // defaults to 2
     unsigned int            xsize, ysize, maxsize, minsize;
     int                     normalBuffer0;
@@ -85,7 +85,7 @@ class idCinematicLocal : public idCinematic {
     int                     startTime;
     float                   frameRate;
 
-    byte*                   image;
+    byte                   *image;
 
     bool                    looping;
     bool                    dirty;
@@ -94,23 +94,23 @@ class idCinematicLocal : public idCinematic {
     bool                    inMemory;
 
     void                    RoQ_init(void);
-    void                    blitVQQuad32fs(byte** status, unsigned char* data);
+    void                    blitVQQuad32fs(byte **status, unsigned char *data);
     void                    RoQShutdown(void);
     void                    RoQInterrupt(void);
 
-    void                    move8_32(byte* src, byte* dst, int spl);
-    void                    move4_32(byte* src, byte* dst, int spl);
-    void                    blit8_32(byte* src, byte* dst, int spl);
-    void                    blit4_32(byte* src, byte* dst, int spl);
-    void                    blit2_32(byte* src, byte* dst, int spl);
+    void                    move8_32(byte *src, byte *dst, int spl);
+    void                    move4_32(byte *src, byte *dst, int spl);
+    void                    blit8_32(byte *src, byte *dst, int spl);
+    void                    blit4_32(byte *src, byte *dst, int spl);
+    void                    blit2_32(byte *src, byte *dst, int spl);
 
     unsigned short          yuv_to_rgb(int y, int u, int v);
     unsigned int            yuv_to_rgb24(int y, int u, int v);
 
-    void                    decodeCodeBook(byte* input, unsigned short roq_flags);
+    void                    decodeCodeBook(byte *input, unsigned short roq_flags);
     void                    recurseQuad(int startX, int startY, int quadSize, int xOff, int yOff);
     void                    setupQuad(int xOff, int yOff);
-    void                    readQuadInfo(byte* qData);
+    void                    readQuadInfo(byte *qData);
     void                    RoQPrepMcomp(int xoff, int yoff);
     void                    RoQReset();
 };
@@ -137,10 +137,10 @@ static int              ROQ_UB_tab[256];
 static int              ROQ_UG_tab[256];
 static int              ROQ_VG_tab[256];
 static int              ROQ_VR_tab[256];
-static byte*            file = NULL;
-static unsigned short*  vq2 = NULL;
-static unsigned short*  vq4 = NULL;
-static unsigned short*  vq8 = NULL;
+static byte            *file = NULL;
+static unsigned short  *vq2 = NULL;
+static unsigned short  *vq4 = NULL;
+static unsigned short  *vq8 = NULL;
 
 
 
@@ -171,10 +171,10 @@ void idCinematic::InitCinematic(void) {
         ROQ_YY_tab[i] = (int)((i << 6) | (i >> 2));
     }
 
-    file = (byte*)Mem_Alloc(65536);
-    vq2 = (word*)Mem_Alloc(256*16*4 * sizeof(word));
-    vq4 = (word*)Mem_Alloc(256*64*4 * sizeof(word));
-    vq8 = (word*)Mem_Alloc(256*256*4 * sizeof(word));
+    file = (byte *)Mem_Alloc(65536);
+    vq2 = (word *)Mem_Alloc(256*16*4 * sizeof(word));
+    vq4 = (word *)Mem_Alloc(256*64*4 * sizeof(word));
+    vq8 = (word *)Mem_Alloc(256*256*4 * sizeof(word));
 }
 
 /*
@@ -198,7 +198,7 @@ void idCinematic::ShutdownCinematic(void) {
 idCinematicLocal::Alloc
 ==============
 */
-idCinematic* idCinematic::Alloc() {
+idCinematic *idCinematic::Alloc() {
     return new idCinematicLocal;
 }
 
@@ -216,7 +216,7 @@ idCinematic::~idCinematic() {
 idCinematicLocal::InitFromFile
 ==============
 */
-bool idCinematic::InitFromFile(const char* qpath, bool looping) {
+bool idCinematic::InitFromFile(const char *qpath, bool looping) {
     return false;
 }
 
@@ -269,8 +269,8 @@ idCinematicLocal::idCinematicLocal() {
     buf = NULL;
     iFile = NULL;
 
-    qStatus[0] = (byte**)Mem_Alloc(32768 * sizeof(byte*));
-    qStatus[1] = (byte**)Mem_Alloc(32768 * sizeof(byte*));
+    qStatus[0] = (byte **)Mem_Alloc(32768 * sizeof(byte *));
+    qStatus[1] = (byte **)Mem_Alloc(32768 * sizeof(byte *));
 }
 
 /*
@@ -292,7 +292,7 @@ idCinematicLocal::~idCinematicLocal() {
 idCinematicLocal::InitFromFile
 ==============
 */
-bool idCinematicLocal::InitFromFile(const char* qpath, bool amilooping) {
+bool idCinematicLocal::InitFromFile(const char *qpath, bool amilooping) {
     unsigned short RoQID;
 
     Close();
@@ -351,7 +351,7 @@ idCinematicLocal::Close
 */
 void idCinematicLocal::Close() {
     if (image) {
-        Mem_Free((void*)image);
+        Mem_Free((void *)image);
         image = NULL;
         buf = NULL;
         status = FMV_EOF;
@@ -474,13 +474,13 @@ cinData_t idCinematicLocal::ImageForTime(int thisTime) {
 idCinematicLocal::move8_32
 ==============
 */
-void idCinematicLocal::move8_32(byte* src, byte* dst, int spl) {
+void idCinematicLocal::move8_32(byte *src, byte *dst, int spl) {
     #if 1
-    int* dsrc, *ddst;
+    int *dsrc, *ddst;
     int dspl;
 
-    dsrc = (int*)src;
-    ddst = (int*)dst;
+    dsrc = (int *)src;
+    ddst = (int *)dst;
     dspl = spl>>2;
 
     ddst[0*dspl+0] = dsrc[0*dspl+0];
@@ -555,11 +555,11 @@ void idCinematicLocal::move8_32(byte* src, byte* dst, int spl) {
     ddst[7*dspl+6] = dsrc[7*dspl+6];
     ddst[7*dspl+7] = dsrc[7*dspl+7];
     #else
-    double* dsrc, *ddst;
+    double *dsrc, *ddst;
     int dspl;
 
-    dsrc = (double*)src;
-    ddst = (double*)dst;
+    dsrc = (double *)src;
+    ddst = (double *)dst;
     dspl = spl>>3;
 
     ddst[0] = dsrc[0];
@@ -616,13 +616,13 @@ void idCinematicLocal::move8_32(byte* src, byte* dst, int spl) {
 idCinematicLocal::move4_32
 ==============
 */
-void idCinematicLocal::move4_32(byte* src, byte* dst, int spl) {
+void idCinematicLocal::move4_32(byte *src, byte *dst, int spl) {
     #if 1
-    int* dsrc, *ddst;
+    int *dsrc, *ddst;
     int dspl;
 
-    dsrc = (int*)src;
-    ddst = (int*)dst;
+    dsrc = (int *)src;
+    ddst = (int *)dst;
     dspl = spl>>2;
 
     ddst[0*dspl+0] = dsrc[0*dspl+0];
@@ -645,11 +645,11 @@ void idCinematicLocal::move4_32(byte* src, byte* dst, int spl) {
     ddst[3*dspl+2] = dsrc[3*dspl+2];
     ddst[3*dspl+3] = dsrc[3*dspl+3];
     #else
-    double* dsrc, *ddst;
+    double *dsrc, *ddst;
     int dspl;
 
-    dsrc = (double*)src;
-    ddst = (double*)dst;
+    dsrc = (double *)src;
+    ddst = (double *)dst;
     dspl = spl>>3;
 
     ddst[0] = dsrc[0];
@@ -674,13 +674,13 @@ void idCinematicLocal::move4_32(byte* src, byte* dst, int spl) {
 idCinematicLocal::blit8_32
 ==============
 */
-void idCinematicLocal::blit8_32(byte* src, byte* dst, int spl) {
+void idCinematicLocal::blit8_32(byte *src, byte *dst, int spl) {
     #if 1
-    int* dsrc, *ddst;
+    int *dsrc, *ddst;
     int dspl;
 
-    dsrc = (int*)src;
-    ddst = (int*)dst;
+    dsrc = (int *)src;
+    ddst = (int *)dst;
     dspl = spl>>2;
 
     ddst[0*dspl+0] = dsrc[ 0];
@@ -755,11 +755,11 @@ void idCinematicLocal::blit8_32(byte* src, byte* dst, int spl) {
     ddst[7*dspl+6] = dsrc[62];
     ddst[7*dspl+7] = dsrc[63];
     #else
-    double* dsrc, *ddst;
+    double *dsrc, *ddst;
     int dspl;
 
-    dsrc = (double*)src;
-    ddst = (double*)dst;
+    dsrc = (double *)src;
+    ddst = (double *)dst;
     dspl = spl>>3;
 
     ddst[0] = dsrc[0];
@@ -816,13 +816,13 @@ void idCinematicLocal::blit8_32(byte* src, byte* dst, int spl) {
 idCinematicLocal::blit4_32
 ==============
 */
-void idCinematicLocal::blit4_32(byte* src, byte* dst, int spl) {
+void idCinematicLocal::blit4_32(byte *src, byte *dst, int spl) {
     #if 1
-    int* dsrc, *ddst;
+    int *dsrc, *ddst;
     int dspl;
 
-    dsrc = (int*)src;
-    ddst = (int*)dst;
+    dsrc = (int *)src;
+    ddst = (int *)dst;
     dspl = spl>>2;
 
     ddst[0*dspl+0] = dsrc[ 0];
@@ -842,11 +842,11 @@ void idCinematicLocal::blit4_32(byte* src, byte* dst, int spl) {
     ddst[3*dspl+2] = dsrc[14];
     ddst[3*dspl+3] = dsrc[15];
     #else
-    double* dsrc, *ddst;
+    double *dsrc, *ddst;
     int dspl;
 
-    dsrc = (double*)src;
-    ddst = (double*)dst;
+    dsrc = (double *)src;
+    ddst = (double *)dst;
     dspl = spl>>3;
 
     ddst[0] = dsrc[0];
@@ -871,13 +871,13 @@ void idCinematicLocal::blit4_32(byte* src, byte* dst, int spl) {
 idCinematicLocal::blit2_32
 ==============
 */
-void idCinematicLocal::blit2_32(byte* src, byte* dst, int spl) {
+void idCinematicLocal::blit2_32(byte *src, byte *dst, int spl) {
     #if 1
-    int* dsrc, *ddst;
+    int *dsrc, *ddst;
     int dspl;
 
-    dsrc = (int*)src;
-    ddst = (int*)dst;
+    dsrc = (int *)src;
+    ddst = (int *)dst;
     dspl = spl>>2;
 
     ddst[0*dspl+0] = dsrc[0];
@@ -885,11 +885,11 @@ void idCinematicLocal::blit2_32(byte* src, byte* dst, int spl) {
     ddst[1*dspl+0] = dsrc[2];
     ddst[1*dspl+1] = dsrc[3];
     #else
-    double* dsrc, *ddst;
+    double *dsrc, *ddst;
     int dspl;
 
-    dsrc = (double*)src;
-    ddst = (double*)dst;
+    dsrc = (double *)src;
+    ddst = (double *)dst;
     dspl = spl>>3;
 
     ddst[0] = dsrc[0];
@@ -902,7 +902,7 @@ void idCinematicLocal::blit2_32(byte* src, byte* dst, int spl) {
 idCinematicLocal::blitVQQuad32fs
 ==============
 */
-void idCinematicLocal::blitVQQuad32fs(byte** status, unsigned char* data) {
+void idCinematicLocal::blitVQQuad32fs(byte **status, unsigned char *data) {
     unsigned short  newd, celdata, code;
     unsigned int    index, i;
 
@@ -924,7 +924,7 @@ void idCinematicLocal::blitVQQuad32fs(byte** status, unsigned char* data) {
 
         switch (code) {
             case    0x8000:                                                 // vq code
-                blit8_32((byte*)&vq8[(*data)*128], status[index], samplesPerLine);
+                blit8_32((byte *)&vq8[(*data)*128], status[index], samplesPerLine);
                 data++;
                 index += 5;
                 break;
@@ -946,18 +946,18 @@ void idCinematicLocal::blitVQQuad32fs(byte** status, unsigned char* data) {
 
                     switch (code) {                                         // code in top two bits of code
                         case    0x8000:                                     // 4x4 vq code
-                            blit4_32((byte*)&vq4[(*data)*32], status[index], samplesPerLine);
+                            blit4_32((byte *)&vq4[(*data)*32], status[index], samplesPerLine);
                             data++;
                             break;
 
                         case    0xc000:                                     // 2x2 vq code
-                            blit2_32((byte*)&vq2[(*data)*8], status[index], samplesPerLine);
+                            blit2_32((byte *)&vq2[(*data)*8], status[index], samplesPerLine);
                             data++;
-                            blit2_32((byte*)&vq2[(*data)*8], status[index]+8, samplesPerLine);
+                            blit2_32((byte *)&vq2[(*data)*8], status[index]+8, samplesPerLine);
                             data++;
-                            blit2_32((byte*)&vq2[(*data)*8], status[index]+samplesPerLine*2, samplesPerLine);
+                            blit2_32((byte *)&vq2[(*data)*8], status[index]+samplesPerLine*2, samplesPerLine);
                             data++;
-                            blit2_32((byte*)&vq2[(*data)*8], status[index]+samplesPerLine*2+8, samplesPerLine);
+                            blit2_32((byte *)&vq2[(*data)*8], status[index]+samplesPerLine*2+8, samplesPerLine);
                             data++;
                             break;
 
@@ -1104,11 +1104,11 @@ unsigned int idCinematicLocal::yuv_to_rgb24(int y, int u, int v) {
 idCinematicLocal::decodeCodeBook
 ==============
 */
-void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
+void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags) {
     int i, j, two, four;
-    unsigned short*  aptr, *bptr, *cptr, *dptr;
+    unsigned short  *aptr, *bptr, *cptr, *dptr;
     int y0,y1,y2,y3,cr,cb;
-    unsigned int* iaptr, *ibptr, *icptr, *idptr;
+    unsigned int *iaptr, *ibptr, *icptr, *idptr;
 
     if (!roq_flags) {
         two = four = 256;
@@ -1124,7 +1124,7 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
 
     four *= 2;
 
-    bptr = (unsigned short*)vq2;
+    bptr = (unsigned short *)vq2;
 
     if (!half) {
         if (!smootheddouble) {
@@ -1145,19 +1145,19 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                     *bptr++ = yuv_to_rgb(y3, cr, cb);
                 }
 
-                cptr = (unsigned short*)vq4;
-                dptr = (unsigned short*)vq8;
+                cptr = (unsigned short *)vq4;
+                dptr = (unsigned short *)vq8;
 
                 for (i=0; i<four; i++) {
-                    aptr = (unsigned short*)vq2 + (*input++)*4;
-                    bptr = (unsigned short*)vq2 + (*input++)*4;
+                    aptr = (unsigned short *)vq2 + (*input++)*4;
+                    bptr = (unsigned short *)vq2 + (*input++)*4;
 
                     for (j=0; j<2; j++) {
                         VQ2TO4(aptr,bptr,cptr,dptr);
                     }
                 }
             } else if (samplesPerPixel==4) {
-                ibptr = (unsigned int*)bptr;
+                ibptr = (unsigned int *)bptr;
 
                 for (i=0; i<two; i++) {
                     y0 = (int)*input++;
@@ -1172,12 +1172,12 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                     *ibptr++ = yuv_to_rgb24(y3, cr, cb);
                 }
 
-                icptr = (unsigned int*)vq4;
-                idptr = (unsigned int*)vq8;
+                icptr = (unsigned int *)vq4;
+                idptr = (unsigned int *)vq8;
 
                 for (i=0; i<four; i++) {
-                    iaptr = (unsigned int*)vq2 + (*input++)*4;
-                    ibptr = (unsigned int*)vq2 + (*input++)*4;
+                    iaptr = (unsigned int *)vq2 + (*input++)*4;
+                    ibptr = (unsigned int *)vq2 + (*input++)*4;
 
                     for (j=0; j<2; j++) {
                         VQ2TO4(iaptr, ibptr, icptr, idptr);
@@ -1206,12 +1206,12 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                     *bptr++ = yuv_to_rgb(y3, cr, cb);
                 }
 
-                cptr = (unsigned short*)vq4;
-                dptr = (unsigned short*)vq8;
+                cptr = (unsigned short *)vq4;
+                dptr = (unsigned short *)vq8;
 
                 for (i=0; i<four; i++) {
-                    aptr = (unsigned short*)vq2 + (*input++)*8;
-                    bptr = (unsigned short*)vq2 + (*input++)*8;
+                    aptr = (unsigned short *)vq2 + (*input++)*8;
+                    bptr = (unsigned short *)vq2 + (*input++)*8;
 
                     for (j=0; j<2; j++) {
                         VQ2TO4(aptr,bptr,cptr,dptr);
@@ -1219,7 +1219,7 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                     }
                 }
             } else if (samplesPerPixel==4) {
-                ibptr = (unsigned int*)bptr;
+                ibptr = (unsigned int *)bptr;
 
                 for (i=0; i<two; i++) {
                     y0 = (int)*input++;
@@ -1238,12 +1238,12 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                     *ibptr++ = yuv_to_rgb24(y3, cr, cb);
                 }
 
-                icptr = (unsigned int*)vq4;
-                idptr = (unsigned int*)vq8;
+                icptr = (unsigned int *)vq4;
+                idptr = (unsigned int *)vq8;
 
                 for (i=0; i<four; i++) {
-                    iaptr = (unsigned int*)vq2 + (*input++)*8;
-                    ibptr = (unsigned int*)vq2 + (*input++)*8;
+                    iaptr = (unsigned int *)vq2 + (*input++)*8;
+                    ibptr = (unsigned int *)vq2 + (*input++)*8;
 
                     for (j=0; j<2; j++) {
                         VQ2TO4(iaptr, ibptr, icptr, idptr);
@@ -1268,19 +1268,19 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                 *bptr++ = yuv_to_rgb(y2, cr, cb);
             }
 
-            cptr = (unsigned short*)vq4;
-            dptr = (unsigned short*)vq8;
+            cptr = (unsigned short *)vq4;
+            dptr = (unsigned short *)vq8;
 
             for (i=0; i<four; i++) {
-                aptr = (unsigned short*)vq2 + (*input++)*2;
-                bptr = (unsigned short*)vq2 + (*input++)*2;
+                aptr = (unsigned short *)vq2 + (*input++)*2;
+                bptr = (unsigned short *)vq2 + (*input++)*2;
 
                 for (j=0; j<2; j++) {
                     VQ2TO2(aptr,bptr,cptr,dptr);
                 }
             }
         } else if (samplesPerPixel == 4) {
-            ibptr = (unsigned int*) bptr;
+            ibptr = (unsigned int *) bptr;
 
             for (i=0; i<two; i++) {
                 y0 = (int)*input;
@@ -1293,12 +1293,12 @@ void idCinematicLocal::decodeCodeBook(byte* input, unsigned short roq_flags) {
                 *ibptr++ = yuv_to_rgb24(y2, cr, cb);
             }
 
-            icptr = (unsigned int*)vq4;
-            idptr = (unsigned int*)vq8;
+            icptr = (unsigned int *)vq4;
+            idptr = (unsigned int *)vq8;
 
             for (i=0; i<four; i++) {
-                iaptr = (unsigned int*)vq2 + (*input++)*2;
-                ibptr = (unsigned int*)vq2 + (*input++)*2;
+                iaptr = (unsigned int *)vq2 + (*input++)*2;
+                ibptr = (unsigned int *)vq2 + (*input++)*2;
 
                 for (j=0; j<2; j++) {
                     VQ2TO2(iaptr,ibptr,icptr,idptr);
@@ -1314,7 +1314,7 @@ idCinematicLocal::recurseQuad
 ==============
 */
 void idCinematicLocal::recurseQuad(int startX, int startY, int quadSize, int xOff, int yOff) {
-    byte* scroff;
+    byte *scroff;
     int bigx, bigy, lowx, lowy, useY;
     int offset;
 
@@ -1356,7 +1356,7 @@ idCinematicLocal::setupQuad
 */
 void idCinematicLocal::setupQuad(int xOff, int yOff) {
     int numQuadCels, i,x,y;
-    byte* temp;
+    byte *temp;
 
     numQuadCels  = (CIN_WIDTH*CIN_HEIGHT) / (16);
     numQuadCels += numQuadCels/4 + numQuadCels/16;
@@ -1386,7 +1386,7 @@ void idCinematicLocal::setupQuad(int xOff, int yOff) {
 idCinematicLocal::readQuadInfo
 ==============
 */
-void idCinematicLocal::readQuadInfo(byte* qData) {
+void idCinematicLocal::readQuadInfo(byte *qData) {
     xsize    = qData[0]+qData[1]*256;
     ysize    = qData[2]+qData[3]*256;
     maxsize  = qData[4]+qData[5]*256;
@@ -1399,7 +1399,7 @@ void idCinematicLocal::readQuadInfo(byte* qData) {
     screenDelta = CIN_HEIGHT*samplesPerLine;
 
     if (!image) {
-        image = (byte*)Mem_Alloc(CIN_WIDTH*CIN_HEIGHT*samplesPerPixel*2);
+        image = (byte *)Mem_Alloc(CIN_WIDTH*CIN_HEIGHT*samplesPerPixel*2);
     }
 
     half = false;
@@ -1454,7 +1454,7 @@ void idCinematicLocal::RoQReset() {
 /* jpeg error handling */
 struct jpeg_error_mgr jerr;
 
-int JPEGBlit(byte* wStatus, byte* data, int datasize) {
+int JPEGBlit(byte *wStatus, byte *data, int datasize) {
     /* This struct contains the JPEG decompression parameters and pointers to
      * working space (which is allocated as needed by the JPEG library).
      */
@@ -1580,7 +1580,7 @@ idCinematicLocal::RoQInterrupt
 ==============
 */
 void idCinematicLocal::RoQInterrupt(void) {
-    byte*                framedata;
+    byte                *framedata;
 
     iFile->Read(file, RoQFrameSize+8);
 
@@ -1763,7 +1763,7 @@ void idCinematicLocal::RoQShutdown(void) {
 idSndWindow::InitFromFile
 ==============
 */
-bool idSndWindow::InitFromFile(const char* qpath, bool looping) {
+bool idSndWindow::InitFromFile(const char *qpath, bool looping) {
     idStr fname = qpath;
 
     fname.ToLower();

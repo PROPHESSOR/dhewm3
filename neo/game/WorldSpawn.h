@@ -47,8 +47,8 @@ class idWorldspawn : public idEntity {
 
     void            Spawn(void);
 
-    void            Save(idRestoreGame* savefile);
-    void            Restore(idRestoreGame* savefile);
+    void            Save(idRestoreGame *savefile);
+    void            Restore(idRestoreGame *savefile);
 
   private:
     void            Event_Remove(void);

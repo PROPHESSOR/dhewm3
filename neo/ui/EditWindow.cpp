@@ -36,7 +36,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/EditWindow.h"
 
-bool idEditWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idEditWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "maxchars") == 0) {
         maxChars = src->ParseInt();
         return true;
@@ -80,7 +80,7 @@ bool idEditWindow::ParseInternalVar(const char* _name, idParser* src) {
     return idWindow::ParseInternalVar(_name, src);
 }
 
-idWinVar* idEditWindow::GetWinVarByName(const char* _name, bool fixup, drawWin_t** owner) {
+idWinVar *idEditWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner) {
     if (idStr::Icmp(_name, "cvar") == 0) {
         return &cvarStr;
     }
@@ -122,13 +122,13 @@ void idEditWindow::CommonInit() {
 }
 
 
-idEditWindow::idEditWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idEditWindow::idEditWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idEditWindow::idEditWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idEditWindow::idEditWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -158,10 +158,10 @@ void idEditWindow::Draw(int time, float x, float y) {
     float scale = textScale;
 
     idStr       pass;
-    const char* buffer;
+    const char *buffer;
 
     if (password) {
-        const char* temp = text;
+        const char *temp = text;
 
         for (; *temp; temp++)  {
             pass += "*";
@@ -206,9 +206,9 @@ void idEditWindow::Draw(int time, float x, float y) {
 idEditWindow::HandleEvent
 =============
 */
-const char* idEditWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idEditWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
     static char buffer[ MAX_EDITFIELD ];
-    const char* ret = "";
+    const char *ret = "";
 
     if (wrap) {
         // need to call this to allow proper focus and capturing on embedded children
@@ -461,9 +461,9 @@ void idEditWindow::PostParse() {
     }
 
     if (sourceFile.Length()) {
-        void* buffer;
+        void *buffer;
         fileSystem->ReadFile(sourceFile, &buffer);
-        text = (char*) buffer;
+        text = (char *) buffer;
         fileSystem->FreeFile(buffer);
     }
 
@@ -483,16 +483,16 @@ This is the same as in idListWindow
 ================
 */
 void idEditWindow::InitScroller(bool horizontal) {
-    const char* thumbImage = "guis/assets/scrollbar_thumb.tga";
-    const char* barImage = "guis/assets/scrollbarv.tga";
-    const char* scrollerName = "_scrollerWinV";
+    const char *thumbImage = "guis/assets/scrollbar_thumb.tga";
+    const char *barImage = "guis/assets/scrollbarv.tga";
+    const char *scrollerName = "_scrollerWinV";
 
     if (horizontal) {
         barImage = "guis/assets/scrollbarh.tga";
         scrollerName = "_scrollerWinH";
     }
 
-    const idMaterial* mat = declManager->FindMaterial(barImage);
+    const idMaterial *mat = declManager->FindMaterial(barImage);
     mat->SetSort(SS_GUI);
     sizeBias = mat->GetImageWidth();
 
@@ -516,7 +516,7 @@ void idEditWindow::InitScroller(bool horizontal) {
     scroller->SetBuddy(this);
 }
 
-void idEditWindow::HandleBuddyUpdate(idWindow* buddy) {
+void idEditWindow::HandleBuddyUpdate(idWindow *buddy) {
 }
 
 void idEditWindow::EnsureCursorVisible() {
@@ -611,7 +611,7 @@ void idEditWindow::EnsureCursorVisible() {
     }
 }
 
-void idEditWindow::Activate(bool activate, idStr& act) {
+void idEditWindow::Activate(bool activate, idStr &act) {
     idWindow::Activate(activate, act);
 
     if (activate) {
@@ -669,7 +669,7 @@ void idEditWindow::UpdateCvar(bool read, bool force) {
 idEditWindow::RunNamedEvent
 ============
 */
-void idEditWindow::RunNamedEvent(const char* eventName) {
+void idEditWindow::RunNamedEvent(const char *eventName) {
     idStr event, group;
 
     if (!idStr::Cmpn(eventName, "cvar read ", 10)) {

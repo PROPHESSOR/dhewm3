@@ -51,24 +51,24 @@ struct idTabRect {
 
 class idListWindow : public idWindow {
   public:
-    idListWindow(idUserInterfaceLocal* gui);
-    idListWindow(idDeviceContext* d, idUserInterfaceLocal* gui);
+    idListWindow(idUserInterfaceLocal *gui);
+    idListWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
 
-    virtual const char* HandleEvent(const sysEvent_t* event, bool* updateVisuals);
+    virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
     virtual void        PostParse();
     virtual void        Draw(int time, float x, float y);
-    virtual void        Activate(bool activate, idStr& act);
-    virtual void        HandleBuddyUpdate(idWindow* buddy);
+    virtual void        Activate(bool activate, idStr &act);
+    virtual void        HandleBuddyUpdate(idWindow *buddy);
     virtual void        StateChanged(bool redraw = false);
     virtual size_t      Allocated() {
         return idWindow::Allocated();
     };
-    virtual idWinVar*   GetWinVarByName(const char* _name, bool winLookup = false, drawWin_t** owner = NULL);
+    virtual idWinVar   *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
     void                UpdateList();
 
   private:
-    virtual bool        ParseInternalVar(const char* name, idParser* src);
+    virtual bool        ParseInternalVar(const char *name, idParser *src);
     void                CommonInit();
     void                InitScroller(bool horizontal);
     void                SetCurrentSel(int sel);
@@ -87,11 +87,11 @@ class idListWindow : public idWindow {
     idStr               tabTypeStr;
     idStr               tabIconSizeStr;
     idStr               tabIconVOffsetStr;
-    idHashTable<const idMaterial*> iconMaterials;
+    idHashTable<const idMaterial *> iconMaterials;
     bool                multipleSel;
 
     idStrList           listItems;
-    idSliderWindow*     scroller;
+    idSliderWindow     *scroller;
     idList<int>         currentSel;
     idStr               listName;
 

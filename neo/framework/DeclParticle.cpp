@@ -34,9 +34,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "framework/DeclParticle.h"
 
 struct ParticleParmDesc {
-    const char* name;
+    const char *name;
     int count;
-    const char* desc;
+    const char *desc;
 };
 
 const ParticleParmDesc ParticleDistributionDesc[] = {
@@ -82,7 +82,7 @@ size_t idDeclParticle::Size(void) const {
 idDeclParticle::GetStageBounds
 =====================
 */
-void idDeclParticle::GetStageBounds(idParticleStage* stage) {
+void idDeclParticle::GetStageBounds(idParticleStage *stage) {
 
     stage->bounds.Clear();
 
@@ -159,7 +159,7 @@ idDeclParticle::ParseParms
 Parses a variable length list of parms on one line
 ================
 */
-void idDeclParticle::ParseParms(idLexer& src, float* parms, int maxParms) {
+void idDeclParticle::ParseParms(idLexer &src, float *parms, int maxParms) {
     idToken token;
 
     memset(parms, 0, maxParms * sizeof(*parms));
@@ -186,7 +186,7 @@ void idDeclParticle::ParseParms(idLexer& src, float* parms, int maxParms) {
 idDeclParticle::ParseParametric
 ================
 */
-void idDeclParticle::ParseParametric(idLexer& src, idParticleParm* parm) {
+void idDeclParticle::ParseParametric(idLexer &src, idParticleParm *parm) {
     idToken token;
 
     parm->table = NULL;
@@ -215,7 +215,7 @@ void idDeclParticle::ParseParametric(idLexer& src, idParticleParm* parm) {
         }
     } else {
         // table
-        parm->table = static_cast<const idDeclTable*>(declManager->FindType(DECL_TABLE, token, false));
+        parm->table = static_cast<const idDeclTable *>(declManager->FindType(DECL_TABLE, token, false));
     }
 
 }
@@ -225,10 +225,10 @@ void idDeclParticle::ParseParametric(idLexer& src, idParticleParm* parm) {
 idDeclParticle::ParseParticleStage
 ================
 */
-idParticleStage* idDeclParticle::ParseParticleStage(idLexer& src) {
+idParticleStage *idDeclParticle::ParseParticleStage(idLexer &src) {
     idToken token;
 
-    idParticleStage* stage = new idParticleStage;
+    idParticleStage *stage = new idParticleStage;
     stage->Default();
 
     while (1) {
@@ -467,7 +467,7 @@ idParticleStage* idDeclParticle::ParseParticleStage(idLexer& src) {
 idDeclParticle::Parse
 ================
 */
-bool idDeclParticle::Parse(const char* text, const int textLength) {
+bool idDeclParticle::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -487,7 +487,7 @@ bool idDeclParticle::Parse(const char* text, const int textLength) {
         }
 
         if (!token.Icmp("{")) {
-            idParticleStage* stage = ParseParticleStage(src);
+            idParticleStage *stage = ParseParticleStage(src);
 
             if (!stage) {
                 src.Warning("Particle stage parse failed");
@@ -540,7 +540,7 @@ void idDeclParticle::FreeData(void) {
 idDeclParticle::DefaultDefinition
 ================
 */
-const char* idDeclParticle::DefaultDefinition(void) const {
+const char *idDeclParticle::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "{\n"
@@ -556,7 +556,7 @@ const char* idDeclParticle::DefaultDefinition(void) const {
 idDeclParticle::WriteParticleParm
 ================
 */
-void idDeclParticle::WriteParticleParm(idFile* f, idParticleParm* parm, const char* name) {
+void idDeclParticle::WriteParticleParm(idFile *f, idParticleParm *parm, const char *name) {
 
     f->WriteFloatString("\t\t%s\t\t\t\t ", name);
 
@@ -578,7 +578,7 @@ void idDeclParticle::WriteParticleParm(idFile* f, idParticleParm* parm, const ch
 idDeclParticle::WriteStage
 ================
 */
-void idDeclParticle::WriteStage(idFile* f, idParticleStage* stage) {
+void idDeclParticle::WriteStage(idFile *f, idParticleStage *stage) {
 
     int i;
 
@@ -714,7 +714,7 @@ bool idDeclParticle::RebuildTextSource(void) {
 idDeclParticle::Save
 ================
 */
-bool idDeclParticle::Save(const char* fileName) {
+bool idDeclParticle::Save(const char *fileName) {
     RebuildTextSource();
 
     if (fileName) {
@@ -733,7 +733,7 @@ idParticleParm
 ====================================================================================
 */
 
-float idParticleParm::Eval(float frac, idRandom& rand) const {
+float idParticleParm::Eval(float frac, idRandom &rand) const {
     if (table) {
         return table->TableLookup(frac);
     }
@@ -741,7 +741,7 @@ float idParticleParm::Eval(float frac, idRandom& rand) const {
     return from + frac * (to - from);
 }
 
-float idParticleParm::Integrate(float frac, idRandom& rand) const {
+float idParticleParm::Integrate(float frac, idRandom &rand) const {
     if (table) {
         common->Printf("idParticleParm::Integrate: can't integrate tables\n");
         return 0;
@@ -905,7 +905,7 @@ int idParticleStage::NumQuadsPerParticle() const {
 idParticleStage::ParticleOrigin
 ===============
 */
-void idParticleStage::ParticleOrigin(particleGen_t* g, idVec3& origin) const {
+void idParticleStage::ParticleOrigin(particleGen_t *g, idVec3 &origin) const {
     if (customPathType == PPATH_STANDARD) {
         //
         // find intial origin distribution
@@ -1111,7 +1111,7 @@ void idParticleStage::ParticleOrigin(particleGen_t* g, idVec3& origin) const {
 idParticleStage::ParticleVerts
 ==================
 */
-int idParticleStage::ParticleVerts(particleGen_t* g, idVec3 origin, idDrawVert* verts) const {
+int idParticleStage::ParticleVerts(particleGen_t *g, idVec3 origin, idDrawVert *verts) const {
     float   psize = size.Eval(g->frac, g->random);
     float   paspect = aspect.Eval(g->frac, g->random);
 
@@ -1125,7 +1125,7 @@ int idParticleStage::ParticleVerts(particleGen_t* g, idVec3 origin, idDrawVert* 
         idRandom    currentRandom = g->random;
         float       currentAge = g->age;
         float       currentFrac = g->frac;
-        idDrawVert* verts_p = verts;
+        idDrawVert *verts_p = verts;
         idVec3      stepOrigin = origin;
         idVec3      stepLeft;
         int         numTrails = idMath::Ftoi(orientationParms[0]);
@@ -1276,7 +1276,7 @@ int idParticleStage::ParticleVerts(particleGen_t* g, idVec3 origin, idDrawVert* 
 idParticleStage::ParticleTexCoords
 ==================
 */
-void idParticleStage::ParticleTexCoords(particleGen_t* g, idDrawVert* verts) const {
+void idParticleStage::ParticleTexCoords(particleGen_t *g, idDrawVert *verts) const {
     float   s, width;
     float   t, height;
 
@@ -1321,7 +1321,7 @@ void idParticleStage::ParticleTexCoords(particleGen_t* g, idDrawVert* verts) con
 idParticleStage::ParticleColors
 ==================
 */
-void idParticleStage::ParticleColors(particleGen_t* g, idDrawVert* verts) const {
+void idParticleStage::ParticleColors(particleGen_t *g, idDrawVert *verts) const {
     float   fadeFraction = 1.0f;
 
     // most particles fade in at the beginning and fade out at the end
@@ -1374,7 +1374,7 @@ Vertex order is:
 2 3
 ================
 */
-int idParticleStage::CreateParticle(particleGen_t* g, idDrawVert* verts) const {
+int idParticleStage::CreateParticle(particleGen_t *g, idDrawVert *verts) const {
     idVec3  origin;
 
     verts[0].Clear();
@@ -1428,7 +1428,7 @@ int idParticleStage::CreateParticle(particleGen_t* g, idDrawVert* verts) const {
 idParticleStage::GetCustomPathName
 ==================
 */
-const char* idParticleStage::GetCustomPathName() {
+const char *idParticleStage::GetCustomPathName() {
     int index = (customPathType < CustomParticleCount) ? customPathType : 0;
     return ParticleCustomDesc[index].name;
 }
@@ -1438,7 +1438,7 @@ const char* idParticleStage::GetCustomPathName() {
 idParticleStage::GetCustomPathDesc
 ==================
 */
-const char* idParticleStage::GetCustomPathDesc() {
+const char *idParticleStage::GetCustomPathDesc() {
     int index = (customPathType < CustomParticleCount) ? customPathType : 0;
     return ParticleCustomDesc[index].desc;
 }
@@ -1458,7 +1458,7 @@ int idParticleStage::NumCustomPathParms() {
 idParticleStage::SetCustomPathType
 ==================
 */
-void idParticleStage::SetCustomPathType(const char* p) {
+void idParticleStage::SetCustomPathType(const char *p) {
     customPathType = PPATH_STANDARD;
 
     for (int i = 0; i < CustomParticleCount; i ++) {
@@ -1474,7 +1474,7 @@ void idParticleStage::SetCustomPathType(const char* p) {
 idParticleStage::operator=
 ==================
 */
-void idParticleStage::operator=(const idParticleStage& src) {
+void idParticleStage::operator=(const idParticleStage &src) {
     material = src.material;
     totalParticles = src.totalParticles;
     cycles = src.cycles;

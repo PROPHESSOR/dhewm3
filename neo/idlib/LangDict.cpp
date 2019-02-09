@@ -68,16 +68,16 @@ void idLangDict::Clear(void) {
 idLangDict::Load
 ============
 */
-bool idLangDict::Load(const char* fileName, bool clear /* _D3XP */) {
+bool idLangDict::Load(const char *fileName, bool clear /* _D3XP */) {
 
     if (clear) {
         Clear();
     }
 
-    const char* buffer = NULL;
+    const char *buffer = NULL;
     idLexer src(LEXFL_NOFATALERRORS | LEXFL_NOSTRINGCONCAT | LEXFL_ALLOWMULTICHARLITERALS | LEXFL_ALLOWBACKSLASHSTRINGCONCAT);
 
-    int len = idLib::fileSystem->ReadFile(fileName, (void**)&buffer);
+    int len = idLib::fileSystem->ReadFile(fileName, (void **)&buffer);
 
     if (len <= 0) {
         // let whoever called us deal with the failure (so sys_lang can be reset)
@@ -112,7 +112,7 @@ bool idLangDict::Load(const char* fileName, bool clear /* _D3XP */) {
     }
 
     idLib::common->Printf("%i strings read from %s\n", args.Num(), fileName);
-    idLib::fileSystem->FreeFile((void*)buffer);
+    idLib::fileSystem->FreeFile((void *)buffer);
 
     return true;
 }
@@ -122,8 +122,8 @@ bool idLangDict::Load(const char* fileName, bool clear /* _D3XP */) {
 idLangDict::Save
 ============
 */
-void idLangDict::Save(const char* fileName) {
-    idFile* outFile = idLib::fileSystem->OpenFileWrite(fileName);
+void idLangDict::Save(const char *fileName) {
+    idFile *outFile = idLib::fileSystem->OpenFileWrite(fileName);
     outFile->WriteFloatString("// string table\n// english\n//\n\n{\n");
 
     for (int j = 0; j < args.Num(); j++) {
@@ -159,7 +159,7 @@ void idLangDict::Save(const char* fileName) {
 idLangDict::GetString
 ============
 */
-const char* idLangDict::GetString(const char* str) const {
+const char *idLangDict::GetString(const char *str) const {
 
     if (str == NULL || str[0] == '\0') {
         return "";
@@ -186,7 +186,7 @@ const char* idLangDict::GetString(const char* str) const {
 idLangDict::AddString
 ============
 */
-const char* idLangDict::AddString(const char* str) {
+const char *idLangDict::AddString(const char *str) {
 
     if (ExcludeString(str)) {
         return str;
@@ -226,7 +226,7 @@ int idLangDict::GetNumKeyVals(void) const {
 idLangDict::GetKeyVal
 ============
 */
-const idLangKeyValue* idLangDict::GetKeyVal(int i) const {
+const idLangKeyValue *idLangDict::GetKeyVal(int i) const {
     return &args[i];
 }
 
@@ -235,7 +235,7 @@ const idLangKeyValue* idLangDict::GetKeyVal(int i) const {
 idLangDict::AddKeyVal
 ============
 */
-void idLangDict::AddKeyVal(const char* key, const char* val) {
+void idLangDict::AddKeyVal(const char *key, const char *val) {
     idLangKeyValue kv;
     kv.key = key;
     kv.value = val;
@@ -248,7 +248,7 @@ void idLangDict::AddKeyVal(const char* key, const char* val) {
 idLangDict::ExcludeString
 ============
 */
-bool idLangDict::ExcludeString(const char* str) const {
+bool idLangDict::ExcludeString(const char *str) const {
     if (str == NULL) {
         return true;
     }
@@ -321,7 +321,7 @@ int idLangDict::GetNextId(void) const {
 idLangDict::GetHashKey
 ============
 */
-int idLangDict::GetHashKey(const char* str) const {
+int idLangDict::GetHashKey(const char *str) const {
     int hashKey = 0;
 
     for (str += STRTABLE_ID_LENGTH; str[0] != '\0'; str++) {

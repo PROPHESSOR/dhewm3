@@ -112,62 +112,62 @@ class idSessionLocal : public idSession {
 
     virtual bool        IsMultiplayer();
 
-    virtual bool        ProcessEvent(const sysEvent_t* event);
+    virtual bool        ProcessEvent(const sysEvent_t *event);
 
     virtual void        StartMenu(bool playIntro = false);
     virtual void        ExitMenu();
     virtual void        GuiFrameEvents();
-    virtual void        SetGUI(idUserInterface* gui, HandleGuiCommand_t handle);
+    virtual void        SetGUI(idUserInterface *gui, HandleGuiCommand_t handle);
 
-    virtual const char* MessageBox(msgBoxType_t type, const char* message, const char* title = NULL, bool wait = false, const char* fire_yes = NULL, const char* fire_no = NULL, bool network = false);
+    virtual const char *MessageBox(msgBoxType_t type, const char *message, const char *title = NULL, bool wait = false, const char *fire_yes = NULL, const char *fire_no = NULL, bool network = false);
     virtual void        StopBox(void);
-    virtual void        DownloadProgressBox(backgroundDownload_t* bgl, const char* title, int progress_start = 0, int progress_end = 100);
+    virtual void        DownloadProgressBox(backgroundDownload_t *bgl, const char *title, int progress_start = 0, int progress_end = 100);
     virtual void        SetPlayingSoundWorld();
 
     virtual void        TimeHitch(int msec);
 
     virtual void        ReadCDKey(void);
     virtual void        WriteCDKey(void);
-    virtual const char* GetCDKey(bool xp);
-    virtual bool        CheckKey(const char* key, bool netConnect, bool offline_valid[ 2 ]);
+    virtual const char *GetCDKey(bool xp);
+    virtual bool        CheckKey(const char *key, bool netConnect, bool offline_valid[ 2 ]);
     virtual bool        CDKeysAreValid(bool strict);
     virtual void        ClearCDKey(bool valid[ 2 ]);
     virtual void        SetCDKeyGuiVars(void);
     virtual bool        WaitingForGameAuth(void);
-    virtual void        CDKeysAuthReply(bool valid, const char* auth_msg);
+    virtual void        CDKeysAuthReply(bool valid, const char *auth_msg);
 
     virtual int         GetSaveGameVersion(void);
 
-    virtual const char* GetCurrentMapName();
+    virtual const char *GetCurrentMapName();
 
     //=====================================
 
     int                 GetLocalClientNum();
 
-    void                MoveToNewMap(const char* mapName);
+    void                MoveToNewMap(const char *mapName);
 
     // loads a map and starts a new game on it
-    void                StartNewGame(const char* mapName, bool devmap = false);
+    void                StartNewGame(const char *mapName, bool devmap = false);
     void                PlayIntroGui();
 
-    void                LoadSession(const char* name);
-    void                SaveSession(const char* name);
+    void                LoadSession(const char *name);
+    void                SaveSession(const char *name);
 
     // called by Draw when the scene to scene wipe is still running
     void                DrawWipeModel();
-    void                StartWipe(const char* materialName, bool hold = false);
+    void                StartWipe(const char *materialName, bool hold = false);
     void                CompleteWipe();
     void                ClearWipe();
 
     void                ShowLoadingGui();
 
-    void                ScrubSaveGameFileName(idStr& saveFileName) const;
-    idStr               GetAutoSaveName(const char* mapName) const;
+    void                ScrubSaveGameFileName(idStr &saveFileName) const;
+    idStr               GetAutoSaveName(const char *mapName) const;
 
-    bool                LoadGame(const char* saveName);
-    bool                SaveGame(const char* saveName, bool autosave = false);
+    bool                LoadGame(const char *saveName);
+    bool                SaveGame(const char *saveName, bool autosave = false);
 
-    const char*          GetAuthMsg(void);
+    const char          *GetAuthMsg(void);
 
     //=====================================
 
@@ -189,7 +189,7 @@ class idSessionLocal : public idSession {
     int                 timeHitch;
 
     bool                menuActive;
-    idSoundWorld*       menuSoundWorld;         // so the game soundWorld can be muted
+    idSoundWorld       *menuSoundWorld;         // so the game soundWorld can be muted
 
     bool                insideExecuteMapChange; // draw loading screen and update
     // screen on prints
@@ -217,10 +217,10 @@ class idSessionLocal : public idSession {
     bool                insideUpdateScreen; // true while inside ::UpdateScreen()
 
     bool                loadingSaveGame;    // currently loading map from a SaveGame
-    idFile*             savegameFile;       // this is the savegame file to load from
+    idFile             *savegameFile;       // this is the savegame file to load from
     int                 savegameVersion;
 
-    idFile*             cmdDemoFile;        // if non-zero, we are reading commands from a file
+    idFile             *cmdDemoFile;        // if non-zero, we are reading commands from a file
 
     int                 latchedTicNumber;   // set to com_ticNumber each frame
     int                 lastGameTic;        // while latchedTicNumber > lastGameTic, run game frames
@@ -243,21 +243,21 @@ class idSessionLocal : public idSession {
     // com_frameTime + demoTimeOffset > currentDemoRenderView.
 
     // TODO: make this private (after sync networking removal and idnet tweaks)
-    idUserInterface*    guiActive;
+    idUserInterface    *guiActive;
     HandleGuiCommand_t  guiHandle;
 
-    idUserInterface*    guiInGame;
-    idUserInterface*    guiMainMenu;
-    idListGUI*          guiMainMenu_MapList;        // easy map list handling
-    idUserInterface*    guiRestartMenu;
-    idUserInterface*    guiLoading;
-    idUserInterface*    guiIntro;
-    idUserInterface*    guiGameOver;
-    idUserInterface*    guiTest;
-    idUserInterface*    guiTakeNotes;
+    idUserInterface    *guiInGame;
+    idUserInterface    *guiMainMenu;
+    idListGUI          *guiMainMenu_MapList;        // easy map list handling
+    idUserInterface    *guiRestartMenu;
+    idUserInterface    *guiLoading;
+    idUserInterface    *guiIntro;
+    idUserInterface    *guiGameOver;
+    idUserInterface    *guiTest;
+    idUserInterface    *guiTakeNotes;
 
-    idUserInterface*    guiMsg;
-    idUserInterface*    guiMsgRestore;              // store the calling GUI for restore
+    idUserInterface    *guiMsg;
+    idUserInterface    *guiMsgRestore;              // store the calling GUI for restore
     idStr               msgFireBack[ 2 ];
     bool                msgRunning;
     int                 msgRetIndex;
@@ -265,9 +265,9 @@ class idSessionLocal : public idSession {
 
     bool                waitingOnBind;
 
-    const idMaterial*   whiteMaterial;
+    const idMaterial   *whiteMaterial;
 
-    const idMaterial*   wipeMaterial;
+    const idMaterial   *wipeMaterial;
     int                 wipeStartTic;
     int                 wipeStopTic;
     bool                wipeHold;
@@ -282,37 +282,37 @@ class idSessionLocal : public idSession {
     void                DrawCmdGraph();
     void                Draw();
 
-    void                WriteCmdDemo(const char* name, bool save = false);
-    void                StartPlayingCmdDemo(const char* demoName);
-    void                TimeCmdDemo(const char* demoName);
-    void                SaveCmdDemoToFile(idFile* file);
-    void                LoadCmdDemoFromFile(idFile* file);
-    void                StartRecordingRenderDemo(const char* name);
-    void                StartRecordingSound(const char* name);
+    void                WriteCmdDemo(const char *name, bool save = false);
+    void                StartPlayingCmdDemo(const char *demoName);
+    void                TimeCmdDemo(const char *demoName);
+    void                SaveCmdDemoToFile(idFile *file);
+    void                LoadCmdDemoFromFile(idFile *file);
+    void                StartRecordingRenderDemo(const char *name);
+    void                StartRecordingSound(const char *name);
     void                EndRecordSound();
     void                StopRecordingRenderDemo();
     void                StartPlayingRenderDemo(idStr name);
     void                StopPlayingRenderDemo();
-    void                CompressDemoFile(const char* scheme, const char* name);
-    void                TimeRenderDemo(const char* name, bool twice = false);
-    void                AVIRenderDemo(const char* name);
-    void                AVICmdDemo(const char* name);
-    void                AVIGame(const char* name);
-    void                BeginAVICapture(const char* name);
+    void                CompressDemoFile(const char *scheme, const char *name);
+    void                TimeRenderDemo(const char *name, bool twice = false);
+    void                AVIRenderDemo(const char *name);
+    void                AVICmdDemo(const char *name);
+    void                AVIGame(const char *name);
+    void                BeginAVICapture(const char *name);
     void                EndAVICapture();
 
     void                AdvanceRenderDemo(bool singleFrameOnly);
     void                RunGameTic();
 
     void                FinishCmdLoad();
-    void                LoadLoadingGui(const char* mapName);
+    void                LoadLoadingGui(const char *mapName);
 
-    void                DemoShot(const char* name);
+    void                DemoShot(const char *name);
 
-    void                TestGUI(const char* name);
+    void                TestGUI(const char *name);
 
-    int                 GetBytesNeededForMapLoad(const char* mapName);
-    void                SetBytesNeededForMapLoad(const char* mapName, int bytesNeeded);
+    int                 GetBytesNeededForMapLoad(const char *mapName);
+    void                SetBytesNeededForMapLoad(const char *mapName, int bytesNeeded);
 
     void                ExecuteMapChange(bool noFadeWipe = false);
     void                UnloadMap();
@@ -326,20 +326,20 @@ class idSessionLocal : public idSession {
     idStrList           loadGameList;
     idStrList           modsList;
 
-    idUserInterface*    GetActiveMenu();
+    idUserInterface    *GetActiveMenu();
 
-    void                DispatchCommand(idUserInterface* gui, const char* menuCommand, bool doIngame = true);
-    void                MenuEvent(const sysEvent_t* event);
-    bool                HandleSaveGameMenuCommand(idCmdArgs& args, int& icmd);
-    void                HandleInGameCommands(const char* menuCommand);
-    void                HandleMainMenuCommands(const char* menuCommand);
-    void                HandleChatMenuCommands(const char* menuCommand);
-    void                HandleIntroMenuCommands(const char* menuCommand);
-    void                HandleRestartMenuCommands(const char* menuCommand);
-    void                HandleMsgCommands(const char* menuCommand);
-    void                HandleNoteCommands(const char* menuCommand);
-    void                GetSaveGameList(idStrList& fileList, idList<fileTIME_T>& fileTimes);
-    void                TakeNotes(const char* p, bool extended = false);
+    void                DispatchCommand(idUserInterface *gui, const char *menuCommand, bool doIngame = true);
+    void                MenuEvent(const sysEvent_t *event);
+    bool                HandleSaveGameMenuCommand(idCmdArgs &args, int &icmd);
+    void                HandleInGameCommands(const char *menuCommand);
+    void                HandleMainMenuCommands(const char *menuCommand);
+    void                HandleChatMenuCommands(const char *menuCommand);
+    void                HandleIntroMenuCommands(const char *menuCommand);
+    void                HandleRestartMenuCommands(const char *menuCommand);
+    void                HandleMsgCommands(const char *menuCommand);
+    void                HandleNoteCommands(const char *menuCommand);
+    void                GetSaveGameList(idStrList &fileList, idList<fileTIME_T> &fileTimes);
+    void                TakeNotes(const char *p, bool extended = false);
     void                UpdateMPLevelShot(void);
 
     void                SetSaveGameGuiVars(void);

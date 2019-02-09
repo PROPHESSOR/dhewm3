@@ -40,14 +40,14 @@ R_CreateVertexProgramTurboShadowVolume
 are dangling edges that are outside the light frustum still making planes?
 =====================
 */
-srfTriangles_t* R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal* ent,
-        const srfTriangles_t* tri, const idRenderLightLocal* light,
-        srfCullInfo_t& cullInfo) {
+srfTriangles_t *R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal *ent,
+        const srfTriangles_t *tri, const idRenderLightLocal *light,
+        srfCullInfo_t &cullInfo) {
     int     i, j;
-    srfTriangles_t*  newTri;
-    silEdge_t*   sil;
-    const glIndex_t* indexes;
-    const byte* facing;
+    srfTriangles_t  *newTri;
+    silEdge_t   *sil;
+    const glIndex_t *indexes;
+    const byte *facing;
 
     R_CalcInteractionFacing(ent, tri, light, cullInfo);
 
@@ -73,8 +73,8 @@ srfTriangles_t* R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal
 
         // make all triangles that are outside the light frustum "facing", so they won't cast shadows
         indexes = tri->indexes;
-        byte* modifyFacing = cullInfo.facing;
-        const byte* cullBits = cullInfo.cullBits;
+        byte *modifyFacing = cullInfo.facing;
+        const byte *cullBits = cullInfo.cullBits;
 
         for (j = i = 0; i < tri->numIndexes; i += 3, j++) {
             if (!modifyFacing[j]) {
@@ -104,11 +104,11 @@ srfTriangles_t* R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal
     // alloc the max possible size
     #ifdef USE_TRI_DATA_ALLOCATOR
     R_AllocStaticTriSurfIndexes(newTri, (numShadowingFaces + tri->numSilEdges) * 6);
-    glIndex_t* tempIndexes = newTri->indexes;
-    glIndex_t* shadowIndexes = newTri->indexes;
+    glIndex_t *tempIndexes = newTri->indexes;
+    glIndex_t *shadowIndexes = newTri->indexes;
     #else
-    glIndex_t* tempIndexes = (glIndex_t*)_alloca16(tri->numSilEdges * 6 * sizeof(tempIndexes[0]));
-    glIndex_t* shadowIndexes = tempIndexes;
+    glIndex_t *tempIndexes = (glIndex_t *)_alloca16(tri->numSilEdges * 6 * sizeof(tempIndexes[0]));
+    glIndex_t *shadowIndexes = tempIndexes;
     #endif
 
     // create new triangles along sil planes
@@ -187,15 +187,15 @@ srfTriangles_t* R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal
 R_CreateTurboShadowVolume
 =====================
 */
-srfTriangles_t* R_CreateTurboShadowVolume(const idRenderEntityLocal* ent,
-        const srfTriangles_t* tri, const idRenderLightLocal* light,
-        srfCullInfo_t& cullInfo) {
+srfTriangles_t *R_CreateTurboShadowVolume(const idRenderEntityLocal *ent,
+        const srfTriangles_t *tri, const idRenderLightLocal *light,
+        srfCullInfo_t &cullInfo) {
     int     i, j;
     idVec3  localLightOrigin;
-    srfTriangles_t*  newTri;
-    silEdge_t*   sil;
-    const glIndex_t* indexes;
-    const byte* facing;
+    srfTriangles_t  *newTri;
+    silEdge_t   *sil;
+    const glIndex_t *indexes;
+    const byte *facing;
 
     R_CalcInteractionFacing(ent, tri, light, cullInfo);
 
@@ -221,8 +221,8 @@ srfTriangles_t* R_CreateTurboShadowVolume(const idRenderEntityLocal* ent,
 
         // make all triangles that are outside the light frustum "facing", so they won't cast shadows
         indexes = tri->indexes;
-        byte* modifyFacing = cullInfo.facing;
-        const byte* cullBits = cullInfo.cullBits;
+        byte *modifyFacing = cullInfo.facing;
+        const byte *cullBits = cullInfo.cullBits;
 
         for (j = i = 0; i < tri->numIndexes; i += 3, j++) {
             if (!modifyFacing[j]) {
@@ -248,14 +248,14 @@ srfTriangles_t* R_CreateTurboShadowVolume(const idRenderEntityLocal* ent,
 
     #ifdef USE_TRI_DATA_ALLOCATOR
     R_AllocStaticTriSurfShadowVerts(newTri, tri->numVerts * 2);
-    shadowCache_t* shadowVerts = newTri->shadowVertexes;
+    shadowCache_t *shadowVerts = newTri->shadowVertexes;
     #else
-    shadowCache_t* shadowVerts = (shadowCache_t*)_alloca16(tri->numVerts * 2 * sizeof(shadowVerts[0]));
+    shadowCache_t *shadowVerts = (shadowCache_t *)_alloca16(tri->numVerts * 2 * sizeof(shadowVerts[0]));
     #endif
 
     R_GlobalPointToLocal(ent->modelMatrix, light->globalLightOrigin, localLightOrigin);
 
-    int* vertRemap = (int*)_alloca16(tri->numVerts * sizeof(vertRemap[0]));
+    int *vertRemap = (int *)_alloca16(tri->numVerts * sizeof(vertRemap[0]));
 
     SIMDProcessor->Memset(vertRemap, -1, tri->numVerts * sizeof(vertRemap[0]));
 
@@ -286,11 +286,11 @@ srfTriangles_t* R_CreateTurboShadowVolume(const idRenderEntityLocal* ent,
     // alloc the max possible size
     #ifdef USE_TRI_DATA_ALLOCATOR
     R_AllocStaticTriSurfIndexes(newTri, (numShadowingFaces + tri->numSilEdges) * 6);
-    glIndex_t* tempIndexes = newTri->indexes;
-    glIndex_t* shadowIndexes = newTri->indexes;
+    glIndex_t *tempIndexes = newTri->indexes;
+    glIndex_t *shadowIndexes = newTri->indexes;
     #else
-    glIndex_t* tempIndexes = (glIndex_t*)_alloca16(tri->numSilEdges * 6 * sizeof(tempIndexes[0]));
-    glIndex_t* shadowIndexes = tempIndexes;
+    glIndex_t *tempIndexes = (glIndex_t *)_alloca16(tri->numSilEdges * 6 * sizeof(tempIndexes[0]));
+    glIndex_t *shadowIndexes = tempIndexes;
     #endif
 
     // create new triangles along sil planes

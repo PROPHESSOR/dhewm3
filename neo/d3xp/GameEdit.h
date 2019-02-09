@@ -74,9 +74,9 @@ class idDragEntity {
     ~idDragEntity(void);
 
     void                    Clear();
-    void                    Update(idPlayer* player);
-    void                    SetSelected(idEntity* ent);
-    idEntity*               GetSelected(void) const {
+    void                    Update(idPlayer *player);
+    void                    SetSelected(idEntity *ent);
+    idEntity               *GetSelected(void) const {
         return selected.GetEntity();
     }
     void                    DeleteSelected(void);
@@ -90,7 +90,7 @@ class idDragEntity {
     idVec3                  localEntityPoint;   // dragged point in entity space
     idVec3                  localPlayerPoint;   // dragged point in player space
     idStr                   bodyName;           // name of the body being dragged
-    idCursor3D*             cursor;             // cursor entity
+    idCursor3D             *cursor;             // cursor entity
     idEntityPtr<idEntity>   selected;           // last dragged entity
 
     void                    StopDrag(void);
@@ -105,23 +105,23 @@ class idDragEntity {
 ===============================================================================
 */
 typedef struct selectedTypeInfo_s {
-    idTypeInfo* typeInfo;
+    idTypeInfo *typeInfo;
     idStr       textKey;
 } selectedTypeInfo_t;
 
 class idEditEntities {
   public:
     idEditEntities(void);
-    bool                    SelectEntity(const idVec3& origin, const idVec3& dir, const idEntity* skip);
-    void                    AddSelectedEntity(idEntity* ent);
-    void                    RemoveSelectedEntity(idEntity* ent);
+    bool                    SelectEntity(const idVec3 &origin, const idVec3 &dir, const idEntity *skip);
+    void                    AddSelectedEntity(idEntity *ent);
+    void                    RemoveSelectedEntity(idEntity *ent);
     void                    ClearSelectedEntities(void);
     void                    DisplayEntities(void);
-    bool                    EntityIsSelectable(idEntity* ent, idVec4* color = NULL, idStr* text = NULL);
+    bool                    EntityIsSelectable(idEntity *ent, idVec4 *color = NULL, idStr *text = NULL);
   private:
     int                     nextSelectTime;
     idList<selectedTypeInfo_t> selectableEntityClasses;
-    idList<idEntity*>      selectedEntities;
+    idList<idEntity *>      selectedEntities;
 };
 
 #endif /* !__GAME_EDIT_H__ */

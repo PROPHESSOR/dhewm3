@@ -41,24 +41,24 @@ template <class T, int N>
 struct MyArray {
     MyArray() : s(0) {}
 
-    MyArray(const MyArray<T,N>& cpy) : s(cpy.s) {
+    MyArray(const MyArray<T,N> &cpy) : s(cpy.s) {
         for (int i=0; i < s; i++) {
             v[i] = cpy.v[i];
         }
     }
 
-    void push_back(const T& i) {
+    void push_back(const T &i) {
         v[s] = i;
         s++;
         //if(s > max_size)
         //  max_size = int(s);
     }
 
-    T& operator[](int i) {
+    T &operator[](int i) {
         return v[i];
     }
 
-    const T& operator[](int i) const {
+    const T &operator[](int i) const {
         return v[i];
     }
 
@@ -167,7 +167,7 @@ struct polyhedron {
 
     void discard_neighbor_info() {
         for (unsigned int i = 0; i < p.size(); i++) {
-            MyArrayInt& ni = p[i].ni;
+            MyArrayInt &ni = p[i].ni;
 
             for (unsigned int j = 0; j < ni.size(); j++) {
                 ni[j] = -1;
@@ -185,8 +185,8 @@ struct polyhedron {
 
         // for each polygon
         for (int i = 0; i < P-1; i++) {
-            const MyArrayInt& vi = p[i].vi;
-            MyArrayInt& ni = p[i].ni;
+            const MyArrayInt &vi = p[i].vi;
+            MyArrayInt &ni = p[i].ni;
             int Si = vi.size();
 
             // for each edge of that polygon
@@ -203,8 +203,8 @@ struct polyhedron {
 
                 // check all remaining polygons
                 for (int j = i+1; j < P; j++) {
-                    const MyArrayInt& vj = p[j].vi;
-                    MyArrayInt& nj = p[j].ni;
+                    const MyArrayInt &vj = p[j].vi;
+                    MyArrayInt &nj = p[j].ni;
                     int Sj = vj.size();
 
                     for (int jj = 0; jj < Sj; jj++) {
@@ -242,7 +242,7 @@ struct polyhedron {
         }
     }
 
-    void transform(const idMat4& m) {
+    void transform(const idMat4 &m) {
         for (unsigned int i=0; i < v.size(); i++) {
             v[i] = m * v[i];
         }
@@ -253,7 +253,7 @@ struct polyhedron {
 };
 
 // make a unit cube
-polyhedron PolyhedronFromBounds(const idBounds& b) {
+polyhedron PolyhedronFromBounds(const idBounds &b) {
 
 //       3----------2
 //       |\        /|
@@ -293,8 +293,8 @@ polyhedron PolyhedronFromBounds(const idBounds& b) {
 
     polyhedron p2(p);
 
-    const idVec3& min = b[0];
-    const idVec3& max = b[1];
+    const idVec3 &min = b[0];
+    const idVec3 &max = b[1];
 
     p2.v.empty();
     p2.v.push_back(idVec4(min.x, min.y, max.z, 1));
@@ -311,7 +311,7 @@ polyhedron PolyhedronFromBounds(const idBounds& b) {
 }
 
 
-polyhedron make_sv(const polyhedron& oc, idVec4 light) {
+polyhedron make_sv(const polyhedron &oc, idVec4 light) {
     static polyhedron lut[64];
     int index = 0;
 
@@ -322,7 +322,7 @@ polyhedron make_sv(const polyhedron& oc, idVec4 light) {
     }
 
     if (lut[index].e.size() == 0) {
-        polyhedron& ph = lut[index];
+        polyhedron &ph = lut[index];
         ph = oc;
 
         int V = ph.v.size();
@@ -350,8 +350,8 @@ polyhedron make_sv(const polyhedron& oc, idVec4 light) {
         int I = ph.p.size();
 
         for (int i=0; i < I; i++) {
-            MyArrayInt& vi = ph.p[i].vi;
-            MyArrayInt& ni = ph.p[i].ni;
+            MyArrayInt &vi = ph.p[i].vi;
+            MyArrayInt &ni = ph.p[i].ni;
             int S = vi.size();
 
             for (int j = 0; j < S; j++) {
@@ -394,7 +394,7 @@ polyhedron make_sv(const polyhedron& oc, idVec4 light) {
 typedef MyArray<idVec4, 36> MySegments;
 //int MySegments::max_size = 0;
 
-void polyhedron_edges(polyhedron& a, MySegments& e) {
+void polyhedron_edges(polyhedron &a, MySegments &e) {
     e.empty();
 
     if (a.e.size() == 0 && a.p.size() != 0) {
@@ -409,8 +409,8 @@ void polyhedron_edges(polyhedron& a, MySegments& e) {
 }
 
 // clip the segments of e by the planes of polyhedron a.
-void clip_segments(const polyhedron& ph, MySegments& is, MySegments& os) {
-    const MyArrayPoly& p = ph.p;
+void clip_segments(const polyhedron &ph, MySegments &is, MySegments &os) {
+    const MyArrayPoly &p = ph.p;
 
     for (unsigned int i = 0; i < is.size(); i+=2) {
         idVec4 a = is[i  ];
@@ -471,30 +471,30 @@ void clip_segments(const polyhedron& ph, MySegments& is, MySegments& os) {
 
 }
 
-idMat4 make_idMat4(const float* m) {
+idMat4 make_idMat4(const float *m) {
     return idMat4(m[ 0], m[ 4], m[ 8], m[12],
                   m[ 1], m[ 5], m[ 9], m[13],
                   m[ 2], m[ 6], m[10], m[14],
                   m[ 3], m[ 7], m[11], m[15]);
 }
 
-idVec3 v4to3(const idVec4& v) {
+idVec3 v4to3(const idVec4 &v) {
     return idVec3(v.x/v.w, v.y/v.w, v.z/v.w);
 }
 
-void draw_polyhedron(const viewDef_t* viewDef, const polyhedron& p, idVec4 color) {
+void draw_polyhedron(const viewDef_t *viewDef, const polyhedron &p, idVec4 color) {
     for (unsigned int i = 0; i < p.e.size(); i++) {
         viewDef->renderWorld->DebugLine(color, v4to3(p.v[p.e[i].vi[0]]), v4to3(p.v[p.e[i].vi[1]]));
     }
 }
 
-void draw_segments(const viewDef_t* viewDef, const MySegments& s, idVec4 color) {
+void draw_segments(const viewDef_t *viewDef, const MySegments &s, idVec4 color) {
     for (unsigned int i = 0; i < s.size(); i+=2) {
         viewDef->renderWorld->DebugLine(color, v4to3(s[i]), v4to3(s[i+1]));
     }
 }
 
-void world_to_hclip(const viewDef_t* viewDef, const idVec4& global, idVec4& clip) {
+void world_to_hclip(const viewDef_t *viewDef, const idVec4 &global, idVec4 &clip) {
     int     i;
     idVec4  view;
 
@@ -516,9 +516,9 @@ void world_to_hclip(const viewDef_t* viewDef, const idVec4& global, idVec4& clip
     }
 }
 
-idScreenRect R_CalcIntersectionScissor(const idRenderLightLocal* lightDef,
-                                       const idRenderEntityLocal* entityDef,
-                                       const viewDef_t* viewDef) {
+idScreenRect R_CalcIntersectionScissor(const idRenderLightLocal *lightDef,
+                                       const idRenderEntityLocal *entityDef,
+                                       const viewDef_t *viewDef) {
 
     idMat4 omodel = make_idMat4(entityDef->modelMatrix);
     //idMat4 lmodel = make_idMat4( lightDef->modelMatrix );

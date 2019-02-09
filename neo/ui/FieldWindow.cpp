@@ -41,13 +41,13 @@ void idFieldWindow::CommonInit() {
     showCursor = false;
 }
 
-idFieldWindow::idFieldWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idFieldWindow::idFieldWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idFieldWindow::idFieldWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idFieldWindow::idFieldWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -56,7 +56,7 @@ idFieldWindow::~idFieldWindow() {
 
 }
 
-bool idFieldWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idFieldWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "cursorvar") == 0) {
         ParseString(src, cursorVar);
         return true;

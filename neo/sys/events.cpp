@@ -58,7 +58,7 @@ If you have questions concerning this license or the applicable additional terms
     #define SDLK_PRINTSCREEN SDLK_PRINT
 #endif
 
-const char* kbdNames[] = {
+const char *kbdNames[] = {
     "english", "french", "german", "italian", "spanish", "turkish", "norwegian", "brazilian", NULL
 };
 
@@ -307,19 +307,19 @@ static byte mapkey(SDL_Keycode key) {
     return 0;
 }
 
-static void PushConsoleEvent(const char* s) {
-    char* b;
+static void PushConsoleEvent(const char *s) {
+    char *b;
     size_t len;
 
     len = strlen(s) + 1;
-    b = (char*)Mem_Alloc(len);
+    b = (char *)Mem_Alloc(len);
     strcpy(b, s);
 
     SDL_Event event;
 
     event.type = SDL_USEREVENT;
     event.user.code = SE_CONSOLE;
-    event.user.data1 = (void*)len;
+    event.user.data1 = (void *)len;
     event.user.data2 = b;
 
     SDL_PushEvent(&event);
@@ -772,7 +772,7 @@ Sys_GenerateEvents
 ================
 */
 void Sys_GenerateEvents() {
-    char* s = Sys_ConsoleInput();
+    char *s = Sys_ConsoleInput();
 
     if (s) {
         PushConsoleEvent(s);
@@ -795,7 +795,7 @@ int Sys_PollKeyboardInputEvents() {
 Sys_ReturnKeyboardInputEvent
 ================
 */
-int Sys_ReturnKeyboardInputEvent(const int n, int& key, bool& state) {
+int Sys_ReturnKeyboardInputEvent(const int n, int &key, bool &state) {
     if (n >= kbd_polls.Num()) {
         return 0;
     }
@@ -828,7 +828,7 @@ int Sys_PollMouseInputEvents() {
 Sys_ReturnMouseInputEvent
 ================
 */
-int Sys_ReturnMouseInputEvent(const int n, int& action, int& value) {
+int Sys_ReturnMouseInputEvent(const int n, int &action, int &value) {
     if (n >= mouse_polls.Num()) {
         return 0;
     }

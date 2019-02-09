@@ -107,7 +107,7 @@ void idPlayerStart::Spawn(void) {
 idPlayerStart::Save
 ================
 */
-void idPlayerStart::Save(idSaveGame* savefile) const {
+void idPlayerStart::Save(idSaveGame *savefile) const {
     savefile->WriteInt(teleportStage);
 }
 
@@ -116,7 +116,7 @@ void idPlayerStart::Save(idSaveGame* savefile) const {
 idPlayerStart::Restore
 ================
 */
-void idPlayerStart::Restore(idRestoreGame* savefile) {
+void idPlayerStart::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(teleportStage);
 }
 
@@ -125,13 +125,13 @@ void idPlayerStart::Restore(idRestoreGame* savefile) {
 idPlayerStart::ClientReceiveEvent
 ================
 */
-bool idPlayerStart::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
+bool idPlayerStart::ClientReceiveEvent(int event, int time, const idBitMsg &msg) {
     int entityNumber;
 
     switch (event) {
         case EVENT_TELEPORTPLAYER: {
                 entityNumber = msg.ReadBits(GENTITYNUM_BITS);
-                idPlayer* player = static_cast<idPlayer*>(gameLocal.entities[entityNumber]);
+                idPlayer *player = static_cast<idPlayer *>(gameLocal.entities[entityNumber]);
 
                 if (player != NULL && player->IsType(idPlayer::Type)) {
                     Event_TeleportPlayer(player);
@@ -154,15 +154,15 @@ idPlayerStart::Event_TeleportStage
 FIXME: add functionality to fx system ( could be done with player scripting too )
 ================
 */
-void idPlayerStart::Event_TeleportStage(idEntity* _player) {
-    idPlayer* player;
+void idPlayerStart::Event_TeleportStage(idEntity *_player) {
+    idPlayer *player;
 
     if (!_player->IsType(idPlayer::Type)) {
         common->Warning("idPlayerStart::Event_TeleportStage: entity is not an idPlayer\n");
         return;
     }
 
-    player = static_cast<idPlayer*>(_player);
+    player = static_cast<idPlayer *>(_player);
     float teleportDelay = spawnArgs.GetFloat("teleportDelay");
 
     switch (teleportStage) {
@@ -200,11 +200,11 @@ void idPlayerStart::Event_TeleportStage(idEntity* _player) {
 idPlayerStart::TeleportPlayer
 ================
 */
-void idPlayerStart::TeleportPlayer(idPlayer* player) {
+void idPlayerStart::TeleportPlayer(idPlayer *player) {
     float pushVel = spawnArgs.GetFloat("push", "300");
     float f = spawnArgs.GetFloat("visualEffect", "0");
-    const char* viewName = spawnArgs.GetString("visualView", "");
-    idEntity* ent = viewName ? gameLocal.FindEntity(viewName) : NULL;
+    const char *viewName = spawnArgs.GetString("visualView", "");
+    idEntity *ent = viewName ? gameLocal.FindEntity(viewName) : NULL;
 
     #ifdef _D3XP
     SetTimeState ts(player->timeGroup);
@@ -215,7 +215,7 @@ void idPlayerStart::TeleportPlayer(idPlayer* player) {
         // the entity needs to teleport to where the camera view is to have the PVS right
         player->Teleport(ent->GetPhysics()->GetOrigin(), ang_zero, this);
         player->StartSound("snd_teleport_enter", SND_CHANNEL_ANY, 0, false, NULL);
-        player->SetPrivateCameraView(static_cast<idCamera*>(ent));
+        player->SetPrivateCameraView(static_cast<idCamera *>(ent));
 
         // the player entity knows where to spawn from the previous Teleport call
         if (!gameLocal.isClient) {
@@ -237,11 +237,11 @@ void idPlayerStart::TeleportPlayer(idPlayer* player) {
 idPlayerStart::Event_TeleportPlayer
 ================
 */
-void idPlayerStart::Event_TeleportPlayer(idEntity* activator) {
-    idPlayer* player;
+void idPlayerStart::Event_TeleportPlayer(idEntity *activator) {
+    idPlayer *player;
 
     if (activator->IsType(idPlayer::Type)) {
-        player = static_cast<idPlayer*>(activator);
+        player = static_cast<idPlayer *>(activator);
     } else {
         player = gameLocal.GetLocalPlayer();
     }
@@ -286,7 +286,7 @@ END_CLASS
 idActivator::Save
 ================
 */
-void idActivator::Save(idSaveGame* savefile) const {
+void idActivator::Save(idSaveGame *savefile) const {
     savefile->WriteBool(stay_on);
 }
 
@@ -295,7 +295,7 @@ void idActivator::Save(idSaveGame* savefile) const {
 idActivator::Restore
 ================
 */
-void idActivator::Restore(idRestoreGame* savefile) {
+void idActivator::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(stay_on);
 
     if (stay_on) {
@@ -346,7 +346,7 @@ void idActivator::Think(void) {
 idActivator::Activate
 ================
 */
-void idActivator::Event_Activate(idEntity* activator) {
+void idActivator::Event_Activate(idEntity *activator) {
     if (thinkFlags & TH_THINK) {
         BecomeInactive(TH_THINK);
     } else {
@@ -381,7 +381,7 @@ idPathCorner::DrawDebugInfo
 =====================
 */
 void idPathCorner::DrawDebugInfo(void) {
-    idEntity* ent;
+    idEntity *ent;
     idBounds bnds(idVec3(-4.0, -4.0f, -8.0f), idVec3(4.0, 4.0f, 64.0f));
 
     for (ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
@@ -399,12 +399,12 @@ void idPathCorner::DrawDebugInfo(void) {
 idPathCorner::RandomPath
 ============
 */
-idPathCorner* idPathCorner::RandomPath(const idEntity* source, const idEntity* ignore) {
+idPathCorner *idPathCorner::RandomPath(const idEntity *source, const idEntity *ignore) {
     int i;
     int num;
     int which;
-    idEntity* ent;
-    idPathCorner* path[ MAX_GENTITIES ];
+    idEntity *ent;
+    idPathCorner *path[ MAX_GENTITIES ];
 
     num = 0;
 
@@ -412,7 +412,7 @@ idPathCorner* idPathCorner::RandomPath(const idEntity* source, const idEntity* i
         ent = source->targets[ i ].GetEntity();
 
         if (ent && (ent != ignore) && ent->IsType(idPathCorner::Type)) {
-            path[ num++ ] = static_cast<idPathCorner*>(ent);
+            path[ num++ ] = static_cast<idPathCorner *>(ent);
 
             if (num >= MAX_GENTITIES) {
                 break;
@@ -434,7 +434,7 @@ idPathCorner::Event_RandomPath
 =====================
 */
 void idPathCorner::Event_RandomPath(void) {
-    idPathCorner* path;
+    idPathCorner *path;
 
     path = RandomPath(this, NULL);
     idThread::ReturnEntity(path);
@@ -470,7 +470,7 @@ idDamagable::idDamagable(void) {
 idDamagable::Save
 ================
 */
-void idDamagable::Save(idSaveGame* savefile) const {
+void idDamagable::Save(idSaveGame *savefile) const {
     savefile->WriteInt(count);
     savefile->WriteInt(nextTriggerTime);
 }
@@ -480,7 +480,7 @@ void idDamagable::Save(idSaveGame* savefile) const {
 idDamagable::Restore
 ================
 */
-void idDamagable::Restore(idRestoreGame* savefile) {
+void idDamagable::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(count);
     savefile->ReadInt(nextTriggerTime);
 }
@@ -513,7 +513,7 @@ void idDamagable::Spawn(void) {
 idDamagable::BecomeBroken
 ================
 */
-void idDamagable::BecomeBroken(idEntity* activator) {
+void idDamagable::BecomeBroken(idEntity *activator) {
     float   forceState;
     int     numStates;
     int     cycle;
@@ -580,7 +580,7 @@ void idDamagable::BecomeBroken(idEntity* activator) {
 idDamagable::Killed
 ================
 */
-void idDamagable::Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
+void idDamagable::Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
     if (gameLocal.time < nextTriggerTime) {
         health += damage;
         return;
@@ -616,7 +616,7 @@ void idDamagable::Show(void) {
 idDamagable::Event_BecomeBroken
 ================
 */
-void idDamagable::Event_BecomeBroken(idEntity* activator) {
+void idDamagable::Event_BecomeBroken(idEntity *activator) {
     BecomeBroken(activator);
 }
 
@@ -657,8 +657,8 @@ void idExplodable::Spawn(void) {
 idExplodable::Event_Explode
 ================
 */
-void idExplodable::Event_Explode(idEntity* activator) {
-    const char* temp;
+void idExplodable::Event_Explode(idEntity *activator) {
+    const char *temp;
 
     if (spawnArgs.GetString("def_damage", "damage_explosion", &temp)) {
         gameLocal.RadiusDamage(GetPhysics()->GetOrigin(), activator, activator, this, this, temp);
@@ -837,7 +837,7 @@ void idForceField::Think(void) {
 idForceField::Save
 ================
 */
-void idForceField::Save(idSaveGame* savefile) const {
+void idForceField::Save(idSaveGame *savefile) const {
     savefile->WriteStaticObject(forceField);
 }
 
@@ -846,7 +846,7 @@ void idForceField::Save(idSaveGame* savefile) const {
 idForceField::Restore
 ================
 */
-void idForceField::Restore(idRestoreGame* savefile) {
+void idForceField::Restore(idRestoreGame *savefile) {
     savefile->ReadStaticObject(forceField);
 }
 
@@ -907,7 +907,7 @@ void idForceField::Event_Toggle(void) {
 idForceField::Event_Activate
 ================
 */
-void idForceField::Event_Activate(idEntity* activator) {
+void idForceField::Event_Activate(idEntity *activator) {
     float wait;
 
     Toggle();
@@ -998,7 +998,7 @@ idAnimated::~idAnimated() {
 idAnimated::Save
 ================
 */
-void idAnimated::Save(idSaveGame* savefile) const {
+void idAnimated::Save(idSaveGame *savefile) const {
     savefile->WriteInt(current_anim_index);
     savefile->WriteInt(num_anims);
     savefile->WriteInt(anim);
@@ -1013,7 +1013,7 @@ void idAnimated::Save(idSaveGame* savefile) const {
 idAnimated::Restore
 ================
 */
-void idAnimated::Restore(idRestoreGame* savefile) {
+void idAnimated::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(current_anim_index);
     savefile->ReadInt(num_anims);
     savefile->ReadInt(anim);
@@ -1032,7 +1032,7 @@ void idAnimated::Spawn(void) {
     idStr       animname;
     int         anim2;
     float       wait;
-    const char*  joint;
+    const char  *joint;
 
     joint = spawnArgs.GetString("sound_bone", "origin");
     soundJoint = animator.GetJointHandle(joint);
@@ -1123,7 +1123,7 @@ bool idAnimated::LoadAF(void) {
 idAnimated::GetPhysicsToSoundTransform
 ===============
 */
-bool idAnimated::GetPhysicsToSoundTransform(idVec3& origin, idMat3& axis) {
+bool idAnimated::GetPhysicsToSoundTransform(idVec3 &origin, idMat3 &axis) {
     animator.GetJointTransform(soundJoint, gameLocal.time, origin, axis);
     axis = renderEntity.axis;
     return true;
@@ -1160,7 +1160,7 @@ idAnimated::PlayNextAnim
 =====================
 */
 void idAnimated::PlayNextAnim(void) {
-    const char* animname;
+    const char *animname;
     int len;
     int cycle;
 
@@ -1238,7 +1238,7 @@ idAnimated::Event_AnimDone
 */
 void idAnimated::Event_AnimDone(int animindex) {
     if (g_debugCinematic.GetBool()) {
-        const idAnim* animPtr = animator.GetAnim(anim);
+        const idAnim *animPtr = animator.GetAnim(anim);
         gameLocal.Printf("%d: '%s' end anim '%s'\n", gameLocal.framenum, GetName(), animPtr ? animPtr->Name() : "");
     }
 
@@ -1259,7 +1259,7 @@ void idAnimated::Event_AnimDone(int animindex) {
 idAnimated::Event_Activate
 ================
 */
-void idAnimated::Event_Activate(idEntity* _activator) {
+void idAnimated::Event_Activate(idEntity *_activator) {
     if (num_anims) {
         PlayNextAnim();
         activator = _activator;
@@ -1294,7 +1294,7 @@ void idAnimated::Event_Start(void) {
 
     if (anim) {
         if (g_debugCinematic.GetBool()) {
-            const idAnim* animPtr = animator.GetAnim(anim);
+            const idAnim *animPtr = animator.GetAnim(anim);
             gameLocal.Printf("%d: '%s' start anim '%s'\n", gameLocal.framenum, GetName(), animPtr ? animPtr->Name() : "");
         }
 
@@ -1337,10 +1337,10 @@ void idAnimated::Event_LaunchMissilesUpdate(int launchjoint, int targetjoint, in
     idVec3          targetPos;
     idMat3          axis;
     idVec3          dir;
-    idEntity*       ent;
-    idProjectile*   projectile;
-    const idDict*   projectileDef;
-    const char*     projectilename;
+    idEntity       *ent;
+    idProjectile   *projectile;
+    const idDict   *projectileDef;
+    const char     *projectilename;
 
     projectilename = spawnArgs.GetString("projectilename");
     projectileDef = gameLocal.FindEntityDefDict(projectilename, false);
@@ -1367,7 +1367,7 @@ void idAnimated::Event_LaunchMissilesUpdate(int launchjoint, int targetjoint, in
         gameLocal.Error("idAnimated '%s' at (%s): in 'launchMissiles' call '%s' is not an idProjectile", name.c_str(), GetPhysics()->GetOrigin().ToString(0), projectilename);
     }
 
-    projectile = (idProjectile*)ent;
+    projectile = (idProjectile *)ent;
     projectile->Create(this, launchPos, dir);
     projectile->Launch(launchPos, dir, vec3_origin);
 
@@ -1381,8 +1381,8 @@ void idAnimated::Event_LaunchMissilesUpdate(int launchjoint, int targetjoint, in
 idAnimated::Event_LaunchMissiles
 =====================
 */
-void idAnimated::Event_LaunchMissiles(const char* projectilename, const char* sound, const char* launchjoint, const char* targetjoint, int numshots, int framedelay) {
-    const idDict*   projectileDef;
+void idAnimated::Event_LaunchMissiles(const char *projectilename, const char *sound, const char *launchjoint, const char *targetjoint, int numshots, int framedelay) {
+    const idDict   *projectileDef;
     jointHandle_t   launch;
     jointHandle_t   target;
 
@@ -1419,7 +1419,7 @@ void idAnimated::Event_LaunchMissiles(const char* projectilename, const char* so
 idAnimated::Event_SetAnimation
 =====================
 */
-void idAnimated::Event_SetAnimation(const char* animName) {
+void idAnimated::Event_SetAnimation(const char *animName) {
 
     //BSM Nerve: Need to add some error checking so we don't change the animation
     //in the middle of the existing animation
@@ -1481,7 +1481,7 @@ idStaticEntity::idStaticEntity(void) {
 idStaticEntity::Save
 ===============
 */
-void idStaticEntity::Save(idSaveGame* savefile) const {
+void idStaticEntity::Save(idSaveGame *savefile) const {
     savefile->WriteInt(spawnTime);
     savefile->WriteBool(active);
     savefile->WriteVec4(fadeFrom);
@@ -1496,7 +1496,7 @@ void idStaticEntity::Save(idSaveGame* savefile) const {
 idStaticEntity::Restore
 ===============
 */
-void idStaticEntity::Restore(idRestoreGame* savefile) {
+void idStaticEntity::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(spawnTime);
     savefile->ReadBool(active);
     savefile->ReadVec4(fadeFrom);
@@ -1571,7 +1571,7 @@ void idStaticEntity::Think(void) {
 
     if (thinkFlags & TH_THINK) {
         if (runGui && renderEntity.gui[0]) {
-            idPlayer* player = gameLocal.GetLocalPlayer();
+            idPlayer *player = gameLocal.GetLocalPlayer();
 
             if (player) {
                 if (!player->objectiveSystemOpen) {
@@ -1609,7 +1609,7 @@ void idStaticEntity::Think(void) {
 idStaticEntity::Fade
 ================
 */
-void idStaticEntity::Fade(const idVec4& to, float fadeTime) {
+void idStaticEntity::Fade(const idVec4 &to, float fadeTime) {
     GetColor(fadeFrom);
     fadeTo = to;
     fadeStart = gameLocal.time;
@@ -1645,13 +1645,13 @@ void idStaticEntity::Show(void) {
 idStaticEntity::Event_Activate
 ================
 */
-void idStaticEntity::Event_Activate(idEntity* activator) {
+void idStaticEntity::Event_Activate(idEntity *activator) {
     idStr activateGui;
 
     spawnTime = gameLocal.time;
     active = !active;
 
-    const idKeyValue* kv = spawnArgs.FindKey("hide");
+    const idKeyValue *kv = spawnArgs.FindKey("hide");
 
     if (kv) {
         if (IsHidden()) {
@@ -1675,7 +1675,7 @@ void idStaticEntity::Event_Activate(idEntity* activator) {
 idStaticEntity::WriteToSnapshot
 ================
 */
-void idStaticEntity::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idStaticEntity::WriteToSnapshot(idBitMsgDelta &msg) const {
     GetPhysics()->WriteToSnapshot(msg);
     WriteBindToSnapshot(msg);
     WriteColorToSnapshot(msg);
@@ -1688,7 +1688,7 @@ void idStaticEntity::WriteToSnapshot(idBitMsgDelta& msg) const {
 idStaticEntity::ReadFromSnapshot
 ================
 */
-void idStaticEntity::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idStaticEntity::ReadFromSnapshot(const idBitMsgDelta &msg) {
     bool hidden;
 
     GetPhysics()->ReadFromSnapshot(msg);
@@ -1753,7 +1753,7 @@ void idFuncEmitter::Spawn(void) {
 idFuncEmitter::Save
 ===============
 */
-void idFuncEmitter::Save(idSaveGame* savefile) const {
+void idFuncEmitter::Save(idSaveGame *savefile) const {
     savefile->WriteBool(hidden);
 }
 
@@ -1762,7 +1762,7 @@ void idFuncEmitter::Save(idSaveGame* savefile) const {
 idFuncEmitter::Restore
 ===============
 */
-void idFuncEmitter::Restore(idRestoreGame* savefile) {
+void idFuncEmitter::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(hidden);
 }
 
@@ -1771,7 +1771,7 @@ void idFuncEmitter::Restore(idRestoreGame* savefile) {
 idFuncEmitter::Event_Activate
 ================
 */
-void idFuncEmitter::Event_Activate(idEntity* activator) {
+void idFuncEmitter::Event_Activate(idEntity *activator) {
     if (hidden || spawnArgs.GetBool("cycleTrigger")) {
         renderEntity.shaderParms[SHADERPARM_PARTICLE_STOPTIME] = 0;
         renderEntity.shaderParms[SHADERPARM_TIMEOFFSET] = -MS2SEC(gameLocal.time);
@@ -1789,7 +1789,7 @@ void idFuncEmitter::Event_Activate(idEntity* activator) {
 idFuncEmitter::WriteToSnapshot
 ================
 */
-void idFuncEmitter::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idFuncEmitter::WriteToSnapshot(idBitMsgDelta &msg) const {
     msg.WriteBits(hidden ? 1 : 0, 1);
     msg.WriteFloat(renderEntity.shaderParms[ SHADERPARM_PARTICLE_STOPTIME ]);
     msg.WriteFloat(renderEntity.shaderParms[ SHADERPARM_TIMEOFFSET ]);
@@ -1800,7 +1800,7 @@ void idFuncEmitter::WriteToSnapshot(idBitMsgDelta& msg) const {
 idFuncEmitter::ReadFromSnapshot
 ================
 */
-void idFuncEmitter::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idFuncEmitter::ReadFromSnapshot(const idBitMsgDelta &msg) {
     hidden = msg.ReadBits(1) != 0;
     renderEntity.shaderParms[ SHADERPARM_PARTICLE_STOPTIME ] = msg.ReadFloat();
     renderEntity.shaderParms[ SHADERPARM_TIMEOFFSET ] = msg.ReadFloat();
@@ -1848,7 +1848,7 @@ idFuncSplat::Event_Splat
 ================
 */
 void idFuncSplat::Event_Splat(void) {
-    const char* splat = NULL;
+    const char *splat = NULL;
     int count = spawnArgs.GetInt("splatCount", "1");
 
     for (int i = 0; i < count; i++) {
@@ -1870,7 +1870,7 @@ void idFuncSplat::Event_Splat(void) {
 idFuncSplat::Event_Activate
 ================
 */
-void idFuncSplat::Event_Activate(idEntity* activator) {
+void idFuncSplat::Event_Activate(idEntity *activator) {
     idFuncEmitter::Event_Activate(activator);
     PostEventSec(&EV_Splat, spawnArgs.GetFloat("splatDelay", "0.25"));
     StartSound("snd_spurt", SND_CHANNEL_ANY, 0, false, NULL);
@@ -1904,7 +1904,7 @@ idFuncSmoke::idFuncSmoke() {
 idFuncSmoke::Save
 ===============
 */
-void idFuncSmoke::Save(idSaveGame* savefile) const {
+void idFuncSmoke::Save(idSaveGame *savefile) const {
     savefile->WriteInt(smokeTime);
     savefile->WriteParticle(smoke);
     savefile->WriteBool(restart);
@@ -1915,7 +1915,7 @@ void idFuncSmoke::Save(idSaveGame* savefile) const {
 idFuncSmoke::Restore
 ===============
 */
-void idFuncSmoke::Restore(idRestoreGame* savefile) {
+void idFuncSmoke::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(smokeTime);
     savefile->ReadParticle(smoke);
     savefile->ReadBool(restart);
@@ -1927,10 +1927,10 @@ idFuncSmoke::Spawn
 ===============
 */
 void idFuncSmoke::Spawn(void) {
-    const char* smokeName = spawnArgs.GetString("smoke");
+    const char *smokeName = spawnArgs.GetString("smoke");
 
     if (*smokeName != '\0') {
-        smoke = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, smokeName));
+        smoke = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, smokeName));
     } else {
         smoke = NULL;
     }
@@ -1952,7 +1952,7 @@ void idFuncSmoke::Spawn(void) {
 idFuncSmoke::Event_Activate
 ================
 */
-void idFuncSmoke::Event_Activate(idEntity* activator) {
+void idFuncSmoke::Event_Activate(idEntity *activator) {
     if (thinkFlags & TH_UPDATEPARTICLES) {
         restart = false;
         return;
@@ -2021,7 +2021,7 @@ void idTextEntity::Spawn(void) {
 idTextEntity::Save
 ================
 */
-void idTextEntity::Save(idSaveGame* savefile) const {
+void idTextEntity::Save(idSaveGame *savefile) const {
     savefile->WriteString(text);
     savefile->WriteBool(playerOriented);
 }
@@ -2031,7 +2031,7 @@ void idTextEntity::Save(idSaveGame* savefile) const {
 idTextEntity::Restore
 ================
 */
-void idTextEntity::Restore(idRestoreGame* savefile) {
+void idTextEntity::Restore(idRestoreGame *savefile) {
     savefile->ReadString(text);
     savefile->ReadBool(playerOriented);
 }
@@ -2085,7 +2085,7 @@ idVacuumSeparatorEntity::idVacuumSeparatorEntity(void) {
 idVacuumSeparatorEntity::Save
 ================
 */
-void idVacuumSeparatorEntity::Save(idSaveGame* savefile) const {
+void idVacuumSeparatorEntity::Save(idSaveGame *savefile) const {
     savefile->WriteInt((int)portal);
     savefile->WriteInt(gameRenderWorld->GetPortalState(portal));
 }
@@ -2095,10 +2095,10 @@ void idVacuumSeparatorEntity::Save(idSaveGame* savefile) const {
 idVacuumSeparatorEntity::Restore
 ================
 */
-void idVacuumSeparatorEntity::Restore(idRestoreGame* savefile) {
+void idVacuumSeparatorEntity::Restore(idRestoreGame *savefile) {
     int state;
 
-    savefile->ReadInt((int&)portal);
+    savefile->ReadInt((int &)portal);
     savefile->ReadInt(state);
 
     gameLocal.SetPortalState(portal, state);
@@ -2128,7 +2128,7 @@ void idVacuumSeparatorEntity::Spawn() {
 idVacuumSeparatorEntity::Event_Activate
 ================
 */
-void idVacuumSeparatorEntity::Event_Activate(idEntity* activator) {
+void idVacuumSeparatorEntity::Event_Activate(idEntity *activator) {
     if (!portal) {
         return;
     }
@@ -2229,7 +2229,7 @@ void idLocationEntity::Spawn() {
 idLocationEntity::GetLocation
 ======================
 */
-const char* idLocationEntity::GetLocation(void) const {
+const char *idLocationEntity::GetLocation(void) const {
     return spawnArgs.GetString("location");
 }
 
@@ -2261,7 +2261,7 @@ idBeam::idBeam() {
 idBeam::Save
 ===============
 */
-void idBeam::Save(idSaveGame* savefile) const {
+void idBeam::Save(idSaveGame *savefile) const {
     target.Save(savefile);
     master.Save(savefile);
 }
@@ -2271,7 +2271,7 @@ void idBeam::Save(idSaveGame* savefile) const {
 idBeam::Restore
 ===============
 */
-void idBeam::Restore(idRestoreGame* savefile) {
+void idBeam::Restore(idRestoreGame *savefile) {
     target.Restore(savefile);
     master.Restore(savefile);
 }
@@ -2299,7 +2299,7 @@ idBeam::Think
 ================
 */
 void idBeam::Think(void) {
-    idBeam* masterEnt;
+    idBeam *masterEnt;
 
     if (!IsHidden() && !target.GetEntity()) {
         // hide if our target is removed
@@ -2311,7 +2311,7 @@ void idBeam::Think(void) {
     masterEnt = master.GetEntity();
 
     if (masterEnt) {
-        const idVec3& origin = GetPhysics()->GetOrigin();
+        const idVec3 &origin = GetPhysics()->GetOrigin();
         masterEnt->SetBeamTarget(origin);
     }
 
@@ -2323,7 +2323,7 @@ void idBeam::Think(void) {
 idBeam::SetMaster
 ================
 */
-void idBeam::SetMaster(idBeam* masterbeam) {
+void idBeam::SetMaster(idBeam *masterbeam) {
     master = masterbeam;
 }
 
@@ -2332,7 +2332,7 @@ void idBeam::SetMaster(idBeam* masterbeam) {
 idBeam::SetBeamTarget
 ================
 */
-void idBeam::SetBeamTarget(const idVec3& origin) {
+void idBeam::SetBeamTarget(const idVec3 &origin) {
     if ((renderEntity.shaderParms[ SHADERPARM_BEAM_END_X ] != origin.x) || (renderEntity.shaderParms[ SHADERPARM_BEAM_END_Y ] != origin.y) || (renderEntity.shaderParms[ SHADERPARM_BEAM_END_Z ] != origin.z)) {
         renderEntity.shaderParms[ SHADERPARM_BEAM_END_X ] = origin.x;
         renderEntity.shaderParms[ SHADERPARM_BEAM_END_Y ] = origin.y;
@@ -2347,14 +2347,14 @@ idBeam::Show
 ================
 */
 void idBeam::Show(void) {
-    idBeam* targetEnt;
+    idBeam *targetEnt;
 
     idEntity::Show();
 
     targetEnt = target.GetEntity();
 
     if (targetEnt) {
-        const idVec3& origin = targetEnt->GetPhysics()->GetOrigin();
+        const idVec3 &origin = targetEnt->GetPhysics()->GetOrigin();
         SetBeamTarget(origin);
     }
 }
@@ -2366,8 +2366,8 @@ idBeam::Event_MatchTarget
 */
 void idBeam::Event_MatchTarget(void) {
     int i;
-    idEntity* targetEnt;
-    idBeam* targetBeam;
+    idEntity *targetEnt;
+    idBeam *targetBeam;
 
     if (!targets.Num()) {
         return;
@@ -2379,7 +2379,7 @@ void idBeam::Event_MatchTarget(void) {
         targetEnt = targets[ i ].GetEntity();
 
         if (targetEnt && targetEnt->IsType(idBeam::Type)) {
-            targetBeam = static_cast<idBeam*>(targetEnt);
+            targetBeam = static_cast<idBeam *>(targetEnt);
             break;
         }
     }
@@ -2401,7 +2401,7 @@ void idBeam::Event_MatchTarget(void) {
 idBeam::Event_Activate
 ================
 */
-void idBeam::Event_Activate(idEntity* activator) {
+void idBeam::Event_Activate(idEntity *activator) {
     if (IsHidden()) {
         Show();
     } else {
@@ -2414,7 +2414,7 @@ void idBeam::Event_Activate(idEntity* activator) {
 idBeam::WriteToSnapshot
 ================
 */
-void idBeam::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idBeam::WriteToSnapshot(idBitMsgDelta &msg) const {
     GetPhysics()->WriteToSnapshot(msg);
     WriteBindToSnapshot(msg);
     WriteColorToSnapshot(msg);
@@ -2428,7 +2428,7 @@ void idBeam::WriteToSnapshot(idBitMsgDelta& msg) const {
 idBeam::ReadFromSnapshot
 ================
 */
-void idBeam::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idBeam::ReadFromSnapshot(const idBitMsgDelta &msg) {
     GetPhysics()->ReadFromSnapshot(msg);
     ReadBindFromSnapshot(msg);
     ReadColorFromSnapshot(msg);
@@ -2459,7 +2459,7 @@ END_CLASS
 idLiquid::Save
 ================
 */
-void idLiquid::Save(idSaveGame* savefile) const {
+void idLiquid::Save(idSaveGame *savefile) const {
     // Nothing to save
 }
 
@@ -2468,7 +2468,7 @@ void idLiquid::Save(idSaveGame* savefile) const {
 idLiquid::Restore
 ================
 */
-void idLiquid::Restore(idRestoreGame* savefile) {
+void idLiquid::Restore(idRestoreGame *savefile) {
     //FIXME: NO!
     Spawn();
 }
@@ -2494,7 +2494,7 @@ void idLiquid::Spawn() {
 idLiquid::Event_Touch
 ================
 */
-void idLiquid::Event_Touch(idEntity* other, trace_t* trace) {
+void idLiquid::Event_Touch(idEntity *other, trace_t *trace) {
     // FIXME: for QuakeCon
     /*
         idVec3 pos;
@@ -2531,7 +2531,7 @@ idShaking::idShaking() {
 idShaking::Save
 ===============
 */
-void idShaking::Save(idSaveGame* savefile) const {
+void idShaking::Save(idSaveGame *savefile) const {
     savefile->WriteBool(active);
     savefile->WriteStaticObject(physicsObj);
 }
@@ -2541,7 +2541,7 @@ void idShaking::Save(idSaveGame* savefile) const {
 idShaking::Restore
 ===============
 */
-void idShaking::Restore(idRestoreGame* savefile) {
+void idShaking::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(active);
     savefile->ReadStaticObject(physicsObj);
     RestorePhysics(&physicsObj);
@@ -2589,7 +2589,7 @@ void idShaking::BeginShaking(void) {
 idShaking::Event_Activate
 ================
 */
-void idShaking::Event_Activate(idEntity* activator) {
+void idShaking::Event_Activate(idEntity *activator) {
     if (!active) {
         BeginShaking();
     } else {
@@ -2631,7 +2631,7 @@ idEarthQuake::idEarthQuake() {
 idEarthQuake::Save
 ===============
 */
-void idEarthQuake::Save(idSaveGame* savefile) const {
+void idEarthQuake::Save(idSaveGame *savefile) const {
     savefile->WriteInt(nextTriggerTime);
     savefile->WriteInt(shakeStopTime);
     savefile->WriteFloat(wait);
@@ -2647,7 +2647,7 @@ void idEarthQuake::Save(idSaveGame* savefile) const {
 idEarthQuake::Restore
 ===============
 */
-void idEarthQuake::Restore(idRestoreGame* savefile) {
+void idEarthQuake::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(nextTriggerTime);
     savefile->ReadInt(shakeStopTime);
     savefile->ReadFloat(wait);
@@ -2689,7 +2689,7 @@ void idEarthQuake::Spawn(void) {
 idEarthQuake::Event_Activate
 ================
 */
-void idEarthQuake::Event_Activate(idEntity* activator) {
+void idEarthQuake::Event_Activate(idEntity *activator) {
 
     if (nextTriggerTime > gameLocal.time) {
         return;
@@ -2699,7 +2699,7 @@ void idEarthQuake::Event_Activate(idEntity* activator) {
         return;
     }
 
-    idPlayer* player = gameLocal.GetLocalPlayer();
+    idPlayer *player = gameLocal.GetLocalPlayer();
 
     if (player == NULL) {
         return;
@@ -2720,7 +2720,7 @@ void idEarthQuake::Event_Activate(idEntity* activator) {
 
     ActivateTargets(activator);
 
-    const idSoundShader* shader = declManager->FindSound(spawnArgs.GetString("snd_quake"));
+    const idSoundShader *shader = declManager->FindSound(spawnArgs.GetString("snd_quake"));
 
     if (playerOriented) {
         player->StartSoundShader(shader, SND_CHANNEL_ANY, SSF_GLOBAL, false, NULL);
@@ -2796,7 +2796,7 @@ idFuncPortal::idFuncPortal() {
 idFuncPortal::Save
 ===============
 */
-void idFuncPortal::Save(idSaveGame* savefile) const {
+void idFuncPortal::Save(idSaveGame *savefile) const {
     savefile->WriteInt((int)portal);
     savefile->WriteBool(state);
 }
@@ -2806,8 +2806,8 @@ void idFuncPortal::Save(idSaveGame* savefile) const {
 idFuncPortal::Restore
 ===============
 */
-void idFuncPortal::Restore(idRestoreGame* savefile) {
-    savefile->ReadInt((int&)portal);
+void idFuncPortal::Restore(idRestoreGame *savefile) {
+    savefile->ReadInt((int &)portal);
     savefile->ReadBool(state);
     gameLocal.SetPortalState(portal, state ? PS_BLOCK_ALL : PS_BLOCK_NONE);
 }
@@ -2831,7 +2831,7 @@ void idFuncPortal::Spawn(void) {
 idFuncPortal::Event_Activate
 ================
 */
-void idFuncPortal::Event_Activate(idEntity* activator) {
+void idFuncPortal::Event_Activate(idEntity *activator) {
     if (portal > 0) {
         state = !state;
         gameLocal.SetPortalState(portal, state ? PS_BLOCK_ALL : PS_BLOCK_NONE);
@@ -2864,7 +2864,7 @@ idFuncAASPortal::idFuncAASPortal() {
 idFuncAASPortal::Save
 ===============
 */
-void idFuncAASPortal::Save(idSaveGame* savefile) const {
+void idFuncAASPortal::Save(idSaveGame *savefile) const {
     savefile->WriteBool(state);
 }
 
@@ -2873,7 +2873,7 @@ void idFuncAASPortal::Save(idSaveGame* savefile) const {
 idFuncAASPortal::Restore
 ===============
 */
-void idFuncAASPortal::Restore(idRestoreGame* savefile) {
+void idFuncAASPortal::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(state);
     gameLocal.SetAASAreaState(GetPhysics()->GetAbsBounds(), AREACONTENTS_CLUSTERPORTAL, state);
 }
@@ -2893,7 +2893,7 @@ void idFuncAASPortal::Spawn(void) {
 idFuncAASPortal::Event_Activate
 ================
 */
-void idFuncAASPortal::Event_Activate(idEntity* activator) {
+void idFuncAASPortal::Event_Activate(idEntity *activator) {
     state ^= 1;
     gameLocal.SetAASAreaState(GetPhysics()->GetAbsBounds(), AREACONTENTS_CLUSTERPORTAL, state);
 }
@@ -2924,7 +2924,7 @@ idFuncAASObstacle::idFuncAASObstacle() {
 idFuncAASObstacle::Save
 ===============
 */
-void idFuncAASObstacle::Save(idSaveGame* savefile) const {
+void idFuncAASObstacle::Save(idSaveGame *savefile) const {
     savefile->WriteBool(state);
 }
 
@@ -2933,7 +2933,7 @@ void idFuncAASObstacle::Save(idSaveGame* savefile) const {
 idFuncAASObstacle::Restore
 ===============
 */
-void idFuncAASObstacle::Restore(idRestoreGame* savefile) {
+void idFuncAASObstacle::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(state);
     gameLocal.SetAASAreaState(GetPhysics()->GetAbsBounds(), AREACONTENTS_OBSTACLE, state);
 }
@@ -2953,7 +2953,7 @@ void idFuncAASObstacle::Spawn(void) {
 idFuncAASObstacle::Event_Activate
 ================
 */
-void idFuncAASObstacle::Event_Activate(idEntity* activator) {
+void idFuncAASObstacle::Event_Activate(idEntity *activator) {
     state ^= 1;
     gameLocal.SetAASAreaState(GetPhysics()->GetAbsBounds(), AREACONTENTS_OBSTACLE, state);
 }
@@ -2990,7 +2990,7 @@ idFuncRadioChatter::idFuncRadioChatter() {
 idFuncRadioChatter::Save
 ===============
 */
-void idFuncRadioChatter::Save(idSaveGame* savefile) const {
+void idFuncRadioChatter::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(time);
 }
 
@@ -2999,7 +2999,7 @@ void idFuncRadioChatter::Save(idSaveGame* savefile) const {
 idFuncRadioChatter::Restore
 ===============
 */
-void idFuncRadioChatter::Restore(idRestoreGame* savefile) {
+void idFuncRadioChatter::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(time);
 }
 
@@ -3017,14 +3017,14 @@ void idFuncRadioChatter::Spawn(void) {
 idFuncRadioChatter::Event_Activate
 ================
 */
-void idFuncRadioChatter::Event_Activate(idEntity* activator) {
-    idPlayer* player;
-    const char*  sound;
-    const idSoundShader* shader;
+void idFuncRadioChatter::Event_Activate(idEntity *activator) {
+    idPlayer *player;
+    const char  *sound;
+    const idSoundShader *shader;
     int length;
 
     if (activator->IsType(idPlayer::Type)) {
-        player = static_cast<idPlayer*>(activator);
+        player = static_cast<idPlayer *>(activator);
     } else {
         player = gameLocal.GetLocalPlayer();
     }
@@ -3050,8 +3050,8 @@ void idFuncRadioChatter::Event_Activate(idEntity* activator) {
 idFuncRadioChatter::Event_ResetRadioHud
 ================
 */
-void idFuncRadioChatter::Event_ResetRadioHud(idEntity* activator) {
-    idPlayer* player = (activator->IsType(idPlayer::Type)) ? static_cast<idPlayer*>(activator) : gameLocal.GetLocalPlayer();
+void idFuncRadioChatter::Event_ResetRadioHud(idEntity *activator) {
+    idPlayer *player = (activator->IsType(idPlayer::Type)) ? static_cast<idPlayer *>(activator) : gameLocal.GetLocalPlayer();
     player->hud->HandleNamedEvent("radioChatterDown");
     ActivateTargets(activator);
 }
@@ -3091,7 +3091,7 @@ idPhantomObjects::idPhantomObjects() {
 idPhantomObjects::Save
 ===============
 */
-void idPhantomObjects::Save(idSaveGame* savefile) const {
+void idPhantomObjects::Save(idSaveGame *savefile) const {
     int i;
 
     savefile->WriteInt(end_time);
@@ -3119,7 +3119,7 @@ void idPhantomObjects::Save(idSaveGame* savefile) const {
 idPhantomObjects::Restore
 ===============
 */
-void idPhantomObjects::Restore(idRestoreGame* savefile) {
+void idPhantomObjects::Restore(idRestoreGame *savefile) {
     int num;
     int i;
 
@@ -3175,7 +3175,7 @@ void idPhantomObjects::Spawn(void) {
 idPhantomObjects::Event_Activate
 ================
 */
-void idPhantomObjects::Event_Activate(idEntity* activator) {
+void idPhantomObjects::Event_Activate(idEntity *activator) {
     int i;
     float time;
     float frac;
@@ -3195,7 +3195,7 @@ void idPhantomObjects::Event_Activate(idEntity* activator) {
     if (!activator || !activator->IsType(idActor::Type)) {
         target = gameLocal.GetLocalPlayer();
     } else {
-        target = static_cast<idActor*>(activator);
+        target = static_cast<idActor *>(activator);
     }
 
     end_time = gameLocal.time + SEC2MS(spawnArgs.GetFloat("end_time", "0"));
@@ -3203,7 +3203,7 @@ void idPhantomObjects::Event_Activate(idEntity* activator) {
     targetTime.SetNum(targets.Num());
     lastTargetPos.SetNum(targets.Num());
 
-    const idVec3& toPos = target.GetEntity()->GetEyePosition();
+    const idVec3 &toPos = target.GetEntity()->GetEyePosition();
 
     // calculate the relative times of all the objects
     time = 0.0f;
@@ -3237,9 +3237,9 @@ void idPhantomObjects::Think(void) {
     float       time;
     idVec3      vel;
     idVec3      ang;
-    idEntity*    ent;
-    idActor*     targetEnt;
-    idPhysics*   entPhys;
+    idEntity    *ent;
+    idActor     *targetEnt;
+    idPhysics   *entPhys;
     trace_t     tr;
 
     // if we are completely closed off from the player, don't do anything at all
@@ -3258,7 +3258,7 @@ void idPhantomObjects::Think(void) {
         BecomeInactive(TH_THINK);
     }
 
-    const idVec3& toPos = targetEnt->GetEyePosition();
+    const idVec3 &toPos = targetEnt->GetEyePosition();
 
     num = 0;
 
@@ -3288,7 +3288,7 @@ void idPhantomObjects::Think(void) {
         }
 
         entPhys = ent->GetPhysics();
-        const idVec3& entOrg = entPhys->GetOrigin();
+        const idVec3 &entOrg = entPhys->GetOrigin();
 
         gameLocal.clip.TracePoint(tr, entOrg, toPos, MASK_OPAQUE, ent);
 
@@ -3309,7 +3309,7 @@ void idPhantomObjects::Think(void) {
             }
 
             if (ent->IsType(idMoveable::Type)) {
-                idMoveable* ment = static_cast<idMoveable*>(ent);
+                idMoveable *ment = static_cast<idMoveable *>(ent);
                 ment->EnableDamage(true, 2.5f);
             }
         } else {
@@ -3369,7 +3369,7 @@ idShockwave::~idShockwave() {
 idShockwave::Save
 ===============
 */
-void idShockwave::Save(idSaveGame* savefile) const {
+void idShockwave::Save(idSaveGame *savefile) const {
     savefile->WriteBool(isActive);
     savefile->WriteInt(startTime);
     savefile->WriteInt(duration);
@@ -3390,7 +3390,7 @@ void idShockwave::Save(idSaveGame* savefile) const {
 idShockwave::Restore
 ===============
 */
-void idShockwave::Restore(idRestoreGame* savefile) {
+void idShockwave::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(isActive);
     savefile->ReadInt(startTime);
     savefile->ReadInt(duration);
@@ -3452,9 +3452,9 @@ void idShockwave::Think() {
 
         // Find all clipmodels between currentSize and newSize
         idVec3      pos, end;
-        idClipModel* clipModelList[ MAX_GENTITIES ];
-        idClipModel* clip;
-        idEntity*    ent;
+        idClipModel *clipModelList[ MAX_GENTITIES ];
+        idClipModel *clip;
+        idEntity    *ent;
         int         i, listedClipModels;
 
         // Set bounds
@@ -3509,7 +3509,7 @@ void idShockwave::Think() {
                         if (damageDef.Length() > 0 && !playerDamaged) {
 
                             playerDamaged = true;   //Only damage once per shockwave
-                            idPlayer* player = static_cast< idPlayer* >(ent);
+                            idPlayer *player = static_cast< idPlayer * >(ent);
                             idVec3 dir = ent->GetPhysics()->GetOrigin() - pos;
                             dir.NormalizeFast();
                             player->Damage(NULL, NULL, dir, damageDef, 1.0f, INVALID_JOINT);
@@ -3559,7 +3559,7 @@ void idShockwave::Think() {
 idShockwave::Event_Activate
 ===============
 */
-void idShockwave::Event_Activate(idEntity* activator) {
+void idShockwave::Event_Activate(idEntity *activator) {
 
     isActive = true;
     startTime = gameLocal.time;
@@ -3642,7 +3642,7 @@ void idFuncMountedObject::Think(void) {
 idFuncMountedObject::GetViewInfo
 ================
 */
-void idFuncMountedObject::GetAngleRestrictions(int& yaw_min, int& yaw_max, int& pitch) {
+void idFuncMountedObject::GetAngleRestrictions(int &yaw_min, int &yaw_max, int &pitch) {
     idMat3      axis;
     idAngles    angs;
 
@@ -3663,7 +3663,7 @@ void idFuncMountedObject::GetAngleRestrictions(int& yaw_min, int& yaw_max, int& 
 idFuncMountedObject::Event_Touch
 ================
 */
-void idFuncMountedObject::Event_Touch(idEntity* other, trace_t* trace) {
+void idFuncMountedObject::Event_Touch(idEntity *other, trace_t *trace) {
 
     ProcessEvent(&EV_Activate, other);
 }
@@ -3673,9 +3673,9 @@ void idFuncMountedObject::Event_Touch(idEntity* other, trace_t* trace) {
 idFuncMountedObject::Event_Activate
 ================
 */
-void idFuncMountedObject::Event_Activate(idEntity* activator) {
+void idFuncMountedObject::Event_Activate(idEntity *activator) {
     if (!isMounted && activator->IsType(idPlayer::Type)) {
-        idPlayer* client = (idPlayer*)activator;
+        idPlayer *client = (idPlayer *)activator;
 
         mountedPlayer = client;
 
@@ -3699,7 +3699,7 @@ void idFuncMountedObject::Event_Activate(idEntity* activator) {
         mountedPlayer->mountedObject = this;
 
         // Call a script function
-        idThread*    mountthread;
+        idThread    *mountthread;
 
         if (scriptFunction) {
             mountthread = new idThread(scriptFunction);
@@ -3765,15 +3765,15 @@ void idFuncMountedWeapon::Think(void) {
         // Check for firing
         if (mountedPlayer->usercmd.buttons & BUTTON_ATTACK && (gameLocal.time > weaponLastFireTime + weaponFireDelay)) {
             // FIRE!
-            idEntity*        ent;
-            idProjectile*    proj;
+            idEntity        *ent;
+            idProjectile    *proj;
             idBounds        projBounds;
             idVec3          dir;
 
             gameLocal.SpawnEntityDef(*projectile, &ent);
 
             if (!ent || !ent->IsType(idProjectile::Type)) {
-                const char* projectileName = spawnArgs.GetString("def_projectile");
+                const char *projectileName = spawnArgs.GetString("def_projectile");
                 gameLocal.Error("'%s' is not an idProjectile", projectileName);
             }
 
@@ -3784,7 +3784,7 @@ void idFuncMountedWeapon::Think(void) {
 
             dir = muzzleAxis[0];
 
-            proj = static_cast<idProjectile*>(ent);
+            proj = static_cast<idProjectile *>(ent);
             proj->Create(this, muzzleOrigin, dir);
 
             projBounds = proj->GetPhysics()->GetBounds().Rotate(proj->GetPhysics()->GetAxis());
@@ -3874,7 +3874,7 @@ void idPortalSky::Event_PostSpawn() {
 idPortalSky::Event_Activate
 ================
 */
-void idPortalSky::Event_Activate(idEntity* activator) {
+void idPortalSky::Event_Activate(idEntity *activator) {
     gameLocal.SetPortalSkyEnt(this);
 }
 #endif /* _D3XP */

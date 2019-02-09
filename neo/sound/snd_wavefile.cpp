@@ -66,7 +66,7 @@ idWaveFile::~idWaveFile(void) {
 // Name: idWaveFile::Open()
 // Desc: Opens a wave file for reading
 //-----------------------------------------------------------------------------
-int idWaveFile::Open(const char* strFileName, waveformatex_t* pwfx) {
+int idWaveFile::Open(const char *strFileName, waveformatex_t *pwfx) {
 
     mbIsReadingFromMemory = false;
 
@@ -119,7 +119,7 @@ int idWaveFile::Open(const char* strFileName, waveformatex_t* pwfx) {
 
     if (mck.cksize != 0xffffffff) {
         if (pwfx) {
-            memcpy(pwfx, (waveformatex_t*)&mpwfx, sizeof(waveformatex_t));
+            memcpy(pwfx, (waveformatex_t *)&mpwfx, sizeof(waveformatex_t));
         }
 
         return 0;
@@ -132,7 +132,7 @@ int idWaveFile::Open(const char* strFileName, waveformatex_t* pwfx) {
 // Name: idWaveFile::OpenFromMemory()
 // Desc: copy data to idWaveFile member variable from memory
 //-----------------------------------------------------------------------------
-int idWaveFile::OpenFromMemory(short* pbData, int ulDataSize, waveformatextensible_t* pwfx) {
+int idWaveFile::OpenFromMemory(short *pbData, int ulDataSize, waveformatextensible_t *pwfx) {
     mpwfx       = *pwfx;
     mulDataSize = ulDataSize;
     mpbData     = pbData;
@@ -214,14 +214,14 @@ int idWaveFile::ReadMMIO(void) {
         // Read in length of extra bytes.
         word cbExtraBytes = 0L;
 
-        if (mhmmio->Read((char*)&cbExtraBytes, sizeof(word)) != sizeof(word)) {
+        if (mhmmio->Read((char *)&cbExtraBytes, sizeof(word)) != sizeof(word)) {
             return -1;
         }
 
         mpwfx.Format.cbSize = cbExtraBytes;
 
         // Now, read those extra bytes into the structure, if cbExtraAlloc != 0.
-        if (mhmmio->Read((char*)(((byte*)&(mpwfx.Format.cbSize))+sizeof(word)), cbExtraBytes) != cbExtraBytes) {
+        if (mhmmio->Read((char *)(((byte *)&(mpwfx.Format.cbSize))+sizeof(word)), cbExtraBytes) != cbExtraBytes) {
             memset(&mpwfx, 0, sizeof(waveformatextensible_t));
             return -1;
         }
@@ -280,7 +280,7 @@ int idWaveFile::ResetFile(void) {
 //       subsequent calls will be continue where the last left off unless
 //       Reset() is called.
 //-----------------------------------------------------------------------------
-int idWaveFile::Read(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead) {
+int idWaveFile::Read(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead) {
 
     if (ogg != NULL) {
 
@@ -292,7 +292,7 @@ int idWaveFile::Read(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead) {
             return -1;
         }
 
-        if ((byte*)(mpbDataCur + dwSizeToRead) > (byte*)(mpbData + mulDataSize)) {
+        if ((byte *)(mpbDataCur + dwSizeToRead) > (byte *)(mpbData + mulDataSize)) {
             dwSizeToRead = mulDataSize - (int)(mpbDataCur - mpbData);
         }
 

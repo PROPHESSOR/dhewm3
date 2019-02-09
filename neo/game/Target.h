@@ -60,7 +60,7 @@ class idTarget_Remove : public idTarget {
     CLASS_PROTOTYPE(idTarget_Remove);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -77,7 +77,7 @@ class idTarget_Show : public idTarget {
     CLASS_PROTOTYPE(idTarget_Show);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -94,7 +94,7 @@ class idTarget_Damage : public idTarget {
     CLASS_PROTOTYPE(idTarget_Damage);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -111,7 +111,7 @@ class idTarget_SessionCommand : public idTarget {
     CLASS_PROTOTYPE(idTarget_SessionCommand);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -128,7 +128,7 @@ class idTarget_EndLevel : public idTarget {
     CLASS_PROTOTYPE(idTarget_EndLevel);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 
 };
 
@@ -148,7 +148,7 @@ class idTarget_WaitForButton : public idTarget {
     void                Think(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -164,7 +164,7 @@ class idTarget_SetGlobalShaderTime : public idTarget {
     CLASS_PROTOTYPE(idTarget_SetGlobalShaderTime);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -181,7 +181,7 @@ class idTarget_SetShaderParm : public idTarget {
     CLASS_PROTOTYPE(idTarget_SetShaderParm);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -198,7 +198,7 @@ class idTarget_SetShaderTime : public idTarget {
     CLASS_PROTOTYPE(idTarget_SetShaderTime);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -215,8 +215,8 @@ class idTarget_FadeEntity : public idTarget {
 
     idTarget_FadeEntity(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Think(void);
 
@@ -225,7 +225,7 @@ class idTarget_FadeEntity : public idTarget {
     int                 fadeStart;
     int                 fadeEnd;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -241,7 +241,7 @@ class idTarget_LightFadeIn : public idTarget {
     CLASS_PROTOTYPE(idTarget_LightFadeIn);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -257,7 +257,7 @@ class idTarget_LightFadeOut : public idTarget {
     CLASS_PROTOTYPE(idTarget_LightFadeOut);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -275,7 +275,7 @@ class idTarget_Give : public idTarget {
     void                Spawn(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -294,7 +294,7 @@ class idTarget_GiveEmail : public idTarget {
     void                Spawn(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -312,7 +312,7 @@ class idTarget_SetModel : public idTarget {
     void                Spawn(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -330,13 +330,13 @@ class idTarget_SetInfluence : public idTarget {
 
     idTarget_SetInfluence(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_RestoreInfluence();
     void                Event_GatherEntities();
     void                Event_Flash(float flash, int out);
@@ -352,7 +352,7 @@ class idTarget_SetInfluence : public idTarget {
     float               delay;
     idStr               flashInSound;
     idStr               flashOutSound;
-    idEntity*           switchToCamera;
+    idEntity           *switchToCamera;
     idInterpolate<float>fovSetting;
     bool                soundFaded;
     bool                restoreOnTrigger;
@@ -372,7 +372,7 @@ class idTarget_SetKeyVal : public idTarget {
     CLASS_PROTOTYPE(idTarget_SetKeyVal);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -388,15 +388,15 @@ class idTarget_SetFov : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_SetFov);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Think(void);
 
   private:
     idInterpolate<int>  fovSetting;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -413,7 +413,7 @@ class idTarget_SetPrimaryObjective : public idTarget {
     CLASS_PROTOTYPE(idTarget_SetPrimaryObjective);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -429,7 +429,7 @@ class idTarget_LockDoor: public idTarget {
     CLASS_PROTOTYPE(idTarget_LockDoor);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -445,7 +445,7 @@ class idTarget_CallObjectFunction : public idTarget {
     CLASS_PROTOTYPE(idTarget_CallObjectFunction);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -462,7 +462,7 @@ class idTarget_EnableLevelWeapons : public idTarget {
     CLASS_PROTOTYPE(idTarget_EnableLevelWeapons);
 
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -482,13 +482,13 @@ class idTarget_Tip : public idTarget {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     idVec3              playerPos;
 
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_TipOff(void);
     void                Event_GetPlayerPos(void);
 };
@@ -504,7 +504,7 @@ class idTarget_GiveSecurity : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_GiveSecurity);
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -519,7 +519,7 @@ class idTarget_RemoveWeapons : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_RemoveWeapons);
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 
@@ -534,7 +534,7 @@ class idTarget_LevelTrigger : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_LevelTrigger);
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -548,7 +548,7 @@ class idTarget_EnableStamina : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_EnableStamina);
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
 };
 
 /*
@@ -562,7 +562,7 @@ class idTarget_FadeSoundClass : public idTarget {
   public:
     CLASS_PROTOTYPE(idTarget_FadeSoundClass);
   private:
-    void                Event_Activate(idEntity* activator);
+    void                Event_Activate(idEntity *activator);
     void                Event_RestoreVolume();
 };
 

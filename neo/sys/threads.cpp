@@ -36,12 +36,12 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "sys/sys_public.h"
 
-static SDL_mutex*    mutex[MAX_CRITICAL_SECTIONS] = { };
-static SDL_cond*     cond[MAX_TRIGGER_EVENTS] = { };
+static SDL_mutex    *mutex[MAX_CRITICAL_SECTIONS] = { };
+static SDL_cond     *cond[MAX_TRIGGER_EVENTS] = { };
 static bool         signaled[MAX_TRIGGER_EVENTS] = { };
 static bool         waiting[MAX_TRIGGER_EVENTS] = { };
 
-static xthreadInfo*  thread[MAX_THREADS] = { };
+static xthreadInfo  *thread[MAX_THREADS] = { };
 static size_t       thread_count = 0;
 
 /*
@@ -229,13 +229,13 @@ void Sys_TriggerEvent(int index) {
 Sys_CreateThread
 ==================
 */
-void Sys_CreateThread(xthread_t function, void* parms, xthreadInfo& info, const char* name) {
+void Sys_CreateThread(xthread_t function, void *parms, xthreadInfo &info, const char *name) {
     Sys_EnterCriticalSection();
 
     #if SDL_VERSION_ATLEAST(2, 0, 0)
-    SDL_Thread* t = SDL_CreateThread(function, name, parms);
+    SDL_Thread *t = SDL_CreateThread(function, name, parms);
     #else
-    SDL_Thread* t = SDL_CreateThread(function, parms);
+    SDL_Thread *t = SDL_CreateThread(function, parms);
     #endif
 
     if (!t) {
@@ -262,7 +262,7 @@ void Sys_CreateThread(xthread_t function, void* parms, xthreadInfo& info, const 
 Sys_DestroyThread
 ==================
 */
-void Sys_DestroyThread(xthreadInfo& info) {
+void Sys_DestroyThread(xthreadInfo &info) {
     assert(info.threadHandle);
 
     SDL_WaitThread(info.threadHandle, NULL);
@@ -299,8 +299,8 @@ Sys_GetThreadName
 find the name of the calling thread
 ==================
 */
-const char* Sys_GetThreadName(int* index) {
-    const char* name;
+const char *Sys_GetThreadName(int *index) {
+    const char *name;
 
     Sys_EnterCriticalSection();
 

@@ -131,13 +131,13 @@ static int  clipSilEdges[MAX_CLIP_SIL_EDGES][2];
 
 // facing will be 0 if forward facing, 1 if backwards facing
 // grabbed with alloca
-static byte* globalFacing;
+static byte *globalFacing;
 
 // faceCastsShadow will be 1 if the face is in the projection
 // and facing the apropriate direction
-static byte* faceCastsShadow;
+static byte *faceCastsShadow;
 
-static int*  remap;
+static int  *remap;
 
 #define MAX_SHADOW_INDEXES      0x18000
 #define MAX_SHADOW_VERTS        0x18000
@@ -229,7 +229,7 @@ If surfaces are ever guaranteed to not have to edge match with
 other surfaces, we could just compare indexes.
 ===============
 */
-static bool PointsOrdered(const idVec3& a, const idVec3& b) {
+static bool PointsOrdered(const idVec3 &a, const idVec3 &b) {
     float   i, j;
 
     // vectors that wind up getting an equal hash value will
@@ -253,7 +253,7 @@ R_LightProjectionMatrix
 
 ====================
 */
-void R_LightProjectionMatrix(const idVec3& origin, const idPlane& rearPlane, idVec4 mat[4]) {
+void R_LightProjectionMatrix(const idVec3 &origin, const idPlane &rearPlane, idVec4 mat[4]) {
     idVec4      lv;
     float       lg;
 
@@ -295,13 +295,13 @@ make a projected copy of the even verts into the odd spots
 that is on the far light clip plane
 ===================
 */
-static void R_ProjectPointsToFarPlane(const idRenderEntityLocal* ent, const idRenderLightLocal* light,
-                                      const idPlane& lightPlaneLocal,
+static void R_ProjectPointsToFarPlane(const idRenderEntityLocal *ent, const idRenderLightLocal *light,
+                                      const idPlane &lightPlaneLocal,
                                       int firstShadowVert, int numShadowVerts) {
     idVec3      lv;
     idVec4      mat[4];
     int         i;
-    idVec4*      in;
+    idVec4      *in;
 
     R_GlobalPointToLocal(ent->modelMatrix, light->globalLightOrigin, lv);
     R_LightProjectionMatrix(lv, lightPlaneLocal, mat);
@@ -367,14 +367,14 @@ I have some worries about edge flag cases when polygons are clipped
 multiple times near the epsilon.
 =============
 */
-static int R_ChopWinding(clipTri_t clipTris[2], int inNum, const idPlane& plane) {
-    clipTri_t*   in, *out;
+static int R_ChopWinding(clipTri_t clipTris[2], int inNum, const idPlane &plane) {
+    clipTri_t   *in, *out;
     float   dists[MAX_CLIPPED_POINTS];
     int     sides[MAX_CLIPPED_POINTS];
     int     counts[3];
     float   dot;
     int     i, j;
-    idVec3*  p1, *p2;
+    idVec3  *p1, *p2;
     idVec3  mid;
 
     in = &clipTris[inNum];
@@ -464,7 +464,7 @@ R_ClipTriangleToLight
 Returns false if nothing is left after clipping
 ===================
 */
-static bool R_ClipTriangleToLight(const idVec3& a, const idVec3& b, const idVec3& c, int planeBits,
+static bool R_ClipTriangleToLight(const idVec3 &a, const idVec3 &b, const idVec3 &c, int planeBits,
                                   const idPlane frustum[6]) {
     int         i;
     int         base;
@@ -554,9 +554,9 @@ If one point is clearly clipped by the plane and the
 other point is on the plane, it will be completely removed.
 ===================
 */
-static bool R_ClipLineToLight(const idVec3& a, const idVec3& b, const idPlane frustum[6],
-                              idVec3& p1, idVec3& p2) {
-    float*   clip;
+static bool R_ClipLineToLight(const idVec3 &a, const idVec3 &b, const idPlane frustum[6],
+                              idVec3 &p1, idVec3 &p2) {
+    float   *clip;
     int     j;
     float   d1, d2;
     float   f;
@@ -661,10 +661,10 @@ Add quads from the front points to the projected points
 for each silhouette edge in the light
 =================
 */
-static void R_AddSilEdges(const srfTriangles_t* tri, unsigned short* pointCull, const idPlane frustum[6]) {
+static void R_AddSilEdges(const srfTriangles_t *tri, unsigned short *pointCull, const idPlane frustum[6]) {
     int     v1, v2;
     int     i;
-    silEdge_t*   sil;
+    silEdge_t   *sil;
     int     numPlanes;
 
     numPlanes = tri->numIndexes / 3;
@@ -774,11 +774,11 @@ R_CalcPointCull
 Also inits the remap[] array to all -1
 ================
 */
-static void R_CalcPointCull(const srfTriangles_t* tri, const idPlane frustum[6], unsigned short* pointCull) {
+static void R_CalcPointCull(const srfTriangles_t *tri, const idPlane frustum[6], unsigned short *pointCull) {
     int i;
     int frontBits;
-    float* planeSide;
-    byte* side1, *side2;
+    float *planeSide;
+    byte *side1, *side2;
 
     SIMDProcessor->Memset(remap, -1, tri->numVerts * sizeof(remap[0]));
 
@@ -799,9 +799,9 @@ static void R_CalcPointCull(const srfTriangles_t* tri, const idPlane frustum[6],
         return;
     }
 
-    planeSide = (float*) _alloca16(tri->numVerts * sizeof(float));
-    side1 = (byte*) _alloca16(tri->numVerts * sizeof(byte));
-    side2 = (byte*) _alloca16(tri->numVerts * sizeof(byte));
+    planeSide = (float *) _alloca16(tri->numVerts * sizeof(float));
+    side1 = (byte *) _alloca16(tri->numVerts * sizeof(byte));
+    side2 = (byte *) _alloca16(tri->numVerts * sizeof(byte));
     SIMDProcessor->Memset(side1, 0, tri->numVerts * sizeof(byte));
     SIMDProcessor->Memset(side2, 0, tri->numVerts * sizeof(byte));
 
@@ -835,22 +835,22 @@ If the frustum is just part of a point light, clipped planes don't
 need to be added.
 =================
 */
-static void R_CreateShadowVolumeInFrustum(const idRenderEntityLocal* ent,
-        const srfTriangles_t* tri,
-        const idRenderLightLocal* light,
+static void R_CreateShadowVolumeInFrustum(const idRenderEntityLocal *ent,
+        const srfTriangles_t *tri,
+        const idRenderLightLocal *light,
         const idVec3 lightOrigin,
         const idPlane frustum[6],
-        const idPlane& farPlane,
+        const idPlane &farPlane,
         bool makeClippedPlanes) {
     int     i;
     int     numTris;
-    unsigned short*      pointCull;
+    unsigned short      *pointCull;
     int     numCapIndexes;
     int     firstShadowIndex;
     int     firstShadowVert;
     int     cullBits;
 
-    pointCull = (unsigned short*)_alloca16(tri->numVerts * sizeof(pointCull[0]));
+    pointCull = (unsigned short *)_alloca16(tri->numVerts * sizeof(pointCull[0]));
 
     // test the vertexes for inside the light frustum, which will allow
     // us to completely cull away some triangles from consideration.
@@ -1067,7 +1067,7 @@ R_MakeShadowFrustums
 Called at definition derivation time
 ===================
 */
-void R_MakeShadowFrustums(idRenderLightLocal* light) {
+void R_MakeShadowFrustums(idRenderLightLocal *light) {
     int     i, j;
 
     if (light->parms.pointLight) {
@@ -1085,13 +1085,13 @@ void R_MakeShadowFrustums(idRenderLightLocal* light) {
 
         // a point light has to project against six planes
         for (i = 0 ; i < 6 ; i++) {
-            shadowFrustum_t* frust = &light->shadowFrustums[ light->numShadowFrustums ];
+            shadowFrustum_t *frust = &light->shadowFrustums[ light->numShadowFrustums ];
 
             frust->numPlanes = 6;
             frust->makeClippedPlanes = false;
 
             for (j = 0 ; j < 6 ; j++) {
-                idPlane& plane = frust->planes[j];
+                idPlane &plane = frust->planes[j];
                 plane[0] = pointLightFrustums[i][j][0] / adjustedRadius[0];
                 plane[1] = pointLightFrustums[i][j][1] / adjustedRadius[1];
                 plane[2] = pointLightFrustums[i][j][2] / adjustedRadius[2];
@@ -1158,10 +1158,10 @@ void R_MakeShadowFrustums(idRenderLightLocal* light) {
         light->numShadowFrustums = 0;
 
         for (int side = 0 ; side < 6 ; side++) {
-            shadowFrustum_t* frust = &light->shadowFrustums[ light->numShadowFrustums ];
-            idVec3& p1 = corners[faceCorners[side][0]];
-            idVec3& p2 = corners[faceCorners[side][1]];
-            idVec3& p3 = corners[faceCorners[side][2]];
+            shadowFrustum_t *frust = &light->shadowFrustums[ light->numShadowFrustums ];
+            idVec3 &p1 = corners[faceCorners[side][0]];
+            idVec3 &p2 = corners[faceCorners[side][1]];
+            idVec3 &p3 = corners[faceCorners[side][2]];
             idPlane backPlane;
 
             // plane will have positive side inward
@@ -1180,15 +1180,15 @@ void R_MakeShadowFrustums(idRenderLightLocal* light) {
 
             // make planes with positive side facing inwards in light local coordinates
             for (int edge = 0 ; edge < 4 ; edge++) {
-                idVec3& p1 = corners[faceCorners[side][edge]];
-                idVec3& p2 = corners[faceCorners[side][(edge+1)&3]];
+                idVec3 &p1 = corners[faceCorners[side][edge]];
+                idVec3 &p2 = corners[faceCorners[side][(edge+1)&3]];
 
                 // create a plane that goes through the center of projection
                 frust->planes[edge].FromPoints(p2, p1, light->globalLightOrigin);
 
                 // see if we should use an adjacent plane instead
                 if (centerOutside) {
-                    idVec3& p3 = corners[faceEdgeAdjacent[side][edge]];
+                    idVec3 &p3 = corners[faceEdgeAdjacent[side][edge]];
                     idPlane sidePlane;
 
                     sidePlane.FromPoints(p2, p1, p3);
@@ -1214,7 +1214,7 @@ void R_MakeShadowFrustums(idRenderLightLocal* light) {
     // projected light
 
     light->numShadowFrustums = 1;
-    shadowFrustum_t* frust = &light->shadowFrustums[ 0 ];
+    shadowFrustum_t *frust = &light->shadowFrustums[ 0 ];
 
     // flip and transform the frustum planes so the positive side faces
     // inward in local coordinates
@@ -1223,7 +1223,7 @@ void R_MakeShadowFrustums(idRenderLightLocal* light) {
     // many projected lights that are faking area lights will have their
     // origin behind solid surfaces.
     for (i = 0 ; i < 6 ; i++) {
-        idPlane& plane = frust->planes[i];
+        idPlane &plane = frust->planes[i];
 
         plane.SetNormal(-light->frustum[i].Normal());
         plane.SetDist(-light->frustum[i].Dist());
@@ -1262,12 +1262,12 @@ as if it was culled for edges, because the sil edge will have been
 generated by the triangle irregardless of if it actually was a sil edge.
 =================
 */
-srfTriangles_t* R_CreateShadowVolume(const idRenderEntityLocal* ent,
-                                     const srfTriangles_t* tri, const idRenderLightLocal* light,
-                                     shadowGen_t optimize, srfCullInfo_t& cullInfo) {
+srfTriangles_t *R_CreateShadowVolume(const idRenderEntityLocal *ent,
+                                     const srfTriangles_t *tri, const idRenderLightLocal *light,
+                                     shadowGen_t optimize, srfCullInfo_t &cullInfo) {
     int     i, j;
     idVec3  lightOrigin;
-    srfTriangles_t*  newTri;
+    srfTriangles_t  *newTri;
     int     capPlaneBits;
 
     if (!r_shadows.GetBool()) {
@@ -1324,8 +1324,8 @@ srfTriangles_t* R_CreateShadowVolume(const idRenderEntityLocal* ent,
     // the facing information will be the same for all six projections
     // from a point light, as well as for any directed lights
     globalFacing = cullInfo.facing;
-    faceCastsShadow = (byte*)_alloca16(tri->numIndexes / 3 + 1);     // + 1 for fake dangling edge face
-    remap = (int*)_alloca16(tri->numVerts * sizeof(remap[0]));
+    faceCastsShadow = (byte *)_alloca16(tri->numIndexes / 3 + 1);    // + 1 for fake dangling edge face
+    remap = (int *)_alloca16(tri->numVerts * sizeof(remap[0]));
 
     R_GlobalPointToLocal(ent->modelMatrix, light->globalLightOrigin, lightOrigin);
 
@@ -1333,7 +1333,7 @@ srfTriangles_t* R_CreateShadowVolume(const idRenderEntityLocal* ent,
     // and usually six for a point light, but point lights with centers outside
     // the box may have less
     for (int frustumNum = 0 ; frustumNum < light->numShadowFrustums ; frustumNum++) {
-        const shadowFrustum_t*   frust = &light->shadowFrustums[frustumNum];
+        const shadowFrustum_t   *frust = &light->shadowFrustums[frustumNum];
         ALIGN16(idPlane frustum[6]);
 
         // transform the planes into entity space

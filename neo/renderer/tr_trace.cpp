@@ -39,9 +39,9 @@ R_LocalTrace
 If we resort the vertexes so all silverts come first, we can save some work here.
 =================
 */
-localTrace_t R_LocalTrace(const idVec3& start, const idVec3& end, const float radius, const srfTriangles_t* tri) {
+localTrace_t R_LocalTrace(const idVec3 &start, const idVec3 &end, const float radius, const srfTriangles_t *tri) {
     int         i, j;
-    byte*       cullBits;
+    byte       *cullBits;
     idPlane     planes[4];
     localTrace_t    hit;
     int         c_testEdges, c_testPlanes, c_intersect;
@@ -70,7 +70,7 @@ localTrace_t R_LocalTrace(const idVec3& start, const idVec3& end, const float ra
     planes[3][3] = - end * planes[3].Normal();
 
     // catagorize each point against the four planes
-    cullBits = (byte*) _alloca16(tri->numVerts);
+    cullBits = (byte *) _alloca16(tri->numVerts);
     SIMDProcessor->TracePointCull(cullBits, totalOr, radius, planes, tri->verts, tri->numVerts);
 
     // if we don't have points on both sides of both the ray planes, no intersection
@@ -94,13 +94,13 @@ localTrace_t R_LocalTrace(const idVec3& start, const idVec3& end, const float ra
     startDir = end - start;
 
     if (!tri->facePlanes || !tri->facePlanesCalculated) {
-        R_DeriveFacePlanes(const_cast<srfTriangles_t*>(tri));
+        R_DeriveFacePlanes(const_cast<srfTriangles_t *>(tri));
     }
 
     for (i = 0, j = 0; i < tri->numIndexes; i += 3, j++) {
         float       d1, d2, f, d;
         float       edgeLengthSqr;
-        idPlane*    plane;
+        idPlane    *plane;
         idVec3      point;
         idVec3      dir[3];
         idVec3      cross;
@@ -303,7 +303,7 @@ localTrace_t R_LocalTrace(const idVec3& start, const idVec3& end, const float ra
 RB_DrawExpandedTriangles
 =================
 */
-void RB_DrawExpandedTriangles(const srfTriangles_t* tri, const float radius, const idVec3& vieworg) {
+void RB_DrawExpandedTriangles(const srfTriangles_t *tri, const float radius, const idVec3 &vieworg) {
     int i, j, k;
     idVec3 dir[6], normal, point;
 
@@ -370,10 +370,10 @@ RB_ShowTrace
 Debug visualization
 ================
 */
-void RB_ShowTrace(drawSurf_t** drawSurfs, int numDrawSurfs) {
+void RB_ShowTrace(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int                     i;
-    const srfTriangles_t*    tri;
-    const drawSurf_t*        surf;
+    const srfTriangles_t    *tri;
+    const drawSurf_t        *surf;
     idVec3                  start, end;
     idVec3                  localStart, localEnd;
     localTrace_t            hit;

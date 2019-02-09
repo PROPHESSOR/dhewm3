@@ -81,7 +81,7 @@ bool idSoundSystemLocal::useEFXReverb = false;
 int idSoundSystemLocal::EFXAvailable = -1;
 
 idSoundSystemLocal  soundSystemLocal;
-idSoundSystem*   soundSystem  = &soundSystemLocal;
+idSoundSystem   *soundSystem  = &soundSystemLocal;
 
 /*
 ===============
@@ -90,7 +90,7 @@ SoundReloadSounds_f
   this is called from the main thread
 ===============
 */
-void SoundReloadSounds_f(const idCmdArgs& args) {
+void SoundReloadSounds_f(const idCmdArgs &args) {
     if (!soundSystemLocal.soundCache) {
         return;
     }
@@ -114,9 +114,9 @@ ListSounds_f
 Optional parameter to only list sounds containing that string
 ===============
 */
-void ListSounds_f(const idCmdArgs& args) {
+void ListSounds_f(const idCmdArgs &args) {
     int i;
-    const char*  snd = args.Argv(1);
+    const char  *snd = args.Argv(1);
 
     if (!soundSystemLocal.soundCache) {
         common->Printf("No sound.\n");
@@ -129,7 +129,7 @@ void ListSounds_f(const idCmdArgs& args) {
     int totalPCMMemory = 0;
 
     for (i = 0; i < soundSystemLocal.soundCache->GetNumObjects(); i++) {
-        const idSoundSample* sample = soundSystemLocal.soundCache->GetObject(i);
+        const idSoundSample *sample = soundSystemLocal.soundCache->GetObject(i);
 
         if (!sample) {
             continue;
@@ -139,11 +139,11 @@ void ListSounds_f(const idCmdArgs& args) {
             continue;
         }
 
-        const waveformatex_t& info = sample->objectInfo;
+        const waveformatex_t &info = sample->objectInfo;
 
-        const char* stereo = (info.nChannels == 2 ? "ST" : "  ");
-        const char* format = (info.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
-        const char* defaulted = (sample->defaultSound ? "(DEFAULTED)" : sample->purged ? "(PURGED)" : "");
+        const char *stereo = (info.nChannels == 2 ? "ST" : "  ");
+        const char *format = (info.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
+        const char *defaulted = (sample->defaultSound ? "(DEFAULTED)" : sample->purged ? "(PURGED)" : "");
 
         common->Printf("%s %dkHz %6dms %5dkB %4s %s%s\n", stereo, sample->objectInfo.nSamplesPerSec / 1000,
                        soundSystemLocal.SamplesToMilliseconds(sample->LengthIn44kHzSamples()),
@@ -174,14 +174,14 @@ void ListSounds_f(const idCmdArgs& args) {
 ListSoundDecoders_f
 ===============
 */
-void ListSoundDecoders_f(const idCmdArgs& args) {
+void ListSoundDecoders_f(const idCmdArgs &args) {
     int i, j, numActiveDecoders, numWaitingDecoders;
-    idSoundWorldLocal* sw = soundSystemLocal.currentSoundWorld;
+    idSoundWorldLocal *sw = soundSystemLocal.currentSoundWorld;
 
     numActiveDecoders = numWaitingDecoders = 0;
 
     for (i = 0; i < sw->emitters.Num(); i++) {
-        idSoundEmitterLocal* sound = sw->emitters[i];
+        idSoundEmitterLocal *sound = sw->emitters[i];
 
         if (!sound) {
             continue;
@@ -189,19 +189,19 @@ void ListSoundDecoders_f(const idCmdArgs& args) {
 
         // run through all the channels
         for (j = 0; j < SOUND_MAX_CHANNELS; j++) {
-            idSoundChannel*  chan = &sound->channels[j];
+            idSoundChannel  *chan = &sound->channels[j];
 
             if (chan->decoder == NULL) {
                 continue;
             }
 
-            idSoundSample* sample = chan->decoder->GetSample();
+            idSoundSample *sample = chan->decoder->GetSample();
 
             if (sample != NULL) {
                 continue;
             }
 
-            const char* format = (chan->leadinSample->objectInfo.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
+            const char *format = (chan->leadinSample->objectInfo.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
             common->Printf("%3d waiting %s: %s\n", numWaitingDecoders, format, chan->leadinSample->name.c_str());
 
             numWaitingDecoders++;
@@ -209,7 +209,7 @@ void ListSoundDecoders_f(const idCmdArgs& args) {
     }
 
     for (i = 0; i < sw->emitters.Num(); i++) {
-        idSoundEmitterLocal* sound = sw->emitters[i];
+        idSoundEmitterLocal *sound = sw->emitters[i];
 
         if (!sound) {
             continue;
@@ -217,19 +217,19 @@ void ListSoundDecoders_f(const idCmdArgs& args) {
 
         // run through all the channels
         for (j = 0; j < SOUND_MAX_CHANNELS; j++) {
-            idSoundChannel*  chan = &sound->channels[j];
+            idSoundChannel  *chan = &sound->channels[j];
 
             if (chan->decoder == NULL) {
                 continue;
             }
 
-            idSoundSample* sample = chan->decoder->GetSample();
+            idSoundSample *sample = chan->decoder->GetSample();
 
             if (sample == NULL) {
                 continue;
             }
 
-            const char* format = (sample->objectInfo.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
+            const char *format = (sample->objectInfo.wFormatTag == WAVE_FORMAT_TAG_OGG) ? "OGG" : "WAV";
 
             int localTime = soundSystemLocal.GetCurrent44kHzTime() - chan->trigger44kHzTime;
             int sampleTime = sample->LengthIn44kHzSamples() * sample->objectInfo.nChannels;
@@ -264,7 +264,7 @@ TestSound_f
   this is called from the main thread
 ===============
 */
-void TestSound_f(const idCmdArgs& args) {
+void TestSound_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         common->Printf("Usage: testSound <file>\n");
         return;
@@ -284,7 +284,7 @@ restart the sound thread
   this is called from the main thread
 ===============
 */
-void SoundSystemRestart_f(const idCmdArgs& args) {
+void SoundSystemRestart_f(const idCmdArgs &args) {
     soundSystem->SetMute(true);
     soundSystemLocal.ShutdownHW();
     soundSystemLocal.InitHW();
@@ -323,7 +323,7 @@ void idSoundSystemLocal::Init() {
     }
 
     // make a 16 byte aligned finalMixBuffer
-    finalMixBuffer = (float*)((((intptr_t)realAccum) + 15) & ~15);
+    finalMixBuffer = (float *)((((intptr_t)realAccum) + 15) & ~15);
 
     graph = NULL;
 
@@ -335,7 +335,7 @@ void idSoundSystemLocal::Init() {
     // set up openal device and context
     common->Printf("Setup OpenAL device and context\n");
 
-    const char* device = s_device.GetString();
+    const char *device = s_device.GetString();
 
     if (strlen(device) < 1) {
         device = NULL;
@@ -344,7 +344,7 @@ void idSoundSystemLocal::Init() {
     }
 
     if (alcIsExtensionPresent(NULL, "ALC_ENUMERATE_ALL_EXT")) {
-        const char* devs = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+        const char *devs = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
         bool found = false;
 
         while (devs && *devs) {
@@ -584,7 +584,7 @@ idSoundSystemLocal::AsyncMix
 Mac OSX version. The system uses it's own thread and an IOProc callback
 ===================
 */
-int idSoundSystemLocal::AsyncMix(int soundTime, float* mixBuffer) {
+int idSoundSystemLocal::AsyncMix(int soundTime, float *mixBuffer) {
     int inTime, numSpeakers;
 
     if (!isInitialized || shutdown) {
@@ -765,11 +765,11 @@ cinData_t idSoundSystemLocal::ImageForTime(const int milliseconds, const bool wa
     Sys_EnterCriticalSection();
 
     if (!graph) {
-        graph = (dword*)Mem_Alloc(256*128 * 4);
+        graph = (dword *)Mem_Alloc(256*128 * 4);
     }
 
     memset(graph, 0, 256*128 * 4);
-    float* accum = finalMixBuffer;  // unfortunately, these are already clamped
+    float *accum = finalMixBuffer;  // unfortunately, these are already clamped
     int time = Sys_Milliseconds();
 
     int numSpeakers = s_numberOfSpeakers.GetInteger();
@@ -927,7 +927,7 @@ cinData_t idSoundSystemLocal::ImageForTime(const int milliseconds, const bool wa
 
     ret.imageHeight = 128;
     ret.imageWidth = 256;
-    ret.image = (unsigned char*)graph;
+    ret.image = (unsigned char *)graph;
 
     Sys_LeaveCriticalSection();
 
@@ -939,9 +939,9 @@ cinData_t idSoundSystemLocal::ImageForTime(const int milliseconds, const bool wa
 idSoundSystemLocal::GetSoundDecoderInfo
 ===================
 */
-int idSoundSystemLocal::GetSoundDecoderInfo(int index, soundDecoderInfo_t& decoderInfo) {
+int idSoundSystemLocal::GetSoundDecoderInfo(int index, soundDecoderInfo_t &decoderInfo) {
     int i, j, firstEmitter, firstChannel;
-    idSoundWorldLocal* sw = soundSystemLocal.currentSoundWorld;
+    idSoundWorldLocal *sw = soundSystemLocal.currentSoundWorld;
 
     if (index < 0) {
         firstEmitter = 0;
@@ -952,7 +952,7 @@ int idSoundSystemLocal::GetSoundDecoderInfo(int index, soundDecoderInfo_t& decod
     }
 
     for (i = firstEmitter; i < sw->emitters.Num(); i++) {
-        idSoundEmitterLocal* sound = sw->emitters[i];
+        idSoundEmitterLocal *sound = sw->emitters[i];
 
         if (!sound) {
             continue;
@@ -960,13 +960,13 @@ int idSoundSystemLocal::GetSoundDecoderInfo(int index, soundDecoderInfo_t& decod
 
         // run through all the channels
         for (j = firstChannel; j < SOUND_MAX_CHANNELS; j++) {
-            idSoundChannel*  chan = &sound->channels[j];
+            idSoundChannel  *chan = &sound->channels[j];
 
             if (chan->decoder == NULL) {
                 continue;
             }
 
-            idSoundSample* sample = chan->decoder->GetSample();
+            idSoundSample *sample = chan->decoder->GetSample();
 
             if (sample == NULL) {
                 continue;
@@ -997,8 +997,8 @@ int idSoundSystemLocal::GetSoundDecoderInfo(int index, soundDecoderInfo_t& decod
 idSoundSystemLocal::AllocSoundWorld
 ===================
 */
-idSoundWorld* idSoundSystemLocal::AllocSoundWorld(idRenderWorld* rw) {
-    idSoundWorldLocal*   local = new idSoundWorldLocal;
+idSoundWorld *idSoundSystemLocal::AllocSoundWorld(idRenderWorld *rw) {
+    idSoundWorldLocal   *local = new idSoundWorldLocal;
 
     local->Init(rw);
 
@@ -1039,8 +1039,8 @@ idSoundSystemLocal::SetPlayingSoundWorld
 specifying NULL will cause silence to be played
 ===================
 */
-void idSoundSystemLocal::SetPlayingSoundWorld(idSoundWorld* soundWorld) {
-    currentSoundWorld = static_cast<idSoundWorldLocal*>(soundWorld);
+void idSoundSystemLocal::SetPlayingSoundWorld(idSoundWorld *soundWorld) {
+    currentSoundWorld = static_cast<idSoundWorldLocal *>(soundWorld);
 }
 
 /*
@@ -1048,7 +1048,7 @@ void idSoundSystemLocal::SetPlayingSoundWorld(idSoundWorld* soundWorld) {
 idSoundSystemLocal::GetPlayingSoundWorld
 ===================
 */
-idSoundWorld* idSoundSystemLocal::GetPlayingSoundWorld(void) {
+idSoundWorld *idSoundSystemLocal::GetPlayingSoundWorld(void) {
     return currentSoundWorld;
 }
 
@@ -1076,7 +1076,7 @@ void idSoundSystemLocal::BeginLevelLoad() {
 idSoundSystemLocal::EndLevelLoad
 ===================
 */
-void idSoundSystemLocal::EndLevelLoad(const char* mapstring) {
+void idSoundSystemLocal::EndLevelLoad(const char *mapstring) {
     if (!isInitialized) {
         return;
     }
@@ -1108,7 +1108,7 @@ void idSoundSystemLocal::EndLevelLoad(const char* mapstring) {
 idSoundSystemLocal::AllocOpenALSource
 ===================
 */
-ALuint idSoundSystemLocal::AllocOpenALSource(idSoundChannel* chan, bool looping, bool stereo) {
+ALuint idSoundSystemLocal::AllocOpenALSource(idSoundChannel *chan, bool looping, bool stereo) {
     int timeOldestZeroVolSingleShot = Sys_Milliseconds();
     int timeOldestZeroVolLooping = Sys_Milliseconds();
     int timeOldestSingle = Sys_Milliseconds();
@@ -1221,7 +1221,7 @@ SoundFX and misc effects
 idSoundSystemLocal::ProcessSample
 ===================
 */
-void SoundFX_Lowpass::ProcessSample(float* in, float* out) {
+void SoundFX_Lowpass::ProcessSample(float *in, float *out) {
     float c, a1, a2, a3, b1, b2;
     float resonance = idSoundSystemLocal::s_enviroSuitCutoffQ.GetFloat();
     float cutoffFrequency = idSoundSystemLocal::s_enviroSuitCutoffFreq.GetFloat();
@@ -1241,7 +1241,7 @@ void SoundFX_Lowpass::ProcessSample(float* in, float* out) {
     out[0] = a1 * in[0] + a2 * in[-1] + a3 * in[-2] - b1 * out[-1] - b2 * out[-2];
 }
 
-void SoundFX_LowpassFast::ProcessSample(float* in, float* out) {
+void SoundFX_LowpassFast::ProcessSample(float *in, float *out) {
     // compute output value
     out[0] = a1 * in[0] + a2 * in[-1] + a3 * in[-2] - b1 * out[-1] - b2 * out[-2];
 }
@@ -1276,7 +1276,7 @@ void SoundFX_Comb::Initialize() {
     currentTime = 0;
 }
 
-void SoundFX_Comb::ProcessSample(float* in, float* out) {
+void SoundFX_Comb::ProcessSample(float *in, float *out) {
     float gain = idSoundSystemLocal::s_reverbFeedback.GetFloat();
     int len = idSoundSystemLocal::s_reverbTime.GetFloat() + param;
 
@@ -1299,7 +1299,7 @@ void SoundFX_Comb::ProcessSample(float* in, float* out) {
 idSoundSystemLocal::DoEnviroSuit
 ===================
 */
-void idSoundSystemLocal::DoEnviroSuit(float* samples, int numSamples, int numSpeakers) {
+void idSoundSystemLocal::DoEnviroSuit(float *samples, int numSamples, int numSpeakers) {
     float out[10000], *out_p = out + 2;
     float in[10000], *in_p = in + 2;
 
@@ -1308,7 +1308,7 @@ void idSoundSystemLocal::DoEnviroSuit(float* samples, int numSamples, int numSpe
 
     if (!fxList.Num()) {
         for (int i = 0; i < 6; i++) {
-            SoundFX* fx;
+            SoundFX *fx;
 
             // lowpass filter
             fx = new SoundFX_Lowpass();
@@ -1338,7 +1338,7 @@ void idSoundSystemLocal::DoEnviroSuit(float* samples, int numSamples, int numSpe
 
         // fx loop
         for (int k = 0; k < fxList.Num(); k++) {
-            SoundFX* fx = fxList[k];
+            SoundFX *fx = fxList[k];
 
             // skip if we're not the right channel
             if (fx->GetChannel() != i) {
@@ -1372,7 +1372,7 @@ void idSoundSystemLocal::DoEnviroSuit(float* samples, int numSamples, int numSpe
 idSoundSystemLocal::PrintMemInfo
 =================
 */
-void idSoundSystemLocal::PrintMemInfo(MemInfo_t* mi) {
+void idSoundSystemLocal::PrintMemInfo(MemInfo_t *mi) {
     soundCache->PrintMemInfo(mi);
 }
 

@@ -74,7 +74,7 @@ idAF::~idAF(void) {
 idAF::Save
 ================
 */
-void idAF::Save(idSaveGame* savefile) const {
+void idAF::Save(idSaveGame *savefile) const {
     savefile->WriteObject(self);
     savefile->WriteString(GetName());
     savefile->WriteBool(hasBindConstraints);
@@ -92,8 +92,8 @@ void idAF::Save(idSaveGame* savefile) const {
 idAF::Restore
 ================
 */
-void idAF::Restore(idRestoreGame* savefile) {
-    savefile->ReadObject(reinterpret_cast<idClass*&>(self));
+void idAF::Restore(idRestoreGame *savefile) {
+    savefile->ReadObject(reinterpret_cast<idClass *&>(self));
     savefile->ReadString(name);
     savefile->ReadBool(hasBindConstraints);
     savefile->ReadVec3(baseOrigin);
@@ -141,7 +141,7 @@ bool idAF::UpdateAnimation(void) {
     int i;
     idVec3 origin, renderOrigin, bodyOrigin;
     idMat3 axis, renderAxis, bodyAxis;
-    renderEntity_t* renderEntity;
+    renderEntity_t *renderEntity;
 
     if (!IsLoaded()) {
         return false;
@@ -202,7 +202,7 @@ idAF::GetBounds
 */
 idBounds idAF::GetBounds(void) const {
     int i;
-    idAFBody* body;
+    idAFBody *body;
     idVec3 origin, entityOrigin;
     idMat3 axis, entityAxis;
     idBounds bounds, b;
@@ -236,13 +236,13 @@ idAF::SetupPose
   Transforms the articulated figure to match the current animation pose of the given entity.
 ================
 */
-void idAF::SetupPose(idEntity* ent, int time) {
+void idAF::SetupPose(idEntity *ent, int time) {
     int i;
-    idAFBody* body;
+    idAFBody *body;
     idVec3 origin;
     idMat3 axis;
-    idAnimator* animatorPtr;
-    renderEntity_t* renderEntity;
+    idAnimator *animatorPtr;
+    renderEntity_t *renderEntity;
 
     if (!IsLoaded() || !ent) {
         return;
@@ -292,14 +292,14 @@ idAF::ChangePose
    and set the velocity relative to the previous pose.
 ================
 */
-void idAF::ChangePose(idEntity* ent, int time) {
+void idAF::ChangePose(idEntity *ent, int time) {
     int i;
     float invDelta;
-    idAFBody* body;
+    idAFBody *body;
     idVec3 origin, lastOrigin;
     idMat3 axis;
-    idAnimator* animatorPtr;
-    renderEntity_t* renderEntity;
+    idAnimator *animatorPtr;
+    renderEntity_t *renderEntity;
 
     if (!IsLoaded() || !ent) {
         return;
@@ -349,9 +349,9 @@ idAF::EntitiesTouchingAF
 */
 int idAF::EntitiesTouchingAF(afTouch_t touchList[ MAX_GENTITIES ]) const {
     int i, j, numClipModels;
-    idAFBody* body;
-    idClipModel* cm;
-    idClipModel* clipModels[ MAX_GENTITIES ];
+    idAFBody *body;
+    idClipModel *cm;
+    idClipModel *clipModels[ MAX_GENTITIES ];
     int numTouching;
 
     if (!IsLoaded()) {
@@ -416,7 +416,7 @@ int idAF::BodyForClipModelId(int id) const {
 idAF::GetPhysicsToVisualTransform
 ================
 */
-void idAF::GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis) const {
+void idAF::GetPhysicsToVisualTransform(idVec3 &origin, idMat3 &axis) const {
     origin = - baseOrigin;
     axis = baseAxis.Transpose();
 }
@@ -426,7 +426,7 @@ void idAF::GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis) const {
 idAF::GetImpactInfo
 ================
 */
-void idAF::GetImpactInfo(idEntity* ent, int id, const idVec3& point, impactInfo_t* info) {
+void idAF::GetImpactInfo(idEntity *ent, int id, const idVec3 &point, impactInfo_t *info) {
     SetupPose(self, gameLocal.time);
     physicsObj.GetImpactInfo(BodyForClipModelId(id), point, info);
 }
@@ -436,7 +436,7 @@ void idAF::GetImpactInfo(idEntity* ent, int id, const idVec3& point, impactInfo_
 idAF::ApplyImpulse
 ================
 */
-void idAF::ApplyImpulse(idEntity* ent, int id, const idVec3& point, const idVec3& impulse) {
+void idAF::ApplyImpulse(idEntity *ent, int id, const idVec3 &point, const idVec3 &impulse) {
     SetupPose(self, gameLocal.time);
     physicsObj.ApplyImpulse(BodyForClipModelId(id), point, impulse);
 }
@@ -446,7 +446,7 @@ void idAF::ApplyImpulse(idEntity* ent, int id, const idVec3& point, const idVec3
 idAF::AddForce
 ================
 */
-void idAF::AddForce(idEntity* ent, int id, const idVec3& point, const idVec3& force) {
+void idAF::AddForce(idEntity *ent, int id, const idVec3 &point, const idVec3 &force) {
     SetupPose(self, gameLocal.time);
     physicsObj.AddForce(BodyForClipModelId(id), point, force);
 }
@@ -458,7 +458,7 @@ idAF::AddBody
   Adds a body.
 ================
 */
-void idAF::AddBody(idAFBody* body, const idJointMat* joints, const char* jointName, const AFJointModType_t mod) {
+void idAF::AddBody(idAFBody *body, const idJointMat *joints, const char *jointName, const AFJointModType_t mod) {
     int index;
     jointHandle_t handle;
     idVec3 origin;
@@ -490,7 +490,7 @@ idAF::SetBase
   Sets the base body.
 ================
 */
-void idAF::SetBase(idAFBody* body, const idJointMat* joints) {
+void idAF::SetBase(idAFBody *body, const idJointMat *joints) {
     physicsObj.ForceBodyId(body, 0);
     baseOrigin = body->GetWorldOrigin();
     baseAxis = body->GetWorldAxis();
@@ -502,12 +502,12 @@ void idAF::SetBase(idAFBody* body, const idJointMat* joints) {
 idAF::LoadBody
 ================
 */
-bool idAF::LoadBody(const idDeclAF_Body* fb, const idJointMat* joints) {
+bool idAF::LoadBody(const idDeclAF_Body *fb, const idJointMat *joints) {
     int id, i;
     float length, mass;
     idTraceModel trm;
-    idClipModel* clip;
-    idAFBody* body;
+    idClipModel *clip;
+    idAFBody *body;
     idMat3 axis, inertiaTensor;
     idVec3 centerOfMass, origin;
     idBounds bounds;
@@ -652,8 +652,8 @@ bool idAF::LoadBody(const idDeclAF_Body* fb, const idJointMat* joints) {
 idAF::LoadConstraint
 ================
 */
-bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
-    idAFBody* body1, *body2;
+bool idAF::LoadConstraint(const idDeclAF_Constraint *fc) {
+    idAFBody *body1, *body2;
     idAngles angles;
     idMat3 axis;
 
@@ -662,8 +662,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
 
     switch (fc->type) {
         case DECLAF_CONSTRAINT_FIXED: {
-                idAFConstraint_Fixed* c;
-                c = static_cast<idAFConstraint_Fixed*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_Fixed *c;
+                c = static_cast<idAFConstraint_Fixed *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -677,8 +677,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
             }
 
         case DECLAF_CONSTRAINT_BALLANDSOCKETJOINT: {
-                idAFConstraint_BallAndSocketJoint* c;
-                c = static_cast<idAFConstraint_BallAndSocketJoint*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_BallAndSocketJoint *c;
+                c = static_cast<idAFConstraint_BallAndSocketJoint *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -715,8 +715,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
             }
 
         case DECLAF_CONSTRAINT_UNIVERSALJOINT: {
-                idAFConstraint_UniversalJoint* c;
-                c = static_cast<idAFConstraint_UniversalJoint*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_UniversalJoint *c;
+                c = static_cast<idAFConstraint_UniversalJoint *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -754,8 +754,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
             }
 
         case DECLAF_CONSTRAINT_HINGE: {
-                idAFConstraint_Hinge* c;
-                c = static_cast<idAFConstraint_Hinge*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_Hinge *c;
+                c = static_cast<idAFConstraint_Hinge *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -789,8 +789,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
             }
 
         case DECLAF_CONSTRAINT_SLIDER: {
-                idAFConstraint_Slider* c;
-                c = static_cast<idAFConstraint_Slider*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_Slider *c;
+                c = static_cast<idAFConstraint_Slider *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -805,8 +805,8 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
             }
 
         case DECLAF_CONSTRAINT_SPRING: {
-                idAFConstraint_Spring* c;
-                c = static_cast<idAFConstraint_Spring*>(physicsObj.GetConstraint(fc->name));
+                idAFConstraint_Spring *c;
+                c = static_cast<idAFConstraint_Spring *>(physicsObj.GetConstraint(fc->name));
 
                 if (c) {
                     c->SetBody1(body1);
@@ -831,12 +831,12 @@ bool idAF::LoadConstraint(const idDeclAF_Constraint* fc) {
 GetJointTransform
 ================
 */
-static bool GetJointTransform(void* model, const idJointMat* frame, const char* jointName, idVec3& origin, idMat3& axis) {
+static bool GetJointTransform(void *model, const idJointMat *frame, const char *jointName, idVec3 &origin, idMat3 &axis) {
     jointHandle_t   joint;
 
-    joint = reinterpret_cast<idAnimator*>(model)->GetJointHandle(jointName);
+    joint = reinterpret_cast<idAnimator *>(model)->GetJointHandle(jointName);
 
-    if ((joint >= 0) && (joint < reinterpret_cast<idAnimator*>(model)->NumJoints())) {
+    if ((joint >= 0) && (joint < reinterpret_cast<idAnimator *>(model)->NumJoints())) {
         origin = frame[ joint ].ToVec3();
         axis = frame[ joint ].ToMat3();
         return true;
@@ -850,13 +850,13 @@ static bool GetJointTransform(void* model, const idJointMat* frame, const char* 
 idAF::Load
 ================
 */
-bool idAF::Load(idEntity* ent, const char* fileName) {
+bool idAF::Load(idEntity *ent, const char *fileName) {
     int i, j;
-    const idDeclAF* file;
-    const idDeclModelDef* modelDef;
-    idRenderModel* model;
+    const idDeclAF *file;
+    const idDeclModelDef *modelDef;
+    idRenderModel *model;
     int numJoints;
-    idJointMat* joints;
+    idJointMat *joints;
 
     assert(ent);
 
@@ -871,7 +871,7 @@ bool idAF::Load(idEntity* ent, const char* fileName) {
     name = fileName;
     name.StripFileExtension();
 
-    file = static_cast<const idDeclAF*>(declManager->FindType(DECL_AF, name));
+    file = static_cast<const idDeclAF *>(declManager->FindType(DECL_AF, name));
 
     if (!file) {
         gameLocal.Warning("Couldn't load af '%s' for entity '%s' at (%s)\n", name.c_str(), ent->name.c_str(), ent->GetPhysics()->GetOrigin().ToString(0));
@@ -911,7 +911,7 @@ bool idAF::Load(idEntity* ent, const char* fileName) {
 
     // create the animation frame used to setup the articulated figure
     numJoints = animator->NumJoints();
-    joints = (idJointMat*)_alloca16(numJoints * sizeof(joints[0]));
+    joints = (idJointMat *)_alloca16(numJoints * sizeof(joints[0]));
     gameEdit->ANIM_CreateAnimFrame(model, animator->GetAnim(modifiedAnim)->MD5Anim(0), numJoints, joints, 1, animator->ModelDef()->GetVisualOffset(), animator->RemoveOrigin());
 
     // set all vector positions from model joints
@@ -938,7 +938,7 @@ bool idAF::Load(idEntity* ent, const char* fileName) {
 
     // delete any bodies in the physicsObj that are no longer in the idDeclAF
     for (i = 0; i < physicsObj.GetNumBodies(); i++) {
-        idAFBody* body = physicsObj.GetBody(i);
+        idAFBody *body = physicsObj.GetBody(i);
 
         for (j = 0; j < file->bodies.Num(); j++) {
             if (file->bodies[j]->name.Icmp(body->GetName()) == 0) {
@@ -954,7 +954,7 @@ bool idAF::Load(idEntity* ent, const char* fileName) {
 
     // delete any constraints in the physicsObj that are no longer in the idDeclAF
     for (i = 0; i < physicsObj.GetNumConstraints(); i++) {
-        idAFConstraint* constraint = physicsObj.GetConstraint(i);
+        idAFConstraint *constraint = physicsObj.GetConstraint(i);
 
         for (j = 0; j < file->constraints.Num(); j++) {
             if (file->constraints[j]->name.Icmp(constraint->GetName()) == 0 &&
@@ -1028,7 +1028,7 @@ idAF::TestSolid
 */
 bool idAF::TestSolid(void) const {
     int i;
-    idAFBody* body;
+    idAFBody *body;
     trace_t trace;
     idStr str;
     bool solid;
@@ -1130,8 +1130,8 @@ idAF::SetConstraintPosition
   Only moves constraints that bind the entity to another entity.
 ================
 */
-void idAF::SetConstraintPosition(const char* name, const idVec3& pos) {
-    idAFConstraint* constraint;
+void idAF::SetConstraintPosition(const char *name, const idVec3 &pos) {
+    idAFConstraint *constraint;
 
     constraint = GetPhysics()->GetConstraint(name);
 
@@ -1147,19 +1147,19 @@ void idAF::SetConstraintPosition(const char* name, const idVec3& pos) {
 
     switch (constraint->GetType()) {
         case CONSTRAINT_BALLANDSOCKETJOINT: {
-                idAFConstraint_BallAndSocketJoint* bs = static_cast<idAFConstraint_BallAndSocketJoint*>(constraint);
+                idAFConstraint_BallAndSocketJoint *bs = static_cast<idAFConstraint_BallAndSocketJoint *>(constraint);
                 bs->Translate(pos - bs->GetAnchor());
                 break;
             }
 
         case CONSTRAINT_UNIVERSALJOINT: {
-                idAFConstraint_UniversalJoint* uj = static_cast<idAFConstraint_UniversalJoint*>(constraint);
+                idAFConstraint_UniversalJoint *uj = static_cast<idAFConstraint_UniversalJoint *>(constraint);
                 uj->Translate(pos - uj->GetAnchor());
                 break;
             }
 
         case CONSTRAINT_HINGE: {
-                idAFConstraint_Hinge* hinge = static_cast<idAFConstraint_Hinge*>(constraint);
+                idAFConstraint_Hinge *hinge = static_cast<idAFConstraint_Hinge *>(constraint);
                 hinge->Translate(pos - hinge->GetAnchor());
                 break;
             }
@@ -1176,9 +1176,9 @@ void idAF::SetConstraintPosition(const char* name, const idVec3& pos) {
 idAF::SaveState
 ================
 */
-void idAF::SaveState(idDict& args) const {
+void idAF::SaveState(idDict &args) const {
     int i;
-    idAFBody* body;
+    idAFBody *body;
     idStr key, value;
 
     for (i = 0; i < jointMods.Num(); i++) {
@@ -1197,10 +1197,10 @@ void idAF::SaveState(idDict& args) const {
 idAF::LoadState
 ================
 */
-void idAF::LoadState(const idDict& args) {
-    const idKeyValue* kv;
+void idAF::LoadState(const idDict &args) {
+    const idKeyValue *kv;
     idStr name;
-    idAFBody* body;
+    idAFBody *body;
     idVec3 origin;
     idAngles angles;
 
@@ -1232,9 +1232,9 @@ idAF::AddBindConstraints
 ================
 */
 void idAF::AddBindConstraints(void) {
-    const idKeyValue* kv;
+    const idKeyValue *kv;
     idStr name;
-    idAFBody* body;
+    idAFBody *body;
     idLexer lexer;
     idToken type, bodyName, jointName;
     idVec3 origin, renderOrigin;
@@ -1244,7 +1244,7 @@ void idAF::AddBindConstraints(void) {
         return;
     }
 
-    const idDict& args = self->spawnArgs;
+    const idDict &args = self->spawnArgs;
 
     // get the render position
     origin = physicsObj.GetOrigin(0);
@@ -1270,12 +1270,12 @@ void idAF::AddBindConstraints(void) {
         }
 
         if (type.Icmp("fixed") == 0) {
-            idAFConstraint_Fixed* c;
+            idAFConstraint_Fixed *c;
 
             c = new idAFConstraint_Fixed(name, body, NULL);
             physicsObj.AddConstraint(c);
         } else if (type.Icmp("ballAndSocket") == 0) {
-            idAFConstraint_BallAndSocketJoint* c;
+            idAFConstraint_BallAndSocketJoint *c;
 
             c = new idAFConstraint_BallAndSocketJoint(name, body, NULL);
             physicsObj.AddConstraint(c);
@@ -1290,7 +1290,7 @@ void idAF::AddBindConstraints(void) {
             animator->GetJointTransform(joint, gameLocal.time, origin, axis);
             c->SetAnchor(renderOrigin + origin * renderAxis);
         } else if (type.Icmp("universal") == 0) {
-            idAFConstraint_UniversalJoint* c;
+            idAFConstraint_UniversalJoint *c;
 
             c = new idAFConstraint_UniversalJoint(name, body, NULL);
             physicsObj.AddConstraint(c);
@@ -1321,13 +1321,13 @@ idAF::RemoveBindConstraints
 ================
 */
 void idAF::RemoveBindConstraints(void) {
-    const idKeyValue* kv;
+    const idKeyValue *kv;
 
     if (!IsLoaded()) {
         return;
     }
 
-    const idDict& args = self->spawnArgs;
+    const idDict &args = self->spawnArgs;
     idStr name;
 
     kv = args.MatchPrefix("bindConstraint ", NULL);

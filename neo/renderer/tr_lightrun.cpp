@@ -123,7 +123,7 @@ Modifies the shaderParms on all the lights so the level
 designers can easily test different color schemes
 ====================
 */
-void R_ModulateLights_f(const idCmdArgs& args) {
+void R_ModulateLights_f(const idCmdArgs &args) {
     if (!tr.primaryWorld) {
         return;
     }
@@ -143,7 +143,7 @@ void R_ModulateLights_f(const idCmdArgs& args) {
     int count = 0;
 
     for (i = 0 ; i < tr.primaryWorld->lightDefs.Num() ; i++) {
-        idRenderLightLocal*  light;
+        idRenderLightLocal  *light;
 
         light = tr.primaryWorld->lightDefs[i];
 
@@ -174,7 +174,7 @@ chaining them to both the area and the entityDef.
 Bumps tr.viewCount.
 ===============
 */
-void R_CreateEntityRefs(idRenderEntityLocal* def) {
+void R_CreateEntityRefs(idRenderEntityLocal *def) {
     int         i;
     idVec3      transformed[8];
     idVec3      v;
@@ -336,7 +336,7 @@ void R_SetLightFrustum(const idPlane lightProject[4], idPlane frustum[6]) {
 R_FreeLightDefFrustum
 ====================
 */
-void R_FreeLightDefFrustum(idRenderLightLocal* ldef) {
+void R_FreeLightDefFrustum(idRenderLightLocal *ldef) {
     int i;
 
     // free the frustum tris
@@ -361,7 +361,7 @@ R_DeriveLightData
 Fills everything in based on light->parms
 =================
 */
-void R_DeriveLightData(idRenderLightLocal* light) {
+void R_DeriveLightData(idRenderLightLocal *light) {
     int i;
 
     // decide which light shader we are going to use
@@ -382,7 +382,7 @@ void R_DeriveLightData(idRenderLightLocal* light) {
 
     if (!light->falloffImage) {
         // use the falloff from the default shader of the correct type
-        const idMaterial*    defaultShader;
+        const idMaterial    *defaultShader;
 
         if (light->parms.pointLight) {
             defaultShader = declManager->FindMaterial("lights/defaultPointLight");
@@ -462,10 +462,10 @@ R_CreateLightRefs
 =================
 */
 #define MAX_LIGHT_VERTS 40
-void R_CreateLightRefs(idRenderLightLocal* light) {
+void R_CreateLightRefs(idRenderLightLocal *light) {
     idVec3  points[MAX_LIGHT_VERTS];
     int     i;
-    srfTriangles_t*  tri;
+    srfTriangles_t  *tri;
 
     tri = light->frustumTris;
 
@@ -518,7 +518,7 @@ R_RenderLightFrustum
 Called by the editor and dmap to operate on light volumes
 ===============
 */
-void R_RenderLightFrustum(const renderLight_t& renderLight, idPlane lightFrustum[6]) {
+void R_RenderLightFrustum(const renderLight_t &renderLight, idPlane lightFrustum[6]) {
     idRenderLightLocal  fakeLight;
 
     fakeLight.parms = renderLight;
@@ -540,7 +540,7 @@ void R_RenderLightFrustum(const renderLight_t& renderLight, idPlane lightFrustum
 WindingCompletelyInsideLight
 ===============
 */
-bool WindingCompletelyInsideLight(const idWinding* w, const idRenderLightLocal* ldef) {
+bool WindingCompletelyInsideLight(const idWinding *w, const idRenderLightLocal *ldef) {
     int     i, j;
 
     for (i = 0 ; i < w->GetNumPoints() ; i++) {
@@ -566,9 +566,9 @@ When a fog light is created or moved, see if it completely
 encloses any portals, which may allow them to be fogged closed.
 ======================
 */
-void R_CreateLightDefFogPortals(idRenderLightLocal* ldef) {
-    areaReference_t*     lref;
-    portalArea_t*        area;
+void R_CreateLightDefFogPortals(idRenderLightLocal *ldef) {
+    areaReference_t     *lref;
+    portalArea_t        *area;
 
     ldef->foggedPortals = NULL;
 
@@ -585,8 +585,8 @@ void R_CreateLightDefFogPortals(idRenderLightLocal* ldef) {
         // check all the models in this area
         area = lref->area;
 
-        portal_t*    prt;
-        doublePortal_t*  dp;
+        portal_t    *prt;
+        doublePortal_t  *dp;
 
         for (prt = area->portals ; prt ; prt = prt->next) {
             dp = prt->doublePortal;
@@ -614,11 +614,11 @@ R_FreeLightDefDerivedData
 Frees all references and lit surfaces from the light
 ====================
 */
-void R_FreeLightDefDerivedData(idRenderLightLocal* ldef) {
-    areaReference_t* lref, *nextRef;
+void R_FreeLightDefDerivedData(idRenderLightLocal *ldef) {
+    areaReference_t *lref, *nextRef;
 
     // rmove any portal fog references
-    for (doublePortal_t* dp = ldef->foggedPortals ; dp ; dp = dp->nextFoggedPortal) {
+    for (doublePortal_t *dp = ldef->foggedPortals ; dp ; dp = dp->nextFoggedPortal) {
         dp->fogLight = NULL;
     }
 
@@ -652,9 +652,9 @@ Used by both RE_FreeEntityDef and RE_UpdateEntityDef
 Does not actually free the entityDef.
 ===================
 */
-void R_FreeEntityDefDerivedData(idRenderEntityLocal* def, bool keepDecals, bool keepCachedDynamicModel) {
+void R_FreeEntityDefDerivedData(idRenderEntityLocal *def, bool keepDecals, bool keepCachedDynamicModel) {
     int i;
-    areaReference_t* ref, *next;
+    areaReference_t *ref, *next;
 
     // demo playback needs to free the joints, while normal play
     // leaves them in the control of the game
@@ -721,9 +721,9 @@ only need to do this on entity update, not the full
 R_FreeEntityDefDerivedData
 ==================
 */
-void R_ClearEntityDefDynamicModel(idRenderEntityLocal* def) {
+void R_ClearEntityDefDynamicModel(idRenderEntityLocal *def) {
     // free all the interaction surfaces
-    for (idInteraction* inter = def->firstInteraction; inter != NULL && !inter->IsEmpty(); inter = inter->entityNext) {
+    for (idInteraction *inter = def->firstInteraction; inter != NULL && !inter->IsEmpty(); inter = inter->entityNext) {
         inter->FreeSurfaces();
     }
 
@@ -738,9 +738,9 @@ void R_ClearEntityDefDynamicModel(idRenderEntityLocal* def) {
 R_FreeEntityDefDecals
 ===================
 */
-void R_FreeEntityDefDecals(idRenderEntityLocal* def) {
+void R_FreeEntityDefDecals(idRenderEntityLocal *def) {
     while (def->decals) {
-        idRenderModelDecal* next = def->decals->Next();
+        idRenderModelDecal *next = def->decals->Next();
         idRenderModelDecal::Free(def->decals);
         def->decals = next;
     }
@@ -751,7 +751,7 @@ void R_FreeEntityDefDecals(idRenderEntityLocal* def) {
 R_FreeEntityDefFadedDecals
 ===================
 */
-void R_FreeEntityDefFadedDecals(idRenderEntityLocal* def, int time) {
+void R_FreeEntityDefFadedDecals(idRenderEntityLocal *def, int time) {
     def->decals = idRenderModelDecal::RemoveFadedDecals(def->decals, time);
 }
 
@@ -760,7 +760,7 @@ void R_FreeEntityDefFadedDecals(idRenderEntityLocal* def, int time) {
 R_FreeEntityDefOverlay
 ===================
 */
-void R_FreeEntityDefOverlay(idRenderEntityLocal* def) {
+void R_FreeEntityDefOverlay(idRenderEntityLocal *def) {
     if (def->overlay) {
         idRenderModelOverlay::Free(def->overlay);
         def->overlay = NULL;
@@ -777,9 +777,9 @@ ReloadModels and RegenerateWorld call this
 */
 void R_FreeDerivedData(void) {
     int i, j;
-    idRenderWorldLocal* rw;
-    idRenderEntityLocal* def;
-    idRenderLightLocal* light;
+    idRenderWorldLocal *rw;
+    idRenderEntityLocal *def;
+    idRenderLightLocal *light;
 
     for (j = 0; j < tr.worlds.Num(); j++) {
         rw = tr.worlds[j];
@@ -811,10 +811,10 @@ void R_FreeDerivedData(void) {
 R_CheckForEntityDefsUsingModel
 ===================
 */
-void R_CheckForEntityDefsUsingModel(idRenderModel* model) {
+void R_CheckForEntityDefsUsingModel(idRenderModel *model) {
     int i, j;
-    idRenderWorldLocal* rw;
-    idRenderEntityLocal* def;
+    idRenderWorldLocal *rw;
+    idRenderEntityLocal *def;
 
     for (j = 0; j < tr.worlds.Num(); j++) {
         rw = tr.worlds[j];
@@ -845,9 +845,9 @@ ReloadModels and RegenerateWorld call this
 */
 void R_ReCreateWorldReferences(void) {
     int i, j;
-    idRenderWorldLocal* rw;
-    idRenderEntityLocal* def;
-    idRenderLightLocal* light;
+    idRenderWorldLocal *rw;
+    idRenderEntityLocal *def;
+    idRenderLightLocal *light;
 
     // let the interaction generation code know this shouldn't be optimized for
     // a particular view
@@ -895,7 +895,7 @@ Frees and regenerates all references and interactions, which
 must be done when switching between display list mode and immediate mode
 ===================
 */
-void R_RegenerateWorld_f(const idCmdArgs& args) {
+void R_RegenerateWorld_f(const idCmdArgs &args) {
     R_FreeDerivedData();
 
     // watch how much memory we allocate

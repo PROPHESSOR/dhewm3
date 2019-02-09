@@ -43,7 +43,7 @@ idDict::operator=
   clear existing key/value pairs and copy all key/value pairs from other
 ================
 */
-idDict& idDict::operator=(const idDict& other) {
+idDict &idDict::operator=(const idDict &other) {
     int i;
 
     // check for assignment to self
@@ -71,7 +71,7 @@ idDict::Copy
   copy all key value pairs without removing existing key/value pairs not present in the other dict
 ================
 */
-void idDict::Copy(const idDict& other) {
+void idDict::Copy(const idDict &other) {
     int i, n, *found;
     idKeyValue kv;
 
@@ -83,7 +83,7 @@ void idDict::Copy(const idDict& other) {
     n = other.args.Num();
 
     if (args.Num()) {
-        found = (int*) _alloca16(other.args.Num() * sizeof(int));
+        found = (int *) _alloca16(other.args.Num() * sizeof(int));
 
         for (i = 0; i < n; i++) {
             found[i] = FindKeyIndex(other.args[i].GetKey());
@@ -95,7 +95,7 @@ void idDict::Copy(const idDict& other) {
     for (i = 0; i < n; i++) {
         if (found && found[i] != -1) {
             // first set the new value and then free the old value to allow proper self copying
-            const idPoolStr* oldValue = args[found[i]].value;
+            const idPoolStr *oldValue = args[found[i]].value;
             args[found[i]].value = globalValues.CopyString(other.args[i].value);
             globalValues.FreeString(oldValue);
         } else {
@@ -113,7 +113,7 @@ idDict::TransferKeyValues
   clear existing key/value pairs and transfer key/value pairs from other
 ================
 */
-void idDict::TransferKeyValues(idDict& other) {
+void idDict::TransferKeyValues(idDict &other) {
     int i, n;
 
     if (this == &other) {
@@ -146,7 +146,7 @@ void idDict::TransferKeyValues(idDict& other) {
 idDict::Parse
 ================
 */
-bool idDict::Parse(idParser& parser) {
+bool idDict::Parse(idParser &parser) {
     idToken token;
     idToken token2;
     bool    errors;
@@ -185,9 +185,9 @@ bool idDict::Parse(idParser& parser) {
 idDict::SetDefaults
 ================
 */
-void idDict::SetDefaults(const idDict* dict) {
+void idDict::SetDefaults(const idDict *dict) {
     int i, n;
-    const idKeyValue* kv, *def;
+    const idKeyValue *kv, *def;
     idKeyValue newkv;
 
     n = dict->args.Num();
@@ -237,7 +237,7 @@ void idDict::Print() const {
     }
 }
 
-int KeyCompare(const idKeyValue* a, const idKeyValue* b) {
+int KeyCompare(const idKeyValue *a, const idKeyValue *b) {
     return idStr::Cmp(a->GetKey(), b->GetKey());
 }
 
@@ -287,7 +287,7 @@ size_t idDict::Allocated(void) const {
 idDict::Set
 ================
 */
-void idDict::Set(const char* key, const char* value) {
+void idDict::Set(const char *key, const char *value) {
     int i;
     idKeyValue kv;
 
@@ -299,7 +299,7 @@ void idDict::Set(const char* key, const char* value) {
 
     if (i != -1) {
         // first set the new value and then free the old value to allow proper self copying
-        const idPoolStr* oldValue = args[i].value;
+        const idPoolStr *oldValue = args[i].value;
         args[i].value = globalValues.AllocString(value);
         globalValues.FreeString(oldValue);
     } else {
@@ -314,8 +314,8 @@ void idDict::Set(const char* key, const char* value) {
 idDict::GetFloat
 ================
 */
-bool idDict::GetFloat(const char* key, const char* defaultString, float& out) const {
-    const char*  s;
+bool idDict::GetFloat(const char *key, const char *defaultString, float &out) const {
+    const char  *s;
     bool        found;
 
     found = GetString(key, defaultString, &s);
@@ -328,8 +328,8 @@ bool idDict::GetFloat(const char* key, const char* defaultString, float& out) co
 idDict::GetInt
 ================
 */
-bool idDict::GetInt(const char* key, const char* defaultString, int& out) const {
-    const char*  s;
+bool idDict::GetInt(const char *key, const char *defaultString, int &out) const {
+    const char  *s;
     bool        found;
 
     found = GetString(key, defaultString, &s);
@@ -342,8 +342,8 @@ bool idDict::GetInt(const char* key, const char* defaultString, int& out) const 
 idDict::GetBool
 ================
 */
-bool idDict::GetBool(const char* key, const char* defaultString, bool& out) const {
-    const char*  s;
+bool idDict::GetBool(const char *key, const char *defaultString, bool &out) const {
+    const char  *s;
     bool        found;
 
     found = GetString(key, defaultString, &s);
@@ -356,9 +356,9 @@ bool idDict::GetBool(const char* key, const char* defaultString, bool& out) cons
 idDict::GetAngles
 ================
 */
-bool idDict::GetAngles(const char* key, const char* defaultString, idAngles& out) const {
+bool idDict::GetAngles(const char *key, const char *defaultString, idAngles &out) const {
     bool        found;
-    const char*  s;
+    const char  *s;
 
     if (!defaultString) {
         defaultString = "0 0 0";
@@ -375,9 +375,9 @@ bool idDict::GetAngles(const char* key, const char* defaultString, idAngles& out
 idDict::GetVector
 ================
 */
-bool idDict::GetVector(const char* key, const char* defaultString, idVec3& out) const {
+bool idDict::GetVector(const char *key, const char *defaultString, idVec3 &out) const {
     bool        found;
-    const char*  s;
+    const char  *s;
 
     if (!defaultString) {
         defaultString = "0 0 0";
@@ -394,9 +394,9 @@ bool idDict::GetVector(const char* key, const char* defaultString, idVec3& out) 
 idDict::GetVec2
 ================
 */
-bool idDict::GetVec2(const char* key, const char* defaultString, idVec2& out) const {
+bool idDict::GetVec2(const char *key, const char *defaultString, idVec2 &out) const {
     bool        found;
-    const char*  s;
+    const char  *s;
 
     if (!defaultString) {
         defaultString = "0 0";
@@ -413,9 +413,9 @@ bool idDict::GetVec2(const char* key, const char* defaultString, idVec2& out) co
 idDict::GetVec4
 ================
 */
-bool idDict::GetVec4(const char* key, const char* defaultString, idVec4& out) const {
+bool idDict::GetVec4(const char *key, const char *defaultString, idVec4 &out) const {
     bool        found;
-    const char*  s;
+    const char  *s;
 
     if (!defaultString) {
         defaultString = "0 0 0 0";
@@ -432,8 +432,8 @@ bool idDict::GetVec4(const char* key, const char* defaultString, idVec4& out) co
 idDict::GetMatrix
 ================
 */
-bool idDict::GetMatrix(const char* key, const char* defaultString, idMat3& out) const {
-    const char*  s;
+bool idDict::GetMatrix(const char *key, const char *defaultString, idMat3 &out) const {
+    const char  *s;
     bool        found;
 
     if (!defaultString) {
@@ -451,7 +451,7 @@ bool idDict::GetMatrix(const char* key, const char* defaultString, idMat3& out) 
 WriteString
 ================
 */
-static void WriteString(const char* s, idFile* f) {
+static void WriteString(const char *s, idFile *f) {
     int len = strlen(s);
 
     if (len >= MAX_STRING_CHARS-1) {
@@ -466,7 +466,7 @@ static void WriteString(const char* s, idFile* f) {
 idDict::FindKey
 ================
 */
-const idKeyValue* idDict::FindKey(const char* key) const {
+const idKeyValue *idDict::FindKey(const char *key) const {
     int i, hash;
 
     if (key == NULL || key[0] == '\0') {
@@ -490,7 +490,7 @@ const idKeyValue* idDict::FindKey(const char* key) const {
 idDict::FindKeyIndex
 ================
 */
-int idDict::FindKeyIndex(const char* key) const {
+int idDict::FindKeyIndex(const char *key) const {
 
     if (key == NULL || key[0] == '\0') {
         idLib::common->DWarning("idDict::FindKeyIndex: empty key");
@@ -513,7 +513,7 @@ int idDict::FindKeyIndex(const char* key) const {
 idDict::Delete
 ================
 */
-void idDict::Delete(const char* key) {
+void idDict::Delete(const char *key) {
     int hash, i;
 
     hash = argHash.GenerateKey(key, false);
@@ -543,7 +543,7 @@ void idDict::Delete(const char* key) {
 idDict::MatchPrefix
 ================
 */
-const idKeyValue* idDict::MatchPrefix(const char* prefix, const idKeyValue* lastMatch) const {
+const idKeyValue *idDict::MatchPrefix(const char *prefix, const idKeyValue *lastMatch) const {
     int i;
     int len;
     int start;
@@ -576,11 +576,11 @@ const idKeyValue* idDict::MatchPrefix(const char* prefix, const idKeyValue* last
 idDict::RandomPrefix
 ================
 */
-const char* idDict::RandomPrefix(const char* prefix, idRandom& random) const {
+const char *idDict::RandomPrefix(const char *prefix, idRandom &random) const {
     int count;
     const int MAX_RANDOM_KEYS = 2048;
-    const char* list[MAX_RANDOM_KEYS];
-    const idKeyValue* kv;
+    const char *list[MAX_RANDOM_KEYS];
+    const idKeyValue *kv;
 
     list[0] = "";
 
@@ -596,7 +596,7 @@ const char* idDict::RandomPrefix(const char* prefix, idRandom& random) const {
 idDict::WriteToFileHandle
 ================
 */
-void idDict::WriteToFileHandle(idFile* f) const {
+void idDict::WriteToFileHandle(idFile *f) const {
     int c = LittleInt(args.Num());
     f->Write(&c, sizeof(c));
 
@@ -611,12 +611,12 @@ void idDict::WriteToFileHandle(idFile* f) const {
 ReadString
 ================
 */
-static idStr ReadString(idFile* f) {
+static idStr ReadString(idFile *f) {
     char    str[MAX_STRING_CHARS];
     int     len;
 
     for (len = 0; len < MAX_STRING_CHARS; len++) {
-        f->Read((void*)&str[len], 1);
+        f->Read((void *)&str[len], 1);
 
         if (str[len] == 0) {
             break;
@@ -635,7 +635,7 @@ static idStr ReadString(idFile* f) {
 idDict::ReadFromFileHandle
 ================
 */
-void idDict::ReadFromFileHandle(idFile* f) {
+void idDict::ReadFromFileHandle(idFile *f) {
     int c;
     idStr key, val;
 
@@ -676,7 +676,7 @@ void idDict::Shutdown(void) {
 idDict::ShowMemoryUsage_f
 ================
 */
-void idDict::ShowMemoryUsage_f(const idCmdArgs& args) {
+void idDict::ShowMemoryUsage_f(const idCmdArgs &args) {
     idLib::common->Printf("%5zd KB in %d keys\n", globalKeys.Size() >> 10, globalKeys.Num());
     idLib::common->Printf("%5zd KB in %d values\n", globalValues.Size() >> 10, globalValues.Num());
 }
@@ -688,7 +688,7 @@ idDictStringSortCmp
 */
 // NOTE: the const wonkyness is required to make msvc happy
 template<>
-ID_INLINE int idListSortCompare(const idPoolStr* const* a, const idPoolStr* const* b) {
+ID_INLINE int idListSortCompare(const idPoolStr *const *a, const idPoolStr *const *b) {
     return (*a)->Icmp(**b);
 }
 
@@ -697,9 +697,9 @@ ID_INLINE int idListSortCompare(const idPoolStr* const* a, const idPoolStr* cons
 idDict::ListKeys_f
 ================
 */
-void idDict::ListKeys_f(const idCmdArgs& args) {
+void idDict::ListKeys_f(const idCmdArgs &args) {
     int i;
-    idList<const idPoolStr*> keyStrings;
+    idList<const idPoolStr *> keyStrings;
 
     for (i = 0; i < globalKeys.Num(); i++) {
         keyStrings.Append(globalKeys[i]);
@@ -719,9 +719,9 @@ void idDict::ListKeys_f(const idCmdArgs& args) {
 idDict::ListValues_f
 ================
 */
-void idDict::ListValues_f(const idCmdArgs& args) {
+void idDict::ListValues_f(const idCmdArgs &args) {
     int i;
-    idList<const idPoolStr*> valueStrings;
+    idList<const idPoolStr *> valueStrings;
 
     for (i = 0; i < globalValues.Num(); i++) {
         valueStrings.Append(globalValues[i]);

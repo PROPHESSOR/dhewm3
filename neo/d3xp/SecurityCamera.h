@@ -46,14 +46,14 @@ class idSecurityCamera : public idEntity {
 
     void                    Spawn(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     virtual void            Think(void);
 
-    virtual renderView_t*   GetRenderView();
-    virtual void            Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
-    virtual bool            Pain(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
+    virtual renderView_t   *GetRenderView();
+    virtual void            Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
+    virtual bool            Pain(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
     virtual void            Present(void);
 
 

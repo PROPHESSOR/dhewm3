@@ -110,13 +110,13 @@ typedef struct urlDownload_s {
 typedef struct fileDownload_s {
     int                 position;
     int                 length;
-    void*               buffer;
+    void               *buffer;
 } fileDownload_t;
 
 struct backgroundDownload_t {
-    backgroundDownload_t*    next;  // set by the fileSystem
+    backgroundDownload_t    *next;  // set by the fileSystem
     dlType_t            opcode;
-    idFile*             f;
+    idFile             *f;
     fileDownload_t      file;
     urlDownload_t       url;
     volatile bool       completed;
@@ -126,16 +126,16 @@ struct backgroundDownload_t {
 class idFileList {
     friend class idFileSystemLocal;
   public:
-    const char*             GetBasePath(void) const {
+    const char             *GetBasePath(void) const {
         return basePath;
     }
     int                     GetNumFiles(void) const {
         return list.Num();
     }
-    const char*             GetFile(int index) const {
+    const char             *GetFile(int index) const {
         return list[index];
     }
-    const idStrList&        GetList(void) const {
+    const idStrList        &GetList(void) const {
         return list;
     }
 
@@ -151,10 +151,10 @@ class idModList {
     int                     GetNumMods(void) const {
         return mods.Num();
     }
-    const char*             GetMod(int index) const {
+    const char             *GetMod(int index) const {
         return mods[index];
     }
-    const char*             GetDescription(int index) const {
+    const char             *GetDescription(int index) const {
         return descriptions[index];
     }
 
@@ -179,32 +179,32 @@ class idFileSystem {
     // Returns a list of mods found along with descriptions
     // 'mods' contains the directory names to be passed to fs_game
     // 'descriptions' contains a free form string to be used in the UI
-    virtual idModList*      ListMods(void) = 0;
+    virtual idModList      *ListMods(void) = 0;
     // Frees the given mod list
-    virtual void            FreeModList(idModList* modList) = 0;
+    virtual void            FreeModList(idModList *modList) = 0;
     // Lists files with the given extension in the given directory.
     // Directory should not have either a leading or trailing '/'
     // The returned files will not include any directories or '/' unless fullRelativePath is set.
     // The extension must include a leading dot and may not contain wildcards.
     // If extension is "/", only subdirectories will be returned.
-    virtual idFileList*     ListFiles(const char* relativePath, const char* extension, bool sort = false, bool fullRelativePath = false, const char* gamedir = NULL) = 0;
+    virtual idFileList     *ListFiles(const char *relativePath, const char *extension, bool sort = false, bool fullRelativePath = false, const char *gamedir = NULL) = 0;
     // Lists files in the given directory and all subdirectories with the given extension.
     // Directory should not have either a leading or trailing '/'
     // The returned files include a full relative path.
     // The extension must include a leading dot and may not contain wildcards.
-    virtual idFileList*     ListFilesTree(const char* relativePath, const char* extension, bool sort = false, const char* gamedir = NULL) = 0;
+    virtual idFileList     *ListFilesTree(const char *relativePath, const char *extension, bool sort = false, const char *gamedir = NULL) = 0;
     // Frees the given file list.
-    virtual void            FreeFileList(idFileList* fileList) = 0;
+    virtual void            FreeFileList(idFileList *fileList) = 0;
     // Converts a relative path to a full OS path.
-    virtual const char*     OSPathToRelativePath(const char* OSPath) = 0;
+    virtual const char     *OSPathToRelativePath(const char *OSPath) = 0;
     // Converts a full OS path to a relative path.
-    virtual const char*     RelativePathToOSPath(const char* relativePath, const char* basePath = "fs_devpath") = 0;
+    virtual const char     *RelativePathToOSPath(const char *relativePath, const char *basePath = "fs_devpath") = 0;
     // Builds a full OS path from the given components.
-    virtual const char*     BuildOSPath(const char* base, const char* game, const char* relativePath) = 0;
+    virtual const char     *BuildOSPath(const char *base, const char *game, const char *relativePath) = 0;
     // Creates the given OS path for as far as it doesn't exist already.
-    virtual void            CreateOSPath(const char* OSPath) = 0;
+    virtual void            CreateOSPath(const char *OSPath) = 0;
     // Returns true if a file is in a pak file.
-    virtual bool            FileIsInPAK(const char* relativePath) = 0;
+    virtual bool            FileIsInPAK(const char *relativePath) = 0;
     // Returns a space separated string containing the checksums of all referenced pak files.
     // will call SetPureServerChecksums internally to restrict itself
     virtual void            UpdatePureServerChecksums(void) = 0;
@@ -231,30 +231,30 @@ class idFileSystem {
     // As a quick check for existance. -1 length == not present.
     // A 0 byte will always be appended at the end, so string ops are safe.
     // The buffer should be considered read-only, because it may be cached for other uses.
-    virtual int             ReadFile(const char* relativePath, void** buffer, ID_TIME_T* timestamp = NULL) = 0;
+    virtual int             ReadFile(const char *relativePath, void **buffer, ID_TIME_T *timestamp = NULL) = 0;
     // Frees the memory allocated by ReadFile.
-    virtual void            FreeFile(void* buffer) = 0;
+    virtual void            FreeFile(void *buffer) = 0;
     // Writes a complete file, will create any needed subdirectories.
     // Returns the length of the file, or -1 on failure.
-    virtual int             WriteFile(const char* relativePath, const void* buffer, int size, const char* basePath = "fs_savepath") = 0;
+    virtual int             WriteFile(const char *relativePath, const void *buffer, int size, const char *basePath = "fs_savepath") = 0;
     // Removes the given file.
-    virtual void            RemoveFile(const char* relativePath) = 0;
+    virtual void            RemoveFile(const char *relativePath) = 0;
     // Opens a file for reading.
-    virtual idFile*         OpenFileRead(const char* relativePath, bool allowCopyFiles = true, const char* gamedir = NULL) = 0;
+    virtual idFile         *OpenFileRead(const char *relativePath, bool allowCopyFiles = true, const char *gamedir = NULL) = 0;
     // Opens a file for writing, will create any needed subdirectories.
-    virtual idFile*         OpenFileWrite(const char* relativePath, const char* basePath = "fs_savepath") = 0;
+    virtual idFile         *OpenFileWrite(const char *relativePath, const char *basePath = "fs_savepath") = 0;
     // Opens a file for writing at the end.
-    virtual idFile*         OpenFileAppend(const char* filename, bool sync = false, const char* basePath = "fs_basepath") = 0;
+    virtual idFile         *OpenFileAppend(const char *filename, bool sync = false, const char *basePath = "fs_basepath") = 0;
     // Opens a file for reading, writing, or appending depending on the value of mode.
-    virtual idFile*         OpenFileByMode(const char* relativePath, fsMode_t mode) = 0;
+    virtual idFile         *OpenFileByMode(const char *relativePath, fsMode_t mode) = 0;
     // Opens a file for reading from a full OS path.
-    virtual idFile*         OpenExplicitFileRead(const char* OSPath) = 0;
+    virtual idFile         *OpenExplicitFileRead(const char *OSPath) = 0;
     // Opens a file for writing to a full OS path.
-    virtual idFile*         OpenExplicitFileWrite(const char* OSPath) = 0;
+    virtual idFile         *OpenExplicitFileWrite(const char *OSPath) = 0;
     // Closes a file.
-    virtual void            CloseFile(idFile* f) = 0;
+    virtual void            CloseFile(idFile *f) = 0;
     // Returns immediately, performing the read from a background thread.
-    virtual void            BackgroundDownload(backgroundDownload_t* bgl) = 0;
+    virtual void            BackgroundDownload(backgroundDownload_t *bgl) = 0;
     // resets the bytes read counter
     virtual void            ResetReadCount(void) = 0;
     // retrieves the current read count
@@ -262,7 +262,7 @@ class idFileSystem {
     // adds to the read count
     virtual void            AddToReadCount(int c) = 0;
     // look for a dynamic module
-    virtual void            FindDLL(const char* basename, char dllPath[ MAX_OSPATH ]) = 0;
+    virtual void            FindDLL(const char *basename, char dllPath[ MAX_OSPATH ]) = 0;
     // case sensitive filesystems use an internal directory cache
     // the cache is cleared when calling OpenFileWrite and RemoveFile
     // in some cases you may need to use this directly
@@ -274,30 +274,30 @@ class idFileSystem {
     virtual bool            RunningD3XP(void) = 0;
 
     // don't use for large copies - allocates a single memory block for the copy
-    virtual void            CopyFile(const char* fromOSPath, const char* toOSPath) = 0;
+    virtual void            CopyFile(const char *fromOSPath, const char *toOSPath) = 0;
 
     // lookup a relative path, return the size or 0 if not found
     virtual int             ValidateDownloadPakForChecksum(int checksum, char path[ MAX_STRING_CHARS ]) = 0;
 
-    virtual idFile*         MakeTemporaryFile(void) = 0;
+    virtual idFile         *MakeTemporaryFile(void) = 0;
 
     // make downloaded pak files known so pure negociation works next time
-    virtual int             AddZipFile(const char* path) = 0;
+    virtual int             AddZipFile(const char *path) = 0;
 
     // look for a file in the loaded paks or the addon paks
     // if the file is found in addons, FS's internal structures are ready for a reloadEngine
-    virtual findFile_t      FindFile(const char* path, bool scheduleAddons = false) = 0;
+    virtual findFile_t      FindFile(const char *path, bool scheduleAddons = false) = 0;
 
     // get map/addon decls and take into account addon paks that are not on the search list
     // the decl 'name' is in the "path" entry of the dict
     virtual int             GetNumMaps() = 0;
-    virtual const idDict*   GetMapDecl(int i) = 0;
-    virtual void            FindMapScreenshot(const char* path, char* buf, int len) = 0;
+    virtual const idDict   *GetMapDecl(int i) = 0;
+    virtual void            FindMapScreenshot(const char *path, char *buf, int len) = 0;
 
     // ignore case and seperator char distinctions
-    virtual bool            FilenameCompare(const char* s1, const char* s2) const = 0;
+    virtual bool            FilenameCompare(const char *s1, const char *s2) const = 0;
 };
 
-extern idFileSystem*        fileSystem;
+extern idFileSystem        *fileSystem;
 
 #endif /* !__FILESYSTEM_H__ */

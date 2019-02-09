@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 idCVar idEventLoop::com_journal("com_journal", "0", CVAR_INIT|CVAR_SYSTEM, "1 = record journal, 2 = play back journal", 0, 2, idCmdSystem::ArgCompletion_Integer<0,2>);
 
 idEventLoop eventLoopLocal;
-idEventLoop* eventLoop = &eventLoopLocal;
+idEventLoop *eventLoop = &eventLoopLocal;
 
 
 /*
@@ -111,8 +111,8 @@ sysEvent_t  idEventLoop::GetRealEvent(void) {
 idEventLoop::PushEvent
 =================
 */
-void idEventLoop::PushEvent(sysEvent_t* event) {
-    sysEvent_t*      ev;
+void idEventLoop::PushEvent(sysEvent_t *event) {
+    sysEvent_t      *ev;
     static          bool printedWarning;
 
     ev = &com_pushedEvents[ com_pushedEventsHead & (MAX_PUSHED_EVENTS-1) ];
@@ -165,7 +165,7 @@ void idEventLoop::ProcessEvent(sysEvent_t ev) {
 
     if (ev.evType == SE_CONSOLE) {
         // from a text console outside the game window
-        cmdSystem->BufferCommandText(CMD_EXEC_APPEND, (char*)ev.evPtr);
+        cmdSystem->BufferCommandText(CMD_EXEC_APPEND, (char *)ev.evPtr);
         cmdSystem->BufferCommandText(CMD_EXEC_APPEND, "\n");
     } else {
         session->ProcessEvent(&ev);

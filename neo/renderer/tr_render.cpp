@@ -47,7 +47,7 @@ Draws with immediate mode commands, which is going to be very slow.
 This should never happen if the vertex cache is operating properly.
 =================
 */
-void RB_DrawElementsImmediate(const srfTriangles_t* tri) {
+void RB_DrawElementsImmediate(const srfTriangles_t *tri) {
 
     backEnd.pc.c_drawElements++;
     backEnd.pc.c_drawIndexes += tri->numIndexes;
@@ -79,7 +79,7 @@ void RB_DrawElementsImmediate(const srfTriangles_t* tri) {
 RB_DrawElementsWithCounters
 ================
 */
-void RB_DrawElementsWithCounters(const srfTriangles_t* tri) {
+void RB_DrawElementsWithCounters(const srfTriangles_t *tri) {
 
     backEnd.pc.c_drawElements++;
     backEnd.pc.c_drawIndexes += tri->numIndexes;
@@ -99,7 +99,7 @@ void RB_DrawElementsWithCounters(const srfTriangles_t* tri) {
         qglDrawElements(GL_TRIANGLES,
                         r_singleTriangle.GetBool() ? 3 : tri->numIndexes,
                         GL_INDEX_TYPE,
-                        (int*)vertexCache.Position(tri->indexCache));
+                        (int *)vertexCache.Position(tri->indexCache));
         backEnd.pc.c_vboIndexes += tri->numIndexes;
     } else {
         if (r_useIndexBuffers.GetBool()) {
@@ -120,7 +120,7 @@ RB_DrawShadowElementsWithCounters
 May not use all the indexes in the surface if caps are skipped
 ================
 */
-void RB_DrawShadowElementsWithCounters(const srfTriangles_t* tri, int numIndexes) {
+void RB_DrawShadowElementsWithCounters(const srfTriangles_t *tri, int numIndexes) {
     backEnd.pc.c_shadowElements++;
     backEnd.pc.c_shadowIndexes += numIndexes;
     backEnd.pc.c_shadowVertexes += tri->numVerts;
@@ -129,7 +129,7 @@ void RB_DrawShadowElementsWithCounters(const srfTriangles_t* tri, int numIndexes
         qglDrawElements(GL_TRIANGLES,
                         r_singleTriangle.GetBool() ? 3 : numIndexes,
                         GL_INDEX_TYPE,
-                        (int*)vertexCache.Position(tri->indexCache));
+                        (int *)vertexCache.Position(tri->indexCache));
         backEnd.pc.c_vboIndexes += numIndexes;
     } else {
         if (r_useIndexBuffers.GetBool()) {
@@ -151,14 +151,14 @@ RB_RenderTriangleSurface
 Sets texcoord and vertex pointers
 ===============
 */
-void RB_RenderTriangleSurface(const srfTriangles_t* tri) {
+void RB_RenderTriangleSurface(const srfTriangles_t *tri) {
     if (!tri->ambientCache) {
         RB_DrawElementsImmediate(tri);
         return;
     }
 
 
-    idDrawVert* ac = (idDrawVert*)vertexCache.Position(tri->ambientCache);
+    idDrawVert *ac = (idDrawVert *)vertexCache.Position(tri->ambientCache);
     qglVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
     qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert), ac->st.ToFloatPtr());
 
@@ -171,7 +171,7 @@ RB_T_RenderTriangleSurface
 
 ===============
 */
-void RB_T_RenderTriangleSurface(const drawSurf_t* surf) {
+void RB_T_RenderTriangleSurface(const drawSurf_t *surf) {
     RB_RenderTriangleSurface(surf->geo);
 }
 
@@ -236,10 +236,10 @@ matrix will already have been loaded, and backEnd.currentSpace will
 be updated after the triangle function completes.
 ====================
 */
-void RB_RenderDrawSurfListWithFunction(drawSurf_t** drawSurfs, int numDrawSurfs,
-                                       void (*triFunc_)(const drawSurf_t*)) {
+void RB_RenderDrawSurfListWithFunction(drawSurf_t **drawSurfs, int numDrawSurfs,
+                                       void (*triFunc_)(const drawSurf_t *)) {
     int             i;
-    const drawSurf_t*        drawSurf;
+    const drawSurf_t        *drawSurf;
 
     backEnd.currentSpace = NULL;
 
@@ -284,9 +284,9 @@ void RB_RenderDrawSurfListWithFunction(drawSurf_t** drawSurfs, int numDrawSurfs,
 RB_RenderDrawSurfChainWithFunction
 ======================
 */
-void RB_RenderDrawSurfChainWithFunction(const drawSurf_t* drawSurfs,
-                                        void (*triFunc_)(const drawSurf_t*)) {
-    const drawSurf_t*        drawSurf;
+void RB_RenderDrawSurfChainWithFunction(const drawSurf_t *drawSurfs,
+                                        void (*triFunc_)(const drawSurf_t *)) {
+    const drawSurf_t        *drawSurf;
 
     backEnd.currentSpace = NULL;
 
@@ -329,8 +329,8 @@ void RB_RenderDrawSurfChainWithFunction(const drawSurf_t* drawSurfs,
 RB_GetShaderTextureMatrix
 ======================
 */
-void RB_GetShaderTextureMatrix(const float* shaderRegisters,
-                               const textureStage_t* texture, float matrix[16]) {
+void RB_GetShaderTextureMatrix(const float *shaderRegisters,
+                               const textureStage_t *texture, float matrix[16]) {
     matrix[0] = shaderRegisters[ texture->matrix[0][0] ];
     matrix[4] = shaderRegisters[ texture->matrix[0][1] ];
     matrix[8] = 0;
@@ -367,7 +367,7 @@ void RB_GetShaderTextureMatrix(const float* shaderRegisters,
 RB_LoadShaderTextureMatrix
 ======================
 */
-void RB_LoadShaderTextureMatrix(const float* shaderRegisters, const textureStage_t* texture) {
+void RB_LoadShaderTextureMatrix(const float *shaderRegisters, const textureStage_t *texture) {
     float   matrix[16];
 
     RB_GetShaderTextureMatrix(shaderRegisters, texture, matrix);
@@ -383,7 +383,7 @@ RB_BindVariableStageImage
 Handles generating a cinematic frame if needed
 ======================
 */
-void RB_BindVariableStageImage(const textureStage_t* texture, const float* shaderRegisters) {
+void RB_BindVariableStageImage(const textureStage_t *texture, const float *shaderRegisters) {
     if (texture->cinematic) {
         cinData_t   cin;
 
@@ -415,13 +415,13 @@ void RB_BindVariableStageImage(const textureStage_t* texture, const float* shade
 RB_BindStageTexture
 ======================
 */
-void RB_BindStageTexture(const float* shaderRegisters, const textureStage_t* texture, const drawSurf_t* surf) {
+void RB_BindStageTexture(const float *shaderRegisters, const textureStage_t *texture, const drawSurf_t *surf) {
     // image
     RB_BindVariableStageImage(texture, shaderRegisters);
 
     // texgens
     if (texture->texgen == TG_DIFFUSE_CUBE) {
-        qglTexCoordPointer(3, GL_FLOAT, sizeof(idDrawVert), ((idDrawVert*)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
+        qglTexCoordPointer(3, GL_FLOAT, sizeof(idDrawVert), ((idDrawVert *)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
     }
 
     if (texture->texgen == TG_SKYBOX_CUBE || texture->texgen == TG_WOBBLESKY_CUBE) {
@@ -436,7 +436,7 @@ void RB_BindStageTexture(const float* shaderRegisters, const textureStage_t* tex
         qglTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
         qglTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
         qglEnableClientState(GL_NORMAL_ARRAY);
-        qglNormalPointer(GL_FLOAT, sizeof(idDrawVert), ((idDrawVert*)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
+        qglNormalPointer(GL_FLOAT, sizeof(idDrawVert), ((idDrawVert *)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
 
         qglMatrixMode(GL_TEXTURE);
         float   mat[16];
@@ -458,11 +458,11 @@ void RB_BindStageTexture(const float* shaderRegisters, const textureStage_t* tex
 RB_FinishStageTexture
 ======================
 */
-void RB_FinishStageTexture(const textureStage_t* texture, const drawSurf_t* surf) {
+void RB_FinishStageTexture(const textureStage_t *texture, const drawSurf_t *surf) {
     if (texture->texgen == TG_DIFFUSE_CUBE || texture->texgen == TG_SKYBOX_CUBE
             || texture->texgen == TG_WOBBLESKY_CUBE) {
         qglTexCoordPointer(2, GL_FLOAT, sizeof(idDrawVert),
-                           (void*)&(((idDrawVert*)vertexCache.Position(surf->geo->ambientCache))->st));
+                           (void *)&(((idDrawVert *)vertexCache.Position(surf->geo->ambientCache))->st));
     }
 
     if (texture->texgen == TG_REFLECT_CUBE) {
@@ -508,11 +508,11 @@ overbright past 1.0
 =================
 */
 void RB_DetermineLightScale(void) {
-    viewLight_t*         vLight;
-    const idMaterial*    shader;
+    viewLight_t         *vLight;
+    const idMaterial    *shader;
     float               max;
     int                 i, j, numStages;
-    const shaderStage_t* stage;
+    const shaderStage_t *stage;
 
     // the light scale will be based on the largest color component of any surface
     // that will be drawn.
@@ -611,8 +611,8 @@ void RB_BeginDrawingView(void) {
 R_SetDrawInteractions
 ==================
 */
-void R_SetDrawInteraction(const shaderStage_t* surfaceStage, const float* surfaceRegs,
-                          idImage** image, idVec4 matrix[2], float color[4]) {
+void R_SetDrawInteraction(const shaderStage_t *surfaceStage, const float *surfaceRegs,
+                          idImage **image, idVec4 matrix[2], float color[4]) {
     *image = surfaceStage->texture.image;
 
     if (surfaceStage->texture.hasMatrix) {
@@ -668,7 +668,7 @@ void R_SetDrawInteraction(const shaderStage_t* surfaceStage, const float* surfac
 RB_SubmittInteraction
 =================
 */
-static void RB_SubmittInteraction(drawInteraction_t* din, void (*DrawInteraction)(const drawInteraction_t*)) {
+static void RB_SubmittInteraction(drawInteraction_t *din, void (*DrawInteraction)(const drawInteraction_t *)) {
     if (!din->bumpImage) {
         return;
     }
@@ -705,12 +705,12 @@ This can be used by different draw_* backends to decompose a complex light / sur
 interaction into primitive interactions
 =============
 */
-void RB_CreateSingleDrawInteractions(const drawSurf_t* surf, void (*DrawInteraction)(const drawInteraction_t*)) {
-    const idMaterial*    surfaceShader = surf->material;
-    const float*         surfaceRegs = surf->shaderRegisters;
-    const viewLight_t*   vLight = backEnd.vLight;
-    const idMaterial*    lightShader = vLight->lightShader;
-    const float*         lightRegs = vLight->shaderRegisters;
+void RB_CreateSingleDrawInteractions(const drawSurf_t *surf, void (*DrawInteraction)(const drawInteraction_t *)) {
+    const idMaterial    *surfaceShader = surf->material;
+    const float         *surfaceRegs = surf->shaderRegisters;
+    const viewLight_t   *vLight = backEnd.vLight;
+    const idMaterial    *lightShader = vLight->lightShader;
+    const float         *lightRegs = vLight->shaderRegisters;
     drawInteraction_t   inter;
 
     if (r_skipInteractions.GetBool() || !surf->geo || !surf->geo->ambientCache) {
@@ -758,7 +758,7 @@ void RB_CreateSingleDrawInteractions(const drawSurf_t* surf, void (*DrawInteract
     }
 
     for (int lightStageNum = 0 ; lightStageNum < lightShader->GetNumStages() ; lightStageNum++) {
-        const shaderStage_t* lightStage = lightShader->GetStage(lightStageNum);
+        const shaderStage_t *lightStage = lightShader->GetStage(lightStageNum);
 
         // ignore stages that fail the condition
         if (!lightRegs[ lightStage->conditionRegister ]) {
@@ -772,7 +772,7 @@ void RB_CreateSingleDrawInteractions(const drawSurf_t* surf, void (*DrawInteract
         // now multiply the texgen by the light texture matrix
         if (lightStage->texture.hasMatrix) {
             RB_GetShaderTextureMatrix(lightRegs, &lightStage->texture, backEnd.lightTextureMatrix);
-            RB_BakeTextureMatrixIntoTexgen(reinterpret_cast<class idPlane*>(inter.lightProjection), backEnd.lightTextureMatrix);
+            RB_BakeTextureMatrixIntoTexgen(reinterpret_cast<class idPlane *>(inter.lightProjection), backEnd.lightTextureMatrix);
         }
 
         inter.bumpImage = NULL;
@@ -792,7 +792,7 @@ void RB_CreateSingleDrawInteractions(const drawSurf_t* surf, void (*DrawInteract
 
         // go through the individual stages
         for (int surfaceStageNum = 0 ; surfaceStageNum < surfaceShader->GetNumStages() ; surfaceStageNum++) {
-            const shaderStage_t* surfaceStage = surfaceShader->GetStage(surfaceStageNum);
+            const shaderStage_t *surfaceStage = surfaceShader->GetStage(surfaceStageNum);
 
             switch (surfaceStage->lighting) {
                 case SL_AMBIENT: {
@@ -871,10 +871,10 @@ void RB_CreateSingleDrawInteractions(const drawSurf_t* surf, void (*DrawInteract
 RB_DrawView
 =============
 */
-void RB_DrawView(const void* data) {
-    const drawSurfsCommand_t*    cmd;
+void RB_DrawView(const void *data) {
+    const drawSurfsCommand_t    *cmd;
 
-    cmd = (const drawSurfsCommand_t*)data;
+    cmd = (const drawSurfsCommand_t *)data;
 
     backEnd.viewDef = cmd->viewDef;
 

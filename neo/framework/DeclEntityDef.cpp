@@ -55,7 +55,7 @@ void idDeclEntityDef::FreeData(void) {
 idDeclEntityDef::Parse
 ================
 */
-bool idDeclEntityDef::Parse(const char* text, const int textLength) {
+bool idDeclEntityDef::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token, token2;
 
@@ -99,17 +99,17 @@ bool idDeclEntityDef::Parse(const char* text, const int textLength) {
     // never be parsed mroe than once
 
     // find all of the dicts first, because copying inherited values will modify the dict
-    idList<const idDeclEntityDef*> defList;
+    idList<const idDeclEntityDef *> defList;
 
     while (1) {
-        const idKeyValue* kv;
+        const idKeyValue *kv;
         kv = dict.MatchPrefix("inherit", NULL);
 
         if (!kv) {
             break;
         }
 
-        const idDeclEntityDef* copy = static_cast<const idDeclEntityDef*>(declManager->FindType(DECL_ENTITYDEF, kv->GetValue(), false));
+        const idDeclEntityDef *copy = static_cast<const idDeclEntityDef *>(declManager->FindType(DECL_ENTITYDEF, kv->GetValue(), false));
 
         if (!copy) {
             src.Warning("Unknown entityDef '%s' inherited by '%s'", kv->GetValue().c_str(), GetName());
@@ -140,7 +140,7 @@ bool idDeclEntityDef::Parse(const char* text, const int textLength) {
 idDeclEntityDef::DefaultDefinition
 ================
 */
-const char* idDeclEntityDef::DefaultDefinition(void) const {
+const char *idDeclEntityDef::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "\"DEFAULTED\"\t\"1\"\n"

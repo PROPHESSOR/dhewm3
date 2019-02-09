@@ -72,7 +72,7 @@ idSound::idSound(void) {
 idSound::Save
 ================
 */
-void idSound::Save(idSaveGame* savefile) const {
+void idSound::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(lastSoundVol);
     savefile->WriteFloat(soundVol);
     savefile->WriteFloat(random);
@@ -88,7 +88,7 @@ void idSound::Save(idSaveGame* savefile) const {
 idSound::Restore
 ================
 */
-void idSound::Restore(idRestoreGame* savefile) {
+void idSound::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(lastSoundVol);
     savefile->ReadFloat(soundVol);
     savefile->ReadFloat(random);
@@ -137,7 +137,7 @@ idSound::Event_Trigger
 this will toggle the idle idSound on and off
 ================
 */
-void idSound::Event_Trigger(idEntity* activator) {
+void idSound::Event_Trigger(idEntity *activator) {
     if (wait > 0.0f) {
         if (timerOn) {
             timerOn = false;
@@ -194,14 +194,14 @@ void idSound::Think(void) {
 idSound::UpdateChangableSpawnArgs
 ===============
 */
-void idSound::UpdateChangeableSpawnArgs(const idDict* source) {
+void idSound::UpdateChangeableSpawnArgs(const idDict *source) {
 
     idEntity::UpdateChangeableSpawnArgs(source);
 
     if (source) {
         FreeSoundEmitter(true);
         spawnArgs.Copy(*source);
-        idSoundEmitter* saveRef = refSound.referenceSound;
+        idSoundEmitter *saveRef = refSound.referenceSound;
         gameEdit->ParseSpawnArgsToRefSound(&spawnArgs, &refSound);
         refSound.referenceSound = saveRef;
 
@@ -240,8 +240,8 @@ void idSound::UpdateChangeableSpawnArgs(const idDict* source) {
 idSound::SetSound
 ===============
 */
-void idSound::SetSound(const char* sound, int channel) {
-    const idSoundShader* shader = declManager->FindSound(sound);
+void idSound::SetSound(const char *sound, int channel) {
+    const idSoundShader *shader = declManager->FindSound(sound);
 
     if (shader != refSound.shader) {
         FreeSoundEmitter(true);

@@ -83,11 +83,11 @@ const int SHADERPARM_PARTICLE_STOPTIME = 8; // don't spawn any more particles af
 const int MAX_RENDERENTITY_GUI      = 3;
 
 
-typedef bool(*deferredEntityCallback_t)(renderEntity_s*, const renderView_s*);
+typedef bool(*deferredEntityCallback_t)(renderEntity_s *, const renderView_s *);
 
 
 typedef struct renderEntity_s {
-    idRenderModel*          hModel;             // this can only be null if callback is set
+    idRenderModel          *hModel;             // this can only be null if callback is set
 
     int                     entityNum;
     int                     bodyId;
@@ -104,7 +104,7 @@ typedef struct renderEntity_s {
     idBounds                bounds;                 // only needs to be set for deferred models and md5s
     deferredEntityCallback_t    callback;
 
-    void*                   callbackData;           // used for whatever the callback wants
+    void                   *callbackData;           // used for whatever the callback wants
 
     // player bodies and possibly player shadows should be suppressed in views from
     // that player's eyes, but will show up in mirrors and other subviews
@@ -129,19 +129,19 @@ typedef struct renderEntity_s {
     idMat3                  axis;
 
     // texturing
-    const idMaterial*       customShader;           // if non-0, all surfaces will use this
-    const idMaterial*       referenceShader;        // used so flares can reference the proper light shader
-    const idDeclSkin*       customSkin;             // 0 for no remappings
-    class idSoundEmitter*   referenceSound;         // for shader sound tables, allowing effects to vary with sounds
+    const idMaterial       *customShader;           // if non-0, all surfaces will use this
+    const idMaterial       *referenceShader;        // used so flares can reference the proper light shader
+    const idDeclSkin       *customSkin;             // 0 for no remappings
+    class idSoundEmitter   *referenceSound;         // for shader sound tables, allowing effects to vary with sounds
     float                   shaderParms[ MAX_ENTITY_SHADER_PARMS ]; // can be used in any way by shader or model generation
 
     // networking: see WriteGUIToSnapshot / ReadGUIFromSnapshot
-    class idUserInterface* gui[ MAX_RENDERENTITY_GUI ];
+    class idUserInterface *gui[ MAX_RENDERENTITY_GUI ];
 
-    struct renderView_s*    remoteRenderView;       // any remote camera surfaces will use this
+    struct renderView_s    *remoteRenderView;       // any remote camera surfaces will use this
 
     int                     numJoints;
-    idJointMat*             joints;                 // array of joints that will modify vertices.
+    idJointMat             *joints;                 // array of joints that will modify vertices.
     // NULL if non-deformable model.  NOT freed by renderer
 
     float                   modelDepthHack;         // squash depth range so particle effects don't clip into walls
@@ -200,15 +200,15 @@ typedef struct renderLight_s {
     // Dmap will generate an optimized shadow volume named _prelight_<lightName>
     // for the light against all the _area* models in the map.  The renderer will
     // ignore this value if the light has been moved after initial creation
-    idRenderModel*          prelightModel;
+    idRenderModel          *prelightModel;
 
     // muzzle flash lights will not cast shadows from player and weapon world models
     int                     lightId;
 
 
-    const idMaterial*       shader;             // NULL = either lights/defaultPointLight or lights/defaultProjectedLight
+    const idMaterial       *shader;             // NULL = either lights/defaultPointLight or lights/defaultProjectedLight
     float                   shaderParms[MAX_ENTITY_SHADER_PARMS];       // can be used in any way by shader
-    idSoundEmitter*         referenceSound;     // for shader sound tables, allowing effects to vary with sounds
+    idSoundEmitter         *referenceSound;     // for shader sound tables, allowing effects to vary with sounds
 } renderLight_t;
 
 
@@ -230,14 +230,14 @@ typedef struct renderView_s {
     // time in milliseconds for shader effects and other time dependent rendering issues
     int                     time;
     float                   shaderParms[MAX_GLOBAL_SHADER_PARMS];       // can be used in any way by shader
-    const idMaterial*        globalMaterial;                            // used to override everything draw
+    const idMaterial        *globalMaterial;                            // used to override everything draw
 } renderView_t;
 
 
 // exitPortal_t is returned by idRenderWorld::GetPortal()
 typedef struct {
     int                 areas[2];       // areas connected by this portal
-    const idWinding*    w;              // winding points have counter clockwise ordering seen from areas[0]
+    const idWinding    *w;              // winding points have counter clockwise ordering seen from areas[0]
     int                 blockingBits;   // PS_BLOCK_VIEW, PS_BLOCK_AIR, etc
     qhandle_t           portalHandle;
 } exitPortal_t;
@@ -255,8 +255,8 @@ typedef struct modelTrace_s {
     float                   fraction;           // fraction of trace completed
     idVec3                  point;              // end point of trace in global space
     idVec3                  normal;             // hit triangle normal vector in global space
-    const idMaterial*       material;           // material of hit surface
-    const renderEntity_t*   entity;             // render entity that was hit
+    const idMaterial       *material;           // material of hit surface
+    const renderEntity_t   *entity;             // render entity that was hit
     int                     jointNumber;        // md5 joint nearest to the hit triangle
 } modelTrace_t;
 
@@ -280,22 +280,22 @@ class idRenderWorld {
 
     // The same render world can be reinitialized as often as desired
     // a NULL or empty mapName will create an empty, single area world
-    virtual bool            InitFromMap(const char* mapName) = 0;
+    virtual bool            InitFromMap(const char *mapName) = 0;
 
     //-------------- Entity and Light Defs -----------------
 
     // entityDefs and lightDefs are added to a given world to determine
     // what will be drawn for a rendered scene.  Most update work is defered
     // until it is determined that it is actually needed for a given view.
-    virtual qhandle_t       AddEntityDef(const renderEntity_t* re) = 0;
-    virtual void            UpdateEntityDef(qhandle_t entityHandle, const renderEntity_t* re) = 0;
+    virtual qhandle_t       AddEntityDef(const renderEntity_t *re) = 0;
+    virtual void            UpdateEntityDef(qhandle_t entityHandle, const renderEntity_t *re) = 0;
     virtual void            FreeEntityDef(qhandle_t entityHandle) = 0;
-    virtual const renderEntity_t* GetRenderEntity(qhandle_t entityHandle) const = 0;
+    virtual const renderEntity_t *GetRenderEntity(qhandle_t entityHandle) const = 0;
 
-    virtual qhandle_t       AddLightDef(const renderLight_t* rlight) = 0;
-    virtual void            UpdateLightDef(qhandle_t lightHandle, const renderLight_t* rlight) = 0;
+    virtual qhandle_t       AddLightDef(const renderLight_t *rlight) = 0;
+    virtual void            UpdateLightDef(qhandle_t lightHandle, const renderLight_t *rlight) = 0;
     virtual void            FreeLightDef(qhandle_t lightHandle) = 0;
-    virtual const renderLight_t* GetRenderLight(qhandle_t lightHandle) const = 0;
+    virtual const renderLight_t *GetRenderLight(qhandle_t lightHandle) const = 0;
 
     // Force the generation of all light / surface interactions at the start of a level
     // If this isn't called, they will all be dynamically generated
@@ -311,13 +311,13 @@ class idRenderWorld {
     // The decals are projected onto world geometry between the winding plane and the projection origin.
     // The decals are depth faded from the winding plane to a certain distance infront of the
     // winding plane and the same distance from the projection origin towards the winding.
-    virtual void            ProjectDecalOntoWorld(const idFixedWinding& winding, const idVec3& projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial* material, const int startTime) = 0;
+    virtual void            ProjectDecalOntoWorld(const idFixedWinding &winding, const idVec3 &projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial *material, const int startTime) = 0;
 
     // Creates decals on static models.
-    virtual void            ProjectDecal(qhandle_t entityHandle, const idFixedWinding& winding, const idVec3& projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial* material, const int startTime) = 0;
+    virtual void            ProjectDecal(qhandle_t entityHandle, const idFixedWinding &winding, const idVec3 &projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial *material, const int startTime) = 0;
 
     // Creates overlays on dynamic models.
-    virtual void            ProjectOverlay(qhandle_t entityHandle, const idPlane localTextureAxis[2], const idMaterial* material) = 0;
+    virtual void            ProjectOverlay(qhandle_t entityHandle, const idPlane localTextureAxis[2], const idMaterial *material) = 0;
 
     // Removes all decals and overlays from the given entity def.
     virtual void            RemoveDecals(qhandle_t entityHandle) = 0;
@@ -326,12 +326,12 @@ class idRenderWorld {
 
     // some calls to material functions use the current renderview time when servicing cinematics.  this function
     // ensures that any parms accessed (such as time) are properly set.
-    virtual void            SetRenderView(const renderView_t* renderView) = 0;
+    virtual void            SetRenderView(const renderView_t *renderView) = 0;
 
     // rendering a scene may actually render multiple subviews for mirrors and portals, and
     // may render composite textures for gui console screens and light projections
     // It would also be acceptable to render a scene multiple times, for "rear view mirrors", etc
-    virtual void            RenderScene(const renderView_t* renderView) = 0;
+    virtual void            RenderScene(const renderView_t *renderView) = 0;
 
     //-------------- Portal Area Information -----------------
 
@@ -342,7 +342,7 @@ class idRenderWorld {
     // This is used by the game to identify portals that are contained
     // inside doors, so the connection between areas can be topologically
     // terminated when the door shuts.
-    virtual qhandle_t       FindPortal(const idBounds& b) const = 0;
+    virtual qhandle_t       FindPortal(const idBounds &b) const = 0;
 
     // doors explicitly close off portals when shut
     // multiple bits can be set to block multiple things, ie: ( PS_VIEW | PS_LOCATION | PS_AIR )
@@ -359,11 +359,11 @@ class idRenderWorld {
 
     // Will return -1 if the point is not in an area, otherwise
     // it will return 0 <= value < NumAreas()
-    virtual int             PointInArea(const idVec3& point) const = 0;
+    virtual int             PointInArea(const idVec3 &point) const = 0;
 
     // fills the *areas array with the numbers of the areas the bounds cover
     // returns the total number of areas the bounds cover
-    virtual int             BoundsInAreas(const idBounds& bounds, int* areas, int maxAreas) const = 0;
+    virtual int             BoundsInAreas(const idBounds &bounds, int *areas, int maxAreas) const = 0;
 
     // Used by the sound system to do area flowing
     virtual int             NumPortalsInArea(int areaNum) = 0;
@@ -380,18 +380,18 @@ class idRenderWorld {
     virtual guiPoint_t      GuiTrace(qhandle_t entityHandle, const idVec3 start, const idVec3 end) const = 0;
 
     // Traces vs the render model, possibly instantiating a dynamic version, and returns true if something was hit
-    virtual bool            ModelTrace(modelTrace_t& trace, qhandle_t entityHandle, const idVec3& start, const idVec3& end, const float radius) const = 0;
+    virtual bool            ModelTrace(modelTrace_t &trace, qhandle_t entityHandle, const idVec3 &start, const idVec3 &end, const float radius) const = 0;
 
     // Traces vs the whole rendered world. FIXME: we need some kind of material flags.
-    virtual bool            Trace(modelTrace_t& trace, const idVec3& start, const idVec3& end, const float radius, bool skipDynamic = true, bool skipPlayer = false) const = 0;
+    virtual bool            Trace(modelTrace_t &trace, const idVec3 &start, const idVec3 &end, const float radius, bool skipDynamic = true, bool skipPlayer = false) const = 0;
 
     // Traces vs the world model bsp tree.
-    virtual bool            FastWorldTrace(modelTrace_t& trace, const idVec3& start, const idVec3& end) const = 0;
+    virtual bool            FastWorldTrace(modelTrace_t &trace, const idVec3 &start, const idVec3 &end) const = 0;
 
     //-------------- Demo Control  -----------------
 
     // Writes a loadmap command to the demo, and clears archive counters.
-    virtual void            StartWritingDemo(idDemoFile* demo) = 0;
+    virtual void            StartWritingDemo(idDemoFile *demo) = 0;
     virtual void            StopWritingDemo() = 0;
 
     // Returns true when demoRenderView has been filled in.
@@ -401,7 +401,7 @@ class idRenderWorld {
     // is less than 30hz
     // demoTimeOffset will be set if a new map load command was processed before
     // the next renderScene
-    virtual bool            ProcessDemoCommand(idDemoFile* readDemo, renderView_t* demoRenderView, int* demoTimeOffset) = 0;
+    virtual bool            ProcessDemoCommand(idDemoFile *readDemo, renderView_t *demoRenderView, int *demoTimeOffset) = 0;
 
     // this is used to regenerate all interactions ( which is currently only done during influences ), there may be a less
     // expensive way to do it
@@ -411,23 +411,23 @@ class idRenderWorld {
 
     // Line drawing for debug visualization
     virtual void            DebugClearLines(int time) = 0;       // a time of 0 will clear all lines and text
-    virtual void            DebugLine(const idVec4& color, const idVec3& start, const idVec3& end, const int lifetime = 0, const bool depthTest = false) = 0;
-    virtual void            DebugArrow(const idVec4& color, const idVec3& start, const idVec3& end, int size, const int lifetime = 0) = 0;
-    virtual void            DebugWinding(const idVec4& color, const idWinding& w, const idVec3& origin, const idMat3& axis, const int lifetime = 0, const bool depthTest = false) = 0;
-    virtual void            DebugCircle(const idVec4& color, const idVec3& origin, const idVec3& dir, const float radius, const int numSteps, const int lifetime = 0, const bool depthTest = false) = 0;
-    virtual void            DebugSphere(const idVec4& color, const idSphere& sphere, const int lifetime = 0, bool depthTest = false) = 0;
-    virtual void            DebugBounds(const idVec4& color, const idBounds& bounds, const idVec3& org = vec3_origin, const int lifetime = 0) = 0;
-    virtual void            DebugBox(const idVec4& color, const idBox& box, const int lifetime = 0) = 0;
-    virtual void            DebugFrustum(const idVec4& color, const idFrustum& frustum, const bool showFromOrigin = false, const int lifetime = 0) = 0;
-    virtual void            DebugCone(const idVec4& color, const idVec3& apex, const idVec3& dir, float radius1, float radius2, const int lifetime = 0) = 0;
-    virtual void            DebugAxis(const idVec3& origin, const idMat3& axis) = 0;
+    virtual void            DebugLine(const idVec4 &color, const idVec3 &start, const idVec3 &end, const int lifetime = 0, const bool depthTest = false) = 0;
+    virtual void            DebugArrow(const idVec4 &color, const idVec3 &start, const idVec3 &end, int size, const int lifetime = 0) = 0;
+    virtual void            DebugWinding(const idVec4 &color, const idWinding &w, const idVec3 &origin, const idMat3 &axis, const int lifetime = 0, const bool depthTest = false) = 0;
+    virtual void            DebugCircle(const idVec4 &color, const idVec3 &origin, const idVec3 &dir, const float radius, const int numSteps, const int lifetime = 0, const bool depthTest = false) = 0;
+    virtual void            DebugSphere(const idVec4 &color, const idSphere &sphere, const int lifetime = 0, bool depthTest = false) = 0;
+    virtual void            DebugBounds(const idVec4 &color, const idBounds &bounds, const idVec3 &org = vec3_origin, const int lifetime = 0) = 0;
+    virtual void            DebugBox(const idVec4 &color, const idBox &box, const int lifetime = 0) = 0;
+    virtual void            DebugFrustum(const idVec4 &color, const idFrustum &frustum, const bool showFromOrigin = false, const int lifetime = 0) = 0;
+    virtual void            DebugCone(const idVec4 &color, const idVec3 &apex, const idVec3 &dir, float radius1, float radius2, const int lifetime = 0) = 0;
+    virtual void            DebugAxis(const idVec3 &origin, const idMat3 &axis) = 0;
 
     // Polygon drawing for debug visualization.
     virtual void            DebugClearPolygons(int time) = 0;        // a time of 0 will clear all polygons
-    virtual void            DebugPolygon(const idVec4& color, const idWinding& winding, const int lifeTime = 0, const bool depthTest = false) = 0;
+    virtual void            DebugPolygon(const idVec4 &color, const idWinding &winding, const int lifeTime = 0, const bool depthTest = false) = 0;
 
     // Text drawing for debug visualization.
-    virtual void            DrawText(const char* text, const idVec3& origin, float scale, const idVec4& color, const idMat3& viewAxis, const int align = 1, const int lifetime = 0, bool depthTest = false) = 0;
+    virtual void            DrawText(const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align = 1, const int lifetime = 0, bool depthTest = false) = 0;
 };
 
 #endif /* !__RENDERWORLD_H__ */

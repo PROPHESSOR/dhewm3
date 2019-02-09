@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/Winvar.h"
 
-const char* VAR_GUIPREFIX = "gui::";
+const char *VAR_GUIPREFIX = "gui::";
 static const int VAR_GUIPREFIX_LEN = strlen(VAR_GUIPREFIX);
 
 idWinVar::idWinVar() {
@@ -46,13 +46,13 @@ idWinVar::~idWinVar() {
     name = NULL;
 }
 
-void idWinVar::SetGuiInfo(idDict* gd, const char* _name) {
+void idWinVar::SetGuiInfo(idDict *gd, const char *_name) {
     guiDict = gd;
     SetName(_name);
 }
 
 
-void idWinVar::Init(const char* _name, idWindow* win) {
+void idWinVar::Init(const char *_name, idWindow *win) {
     idStr key = _name;
     guiDict = NULL;
     int len = key.Length();
@@ -66,7 +66,7 @@ void idWinVar::Init(const char* _name, idWindow* win) {
     }
 }
 
-void idMultiWinVar::Set(const char* val) {
+void idMultiWinVar::Set(const char *val) {
     for (int i = 0; i < Num(); i++) {
         (*this)[i]->Set(val);
     }
@@ -78,7 +78,7 @@ void idMultiWinVar::Update(void) {
     }
 }
 
-void idMultiWinVar::SetGuiInfo(idDict* dict) {
+void idMultiWinVar::SetGuiInfo(idDict *dict) {
     for (int i = 0; i < Num(); i++) {
         (*this)[i]->SetGuiInfo(dict, (*this)[i]->c_str());
     }

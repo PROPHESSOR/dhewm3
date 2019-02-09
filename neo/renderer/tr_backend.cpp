@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "renderer/tr_local.h"
 
-frameData_t*     frameData;
+frameData_t     *frameData;
 backEndState_t  backEnd;
 
 /*
@@ -173,7 +173,7 @@ GL_TexEnv
 ====================
 */
 void GL_TexEnv(int env) {
-    tmu_t*   tmu;
+    tmu_t   *tmu;
 
     tmu = &backEnd.glState.tmu[backEnd.glState.currenttmu];
 
@@ -455,12 +455,12 @@ RB_SetBuffer
 
 =============
 */
-static void RB_SetBuffer(const void* data) {
-    const setBufferCommand_t*    cmd;
+static void RB_SetBuffer(const void *data) {
+    const setBufferCommand_t    *cmd;
 
     // see which draw buffer we want to render the frame to
 
-    cmd = (const setBufferCommand_t*)data;
+    cmd = (const setBufferCommand_t *)data;
 
     backEnd.frameCount = cmd->frameCount;
 
@@ -496,7 +496,7 @@ was there.  This is used to test for texture thrashing.
 */
 void RB_ShowImages(void) {
     int     i;
-    idImage* image;
+    idImage *image;
     float   x, y, w, h;
     int     start, end;
 
@@ -553,7 +553,7 @@ RB_SwapBuffers
 
 =============
 */
-const void  RB_SwapBuffers(const void* data) {
+const void  RB_SwapBuffers(const void *data) {
     // texture swapping test
     if (r_showImages.GetInteger() != 0) {
         RB_ShowImages();
@@ -577,10 +577,10 @@ RB_CopyRender
 Copy part of the current framebuffer to an image
 =============
 */
-const void  RB_CopyRender(const void* data) {
-    const copyRenderCommand_t*   cmd;
+const void  RB_CopyRender(const void *data) {
+    const copyRenderCommand_t   *cmd;
 
-    cmd = (const copyRenderCommand_t*)data;
+    cmd = (const copyRenderCommand_t *)data;
 
     if (r_skipCopyTexture.GetBool()) {
         return;
@@ -600,7 +600,7 @@ smp extensions, or asyncronously by another thread.
 ====================
 */
 int     backEndStartTime, backEndFinishTime;
-void RB_ExecuteBackEndCommands(const emptyCommand_t* cmds) {
+void RB_ExecuteBackEndCommands(const emptyCommand_t *cmds) {
     // r_debugRenderToTexture
     int c_draw3d = 0, c_draw2d = 0, c_setBuffers = 0, c_swapBuffers = 0, c_copyRenders = 0;
 
@@ -616,7 +616,7 @@ void RB_ExecuteBackEndCommands(const emptyCommand_t* cmds) {
     // upload any image loads that have completed
     globalImages->CompleteBackgroundImageLoads();
 
-    for (; cmds ; cmds = (const emptyCommand_t*)cmds->next) {
+    for (; cmds ; cmds = (const emptyCommand_t *)cmds->next) {
         switch (cmds->commandId) {
             case RC_NOP:
                 break;
@@ -624,7 +624,7 @@ void RB_ExecuteBackEndCommands(const emptyCommand_t* cmds) {
             case RC_DRAW_VIEW:
                 RB_DrawView(cmds);
 
-                if (((const drawSurfsCommand_t*)cmds)->viewDef->viewEntitys) {
+                if (((const drawSurfsCommand_t *)cmds)->viewDef->viewEntitys) {
                     c_draw3d++;
                 } else {
                     c_draw2d++;

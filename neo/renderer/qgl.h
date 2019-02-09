@@ -57,7 +57,7 @@ typedef void (*GLExtension_t)(void);
 extern "C" {
 #endif
 
-GLExtension_t GLimp_ExtensionPointer(const char* name);
+GLExtension_t GLimp_ExtensionPointer(const char *name);
 
 #ifdef __cplusplus
 }
@@ -68,10 +68,10 @@ GLExtension_t GLimp_ExtensionPointer(const char* name);
 #include "renderer/qgl_proc.h"
 
 // multitexture
-extern  void (APIENTRY* qglMultiTexCoord2fARB)(GLenum texture, GLfloat s, GLfloat t);
-extern  void (APIENTRY* qglMultiTexCoord2fvARB)(GLenum texture, GLfloat* st);
-extern  void (APIENTRY* qglActiveTextureARB)(GLenum texture);
-extern  void (APIENTRY* qglClientActiveTextureARB)(GLenum texture);
+extern  void (APIENTRY *qglMultiTexCoord2fARB)(GLenum texture, GLfloat s, GLfloat t);
+extern  void (APIENTRY *qglMultiTexCoord2fvARB)(GLenum texture, GLfloat *st);
+extern  void (APIENTRY *qglActiveTextureARB)(GLenum texture);
+extern  void (APIENTRY *qglClientActiveTextureARB)(GLenum texture);
 
 // ARB_vertex_buffer_object
 extern PFNGLBINDBUFFERARBPROC qglBindBufferARB;
@@ -87,10 +87,10 @@ extern PFNGLGETBUFFERPARAMETERIVARBPROC qglGetBufferParameterivARB;
 extern PFNGLGETBUFFERPOINTERVARBPROC qglGetBufferPointervARB;
 
 // 3D textures
-extern void (APIENTRY* qglTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*);
+extern void (APIENTRY *qglTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *);
 
 // shared texture palette
-extern  void (APIENTRY* qglColorTableEXT)(int, int, int, int, int, const void*);
+extern  void (APIENTRY *qglColorTableEXT)(int, int, int, int, int, const void *);
 
 // EXT_stencil_two_side
 extern  PFNGLACTIVESTENCILFACEEXTPROC   qglActiveStencilFaceEXT;

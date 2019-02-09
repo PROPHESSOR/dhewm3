@@ -81,23 +81,23 @@ class idMapBrushSide {
   public:
     idMapBrushSide(void);
     ~idMapBrushSide(void) { }
-    const char*             GetMaterial(void) const {
+    const char             *GetMaterial(void) const {
         return material;
     }
-    void                    SetMaterial(const char* p) {
+    void                    SetMaterial(const char *p) {
         material = p;
     }
-    const idPlane&          GetPlane(void) const {
+    const idPlane          &GetPlane(void) const {
         return plane;
     }
-    void                    SetPlane(const idPlane& p) {
+    void                    SetPlane(const idPlane &p) {
         plane = p;
     }
     void                    SetTextureMatrix(const idVec3 mat[2]) {
         texMat[0] = mat[0];
         texMat[1] = mat[1];
     }
-    void                    GetTextureMatrix(idVec3& mat1, idVec3& mat2) {
+    void                    GetTextureMatrix(idVec3 &mat1, idVec3 &mat2) {
         mat1 = texMat[0];
         mat2 = texMat[1];
     }
@@ -127,23 +127,23 @@ class idMapBrush : public idMapPrimitive {
     ~idMapBrush(void) {
         sides.DeleteContents(true);
     }
-    static idMapBrush*      Parse(idLexer& src, const idVec3& origin, bool newFormat = true, float version = CURRENT_MAP_VERSION);
-    static idMapBrush*      ParseQ3(idLexer& src, const idVec3& origin);
-    bool                    Write(idFile* fp, int primitiveNum, const idVec3& origin) const;
+    static idMapBrush      *Parse(idLexer &src, const idVec3 &origin, bool newFormat = true, float version = CURRENT_MAP_VERSION);
+    static idMapBrush      *ParseQ3(idLexer &src, const idVec3 &origin);
+    bool                    Write(idFile *fp, int primitiveNum, const idVec3 &origin) const;
     int                     GetNumSides(void) const {
         return sides.Num();
     }
-    int                     AddSide(idMapBrushSide* side) {
+    int                     AddSide(idMapBrushSide *side) {
         return sides.Append(side);
     }
-    idMapBrushSide*         GetSide(int i) const {
+    idMapBrushSide         *GetSide(int i) const {
         return sides[i];
     }
     unsigned int            GetGeometryCRC(void) const;
 
   protected:
     int                     numSides;
-    idList<idMapBrushSide*> sides;
+    idList<idMapBrushSide *> sides;
 };
 
 
@@ -152,12 +152,12 @@ class idMapPatch : public idMapPrimitive, public idSurface_Patch {
     idMapPatch(void);
     idMapPatch(int maxPatchWidth, int maxPatchHeight);
     ~idMapPatch(void) { }
-    static idMapPatch*      Parse(idLexer& src, const idVec3& origin, bool patchDef3 = true, float version = CURRENT_MAP_VERSION);
-    bool                    Write(idFile* fp, int primitiveNum, const idVec3& origin) const;
-    const char*             GetMaterial(void) const {
+    static idMapPatch      *Parse(idLexer &src, const idVec3 &origin, bool patchDef3 = true, float version = CURRENT_MAP_VERSION);
+    bool                    Write(idFile *fp, int primitiveNum, const idVec3 &origin) const;
+    const char             *GetMaterial(void) const {
         return material;
     }
-    void                    SetMaterial(const char* p) {
+    void                    SetMaterial(const char *p) {
         material = p;
     }
     int                     GetHorzSubdivisions(void) const {
@@ -221,22 +221,22 @@ class idMapEntity {
     ~idMapEntity(void) {
         primitives.DeleteContents(true);
     }
-    static idMapEntity*     Parse(idLexer& src, bool worldSpawn = false, float version = CURRENT_MAP_VERSION);
-    bool                    Write(idFile* fp, int entityNum) const;
+    static idMapEntity     *Parse(idLexer &src, bool worldSpawn = false, float version = CURRENT_MAP_VERSION);
+    bool                    Write(idFile *fp, int entityNum) const;
     int                     GetNumPrimitives(void) const {
         return primitives.Num();
     }
-    idMapPrimitive*         GetPrimitive(int i) const {
+    idMapPrimitive         *GetPrimitive(int i) const {
         return primitives[i];
     }
-    void                    AddPrimitive(idMapPrimitive* p) {
+    void                    AddPrimitive(idMapPrimitive *p) {
         primitives.Append(p);
     }
     unsigned int            GetGeometryCRC(void) const;
     void                    RemovePrimitiveData();
 
   protected:
-    idList<idMapPrimitive*> primitives;
+    idList<idMapPrimitive *> primitives;
 };
 
 
@@ -251,18 +251,18 @@ class idMapFile {
     // normally this will use a .reg file instead of a .map file if it exists,
     // which is what the game and dmap want, but the editor will want to always
     // load a .map file
-    bool                    Parse(const char* filename, bool ignoreRegion = false, bool osPath = false);
-    bool                    Write(const char* fileName, const char* ext, bool fromBasePath = true);
+    bool                    Parse(const char *filename, bool ignoreRegion = false, bool osPath = false);
+    bool                    Write(const char *fileName, const char *ext, bool fromBasePath = true);
     // get the number of entities in the map
     int                     GetNumEntities(void) const {
         return entities.Num();
     }
     // get the specified entity
-    idMapEntity*            GetEntity(int i) const {
+    idMapEntity            *GetEntity(int i) const {
         return entities[i];
     }
     // get the name without file extension
-    const char*             GetName(void) const {
+    const char             *GetName(void) const {
         return name;
     }
     // get the file time
@@ -277,10 +277,10 @@ class idMapFile {
     // returns true if the file on disk changed
     bool                    NeedsReload();
 
-    int                     AddEntity(idMapEntity* mapentity);
-    idMapEntity*            FindEntity(const char* name);
-    void                    RemoveEntity(idMapEntity* mapEnt);
-    void                    RemoveEntities(const char* classname);
+    int                     AddEntity(idMapEntity *mapentity);
+    idMapEntity            *FindEntity(const char *name);
+    void                    RemoveEntity(idMapEntity *mapEnt);
+    void                    RemoveEntities(const char *classname);
     void                    RemoveAllEntities();
     void                    RemovePrimitiveData();
     bool                    HasPrimitiveData() {
@@ -291,7 +291,7 @@ class idMapFile {
     float                   version;
     ID_TIME_T                   fileTime;
     unsigned int            geometryCRC;
-    idList<idMapEntity*>   entities;
+    idList<idMapEntity *>   entities;
     idStr                   name;
     bool                    hasPrimitiveData;
 

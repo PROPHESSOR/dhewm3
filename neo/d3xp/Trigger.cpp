@@ -59,11 +59,11 @@ void idTrigger::DrawDebugInfo(void) {
     idBounds    viewTextBounds(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin());
     idBounds    viewBounds(gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin());
     idBounds    box(idVec3(-4.0f, -4.0f, -4.0f), idVec3(4.0f, 4.0f, 4.0f));
-    idEntity*    ent;
-    idEntity*    target;
+    idEntity    *ent;
+    idEntity    *target;
     int         i;
     bool        show;
-    const function_t* func;
+    const function_t *func;
 
     viewTextBounds.ExpandSelf(128.0f);
     viewBounds.ExpandSelf(512.0f);
@@ -94,7 +94,7 @@ void idTrigger::DrawDebugInfo(void) {
                 gameRenderWorld->DrawText(ent->GetEntityDefName(), ent->GetPhysics()->GetAbsBounds().GetCenter() + up, 0.1f, colorWhite, axis, 1);
 
                 if (ent->IsType(idTrigger::Type)) {
-                    func = static_cast<idTrigger*>(ent)->GetScriptFunction();
+                    func = static_cast<idTrigger *>(ent)->GetScriptFunction();
                 } else {
                     func = NULL;
                 }
@@ -147,7 +147,7 @@ idTrigger::CallScript
 ================
 */
 void idTrigger::CallScript(void) const {
-    idThread* thread;
+    idThread *thread;
 
     if (scriptFunction) {
         thread = new idThread(scriptFunction);
@@ -160,7 +160,7 @@ void idTrigger::CallScript(void) const {
 idTrigger::GetScriptFunction
 ================
 */
-const function_t* idTrigger::GetScriptFunction(void) const {
+const function_t *idTrigger::GetScriptFunction(void) const {
     return scriptFunction;
 }
 
@@ -169,7 +169,7 @@ const function_t* idTrigger::GetScriptFunction(void) const {
 idTrigger::Save
 ================
 */
-void idTrigger::Save(idSaveGame* savefile) const {
+void idTrigger::Save(idSaveGame *savefile) const {
     if (scriptFunction) {
         savefile->WriteString(scriptFunction->Name());
     } else {
@@ -182,7 +182,7 @@ void idTrigger::Save(idSaveGame* savefile) const {
 idTrigger::Restore
 ================
 */
-void idTrigger::Restore(idRestoreGame* savefile) {
+void idTrigger::Restore(idRestoreGame *savefile) {
     idStr funcname;
     savefile->ReadString(funcname);
 
@@ -286,7 +286,7 @@ idTrigger_Multi::idTrigger_Multi(void) {
 idTrigger_Multi::Save
 ================
 */
-void idTrigger_Multi::Save(idSaveGame* savefile) const {
+void idTrigger_Multi::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(wait);
     savefile->WriteFloat(random);
     savefile->WriteFloat(delay);
@@ -305,7 +305,7 @@ void idTrigger_Multi::Save(idSaveGame* savefile) const {
 idTrigger_Multi::Restore
 ================
 */
-void idTrigger_Multi::Restore(idRestoreGame* savefile) {
+void idTrigger_Multi::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(wait);
     savefile->ReadFloat(random);
     savefile->ReadFloat(delay);
@@ -380,13 +380,13 @@ void idTrigger_Multi::Spawn(void) {
 idTrigger_Multi::CheckFacing
 ================
 */
-bool idTrigger_Multi::CheckFacing(idEntity* activator) {
+bool idTrigger_Multi::CheckFacing(idEntity *activator) {
     if (spawnArgs.GetBool("facing")) {
         if (!activator->IsType(idPlayer::Type)) {
             return true;
         }
 
-        idPlayer* player = static_cast< idPlayer* >(activator);
+        idPlayer *player = static_cast< idPlayer * >(activator);
         float dot = player->viewAngles.ToForward() * GetPhysics()->GetAxis()[0];
         float angle = RAD2DEG(idMath::ACos(dot));
 
@@ -404,7 +404,7 @@ bool idTrigger_Multi::CheckFacing(idEntity* activator) {
 idTrigger_Multi::TriggerAction
 ================
 */
-void idTrigger_Multi::TriggerAction(idEntity* activator) {
+void idTrigger_Multi::TriggerAction(idEntity *activator) {
     ActivateTargets(triggerWithSelf ? this : activator);
     CallScript();
 
@@ -429,7 +429,7 @@ void idTrigger_Multi::TriggerAction(idEntity* activator) {
 idTrigger_Multi::Event_TriggerAction
 ================
 */
-void idTrigger_Multi::Event_TriggerAction(idEntity* activator) {
+void idTrigger_Multi::Event_TriggerAction(idEntity *activator) {
     TriggerAction(activator);
 }
 
@@ -443,7 +443,7 @@ activator should be set to the activator so it can be held through a delay
 so wait for the delay time before firing
 ================
 */
-void idTrigger_Multi::Event_Trigger(idEntity* activator) {
+void idTrigger_Multi::Event_Trigger(idEntity *activator) {
     if (nextTriggerTime > gameLocal.time) {
         // can't retrigger until the wait is over
         return;
@@ -480,7 +480,7 @@ void idTrigger_Multi::Event_Trigger(idEntity* activator) {
 idTrigger_Multi::Event_Touch
 ================
 */
-void idTrigger_Multi::Event_Touch(idEntity* other, trace_t* trace) {
+void idTrigger_Multi::Event_Touch(idEntity *other, trace_t *trace) {
     if (triggerFirst) {
         return;
     }
@@ -492,7 +492,7 @@ void idTrigger_Multi::Event_Touch(idEntity* other, trace_t* trace) {
             return;
         }
 
-        if (static_cast< idPlayer* >(other)->spectating) {
+        if (static_cast< idPlayer * >(other)->spectating) {
             return;
         }
     } else if (!touchOther) {
@@ -561,7 +561,7 @@ idTrigger_EntityName::idTrigger_EntityName(void) {
 idTrigger_EntityName::Save
 ================
 */
-void idTrigger_EntityName::Save(idSaveGame* savefile) const {
+void idTrigger_EntityName::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(wait);
     savefile->WriteFloat(random);
     savefile->WriteFloat(delay);
@@ -576,7 +576,7 @@ void idTrigger_EntityName::Save(idSaveGame* savefile) const {
 idTrigger_EntityName::Restore
 ================
 */
-void idTrigger_EntityName::Restore(idRestoreGame* savefile) {
+void idTrigger_EntityName::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(wait);
     savefile->ReadFloat(random);
     savefile->ReadFloat(delay);
@@ -627,7 +627,7 @@ void idTrigger_EntityName::Spawn(void) {
 idTrigger_EntityName::TriggerAction
 ================
 */
-void idTrigger_EntityName::TriggerAction(idEntity* activator) {
+void idTrigger_EntityName::TriggerAction(idEntity *activator) {
     ActivateTargets(activator);
     CallScript();
 
@@ -646,7 +646,7 @@ void idTrigger_EntityName::TriggerAction(idEntity* activator) {
 idTrigger_EntityName::Event_TriggerAction
 ================
 */
-void idTrigger_EntityName::Event_TriggerAction(idEntity* activator) {
+void idTrigger_EntityName::Event_TriggerAction(idEntity *activator) {
     TriggerAction(activator);
 }
 
@@ -660,7 +660,7 @@ activator should be set to the activator so it can be held through a delay
 so wait for the delay time before firing
 ================
 */
-void idTrigger_EntityName::Event_Trigger(idEntity* activator) {
+void idTrigger_EntityName::Event_Trigger(idEntity *activator) {
     if (nextTriggerTime > gameLocal.time) {
         // can't retrigger until the wait is over
         return;
@@ -692,7 +692,7 @@ void idTrigger_EntityName::Event_Trigger(idEntity* activator) {
 idTrigger_EntityName::Event_Touch
 ================
 */
-void idTrigger_EntityName::Event_Touch(idEntity* other, trace_t* trace) {
+void idTrigger_EntityName::Event_Touch(idEntity *other, trace_t *trace) {
     if (triggerFirst) {
         return;
     }
@@ -749,7 +749,7 @@ idTrigger_Timer::idTrigger_Timer(void) {
 idTrigger_Timer::Save
 ================
 */
-void idTrigger_Timer::Save(idSaveGame* savefile) const {
+void idTrigger_Timer::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(random);
     savefile->WriteFloat(wait);
     savefile->WriteBool(on);
@@ -763,7 +763,7 @@ void idTrigger_Timer::Save(idSaveGame* savefile) const {
 idTrigger_Timer::Restore
 ================
 */
-void idTrigger_Timer::Restore(idRestoreGame* savefile) {
+void idTrigger_Timer::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(random);
     savefile->ReadFloat(wait);
     savefile->ReadBool(on);
@@ -843,7 +843,7 @@ void idTrigger_Timer::Event_Timer(void) {
 idTrigger_Timer::Event_Use
 ================
 */
-void idTrigger_Timer::Event_Use(idEntity* activator) {
+void idTrigger_Timer::Event_Use(idEntity *activator) {
     // if on, turn it off
     if (on) {
         if (offName.Length() && offName.Icmp(activator->GetName())) {
@@ -892,7 +892,7 @@ idTrigger_Count::idTrigger_Count(void) {
 idTrigger_Count::Save
 ================
 */
-void idTrigger_Count::Save(idSaveGame* savefile) const {
+void idTrigger_Count::Save(idSaveGame *savefile) const {
     savefile->WriteInt(goal);
     savefile->WriteInt(count);
     savefile->WriteFloat(delay);
@@ -903,7 +903,7 @@ void idTrigger_Count::Save(idSaveGame* savefile) const {
 idTrigger_Count::Restore
 ================
 */
-void idTrigger_Count::Restore(idRestoreGame* savefile) {
+void idTrigger_Count::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(goal);
     savefile->ReadInt(count);
     savefile->ReadFloat(delay);
@@ -925,7 +925,7 @@ void idTrigger_Count::Spawn(void) {
 idTrigger_Count::Event_Trigger
 ================
 */
-void idTrigger_Count::Event_Trigger(idEntity* activator) {
+void idTrigger_Count::Event_Trigger(idEntity *activator) {
     // goal of -1 means trigger has been exhausted
     if (goal >= 0) {
         count++;
@@ -947,7 +947,7 @@ void idTrigger_Count::Event_Trigger(idEntity* activator) {
 idTrigger_Count::Event_TriggerAction
 ================
 */
-void idTrigger_Count::Event_TriggerAction(idEntity* activator) {
+void idTrigger_Count::Event_TriggerAction(idEntity *activator) {
     ActivateTargets(activator);
     CallScript();
 
@@ -986,7 +986,7 @@ idTrigger_Hurt::idTrigger_Hurt(void) {
 idTrigger_Hurt::Save
 ================
 */
-void idTrigger_Hurt::Save(idSaveGame* savefile) const {
+void idTrigger_Hurt::Save(idSaveGame *savefile) const {
     savefile->WriteBool(on);
     savefile->WriteFloat(delay);
     savefile->WriteInt(nextTime);
@@ -997,7 +997,7 @@ void idTrigger_Hurt::Save(idSaveGame* savefile) const {
 idTrigger_Hurt::Restore
 ================
 */
-void idTrigger_Hurt::Restore(idRestoreGame* savefile) {
+void idTrigger_Hurt::Restore(idRestoreGame *savefile) {
     savefile->ReadBool(on);
     savefile->ReadFloat(delay);
     savefile->ReadInt(nextTime);
@@ -1023,8 +1023,8 @@ void idTrigger_Hurt::Spawn(void) {
 idTrigger_Hurt::Event_Touch
 ================
 */
-void idTrigger_Hurt::Event_Touch(idEntity* other, trace_t* trace) {
-    const char* damage;
+void idTrigger_Hurt::Event_Touch(idEntity *other, trace_t *trace) {
+    const char *damage;
 
     if (on && other && gameLocal.time >= nextTime) {
         #ifdef _D3XP
@@ -1064,7 +1064,7 @@ void idTrigger_Hurt::Event_Touch(idEntity* other, trace_t* trace) {
 idTrigger_Hurt::Event_Toggle
 ================
 */
-void idTrigger_Hurt::Event_Toggle(idEntity* activator) {
+void idTrigger_Hurt::Event_Toggle(idEntity *activator) {
     on = !on;
 }
 
@@ -1086,10 +1086,10 @@ END_CLASS
 idTrigger_Fade::Event_Trigger
 ================
 */
-void idTrigger_Fade::Event_Trigger(idEntity* activator) {
+void idTrigger_Fade::Event_Trigger(idEntity *activator) {
     idVec4      fadeColor;
     int         fadeTime;
-    idPlayer*    player;
+    idPlayer    *player;
 
     player = gameLocal.GetLocalPlayer();
 
@@ -1145,7 +1145,7 @@ void idTrigger_Touch::Spawn(void) {
 idTrigger_Touch::Save
 ================
 */
-void idTrigger_Touch::Save(idSaveGame* savefile) {
+void idTrigger_Touch::Save(idSaveGame *savefile) {
     savefile->WriteClipModel(clipModel);
 }
 
@@ -1154,7 +1154,7 @@ void idTrigger_Touch::Save(idSaveGame* savefile) {
 idTrigger_Touch::Restore
 ================
 */
-void idTrigger_Touch::Restore(idRestoreGame* savefile) {
+void idTrigger_Touch::Restore(idRestoreGame *savefile) {
     savefile->ReadClipModel(clipModel);
 }
 
@@ -1166,7 +1166,7 @@ idTrigger_Touch::TouchEntities
 void idTrigger_Touch::TouchEntities(void) {
     int numClipModels, i;
     idBounds bounds;
-    idClipModel* cm, *clipModelList[ MAX_GENTITIES ];
+    idClipModel *cm, *clipModelList[ MAX_GENTITIES ];
 
     if (clipModel == NULL || scriptFunction == NULL) {
         return;
@@ -1182,7 +1182,7 @@ void idTrigger_Touch::TouchEntities(void) {
             continue;
         }
 
-        idEntity* entity = cm->GetEntity();
+        idEntity *entity = cm->GetEntity();
 
         if (!entity) {
             continue;
@@ -1195,7 +1195,7 @@ void idTrigger_Touch::TouchEntities(void) {
 
         ActivateTargets(entity);
 
-        idThread* thread = new idThread();
+        idThread *thread = new idThread();
         thread->CallFunction(entity, scriptFunction, false);
         thread->DelayedStart(0);
     }
@@ -1219,7 +1219,7 @@ void idTrigger_Touch::Think(void) {
 idTrigger_Touch::Event_Trigger
 ================
 */
-void idTrigger_Touch::Event_Trigger(idEntity* activator) {
+void idTrigger_Touch::Event_Trigger(idEntity *activator) {
     if (thinkFlags & TH_THINK) {
         BecomeInactive(TH_THINK);
     } else {
@@ -1283,16 +1283,16 @@ void idTrigger_Flag::Spawn(void) {
     idTrigger_Multi::Spawn();
 }
 
-void idTrigger_Flag::Event_Touch(idEntity* other, trace_t* trace) {
+void idTrigger_Flag::Event_Touch(idEntity *other, trace_t *trace) {
 
-    idItemTeam* flag = NULL;
+    idItemTeam *flag = NULL;
 
     if (player) {
         if (!other->IsType(idPlayer::Type)) {
             return;
         }
 
-        idPlayer* player = static_cast<idPlayer*>(other);
+        idPlayer *player = static_cast<idPlayer *>(other);
 
         if (player->carryingFlag == false) {
             return;
@@ -1302,7 +1302,7 @@ void idTrigger_Flag::Event_Touch(idEntity* other, trace_t* trace) {
             return;
         }
 
-        idItemTeam* flags[2];
+        idItemTeam *flags[2];
 
         flags[0] = gameLocal.mpGame.GetTeamFlag(0);
         flags[1] = gameLocal.mpGame.GetTeamFlag(1);
@@ -1324,7 +1324,7 @@ void idTrigger_Flag::Event_Touch(idEntity* other, trace_t* trace) {
             return;
         }
 
-        idItemTeam* item = static_cast<idItemTeam*>(other);
+        idItemTeam *item = static_cast<idItemTeam *>(other);
 
         if (item->team == team || team == -1) {
             flag = item;

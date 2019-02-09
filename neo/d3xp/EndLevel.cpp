@@ -84,7 +84,7 @@ idTarget_EndLevel::~idTarget_EndLevel() {
 idTarget_EndLevel::Event_Trigger
 ================
 */
-void idTarget_EndLevel::Event_Trigger(idEntity* activator) {
+void idTarget_EndLevel::Event_Trigger(idEntity *activator) {
     if (gameLocal.endLevel) {
         return;
     }
@@ -94,7 +94,7 @@ void idTarget_EndLevel::Event_Trigger(idEntity* activator) {
     gameLocal.endLevel = this;
 
     // grab the activating player view position
-    idPlayer* player = (idPlayer*)(activator);
+    idPlayer *player = (idPlayer *)(activator);
 
     initialViewOrg = player->GetEyePosition();
     initialViewAngles = idVec3(player->viewAngles[0], player->viewAngles[1], player->viewAngles[2]);
@@ -169,7 +169,7 @@ void idTarget_EndLevel::PlayerCommand(int buttons) {
 idTarget_EndLevel::ExitCommand
 ================
 */
-const char* idTarget_EndLevel::ExitCommand() {
+const char *idTarget_EndLevel::ExitCommand() {
     if (!readyToExit) {
         return NULL;
     }

@@ -175,9 +175,9 @@ class idWaveFile {
     idWaveFile(void);
     ~idWaveFile(void);
 
-    int             Open(const char* strFileName, waveformatex_t* pwfx = NULL);
-    int             OpenFromMemory(short* pbData, int ulDataSize, waveformatextensible_t* pwfx);
-    int             Read(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead);
+    int             Open(const char *strFileName, waveformatex_t *pwfx = NULL);
+    int             OpenFromMemory(short *pbData, int ulDataSize, waveformatextensible_t *pwfx);
+    int             Read(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead);
     int             Seek(int offset);
     int             Close(void);
     int             ResetFile(void);
@@ -192,7 +192,7 @@ class idWaveFile {
     waveformatextensible_t  mpwfx;        // Pointer to waveformatex structure
 
   private:
-    idFile*         mhmmio;         // I/O handle for the WAVE
+    idFile         *mhmmio;         // I/O handle for the WAVE
     mminfo_t        mck;            // Multimedia RIFF chunk
     mminfo_t        mckRiff;        // used when opening a WAVE file
     dword           mdwSize;        // size in samples
@@ -201,18 +201,18 @@ class idWaveFile {
     ID_TIME_T           mfileTime;
 
     bool            mbIsReadingFromMemory;
-    short*          mpbData;
-    short*          mpbDataCur;
+    short          *mpbData;
+    short          *mpbDataCur;
     dword           mulDataSize;
 
-    void*           ogg;            // only !NULL when !s_realTimeDecoding
+    void           *ogg;            // only !NULL when !s_realTimeDecoding
     bool            isOgg;
 
   private:
     int             ReadMMIO(void);
 
-    int             OpenOGG(const char* strFileName, waveformatex_t* pwfx = NULL);
-    int             ReadOGG(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead);
+    int             OpenOGG(const char *strFileName, waveformatex_t *pwfx = NULL);
+    int             ReadOGG(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead);
     int             CloseOGG(void);
 };
 
@@ -268,7 +268,7 @@ class SoundFX {
     int                 channel;
     int                 maxlen;
 
-    float*              buffer;
+    float              *buffer;
     float               continuitySamples[4];
 
     float               param;
@@ -288,7 +288,7 @@ class SoundFX {
     };
 
     virtual void        Initialize()                                    { };
-    virtual void        ProcessSample(float* in, float* out) = 0;
+    virtual void        ProcessSample(float *in, float *out) = 0;
 
     void                SetChannel(int chan)                           {
         channel = chan;
@@ -303,7 +303,7 @@ class SoundFX {
         continuitySamples[2] = out1;
         continuitySamples[3] = out2;
     };      // FIXME?
-    void                GetContinuitySamples(float& in1, float& in2, float& out1, float& out2) {
+    void                GetContinuitySamples(float &in1, float &in2, float &out1, float &out2) {
         in1 = continuitySamples[0];
         in2 = continuitySamples[1];
         out1 = continuitySamples[2];
@@ -317,7 +317,7 @@ class SoundFX {
 
 class SoundFX_Lowpass : public SoundFX {
   public:
-    virtual void        ProcessSample(float* in, float* out);
+    virtual void        ProcessSample(float *in, float *out);
 };
 
 class SoundFX_LowpassFast : public SoundFX {
@@ -327,7 +327,7 @@ class SoundFX_LowpassFast : public SoundFX {
     float               b1, b2;
 
   public:
-    virtual void        ProcessSample(float* in, float* out);
+    virtual void        ProcessSample(float *in, float *out);
     void                SetParms(float p1 = 0, float p2 = 0, float p3 = 0);
 };
 
@@ -336,7 +336,7 @@ class SoundFX_Comb : public SoundFX {
 
   public:
     virtual void        Initialize();
-    virtual void        ProcessSample(float* in, float* out);
+    virtual void        ProcessSample(float *in, float *out);
 };
 
 class FracTime {
@@ -367,7 +367,7 @@ class idSoundChannel;
 
 class idSlowChannel {
     bool                    active;
-    const idSoundChannel*   chan;
+    const idSoundChannel   *chan;
 
     int                     playbackState;
     int                     triggerOffset;
@@ -381,16 +381,16 @@ class idSlowChannel {
     SoundFX_LowpassFast     lowpass;
 
     // functions
-    void                    GenerateSlowChannel(FracTime& playPos, int sampleCount44k, float* finalBuffer);
+    void                    GenerateSlowChannel(FracTime &playPos, int sampleCount44k, float *finalBuffer);
 
     float                   GetSlowmoSpeed();
 
   public:
 
-    void                    AttachSoundChannel(const idSoundChannel* chan);
+    void                    AttachSoundChannel(const idSoundChannel *chan);
     void                    Reset();
 
-    void                    GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float* dest);
+    void                    GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float *dest);
 
     bool                    IsActive()              {
         return active;
@@ -408,17 +408,17 @@ class idSoundChannel {
     void                Clear(void);
     void                Start(void);
     void                Stop(void);
-    void                GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float* dest) const;
+    void                GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float *dest) const;
     void                ALStop(void);            // free OpenAL resources if any
 
     bool                triggerState;
     int                 trigger44kHzTime;       // hardware time sample the channel started
     int                 triggerGame44kHzTime;   // game time sample time the channel started
     soundShaderParms_t  parms;                  // combines the shader parms and the per-channel overrides
-    idSoundSample*      leadinSample;           // if not looped, this is the only sample
+    idSoundSample      *leadinSample;           // if not looped, this is the only sample
     s_channelType       triggerChannel;
-    const idSoundShader* soundShader;
-    idSampleDecoder*    decoder;
+    const idSoundShader *soundShader;
+    idSampleDecoder    *decoder;
     float               diversity;
     float               lastVolume;             // last calculated volume based on distance
     float               lastV[6];               // last calculated volume for each speaker, so we can smoothly fade
@@ -450,13 +450,13 @@ class idSoundEmitterLocal : public idSoundEmitter {
 
     // the parms specified will be the default overrides for all sounds started on this emitter.
     // NULL is acceptable for parms
-    virtual void        UpdateEmitter(const idVec3& origin, int listenerId, const soundShaderParms_t* parms);
+    virtual void        UpdateEmitter(const idVec3 &origin, int listenerId, const soundShaderParms_t *parms);
 
     // returns the length of the started sound in msec
-    virtual int         StartSound(const idSoundShader* shader, const s_channelType channel, float diversity = 0, int shaderFlags = 0, bool allowSlow = true /* D3XP */);
+    virtual int         StartSound(const idSoundShader *shader, const s_channelType channel, float diversity = 0, int shaderFlags = 0, bool allowSlow = true /* D3XP */);
 
     // can pass SCHANNEL_ANY
-    virtual void        ModifySound(const s_channelType channel, const soundShaderParms_t* parms);
+    virtual void        ModifySound(const s_channelType channel, const soundShaderParms_t *parms);
     virtual void        StopSound(const s_channelType channel);
     virtual void        FadeSound(const s_channelType channel, float to, float over);
 
@@ -472,11 +472,11 @@ class idSoundEmitterLocal : public idSoundEmitter {
 
     void                Clear(void);
 
-    void                OverrideParms(const soundShaderParms_t* base, const soundShaderParms_t* over, soundShaderParms_t* out);
+    void                OverrideParms(const soundShaderParms_t *base, const soundShaderParms_t *over, soundShaderParms_t *out);
     void                CheckForCompletion(int current44kHzTime);
-    void                Spatialize(idVec3 listenerPos, int listenerArea, idRenderWorld* rw);
+    void                Spatialize(idVec3 listenerPos, int listenerArea, idRenderWorld *rw);
 
-    idSoundWorldLocal*  soundWorld;             // the world that holds this emitter
+    idSoundWorldLocal  *soundWorld;             // the world that holds this emitter
 
     int                 index;                      // in world emitter list
     removeStatus_t      removeStatus;
@@ -503,9 +503,9 @@ class idSoundEmitterLocal : public idSoundEmitter {
 
     idSlowChannel       slowChannels[SOUND_MAX_CHANNELS];
 
-    idSlowChannel       GetSlowChannel(const idSoundChannel* chan);
-    void                SetSlowChannel(const idSoundChannel* chan, idSlowChannel slow);
-    void                ResetSlowChannel(const idSoundChannel* chan);
+    idSlowChannel       GetSlowChannel(const idSoundChannel *chan);
+    void                SetSlowChannel(const idSoundChannel *chan, idSlowChannel slow);
+    void                ResetSlowChannel(const idSoundChannel *chan);
 
     // this is just used for feedback to the game or rendering system:
     // flashing lights and screen shakes.  Because the material expression
@@ -544,7 +544,7 @@ class s_stats {
 
 typedef struct soundPortalTrace_s {
     int     portalArea;
-    const struct soundPortalTrace_s* prevStack;
+    const struct soundPortalTrace_s *prevStack;
 } soundPortalTrace_t;
 
 class idSoundWorldLocal : public idSoundWorld {
@@ -556,31 +556,31 @@ class idSoundWorldLocal : public idSoundWorld {
     virtual void            StopAllSounds(void);
 
     // get a new emitter that can play sounds in this world
-    virtual idSoundEmitter* AllocSoundEmitter(void);
+    virtual idSoundEmitter *AllocSoundEmitter(void);
 
     // for load games
-    virtual idSoundEmitter* EmitterForIndex(int index);
+    virtual idSoundEmitter *EmitterForIndex(int index);
 
     // query data from all emitters in the world
-    virtual float           CurrentShakeAmplitudeForPosition(const int time, const idVec3& listererPosition);
+    virtual float           CurrentShakeAmplitudeForPosition(const int time, const idVec3 &listererPosition);
 
     // where is the camera/microphone
     // listenerId allows listener-private sounds to be added
-    virtual void            PlaceListener(const idVec3& origin, const idMat3& axis, const int listenerId, const int gameTime, const idStr& areaName);
+    virtual void            PlaceListener(const idVec3 &origin, const idMat3 &axis, const int listenerId, const int gameTime, const idStr &areaName);
 
     // fade all sounds in the world with a given shader soundClass
     // to is in Db (sigh), over is in seconds
     virtual void            FadeSoundClasses(const int soundClass, const float to, const float over);
 
     // dumps the current state and begins archiving commands
-    virtual void            StartWritingDemo(idDemoFile* demo);
+    virtual void            StartWritingDemo(idDemoFile *demo);
     virtual void            StopWritingDemo(void);
 
     // read a sound command from a demo file
-    virtual void            ProcessDemoCommand(idDemoFile* readDemo);
+    virtual void            ProcessDemoCommand(idDemoFile *readDemo);
 
     // background music
-    virtual void            PlayShaderDirectly(const char* name, int channel = -1);
+    virtual void            PlayShaderDirectly(const char *name, int channel = -1);
 
     // pause and unpause the sound world
     virtual void            Pause(void);
@@ -588,17 +588,17 @@ class idSoundWorldLocal : public idSoundWorld {
     virtual bool            IsPaused(void);
 
     // avidump
-    virtual void            AVIOpen(const char* path, const char* name);
+    virtual void            AVIOpen(const char *path, const char *name);
     virtual void            AVIClose(void);
 
     // SaveGame Support
-    virtual void            WriteToSaveGame(idFile* savefile);
-    virtual void            ReadFromSaveGame(idFile* savefile);
+    virtual void            WriteToSaveGame(idFile *savefile);
+    virtual void            ReadFromSaveGame(idFile *savefile);
 
-    virtual void            ReadFromSaveGameSoundChannel(idFile* saveGame, idSoundChannel* ch);
-    virtual void            ReadFromSaveGameSoundShaderParams(idFile* saveGame, soundShaderParms_t* params);
-    virtual void            WriteToSaveGameSoundChannel(idFile* saveGame, idSoundChannel* ch);
-    virtual void            WriteToSaveGameSoundShaderParams(idFile* saveGame, soundShaderParms_t* params);
+    virtual void            ReadFromSaveGameSoundChannel(idFile *saveGame, idSoundChannel *ch);
+    virtual void            ReadFromSaveGameSoundShaderParams(idFile *saveGame, soundShaderParms_t *params);
+    virtual void            WriteToSaveGameSoundChannel(idFile *saveGame, idSoundChannel *ch);
+    virtual void            WriteToSaveGameSoundShaderParams(idFile *saveGame, soundShaderParms_t *params);
 
     virtual void            SetSlowmo(bool active);
     virtual void            SetSlowmoSpeed(float speed);
@@ -609,25 +609,25 @@ class idSoundWorldLocal : public idSoundWorld {
     idSoundWorldLocal(void);
 
     void                    Shutdown(void);
-    void                    Init(idRenderWorld* rw);
+    void                    Init(idRenderWorld *rw);
 
     // update
     void                    ForegroundUpdate(int currentTime);
     void                    OffsetSoundTime(int offset44kHz);
 
-    idSoundEmitterLocal*    AllocLocalSoundEmitter();
+    idSoundEmitterLocal    *AllocLocalSoundEmitter();
     void                    CalcEars(int numSpeakers, idVec3 realOrigin, idVec3 listenerPos, idMat3 listenerAxis, float ears[6], float spatialize);
-    void                    AddChannelContribution(idSoundEmitterLocal* sound, idSoundChannel* chan,
-            int current44kHz, int numSpeakers, float* finalMixBuffer);
-    void                    MixLoop(int current44kHz, int numSpeakers, float* finalMixBuffer);
+    void                    AddChannelContribution(idSoundEmitterLocal *sound, idSoundChannel *chan,
+            int current44kHz, int numSpeakers, float *finalMixBuffer);
+    void                    MixLoop(int current44kHz, int numSpeakers, float *finalMixBuffer);
     void                    AVIUpdate(void);
-    void                    ResolveOrigin(const int stackDepth, const soundPortalTrace_t* prevStack, const int soundArea, const float dist, const idVec3& soundOrigin, idSoundEmitterLocal* def);
-    float                   FindAmplitude(idSoundEmitterLocal* sound, const int localTime, const idVec3* listenerPosition, const s_channelType channel, bool shakesOnly);
+    void                    ResolveOrigin(const int stackDepth, const soundPortalTrace_t *prevStack, const int soundArea, const float dist, const idVec3 &soundOrigin, idSoundEmitterLocal *def);
+    float                   FindAmplitude(idSoundEmitterLocal *sound, const int localTime, const idVec3 *listenerPosition, const s_channelType channel, bool shakesOnly);
 
     //============================================
 
-    idRenderWorld*          rw;             // for portals and debug drawing
-    idDemoFile*             writeDemo;          // if not NULL, archive commands here
+    idRenderWorld          *rw;             // for portals and debug drawing
+    idDemoFile             *writeDemo;          // if not NULL, archive commands here
 
     idMat3                  listenerAxis;
     idVec3                  listenerPos;        // position in meters
@@ -644,16 +644,16 @@ class idSoundWorldLocal : public idSoundWorld {
     int                     pause44kHz;
     int                     lastAVI44kHz;       // determine when we need to mix and write another block
 
-    idList<idSoundEmitterLocal*>emitters;
+    idList<idSoundEmitterLocal *>emitters;
 
     idSoundFade             soundClassFade[SOUND_MAX_CLASSES];  // for global sound fading
 
     // avi stuff
-    idFile*                 fpa[6];
+    idFile                 *fpa[6];
     idStr                   aviDemoPath;
     idStr                   aviDemoName;
 
-    idSoundEmitterLocal*    localSound;     // just for playShaderDirectly()
+    idSoundEmitterLocal    *localSound;     // just for playShaderDirectly()
 
     bool                    slowmoActive;
     float                   slowmoSpeed;
@@ -671,7 +671,7 @@ idSoundSystemLocal
 typedef struct {
     ALuint          handle;
     int             startTime;
-    idSoundChannel*  chan;
+    idSoundChannel  *chan;
     bool            inUse;
     bool            looping;
     bool            stereo;
@@ -698,28 +698,28 @@ class idSoundSystemLocal : public idSoundSystem {
     // async loop, when the sound driver uses a write strategy
     virtual int             AsyncUpdateWrite(int time);
     // direct mixing called from the sound driver thread for OSes that support it
-    virtual int             AsyncMix(int soundTime, float* mixBuffer);
+    virtual int             AsyncMix(int soundTime, float *mixBuffer);
 
     virtual void            SetMute(bool mute);
 
     virtual cinData_t       ImageForTime(const int milliseconds, const bool waveform);
 
-    int                     GetSoundDecoderInfo(int index, soundDecoderInfo_t& decoderInfo);
+    int                     GetSoundDecoderInfo(int index, soundDecoderInfo_t &decoderInfo);
 
     // if rw == NULL, no portal occlusion or rendered debugging is available
-    virtual idSoundWorld*    AllocSoundWorld(idRenderWorld* rw);
+    virtual idSoundWorld    *AllocSoundWorld(idRenderWorld *rw);
 
     // specifying NULL will cause silence to be played
-    virtual void            SetPlayingSoundWorld(idSoundWorld* soundWorld);
+    virtual void            SetPlayingSoundWorld(idSoundWorld *soundWorld);
 
     // some tools, like the sound dialog, may be used in both the game and the editor
     // This can return NULL, so check!
-    virtual idSoundWorld*    GetPlayingSoundWorld(void);
+    virtual idSoundWorld    *GetPlayingSoundWorld(void);
 
     virtual void            BeginLevelLoad(void);
-    virtual void            EndLevelLoad(const char* mapString);
+    virtual void            EndLevelLoad(const char *mapString);
 
-    virtual void            PrintMemInfo(MemInfo_t* mi);
+    virtual void            PrintMemInfo(MemInfo_t *mi);
 
     virtual int             IsEFXAvailable(void);
 
@@ -730,14 +730,14 @@ class idSoundSystemLocal : public idSoundSystem {
     int                     SamplesToMilliseconds(int samples) const;
     int                     MillisecondsToSamples(int ms) const;
 
-    void                    DoEnviroSuit(float* samples, int numSamples, int numSpeakers);
+    void                    DoEnviroSuit(float *samples, int numSamples, int numSpeakers);
 
-    ALuint                  AllocOpenALSource(idSoundChannel* chan, bool looping, bool stereo);
+    ALuint                  AllocOpenALSource(idSoundChannel *chan, bool looping, bool stereo);
     void                    FreeOpenALSource(ALuint handle);
 
-    idSoundCache*           soundCache;
+    idSoundCache           *soundCache;
 
-    idSoundWorldLocal*      currentSoundWorld;  // the one to mix each async tic
+    idSoundWorldLocal      *currentSoundWorld;  // the one to mix each async tic
 
     int                     olddwCurrentWritePos;   // statistics
     int                     buffers;                // statistics
@@ -746,7 +746,7 @@ class idSoundSystemLocal : public idSoundSystem {
     unsigned int            nextWriteBlock;
 
     float                   realAccum[6*MIXBUFFER_SAMPLES+16];
-    float*                  finalMixBuffer;         // points inside realAccum at a 16 byte aligned boundary
+    float                  *finalMixBuffer;         // points inside realAccum at a 16 byte aligned boundary
 
     bool                    isInitialized;
     bool                    muted;
@@ -757,14 +757,14 @@ class idSoundSystemLocal : public idSoundSystem {
     int                     meterTops[256];
     int                     meterTopsTime[256];
 
-    dword*                  graph;
+    dword                  *graph;
 
     float                   volumesDB[1200];        // dB to float volume conversion
 
-    idList<SoundFX*>        fxList;
+    idList<SoundFX *>        fxList;
 
-    ALCdevice*               openalDevice;
-    ALCcontext*              openalContext;
+    ALCdevice               *openalDevice;
+    ALCcontext              *openalContext;
     ALsizei                 openalSourceCount;
     openalSource_t          openalSources[256];
 
@@ -857,8 +857,8 @@ class idSoundSample {
     waveformatex_t          objectInfo;                 // what are we caching
     int                     objectSize;                 // size of waveform in samples, excludes the header
     int                     objectMemSize;              // object size in memory
-    byte*                   nonCacheData;               // if it's not cached
-    byte*                   amplitudeData;              // precomputed min,max amplitude pairs
+    byte                   *nonCacheData;               // if it's not cached
+    byte                   *amplitudeData;              // precomputed min,max amplitude pairs
     ALuint                  openalBuffer;               // openal buffer
     bool                    hardwareBuffer;
     bool                    defaultSound;
@@ -873,7 +873,7 @@ class idSoundSample {
     void                    Reload(bool force);          // reloads if timestamp has changed, or always if force
     void                    PurgeSoundSample();         // frees all data
     void                    CheckForDownSample();       // down sample if required
-    bool                    FetchFromCache(int offset, const byte** output, int* position, int* size, const bool allowIO);
+    bool                    FetchFromCache(int offset, const byte **output, int *position, int *size, const bool allowIO);
 };
 
 
@@ -889,15 +889,15 @@ class idSampleDecoder {
   public:
     static void             Init(void);
     static void             Shutdown(void);
-    static idSampleDecoder* Alloc(void);
-    static void             Free(idSampleDecoder* decoder);
+    static idSampleDecoder *Alloc(void);
+    static void             Free(idSampleDecoder *decoder);
     static int              GetNumUsedBlocks(void);
     static int              GetUsedBlockMemory(void);
 
     virtual                 ~idSampleDecoder(void) {}
-    virtual void            Decode(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest) = 0;
+    virtual void            Decode(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest) = 0;
     virtual void            ClearDecoder(void) = 0;
-    virtual idSoundSample*  GetSample(void) const = 0;
+    virtual idSoundSample  *GetSample(void) const = 0;
     virtual int             GetLastDecodeTime(void) const = 0;
 };
 
@@ -915,23 +915,23 @@ class idSoundCache {
     idSoundCache();
     ~idSoundCache();
 
-    idSoundSample*          FindSound(const idStr& fname, bool loadOnDemandOnly);
+    idSoundSample          *FindSound(const idStr &fname, bool loadOnDemandOnly);
 
     const int               GetNumObjects(void) {
         return listCache.Num();
     }
-    const idSoundSample*    GetObject(const int index) const;
+    const idSoundSample    *GetObject(const int index) const;
 
     void                    ReloadSounds(bool force);
 
     void                    BeginLevelLoad();
     void                    EndLevelLoad();
 
-    void                    PrintMemInfo(MemInfo_t* mi);
+    void                    PrintMemInfo(MemInfo_t *mi);
 
   private:
     bool                    insideLevelLoad;
-    idList<idSoundSample*>  listCache;
+    idList<idSoundSample *>  listCache;
 };
 
 #endif /* !__SND_LOCAL_H__ */

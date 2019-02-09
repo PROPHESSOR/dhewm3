@@ -105,7 +105,7 @@ const int DECL_LEXER_FLAGS  =   LEXFL_NOSTRINGCONCAT |              // multiple 
 class idDeclBase {
   public:
     virtual                 ~idDeclBase() {};
-    virtual const char*     GetName(void) const = 0;
+    virtual const char     *GetName(void) const = 0;
     virtual declType_t      GetType(void) const = 0;
     virtual declState_t     GetState(void) const = 0;
     virtual bool            IsImplicit(void) const = 0;
@@ -115,17 +115,17 @@ class idDeclBase {
     virtual void            EnsureNotPurged(void) = 0;
     virtual int             Index(void) const = 0;
     virtual int             GetLineNum(void) const = 0;
-    virtual const char*     GetFileName(void) const = 0;
-    virtual void            GetText(char* text) const = 0;
+    virtual const char     *GetFileName(void) const = 0;
+    virtual void            GetText(char *text) const = 0;
     virtual int             GetTextLength(void) const = 0;
-    virtual void            SetText(const char* text) = 0;
+    virtual void            SetText(const char *text) = 0;
     virtual bool            ReplaceSourceFileText(void) = 0;
     virtual bool            SourceFileChanged(void) const = 0;
     virtual void            MakeDefault(void) = 0;
     virtual bool            EverReferenced(void) const = 0;
     virtual bool            SetDefaultText(void) = 0;
-    virtual const char*     DefaultDefinition(void) const = 0;
-    virtual bool            Parse(const char* text, const int textLength) = 0;
+    virtual const char     *DefaultDefinition(void) const = 0;
+    virtual bool            Parse(const char *text, const int textLength) = 0;
     virtual void            FreeData(void) = 0;
     virtual size_t          Size(void) const = 0;
     virtual void            List(void) const = 0;
@@ -143,7 +143,7 @@ class idDecl {
     virtual                 ~idDecl(void) {};
 
     // Returns the name of the decl.
-    const char*             GetName(void) const {
+    const char             *GetName(void) const {
         return base->GetName();
     }
 
@@ -192,12 +192,12 @@ class idDecl {
     }
 
     // Returns the name of the file in which the decl is defined.
-    const char*             GetFileName(void) const {
+    const char             *GetFileName(void) const {
         return base->GetFileName();
     }
 
     // Returns the decl text.
-    void                    GetText(char* text) const {
+    void                    GetText(char *text) const {
         base->GetText(text);
     }
 
@@ -207,7 +207,7 @@ class idDecl {
     }
 
     // Sets new decl text.
-    void                    SetText(const char* text) {
+    void                    SetText(const char *text) {
         base->SetText(text);
     }
 
@@ -246,7 +246,7 @@ class idDecl {
     // has an error while parsing, MakeDefault() will do a FreeData(), then a
     // Parse() with DefaultDefinition(). The defaultDefintion should start with
     // an open brace and end with a close brace.
-    virtual const char*     DefaultDefinition(void) const {
+    virtual const char     *DefaultDefinition(void) const {
         return base->DefaultDefinition();
     }
 
@@ -255,7 +255,7 @@ class idDecl {
     // The manager will have called FreeData() before issuing a Parse().
     // The subclass can call MakeDefault() internally at any point if
     // there are parse errors.
-    virtual bool            Parse(const char* text, const int textLength) {
+    virtual bool            Parse(const char *text, const int textLength) {
         return base->Parse(text, textLength);
     }
 
@@ -287,12 +287,12 @@ class idDecl {
     }
 
   public:
-    idDeclBase*             base;
+    idDeclBase             *base;
 };
 
 
 template< class type >
-ID_INLINE idDecl* idDeclAllocator(void) {
+ID_INLINE idDecl *idDeclAllocator(void) {
     return new type;
 }
 
@@ -313,10 +313,10 @@ class idDeclManager {
     virtual void            EndLevelLoad() = 0;
 
     // Registers a new decl type.
-    virtual void            RegisterDeclType(const char* typeName, declType_t type, idDecl *(*allocator)(void)) = 0;
+    virtual void            RegisterDeclType(const char *typeName, declType_t type, idDecl *(*allocator)(void)) = 0;
 
     // Registers a new folder with decl files.
-    virtual void            RegisterDeclFolder(const char* folder, const char* extension, declType_t defaultType) = 0;
+    virtual void            RegisterDeclFolder(const char *folder, const char *extension, declType_t defaultType) = 0;
 
     // Returns a checksum for all loaded decl text.
     virtual int             GetChecksum(void) const = 0;
@@ -325,19 +325,19 @@ class idDeclManager {
     virtual int             GetNumDeclTypes(void) const = 0;
 
     // Returns the type name for a decl type.
-    virtual const char*     GetDeclNameFromType(declType_t type) const = 0;
+    virtual const char     *GetDeclNameFromType(declType_t type) const = 0;
 
     // Returns the decl type for a type name.
-    virtual declType_t      GetDeclTypeFromName(const char* typeName) const = 0;
+    virtual declType_t      GetDeclTypeFromName(const char *typeName) const = 0;
 
     // If makeDefault is true, a default decl of appropriate type will be created
     // if an explicit one isn't found. If makeDefault is false, NULL will be returned
     // if the decl wasn't explcitly defined.
-    virtual const idDecl*   FindType(declType_t type, const char* name, bool makeDefault = true) = 0;
+    virtual const idDecl   *FindType(declType_t type, const char *name, bool makeDefault = true) = 0;
 
-    virtual const idDecl*   FindDeclWithoutParsing(declType_t type, const char* name, bool makeDefault = true) = 0;
+    virtual const idDecl   *FindDeclWithoutParsing(declType_t type, const char *name, bool makeDefault = true) = 0;
 
-    virtual void            ReloadFile(const char* filename, bool force) = 0;
+    virtual void            ReloadFile(const char *filename, bool force) = 0;
 
     // Returns the number of decls of the given type.
     virtual int             GetNumDecls(declType_t type) = 0;
@@ -345,45 +345,45 @@ class idDeclManager {
     // The complete lists of decls can be walked to populate editor browsers.
     // If forceParse is set false, you can get the decl to check name / filename / etc.
     // without causing it to parse the source and load media.
-    virtual const idDecl*   DeclByIndex(declType_t type, int index, bool forceParse = true) = 0;
+    virtual const idDecl   *DeclByIndex(declType_t type, int index, bool forceParse = true) = 0;
 
     // List and print decls.
-    virtual void            ListType(const idCmdArgs& args, declType_t type) = 0;
-    virtual void            PrintType(const idCmdArgs& args, declType_t type) = 0;
+    virtual void            ListType(const idCmdArgs &args, declType_t type) = 0;
+    virtual void            PrintType(const idCmdArgs &args, declType_t type) = 0;
 
     // Creates a new default decl of the given type with the given name in
     // the given file used by editors to create a new decls.
-    virtual idDecl*         CreateNewDecl(declType_t type, const char* name, const char* fileName) = 0;
+    virtual idDecl         *CreateNewDecl(declType_t type, const char *name, const char *fileName) = 0;
 
     // BSM - Added for the material editors rename capabilities
-    virtual bool            RenameDecl(declType_t type, const char* oldName, const char* newName) = 0;
+    virtual bool            RenameDecl(declType_t type, const char *oldName, const char *newName) = 0;
 
     // When media files are loaded, a reference line can be printed at a
     // proper indentation if decl_show is set
-    virtual void            MediaPrint(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void            MediaPrint(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
-    virtual void            WritePrecacheCommands(idFile* f) = 0;
+    virtual void            WritePrecacheCommands(idFile *f) = 0;
 
     // Convenience functions for specific types.
-    virtual const idMaterial*       FindMaterial(const char* name, bool makeDefault = true) = 0;
-    virtual const idDeclSkin*       FindSkin(const char* name, bool makeDefault = true) = 0;
-    virtual const idSoundShader*    FindSound(const char* name, bool makeDefault = true) = 0;
+    virtual const idMaterial       *FindMaterial(const char *name, bool makeDefault = true) = 0;
+    virtual const idDeclSkin       *FindSkin(const char *name, bool makeDefault = true) = 0;
+    virtual const idSoundShader    *FindSound(const char *name, bool makeDefault = true) = 0;
 
-    virtual const idMaterial*       MaterialByIndex(int index, bool forceParse = true) = 0;
-    virtual const idDeclSkin*       SkinByIndex(int index, bool forceParse = true) = 0;
-    virtual const idSoundShader*    SoundByIndex(int index, bool forceParse = true) = 0;
+    virtual const idMaterial       *MaterialByIndex(int index, bool forceParse = true) = 0;
+    virtual const idDeclSkin       *SkinByIndex(int index, bool forceParse = true) = 0;
+    virtual const idSoundShader    *SoundByIndex(int index, bool forceParse = true) = 0;
 };
 
-extern idDeclManager*       declManager;
+extern idDeclManager       *declManager;
 
 
 template< declType_t type >
-ID_INLINE void idListDecls_f(const idCmdArgs& args) {
+ID_INLINE void idListDecls_f(const idCmdArgs &args) {
     declManager->ListType(args, type);
 }
 
 template< declType_t type >
-ID_INLINE void idPrintDecls_f(const idCmdArgs& args) {
+ID_INLINE void idPrintDecls_f(const idCmdArgs &args) {
     declManager->PrintType(args, type);
 }
 

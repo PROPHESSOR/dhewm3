@@ -34,7 +34,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 // simple rectangle
 //
-extern void RotateVector(idVec3& v, idVec3 origin, float a, float c, float s);
+extern void RotateVector(idVec3 &v, idVec3 origin, float a, float c, float s);
 class idRectangle {
   public:
     float x;    // horiz position
@@ -97,7 +97,7 @@ class idRectangle {
 
 
 
-    void Rotate(float a, idRectangle& out) {
+    void Rotate(float a, idRectangle &out) {
         idVec3 p1, p2, p3, p4, p5;
         float c, s;
         idVec3 center;
@@ -122,25 +122,25 @@ class idRectangle {
         out.h = (p4 - p1).Length();
     }
 
-    idRectangle& operator+=(const idRectangle& a);
-    idRectangle& operator-=(const idRectangle& a);
-    idRectangle& operator/=(const idRectangle& a);
-    idRectangle& operator/=(const float a);
-    idRectangle& operator*=(const float a);
-    idRectangle& operator=(const idVec4 v);
-    int operator==(const idRectangle& a) const;
-    float&  operator[](const int index);
-    char* String(void) const;
-    const idVec4& ToVec4() const;
+    idRectangle &operator+=(const idRectangle &a);
+    idRectangle &operator-=(const idRectangle &a);
+    idRectangle &operator/=(const idRectangle &a);
+    idRectangle &operator/=(const float a);
+    idRectangle &operator*=(const float a);
+    idRectangle &operator=(const idVec4 v);
+    int operator==(const idRectangle &a) const;
+    float  &operator[](const int index);
+    char *String(void) const;
+    const idVec4 &ToVec4() const;
 
 };
 
-ID_INLINE const idVec4& idRectangle::ToVec4() const {
-    return *reinterpret_cast<const idVec4*>(&x);
+ID_INLINE const idVec4 &idRectangle::ToVec4() const {
+    return *reinterpret_cast<const idVec4 *>(&x);
 }
 
 
-ID_INLINE idRectangle& idRectangle::operator+=(const idRectangle& a) {
+ID_INLINE idRectangle &idRectangle::operator+=(const idRectangle &a) {
     x += a.x;
     y += a.y;
     w += a.w;
@@ -149,7 +149,7 @@ ID_INLINE idRectangle& idRectangle::operator+=(const idRectangle& a) {
     return *this;
 }
 
-ID_INLINE idRectangle& idRectangle::operator/=(const idRectangle& a) {
+ID_INLINE idRectangle &idRectangle::operator/=(const idRectangle &a) {
     x /= a.x;
     y /= a.y;
     w /= a.w;
@@ -158,7 +158,7 @@ ID_INLINE idRectangle& idRectangle::operator/=(const idRectangle& a) {
     return *this;
 }
 
-ID_INLINE idRectangle& idRectangle::operator/=(const float a) {
+ID_INLINE idRectangle &idRectangle::operator/=(const float a) {
     float inva = 1.0f / a;
     x *= inva;
     y *= inva;
@@ -168,7 +168,7 @@ ID_INLINE idRectangle& idRectangle::operator/=(const float a) {
     return *this;
 }
 
-ID_INLINE idRectangle& idRectangle::operator-=(const idRectangle& a) {
+ID_INLINE idRectangle &idRectangle::operator-=(const idRectangle &a) {
     x -= a.x;
     y -= a.y;
     w -= a.w;
@@ -177,7 +177,7 @@ ID_INLINE idRectangle& idRectangle::operator-=(const idRectangle& a) {
     return *this;
 }
 
-ID_INLINE idRectangle& idRectangle::operator*=(const float a) {
+ID_INLINE idRectangle &idRectangle::operator*=(const float a) {
     x *= a;
     y *= a;
     w *= a;
@@ -187,7 +187,7 @@ ID_INLINE idRectangle& idRectangle::operator*=(const float a) {
 }
 
 
-ID_INLINE idRectangle& idRectangle::operator=(const idVec4 v) {
+ID_INLINE idRectangle &idRectangle::operator=(const idVec4 v) {
     x = v.x;
     y = v.y;
     w = v.z;
@@ -195,11 +195,11 @@ ID_INLINE idRectangle& idRectangle::operator=(const idVec4 v) {
     return *this;
 }
 
-ID_INLINE int idRectangle::operator==(const idRectangle& a) const {
+ID_INLINE int idRectangle::operator==(const idRectangle &a) const {
     return (x == a.x && y == a.y && w == a.w && a.h);
 }
 
-ID_INLINE float& idRectangle::operator[](int index) {
+ID_INLINE float &idRectangle::operator[](int index) {
     return (&x)[ index ];
 }
 
@@ -231,7 +231,7 @@ class idRegion {
         return rects.Num();
     }
 
-    idRectangle* GetRect(int index) {
+    idRectangle *GetRect(int index) {
         if (index >= 0 && index < rects.Num()) {
             return &rects[index];
         }

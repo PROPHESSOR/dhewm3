@@ -52,40 +52,40 @@ class idDeviceContext {
     }
     void                EnableLocalization();
 
-    void                GetTransformInfo(idVec3& origin, idMat3& mat);
+    void                GetTransformInfo(idVec3 &origin, idMat3 &mat);
 
-    void                SetTransformInfo(const idVec3& origin, const idMat3& mat);
-    void                DrawMaterial(float x, float y, float w, float h, const idMaterial* mat, const idVec4& color, float scalex = 1.0, float scaley = 1.0);
-    void                DrawRect(float x, float y, float width, float height, float size, const idVec4& color);
-    void                DrawFilledRect(float x, float y, float width, float height, const idVec4& color);
-    int                 DrawText(const char* text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor = -1, bool calcOnly = false, idList<int>* breaks = NULL, int limit = 0);
-    void                DrawMaterialRect(float x, float y, float w, float h, float size, const idMaterial* mat, const idVec4& color);
-    void                DrawStretchPic(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial* mat);
+    void                SetTransformInfo(const idVec3 &origin, const idMat3 &mat);
+    void                DrawMaterial(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0);
+    void                DrawRect(float x, float y, float width, float height, float size, const idVec4 &color);
+    void                DrawFilledRect(float x, float y, float width, float height, const idVec4 &color);
+    int                 DrawText(const char *text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor = -1, bool calcOnly = false, idList<int> *breaks = NULL, int limit = 0);
+    void                DrawMaterialRect(float x, float y, float w, float h, float size, const idMaterial *mat, const idVec4 &color);
+    void                DrawStretchPic(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat);
 
-    void                DrawMaterialRotated(float x, float y, float w, float h, const idMaterial* mat, const idVec4& color, float scalex = 1.0, float scaley = 1.0, float angle = 0.0f);
-    void                DrawStretchPicRotated(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial* mat, float angle = 0.0f);
+    void                DrawMaterialRotated(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0, float angle = 0.0f);
+    void                DrawStretchPicRotated(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat, float angle = 0.0f);
 
     int                 CharWidth(const char c, float scale);
-    int                 TextWidth(const char* text, float scale, int limit);
-    int                 TextHeight(const char* text, float scale, int limit);
+    int                 TextWidth(const char *text, float scale, int limit);
+    int                 TextHeight(const char *text, float scale, int limit);
     int                 MaxCharHeight(float scale);
     int                 MaxCharWidth(float scale);
 
-    int                 FindFont(const char* name);
+    int                 FindFont(const char *name);
     void                SetupFonts();
 
-    idRegion*            GetTextRegion(const char* text, float textScale, idRectangle rectDraw, float xStart, float yStart);
+    idRegion            *GetTextRegion(const char *text, float textScale, idRectangle rectDraw, float xStart, float yStart);
 
     void                SetSize(float width, float height);
 
-    const idMaterial*    GetScrollBarImage(int index);
+    const idMaterial    *GetScrollBarImage(int index);
 
-    void                DrawCursor(float* x, float* y, float size);
+    void                DrawCursor(float *x, float *y, float size);
     void                SetCursor(int n);
 
-    void                AdjustCoords(float* x, float* y, float* w, float* h);
-    bool                ClippedCoords(float* x, float* y, float* w, float* h);
-    bool                ClippedCoords(float* x, float* y, float* w, float* h, float* s1, float* t1, float* s2, float* t2);
+    void                AdjustCoords(float *x, float *y, float *w, float *h);
+    bool                ClippedCoords(float *x, float *y, float *w, float *h);
+    bool                ClippedCoords(float *x, float *y, float *w, float *h, float *s1, float *t1, float *s2, float *t2);
 
     void                PushClipRect(float x, float y, float w, float h);
     void                PushClipRect(idRectangle r);
@@ -140,16 +140,16 @@ class idDeviceContext {
     static idVec4 colorNone;
 
   private:
-    int                 DrawText(float x, float y, float scale, idVec4 color, const char* text, float adjust, int limit, int style, int cursor = -1);
-    void                PaintChar(float x,float y,float width,float height,float scale,float    s,float t,float s2,float t2,const idMaterial* hShader);
+    int                 DrawText(float x, float y, float scale, idVec4 color, const char *text, float adjust, int limit, int style, int cursor = -1);
+    void                PaintChar(float x,float y,float width,float height,float scale,float    s,float t,float s2,float t2,const idMaterial *hShader);
     void                SetFontByScale(float scale);
     void                Clear(void);
 
-    const idMaterial*    cursorImages[CURSOR_COUNT];
-    const idMaterial*    scrollBarImages[SCROLLBAR_COUNT];
-    const idMaterial*    whiteImage;
-    fontInfoEx_t*        activeFont;
-    fontInfo_t*          useFont;
+    const idMaterial    *cursorImages[CURSOR_COUNT];
+    const idMaterial    *scrollBarImages[SCROLLBAR_COUNT];
+    const idMaterial    *whiteImage;
+    fontInfoEx_t        *activeFont;
+    fontInfo_t          *useFont;
     idStr               fontName;
     float               xScale;
     float               yScale;

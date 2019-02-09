@@ -63,7 +63,7 @@ END_CLASS
 idSecurityCamera::Save
 ================
 */
-void idSecurityCamera::Save(idSaveGame* savefile) const {
+void idSecurityCamera::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(angle);
     savefile->WriteFloat(sweepAngle);
     savefile->WriteInt(modelAxis);
@@ -91,7 +91,7 @@ void idSecurityCamera::Save(idSaveGame* savefile) const {
 idSecurityCamera::Restore
 ================
 */
-void idSecurityCamera::Restore(idRestoreGame* savefile) {
+void idSecurityCamera::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(angle);
     savefile->ReadFloat(sweepAngle);
     savefile->ReadInt(modelAxis);
@@ -191,7 +191,7 @@ void idSecurityCamera::Event_AddLight(void) {
     idVec3  dir;
     float   radius;
     idVec3  lightOffset;
-    idLight* spotLight;
+    idLight *spotLight;
 
     dir = GetAxis();
     dir.NormalVectors(right, up);
@@ -216,7 +216,7 @@ void idSecurityCamera::Event_AddLight(void) {
     args.Set("light_up", up.ToString());
     args.SetFloat("angle", GetPhysics()->GetAxis()[0].ToYaw());
 
-    spotLight = static_cast<idLight*>(gameLocal.SpawnEntityType(idLight::Type, &args));
+    spotLight = static_cast<idLight *>(gameLocal.SpawnEntityType(idLight::Type, &args));
     spotLight->Bind(this, true);
     spotLight->UpdateVisuals();
 }
@@ -272,8 +272,8 @@ void idSecurityCamera::DrawFov(void) {
 idSecurityCamera::GetRenderView
 ================
 */
-renderView_t* idSecurityCamera::GetRenderView() {
-    renderView_t* rv = idEntity::GetRenderView();
+renderView_t *idSecurityCamera::GetRenderView() {
+    renderView_t *rv = idEntity::GetRenderView();
     rv->fov_x = scanFov;
     rv->fov_y = scanFov;
     rv->viewaxis = GetAxis().ToAngles().ToMat3();
@@ -289,7 +289,7 @@ idSecurityCamera::CanSeePlayer
 bool idSecurityCamera::CanSeePlayer(void) {
     int i;
     float dist;
-    idPlayer* ent;
+    idPlayer *ent;
     trace_t tr;
     idVec3 dir;
     pvsHandle_t handle;
@@ -297,7 +297,7 @@ bool idSecurityCamera::CanSeePlayer(void) {
     handle = gameLocal.pvs.SetupCurrentPVS(pvsArea);
 
     for (i = 0; i < gameLocal.numClients; i++) {
-        ent = static_cast<idPlayer*>(gameLocal.entities[ i ]);
+        ent = static_cast<idPlayer *>(gameLocal.entities[ i ]);
 
         if (!ent || (ent->fl.notarget)) {
             continue;
@@ -527,10 +527,10 @@ void idSecurityCamera::Event_Pause(void) {
 idSecurityCamera::Killed
 ============
 */
-void idSecurityCamera::Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
+void idSecurityCamera::Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
     sweeping = false;
     StopSound(SND_CHANNEL_ANY, false);
-    const char* fx = spawnArgs.GetString("fx_destroyed");
+    const char *fx = spawnArgs.GetString("fx_destroyed");
 
     if (fx[0] != '\0') {
         idEntityFx::StartFx(fx, NULL, NULL, this, true);
@@ -555,8 +555,8 @@ void idSecurityCamera::Killed(idEntity* inflictor, idEntity* attacker, int damag
 idSecurityCamera::Pain
 ============
 */
-bool idSecurityCamera::Pain(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
-    const char* fx = spawnArgs.GetString("fx_damage");
+bool idSecurityCamera::Pain(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
+    const char *fx = spawnArgs.GetString("fx_damage");
 
     if (fx[0] != '\0') {
         idEntityFx::StartFx(fx, NULL, NULL, this, true);

@@ -67,7 +67,7 @@ idRenderModelDecal::~idRenderModelDecal(void) {
 idRenderModelDecal::idRenderModelDecal
 ==================
 */
-idRenderModelDecal* idRenderModelDecal::Alloc(void) {
+idRenderModelDecal *idRenderModelDecal::Alloc(void) {
     return new idRenderModelDecal;
 }
 
@@ -76,7 +76,7 @@ idRenderModelDecal* idRenderModelDecal::Alloc(void) {
 idRenderModelDecal::idRenderModelDecal
 ==================
 */
-void idRenderModelDecal::Free(idRenderModelDecal* decal) {
+void idRenderModelDecal::Free(idRenderModelDecal *decal) {
     delete decal;
 }
 
@@ -85,7 +85,7 @@ void idRenderModelDecal::Free(idRenderModelDecal* decal) {
 idRenderModelDecal::CreateProjectionInfo
 =================
 */
-bool idRenderModelDecal::CreateProjectionInfo(decalProjectionInfo_t& info, const idFixedWinding& winding, const idVec3& projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial* material, const int startTime) {
+bool idRenderModelDecal::CreateProjectionInfo(decalProjectionInfo_t &info, const idFixedWinding &winding, const idVec3 &projectionOrigin, const bool parallel, const float fadeDepth, const idMaterial *material, const int startTime) {
 
     if (winding.GetNumPoints() != NUM_DECAL_BOUNDING_PLANES - 2) {
         common->Printf("idRenderModelDecal::CreateProjectionInfo: winding must have %d points\n", NUM_DECAL_BOUNDING_PLANES - 2);
@@ -144,9 +144,9 @@ bool idRenderModelDecal::CreateProjectionInfo(decalProjectionInfo_t& info, const
     idVec3  temp;
     idVec5  d0, d1;
 
-    const idVec5& a = winding[0];
-    const idVec5& b = winding[1];
-    const idVec5& c = winding[2];
+    const idVec5 &a = winding[0];
+    const idVec5 &b = winding[1];
+    const idVec5 &c = winding[2];
 
     d0 = b.ToVec3() - a.ToVec3();
     d0.s = b.s - a.s;
@@ -180,7 +180,7 @@ bool idRenderModelDecal::CreateProjectionInfo(decalProjectionInfo_t& info, const
 idRenderModelDecal::CreateProjectionInfo
 =================
 */
-void idRenderModelDecal::GlobalProjectionInfoToLocal(decalProjectionInfo_t& localInfo, const decalProjectionInfo_t& info, const idVec3& origin, const idMat3& axis) {
+void idRenderModelDecal::GlobalProjectionInfoToLocal(decalProjectionInfo_t &localInfo, const decalProjectionInfo_t &info, const idVec3 &origin, const idMat3 &axis) {
     float modelMatrix[16];
 
     R_AxisToModelMatrix(axis, origin, modelMatrix);
@@ -209,7 +209,7 @@ void idRenderModelDecal::GlobalProjectionInfoToLocal(decalProjectionInfo_t& loca
 idRenderModelDecal::AddWinding
 =================
 */
-void idRenderModelDecal::AddWinding(const idWinding& w, const idMaterial* decalMaterial, const idPlane fadePlanes[2], float fadeDepth, int startTime) {
+void idRenderModelDecal::AddWinding(const idWinding &w, const idMaterial *decalMaterial, const idPlane fadePlanes[2], float fadeDepth, int startTime) {
     int i;
     float invFadeDepth, fade;
     decalInfo_t decalInfo;
@@ -284,7 +284,7 @@ void idRenderModelDecal::AddWinding(const idWinding& w, const idMaterial* decalM
 idRenderModelDecal::AddDepthFadedWinding
 =================
 */
-void idRenderModelDecal::AddDepthFadedWinding(const idWinding& w, const idMaterial* decalMaterial, const idPlane fadePlanes[2], float fadeDepth, int startTime) {
+void idRenderModelDecal::AddDepthFadedWinding(const idWinding &w, const idMaterial *decalMaterial, const idPlane fadePlanes[2], float fadeDepth, int startTime) {
     idFixedWinding front, back;
 
     front = w;
@@ -305,11 +305,11 @@ void idRenderModelDecal::AddDepthFadedWinding(const idWinding& w, const idMateri
 idRenderModelDecal::CreateDecal
 =================
 */
-void idRenderModelDecal::CreateDecal(const idRenderModel* model, const decalProjectionInfo_t& localInfo) {
+void idRenderModelDecal::CreateDecal(const idRenderModel *model, const decalProjectionInfo_t &localInfo) {
 
     // check all model surfaces
     for (int surfNum = 0; surfNum < model->NumSurfaces(); surfNum++) {
-        const modelSurface_t* surf = model->Surface(surfNum);
+        const modelSurface_t *surf = model->Surface(surfNum);
 
         // if no geometry or no shader
         if (!surf->geometry || !surf->shader) {
@@ -321,7 +321,7 @@ void idRenderModelDecal::CreateDecal(const idRenderModel* model, const decalProj
             continue;
         }
 
-        srfTriangles_t* stri = surf->geometry;
+        srfTriangles_t *stri = surf->geometry;
 
         // if the triangle bounds do not overlap with projection bounds
         if (!localInfo.projectionBounds.IntersectsBounds(stri->bounds)) {
@@ -329,7 +329,7 @@ void idRenderModelDecal::CreateDecal(const idRenderModel* model, const decalProj
         }
 
         // allocate memory for the cull bits
-        byte* cullBits = (byte*)_alloca16(stri->numVerts * sizeof(cullBits[0]));
+        byte *cullBits = (byte *)_alloca16(stri->numVerts * sizeof(cullBits[0]));
 
         // catagorize all points by the planes
         SIMDProcessor->DecalPointCull(cullBits, localInfo.boundingPlanes, stri->verts, stri->numVerts);
@@ -404,11 +404,11 @@ void idRenderModelDecal::CreateDecal(const idRenderModel* model, const decalProj
 idRenderModelDecal::RemoveFadedDecals
 =====================
 */
-idRenderModelDecal* idRenderModelDecal::RemoveFadedDecals(idRenderModelDecal* decals, int time) {
+idRenderModelDecal *idRenderModelDecal::RemoveFadedDecals(idRenderModelDecal *decals, int time) {
     int i, j, minTime, newNumIndexes, newNumVerts;
     int inUse[MAX_DECAL_VERTS];
     decalInfo_t decalInfo;
-    idRenderModelDecal* nextDecal;
+    idRenderModelDecal *nextDecal;
 
     if (decals == NULL) {
         return NULL;
@@ -485,7 +485,7 @@ idRenderModelDecal* idRenderModelDecal::RemoveFadedDecals(idRenderModelDecal* de
 idRenderModelDecal::AddDecalDrawSurf
 =====================
 */
-void idRenderModelDecal::AddDecalDrawSurf(viewEntity_t* space) {
+void idRenderModelDecal::AddDecalDrawSurf(viewEntity_t *space) {
     int i, j, maxTime;
     float f;
     decalInfo_t decalInfo;
@@ -534,7 +534,7 @@ void idRenderModelDecal::AddDecalDrawSurf(viewEntity_t* space) {
     // copy the tri and indexes to temp heap memory,
     // because if we are running multi-threaded, we wouldn't
     // be able to reorganize the index list
-    srfTriangles_t* newTri = (srfTriangles_t*)R_FrameAlloc(sizeof(*newTri));
+    srfTriangles_t *newTri = (srfTriangles_t *)R_FrameAlloc(sizeof(*newTri));
     *newTri = tri;
 
     // copy the current vertexes to temp vertex cache
@@ -549,7 +549,7 @@ void idRenderModelDecal::AddDecalDrawSurf(viewEntity_t* space) {
 idRenderModelDecal::ReadFromDemoFile
 ====================
 */
-void idRenderModelDecal::ReadFromDemoFile(idDemoFile* f) {
+void idRenderModelDecal::ReadFromDemoFile(idDemoFile *f) {
     // FIXME: implement
 }
 
@@ -558,6 +558,6 @@ void idRenderModelDecal::ReadFromDemoFile(idDemoFile* f) {
 idRenderModelDecal::WriteToDemoFile
 ====================
 */
-void idRenderModelDecal::WriteToDemoFile(idDemoFile* f) const {
+void idRenderModelDecal::WriteToDemoFile(idDemoFile *f) const {
     // FIXME: implement
 }

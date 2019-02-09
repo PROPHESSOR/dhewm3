@@ -38,7 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 idSoundWorldLocal::Init
 ==================
 */
-void idSoundWorldLocal::Init(idRenderWorld* renderWorld) {
+void idSoundWorldLocal::Init(idRenderWorld *renderWorld) {
     rw = renderWorld;
     writeDemo = NULL;
 
@@ -94,7 +94,7 @@ void idSoundWorldLocal::Init(idRenderWorld* renderWorld) {
     }
 
     // fill in the 0 index spot
-    idSoundEmitterLocal* placeHolder = new idSoundEmitterLocal;
+    idSoundEmitterLocal *placeHolder = new idSoundEmitterLocal;
     emitters.Append(placeHolder);
 
     fpa[0] = fpa[1] = fpa[2] = fpa[3] = fpa[4] = fpa[5] = NULL;
@@ -178,7 +178,7 @@ void idSoundWorldLocal::ClearAllSoundEmitters() {
     AVIClose();
 
     for (i = 0; i < emitters.Num(); i++) {
-        idSoundEmitterLocal* sound = emitters[i];
+        idSoundEmitterLocal *sound = emitters[i];
         sound->Clear();
     }
 
@@ -192,9 +192,9 @@ void idSoundWorldLocal::ClearAllSoundEmitters() {
 idSoundWorldLocal::AllocLocalSoundEmitter
 ===================
 */
-idSoundEmitterLocal* idSoundWorldLocal::AllocLocalSoundEmitter() {
+idSoundEmitterLocal *idSoundWorldLocal::AllocLocalSoundEmitter() {
     int i, index;
-    idSoundEmitterLocal* def = NULL;
+    idSoundEmitterLocal *def = NULL;
 
     index = -1;
 
@@ -244,8 +244,8 @@ idSoundWorldLocal::AllocSoundEmitter
   this is called from the main thread
 ===================
 */
-idSoundEmitter* idSoundWorldLocal::AllocSoundEmitter() {
-    idSoundEmitterLocal* emitter = AllocLocalSoundEmitter();
+idSoundEmitter *idSoundWorldLocal::AllocSoundEmitter() {
+    idSoundEmitterLocal *emitter = AllocLocalSoundEmitter();
 
     if (idSoundSystemLocal::s_showStartSound.GetInteger()) {
         common->Printf("AllocSoundEmitter = %i\n",  emitter->index);
@@ -267,7 +267,7 @@ idSoundWorldLocal::StartWritingDemo
   this is called from the main thread
 ===================
 */
-void idSoundWorldLocal::StartWritingDemo(idDemoFile* demo) {
+void idSoundWorldLocal::StartWritingDemo(idDemoFile *demo) {
     writeDemo = demo;
 
     writeDemo->WriteInt(DS_SOUND);
@@ -295,9 +295,9 @@ idSoundWorldLocal::ProcessDemoCommand
   this is called from the main thread
 ===================
 */
-void idSoundWorldLocal::ProcessDemoCommand(idDemoFile* readDemo) {
+void idSoundWorldLocal::ProcessDemoCommand(idDemoFile *readDemo) {
     int index;
-    idSoundEmitterLocal* def;
+    idSoundEmitterLocal *def;
 
     if (!readDemo) {
         return;
@@ -383,7 +383,7 @@ void idSoundWorldLocal::ProcessDemoCommand(idDemoFile* readDemo) {
             break;
 
         case SCMD_START: {
-                const idSoundShader* shader;
+                const idSoundShader *shader;
                 int         channel;
                 float       diversity;
                 int         shaderFlags;
@@ -443,7 +443,7 @@ idSoundWorldLocal::CurrentShakeAmplitudeForPosition
   this is called from the main thread
 ===================
 */
-float idSoundWorldLocal::CurrentShakeAmplitudeForPosition(const int time, const idVec3& listererPosition) {
+float idSoundWorldLocal::CurrentShakeAmplitudeForPosition(const int time, const idVec3 &listererPosition) {
     float amp = 0.0f;
     int localTime;
 
@@ -454,7 +454,7 @@ float idSoundWorldLocal::CurrentShakeAmplitudeForPosition(const int time, const 
     localTime = soundSystemLocal.GetCurrent44kHzTime();
 
     for (int i = 1; i < emitters.Num(); i++) {
-        idSoundEmitterLocal* sound = emitters[i];
+        idSoundEmitterLocal *sound = emitters[i];
 
         if (!sound->hasShakes) {
             continue;
@@ -478,9 +478,9 @@ this is normally called from the sound thread, but also from the main thread
 for AVIdemo writing
 ===================
 */
-void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float* finalMixBuffer) {
+void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float *finalMixBuffer) {
     int i, j;
-    idSoundEmitterLocal* sound;
+    idSoundEmitterLocal *sound;
 
     // if noclip flying outside the world, leave silence
     if (listenerArea == -1) {
@@ -540,7 +540,7 @@ void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float* finalM
         if (sound && sound->playing) {
             // run through all the channels
             for (j = 0; j < SOUND_MAX_CHANNELS ; j++) {
-                idSoundChannel*  chan = &sound->channels[j];
+                idSoundChannel  *chan = &sound->channels[j];
 
                 // see if we have a sound triggered on this channel
                 if (!chan->triggerState) {
@@ -569,7 +569,7 @@ void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float* finalM
 
         // run through all the channels
         for (j = 0; j < SOUND_MAX_CHANNELS ; j++) {
-            idSoundChannel*  chan = &sound->channels[j];
+            idSoundChannel  *chan = &sound->channels[j];
 
             // see if we have a sound triggered on this channel
             if (!chan->triggerState) {
@@ -599,7 +599,7 @@ idSoundWorldLocal::AVIOpen
     this is called by the main thread
 ===================
 */
-void idSoundWorldLocal::AVIOpen(const char* path, const char* name) {
+void idSoundWorldLocal::AVIOpen(const char *path, const char *name) {
     aviDemoPath = path;
     aviDemoName = name;
 
@@ -639,7 +639,7 @@ void idSoundWorldLocal::AVIUpdate() {
     numSpeakers = idSoundSystemLocal::s_numberOfSpeakers.GetInteger();
 
     float   mix[MIXBUFFER_SAMPLES*6+16];
-    float*   mix_p = (float*)(((intptr_t)mix + 15) & ~15);       // SIMD align
+    float   *mix_p = (float *)(((intptr_t)mix + 15) & ~15);      // SIMD align
 
     SIMDProcessor->Memset(mix_p, 0, MIXBUFFER_SAMPLES*sizeof(float)*numSpeakers);
 
@@ -695,7 +695,7 @@ void idSoundWorldLocal::AVIClose(void) {
 
     if (idSoundSystemLocal::s_numberOfSpeakers.GetInteger() == 2) {
         // convert it to a wave file
-        idFile* rL, *lL, *wO;
+        idFile *rL, *lL, *wO;
         idStr   name;
 
         name = aviDemoPath + aviDemoName + ".wav";
@@ -789,7 +789,7 @@ set at maxDistance
 */
 static const int MAX_PORTAL_TRACE_DEPTH = 10;
 
-void idSoundWorldLocal::ResolveOrigin(const int stackDepth, const soundPortalTrace_t* prevStack, const int soundArea, const float dist, const idVec3& soundOrigin, idSoundEmitterLocal* def) {
+void idSoundWorldLocal::ResolveOrigin(const int stackDepth, const soundPortalTrace_t *prevStack, const int soundArea, const float dist, const idVec3 &soundOrigin, idSoundEmitterLocal *def) {
 
     if (dist >= def->distance) {
         // we can't possibly hear the sound through this chain of portals
@@ -838,7 +838,7 @@ void idSoundWorldLocal::ResolveOrigin(const int stackDepth, const soundPortalTra
         }
 
         // if this area is already in our portal chain, don't bother looking into it
-        const soundPortalTrace_t* prev;
+        const soundPortalTrace_t *prev;
 
         for (prev = prevStack ; prev ; prev = prev->prevStack) {
             if (prev->portalArea == otherArea) {
@@ -957,8 +957,8 @@ idSoundWorldLocal::PlaceListener
   this is called by the main thread
 ===================
 */
-void idSoundWorldLocal::PlaceListener(const idVec3& origin, const idMat3& axis,
-                                      const int listenerId, const int gameTime, const idStr& areaName) {
+void idSoundWorldLocal::PlaceListener(const idVec3 &origin, const idMat3 &axis,
+                                      const int listenerId, const int gameTime, const idStr &areaName) {
 
     int current44kHzTime;
 
@@ -1028,7 +1028,7 @@ idSoundWorldLocal::ForegroundUpdate
 */
 void idSoundWorldLocal::ForegroundUpdate(int current44kHzTime) {
     int j, k;
-    idSoundEmitterLocal* def;
+    idSoundEmitterLocal *def;
 
     if (!soundSystemLocal.isInitialized) {
         return;
@@ -1089,7 +1089,7 @@ void idSoundWorldLocal::ForegroundUpdate(int current44kHzTime) {
 
                 // run through all the channels
                 for (k = 0; k < SOUND_MAX_CHANNELS ; k++) {
-                    idSoundChannel*  chan = &def->channels[k];
+                    idSoundChannel  *chan = &def->channels[k];
 
                     // see if we have a sound triggered on this channel
                     if (!chan->triggerState) {
@@ -1099,7 +1099,7 @@ void idSoundWorldLocal::ForegroundUpdate(int current44kHzTime) {
                     char    text[1024];
                     float   min = chan->parms.minDistance;
                     float   max = chan->parms.maxDistance;
-                    const char*  defaulted = chan->leadinSample->defaultSound ? "(DEFAULTED)" : "";
+                    const char  *defaulted = chan->leadinSample->defaultSound ? "(DEFAULTED)" : "";
                     sprintf(text, "%s (%i/%i %i/%i)%s", chan->soundShader->GetName(), (int)def->distance,
                             (int)def->realDistance, (int)min, (int)max, defaulted);
                     rw->DrawText(text, textPos, 0.1f, idVec4(1,0,0,1), listenerAxis);
@@ -1115,13 +1115,13 @@ void idSoundWorldLocal::ForegroundUpdate(int current44kHzTime) {
     // the sound meter
     //
     if (idSoundSystemLocal::s_showLevelMeter.GetInteger()) {
-        const idMaterial* gui = declManager->FindMaterial("guis/assets/soundmeter/audiobg", false);
+        const idMaterial *gui = declManager->FindMaterial("guis/assets/soundmeter/audiobg", false);
 
         if (gui) {
-            const shaderStage_t* foo = gui->GetStage(0);
+            const shaderStage_t *foo = gui->GetStage(0);
 
             if (!foo->texture.cinematic) {
-                ((shaderStage_t*)foo)->texture.cinematic = new idSndWindow;
+                ((shaderStage_t *)foo)->texture.cinematic = new idSndWindow;
             }
         }
     }
@@ -1148,7 +1148,7 @@ void idSoundWorldLocal::OffsetSoundTime(int offset44kHz) {
         }
 
         for (j = 0; j < SOUND_MAX_CHANNELS; j++) {
-            idSoundChannel* chan = &emitters[i]->channels[ j ];
+            idSoundChannel *chan = &emitters[i]->channels[ j ];
 
             if (!chan->triggerState) {
                 continue;
@@ -1164,9 +1164,9 @@ void idSoundWorldLocal::OffsetSoundTime(int offset44kHz) {
 idSoundWorldLocal::WriteToSaveGame
 ===================
 */
-void idSoundWorldLocal::WriteToSaveGame(idFile* savefile) {
+void idSoundWorldLocal::WriteToSaveGame(idFile *savefile) {
     int i, j, num, currentSoundTime;
-    const char* name;
+    const char *name;
 
     // the game soundworld is always paused at this point, save that time down
     if (pause44kHz > 0) {
@@ -1187,7 +1187,7 @@ void idSoundWorldLocal::WriteToSaveGame(idFile* savefile) {
     savefile->WriteInt(num);
 
     for (i = 1; i < emitters.Num(); i++) {
-        idSoundEmitterLocal* def = emitters[i];
+        idSoundEmitterLocal *def = emitters[i];
 
         if (def->removeStatus != REMOVE_STATUS_ALIVE) {
             int skip = -1;
@@ -1219,7 +1219,7 @@ void idSoundWorldLocal::WriteToSaveGame(idFile* savefile) {
 
         // write the channel data
         for (j = 0; j < SOUND_MAX_CHANNELS; j++) {
-            idSoundChannel* chan = &def->channels[ j ];
+            idSoundChannel *chan = &def->channels[ j ];
 
             // Write out any sound commands for this def
             if (chan->triggerState && chan->soundShader && chan->leadinSample) {
@@ -1251,7 +1251,7 @@ void idSoundWorldLocal::WriteToSaveGame(idFile* savefile) {
  idSoundWorldLocal::WriteToSaveGameSoundShaderParams
  ===================
  */
-void idSoundWorldLocal::WriteToSaveGameSoundShaderParams(idFile* saveGame, soundShaderParms_t* params) {
+void idSoundWorldLocal::WriteToSaveGameSoundShaderParams(idFile *saveGame, soundShaderParms_t *params) {
     saveGame->WriteFloat(params->minDistance);
     saveGame->WriteFloat(params->maxDistance);
     saveGame->WriteFloat(params->volume);
@@ -1265,7 +1265,7 @@ void idSoundWorldLocal::WriteToSaveGameSoundShaderParams(idFile* saveGame, sound
  idSoundWorldLocal::WriteToSaveGameSoundChannel
  ===================
  */
-void idSoundWorldLocal::WriteToSaveGameSoundChannel(idFile* saveGame, idSoundChannel* ch) {
+void idSoundWorldLocal::WriteToSaveGameSoundChannel(idFile *saveGame, idSoundChannel *ch) {
     saveGame->WriteBool(ch->triggerState);
     saveGame->WriteUnsignedChar(0);
     saveGame->WriteUnsignedChar(0);
@@ -1295,10 +1295,10 @@ void idSoundWorldLocal::WriteToSaveGameSoundChannel(idFile* saveGame, idSoundCha
 idSoundWorldLocal::ReadFromSaveGame
 ===================
 */
-void idSoundWorldLocal::ReadFromSaveGame(idFile* savefile) {
+void idSoundWorldLocal::ReadFromSaveGame(idFile *savefile) {
     int i, num, handle, listenerId, gameTime, channel;
     int savedSoundTime, currentSoundTime, soundTimeOffset;
-    idSoundEmitterLocal* def;
+    idSoundEmitterLocal *def;
     idVec3 origin;
     idMat3 axis;
     idStr soundShader;
@@ -1367,7 +1367,7 @@ void idSoundWorldLocal::ReadFromSaveGame(idFile* savefile) {
         savefile->ReadFloat(def->maxDistance);
         savefile->ReadBool(def->playing);
         savefile->ReadFloat(def->realDistance);
-        savefile->ReadInt((int&)def->removeStatus);
+        savefile->ReadInt((int &)def->removeStatus);
         savefile->ReadVec3(def->spatializedOrigin);
 
         // read the individual channels
@@ -1378,7 +1378,7 @@ void idSoundWorldLocal::ReadFromSaveGame(idFile* savefile) {
                 common->Error("idSoundWorldLocal::ReadFromSaveGame: channel > SOUND_MAX_CHANNELS");
             }
 
-            idSoundChannel* chan = &def->channels[channel];
+            idSoundChannel *chan = &def->channels[channel];
 
             if (!chan->decoder) {
                 // The pointer in the save file is not valid, so we grab a new one
@@ -1431,7 +1431,7 @@ void idSoundWorldLocal::ReadFromSaveGame(idFile* savefile) {
  idSoundWorldLocal::ReadFromSaveGameSoundShaderParams
  ===================
  */
-void idSoundWorldLocal::ReadFromSaveGameSoundShaderParams(idFile* saveGame, soundShaderParms_t* params) {
+void idSoundWorldLocal::ReadFromSaveGameSoundShaderParams(idFile *saveGame, soundShaderParms_t *params) {
     saveGame->ReadFloat(params->minDistance);
     saveGame->ReadFloat(params->maxDistance);
     saveGame->ReadFloat(params->volume);
@@ -1445,7 +1445,7 @@ void idSoundWorldLocal::ReadFromSaveGameSoundShaderParams(idFile* saveGame, soun
  idSoundWorldLocal::ReadFromSaveGameSoundChannel
  ===================
  */
-void idSoundWorldLocal::ReadFromSaveGameSoundChannel(idFile* saveGame, idSoundChannel* ch) {
+void idSoundWorldLocal::ReadFromSaveGameSoundChannel(idFile *saveGame, idSoundChannel *ch) {
     saveGame->ReadBool(ch->triggerState);
     char tmp;
     int i;
@@ -1480,7 +1480,7 @@ void idSoundWorldLocal::ReadFromSaveGameSoundChannel(idFile* saveGame, idSoundCh
 idSoundWorldLocal::EmitterForIndex
 ===================
 */
-idSoundEmitter*  idSoundWorldLocal::EmitterForIndex(int index) {
+idSoundEmitter  *idSoundWorldLocal::EmitterForIndex(int index) {
     if (index == 0) {
         return NULL;
     }
@@ -1502,7 +1502,7 @@ idSoundWorldLocal::StopAllSounds
 void idSoundWorldLocal::StopAllSounds() {
 
     for (int i = 0; i < emitters.Num(); i++) {
-        idSoundEmitterLocal* def = emitters[i];
+        idSoundEmitterLocal *def = emitters[i];
         def->StopSound(SCHANNEL_ANY);
     }
 }
@@ -1558,7 +1558,7 @@ start a music track
   this is called from the main thread
 ===============
 */
-void idSoundWorldLocal::PlayShaderDirectly(const char* shaderName, int channel) {
+void idSoundWorldLocal::PlayShaderDirectly(const char *shaderName, int channel) {
 
     if (localSound && channel == -1) {
         localSound->StopSound(SCHANNEL_ANY);
@@ -1570,7 +1570,7 @@ void idSoundWorldLocal::PlayShaderDirectly(const char* shaderName, int channel) 
         return;
     }
 
-    const idSoundShader* shader = declManager->FindSound(shaderName);
+    const idSoundShader *shader = declManager->FindSound(shaderName);
 
     if (!shader) {
         return;
@@ -1667,21 +1667,21 @@ Mixes MIXBUFFER_SAMPLES samples starting at current44kHz sample time into
 finalMixBuffer
 ===============
 */
-void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal* sound, idSoundChannel* chan,
-        int current44kHz, int numSpeakers, float* finalMixBuffer) {
+void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal *sound, idSoundChannel *chan,
+        int current44kHz, int numSpeakers, float *finalMixBuffer) {
     int j;
     float volume;
 
     //
     // get the sound definition and parameters from the entity
     //
-    soundShaderParms_t* parms = &chan->parms;
+    soundShaderParms_t *parms = &chan->parms;
 
     // assume we have a sound triggered on this channel
     assert(chan->triggerState);
 
     // fetch the actual wave file and see if it's valid
-    idSoundSample* sample = chan->leadinSample;
+    idSoundSample *sample = chan->leadinSample;
 
     if (sample == NULL) {
         return;
@@ -1693,7 +1693,7 @@ void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal* sound, idSou
     }
 
     // get the actual shader
-    const idSoundShader* shader = chan->soundShader;
+    const idSoundShader *shader = chan->soundShader;
 
     // this might happen if the foreground thread just deleted the sound emitter
     if (!shader) {
@@ -1826,7 +1826,7 @@ void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal* sound, idSou
     //
     int offset = current44kHz - chan->trigger44kHzTime;
     float inputSamples[MIXBUFFER_SAMPLES*2+16];
-    float* alignedInputSamples = (float*)((((intptr_t)inputSamples) + 15) & ~15);
+    float *alignedInputSamples = (float *)((((intptr_t)inputSamples) + 15) & ~15);
 
     //
     // allocate and initialize hardware source
@@ -1906,11 +1906,11 @@ void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal* sound, idSou
 
                     for (int i = 0; i < (MIXBUFFER_SAMPLES * sample->objectInfo.nChannels); i++) {
                         if (alignedInputSamples[i] < -32768.0f) {
-                            ((short*)alignedInputSamples)[i] = -32768;
+                            ((short *)alignedInputSamples)[i] = -32768;
                         } else if (alignedInputSamples[i] > 32767.0f) {
-                            ((short*)alignedInputSamples)[i] = 32767;
+                            ((short *)alignedInputSamples)[i] = 32767;
                         } else {
-                            ((short*)alignedInputSamples)[i] = idMath::FtoiFast(alignedInputSamples[i]);
+                            ((short *)alignedInputSamples)[i] = idMath::FtoiFast(alignedInputSamples[i]);
                         }
                     }
 
@@ -2047,10 +2047,10 @@ idSoundWorldLocal::FindAmplitude
   which would be problematic in multiplayer
 ===============
 */
-float idSoundWorldLocal::FindAmplitude(idSoundEmitterLocal* sound, const int localTime, const idVec3* listenerPosition,
+float idSoundWorldLocal::FindAmplitude(idSoundEmitterLocal *sound, const int localTime, const idVec3 *listenerPosition,
                                        const s_channelType channel, bool shakesOnly) {
     int     i, j;
-    soundShaderParms_t* parms;
+    soundShaderParms_t *parms;
     float   volume;
     int     activeChannelCount;
     static const int AMPLITUDE_SAMPLES = MIXBUFFER_SAMPLES/8;
@@ -2075,7 +2075,7 @@ float idSoundWorldLocal::FindAmplitude(idSoundEmitterLocal* sound, const int loc
     activeChannelCount = 0;
 
     for (i = 0; i < SOUND_MAX_CHANNELS ; i++) {
-        idSoundChannel*  chan = &sound->channels[ i ];
+        idSoundChannel  *chan = &sound->channels[ i ];
 
         if (!chan->triggerState) {
             continue;
@@ -2148,7 +2148,7 @@ float idSoundWorldLocal::FindAmplitude(idSoundEmitterLocal* sound, const int loc
         } else {
             int offset = (localTime - localTriggerTimes);   // offset in samples
             int size = (looping ? chan->soundShader->entries[0]->LengthIn44kHzSamples() : chan->leadinSample->LengthIn44kHzSamples());
-            short* amplitudeData = (short*)(looping ? chan->soundShader->entries[0]->amplitudeData : chan->leadinSample->amplitudeData);
+            short *amplitudeData = (short *)(looping ? chan->soundShader->entries[0]->amplitudeData : chan->leadinSample->amplitudeData);
 
             if (amplitudeData) {
                 // when the amplitudeData is present use that fill a dummy sourceBuffer
@@ -2222,7 +2222,7 @@ void    idSoundWorldLocal::FadeSoundClasses(const int soundClass, const float to
         common->Error("idSoundWorldLocal::FadeSoundClasses: bad soundClass %i", soundClass);
     }
 
-    idSoundFade* fade = &soundClassFade[ soundClass ];
+    idSoundFade *fade = &soundClassFade[ soundClass ];
 
     int length44kHz = soundSystemLocal.MillisecondsToSamples(over * 1000);
 

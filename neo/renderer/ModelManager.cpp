@@ -42,41 +42,41 @@ class idRenderModelManagerLocal : public idRenderModelManager {
 
     virtual void            Init();
     virtual void            Shutdown();
-    virtual idRenderModel*  AllocModel();
-    virtual void            FreeModel(idRenderModel* model);
-    virtual idRenderModel*  FindModel(const char* modelName);
-    virtual idRenderModel*  CheckModel(const char* modelName);
-    virtual idRenderModel*  DefaultModel();
-    virtual void            AddModel(idRenderModel* model);
-    virtual void            RemoveModel(idRenderModel* model);
+    virtual idRenderModel  *AllocModel();
+    virtual void            FreeModel(idRenderModel *model);
+    virtual idRenderModel  *FindModel(const char *modelName);
+    virtual idRenderModel  *CheckModel(const char *modelName);
+    virtual idRenderModel  *DefaultModel();
+    virtual void            AddModel(idRenderModel *model);
+    virtual void            RemoveModel(idRenderModel *model);
     virtual void            ReloadModels(bool forceAll = false);
     virtual void            FreeModelVertexCaches();
-    virtual void            WritePrecacheCommands(idFile* file);
+    virtual void            WritePrecacheCommands(idFile *file);
     virtual void            BeginLevelLoad();
     virtual void            EndLevelLoad();
 
-    virtual void            PrintMemInfo(MemInfo_t* mi);
+    virtual void            PrintMemInfo(MemInfo_t *mi);
 
   private:
-    idList<idRenderModel*>  models;
+    idList<idRenderModel *>  models;
     idHashIndex             hash;
-    idRenderModel*          defaultModel;
-    idRenderModel*          beamModel;
-    idRenderModel*          spriteModel;
-    idRenderModel*          trailModel;
+    idRenderModel          *defaultModel;
+    idRenderModel          *beamModel;
+    idRenderModel          *spriteModel;
+    idRenderModel          *trailModel;
     bool                    insideLevelLoad;        // don't actually load now
 
-    idRenderModel*          GetModel(const char* modelName, bool createIfNotFound);
+    idRenderModel          *GetModel(const char *modelName, bool createIfNotFound);
 
-    static void             PrintModel_f(const idCmdArgs& args);
-    static void             ListModels_f(const idCmdArgs& args);
-    static void             ReloadModels_f(const idCmdArgs& args);
-    static void             TouchModel_f(const idCmdArgs& args);
+    static void             PrintModel_f(const idCmdArgs &args);
+    static void             ListModels_f(const idCmdArgs &args);
+    static void             ReloadModels_f(const idCmdArgs &args);
+    static void             TouchModel_f(const idCmdArgs &args);
 };
 
 
 idRenderModelManagerLocal   localModelManager;
-idRenderModelManager*       renderModelManager = &localModelManager;
+idRenderModelManager       *renderModelManager = &localModelManager;
 
 /*
 ==============
@@ -96,8 +96,8 @@ idRenderModelManagerLocal::idRenderModelManagerLocal() {
 idRenderModelManagerLocal::PrintModel_f
 ==============
 */
-void idRenderModelManagerLocal::PrintModel_f(const idCmdArgs& args) {
-    idRenderModel*   model;
+void idRenderModelManagerLocal::PrintModel_f(const idCmdArgs &args) {
+    idRenderModel   *model;
 
     if (args.Argc() != 2) {
         common->Printf("usage: printModel <modelName>\n");
@@ -119,7 +119,7 @@ void idRenderModelManagerLocal::PrintModel_f(const idCmdArgs& args) {
 idRenderModelManagerLocal::ListModels_f
 ==============
 */
-void idRenderModelManagerLocal::ListModels_f(const idCmdArgs& args) {
+void idRenderModelManagerLocal::ListModels_f(const idCmdArgs &args) {
     int     totalMem = 0;
     int     inUse = 0;
 
@@ -127,7 +127,7 @@ void idRenderModelManagerLocal::ListModels_f(const idCmdArgs& args) {
     common->Printf(" ---   --- ----- ----\n");
 
     for (int i = 0 ; i < localModelManager.models.Num() ; i++) {
-        idRenderModel*   model = localModelManager.models[i];
+        idRenderModel   *model = localModelManager.models[i];
 
         if (!model->IsLoaded()) {
             continue;
@@ -150,7 +150,7 @@ void idRenderModelManagerLocal::ListModels_f(const idCmdArgs& args) {
 idRenderModelManagerLocal::ReloadModels_f
 ==============
 */
-void idRenderModelManagerLocal::ReloadModels_f(const idCmdArgs& args) {
+void idRenderModelManagerLocal::ReloadModels_f(const idCmdArgs &args) {
     if (idStr::Icmp(args.Argv(1), "all") == 0) {
         localModelManager.ReloadModels(true);
     } else {
@@ -165,8 +165,8 @@ idRenderModelManagerLocal::TouchModel_f
 Precache a specific model
 ==============
 */
-void idRenderModelManagerLocal::TouchModel_f(const idCmdArgs& args) {
-    const char*  model = args.Argv(1);
+void idRenderModelManagerLocal::TouchModel_f(const idCmdArgs &args) {
+    const char  *model = args.Argv(1);
 
     if (!model[0]) {
         common->Printf("usage: touchModel <modelName>\n");
@@ -175,7 +175,7 @@ void idRenderModelManagerLocal::TouchModel_f(const idCmdArgs& args) {
 
     common->Printf("touchModel %s\n", model);
     session->UpdateScreen();
-    idRenderModel* m = renderModelManager->CheckModel(model);
+    idRenderModel *m = renderModelManager->CheckModel(model);
 
     if (!m) {
         common->Printf("...not found\n");
@@ -187,9 +187,9 @@ void idRenderModelManagerLocal::TouchModel_f(const idCmdArgs& args) {
 idRenderModelManagerLocal::WritePrecacheCommands
 =================
 */
-void idRenderModelManagerLocal::WritePrecacheCommands(idFile* f) {
+void idRenderModelManagerLocal::WritePrecacheCommands(idFile *f) {
     for (int i = 0 ; i < models.Num() ; i++) {
-        idRenderModel*   model = models[i];
+        idRenderModel   *model = models[i];
 
         if (!model) {
             continue;
@@ -220,7 +220,7 @@ void idRenderModelManagerLocal::Init() {
     insideLevelLoad = false;
 
     // create a default model
-    idRenderModelStatic* model = new idRenderModelStatic;
+    idRenderModelStatic *model = new idRenderModelStatic;
     model->InitEmpty("_DEFAULT");
     model->MakeDefaultModel();
     model->SetLevelLoadReferenced(true);
@@ -228,13 +228,13 @@ void idRenderModelManagerLocal::Init() {
     AddModel(model);
 
     // create the beam model
-    idRenderModelStatic* beam = new idRenderModelBeam;
+    idRenderModelStatic *beam = new idRenderModelBeam;
     beam->InitEmpty("_BEAM");
     beam->SetLevelLoadReferenced(true);
     beamModel = beam;
     AddModel(beam);
 
-    idRenderModelStatic* sprite = new idRenderModelSprite;
+    idRenderModelStatic *sprite = new idRenderModelSprite;
     sprite->InitEmpty("_SPRITE");
     sprite->SetLevelLoadReferenced(true);
     spriteModel = sprite;
@@ -256,7 +256,7 @@ void idRenderModelManagerLocal::Shutdown() {
 idRenderModelManagerLocal::GetModel
 =================
 */
-idRenderModel* idRenderModelManagerLocal::GetModel(const char* modelName, bool createIfNotFound) {
+idRenderModel *idRenderModelManagerLocal::GetModel(const char *modelName, bool createIfNotFound) {
     idStr       canonical;
     idStr       extension;
 
@@ -271,7 +271,7 @@ idRenderModel* idRenderModelManagerLocal::GetModel(const char* modelName, bool c
     int key = hash.GenerateKey(modelName, false);
 
     for (int i = hash.First(key); i != -1; i = hash.Next(i)) {
-        idRenderModel* model = models[i];
+        idRenderModel *model = models[i];
 
         if (canonical.Icmp(model->Name()) == 0) {
             if (!model->IsLoaded()) {
@@ -293,7 +293,7 @@ idRenderModel* idRenderModelManagerLocal::GetModel(const char* modelName, bool c
 
     // determine which subclass of idRenderModel to initialize
 
-    idRenderModel*   model;
+    idRenderModel   *model;
 
     canonical.ExtractFileExtension(extension);
 
@@ -325,7 +325,7 @@ idRenderModel* idRenderModelManagerLocal::GetModel(const char* modelName, bool c
             return NULL;
         }
 
-        idRenderModelStatic* smodel = new idRenderModelStatic;
+        idRenderModelStatic *smodel = new idRenderModelStatic;
         smodel->InitEmpty(modelName);
         smodel->MakeDefaultModel();
 
@@ -351,7 +351,7 @@ idRenderModel* idRenderModelManagerLocal::GetModel(const char* modelName, bool c
 idRenderModelManagerLocal::AllocModel
 =================
 */
-idRenderModel* idRenderModelManagerLocal::AllocModel() {
+idRenderModel *idRenderModelManagerLocal::AllocModel() {
     return new idRenderModelStatic();
 }
 
@@ -360,12 +360,12 @@ idRenderModel* idRenderModelManagerLocal::AllocModel() {
 idRenderModelManagerLocal::FreeModel
 =================
 */
-void idRenderModelManagerLocal::FreeModel(idRenderModel* model) {
+void idRenderModelManagerLocal::FreeModel(idRenderModel *model) {
     if (!model) {
         return;
     }
 
-    if (!dynamic_cast<idRenderModelStatic*>(model)) {
+    if (!dynamic_cast<idRenderModelStatic *>(model)) {
         common->Error("idRenderModelManager::FreeModel: model '%s' is not a static model", model->Name());
         return;
     }
@@ -395,7 +395,7 @@ void idRenderModelManagerLocal::FreeModel(idRenderModel* model) {
 idRenderModelManagerLocal::FindModel
 =================
 */
-idRenderModel* idRenderModelManagerLocal::FindModel(const char* modelName) {
+idRenderModel *idRenderModelManagerLocal::FindModel(const char *modelName) {
     return GetModel(modelName, true);
 }
 
@@ -404,7 +404,7 @@ idRenderModel* idRenderModelManagerLocal::FindModel(const char* modelName) {
 idRenderModelManagerLocal::CheckModel
 =================
 */
-idRenderModel* idRenderModelManagerLocal::CheckModel(const char* modelName) {
+idRenderModel *idRenderModelManagerLocal::CheckModel(const char *modelName) {
     return GetModel(modelName, false);
 }
 
@@ -413,7 +413,7 @@ idRenderModel* idRenderModelManagerLocal::CheckModel(const char* modelName) {
 idRenderModelManagerLocal::DefaultModel
 =================
 */
-idRenderModel* idRenderModelManagerLocal::DefaultModel() {
+idRenderModel *idRenderModelManagerLocal::DefaultModel() {
     return defaultModel;
 }
 
@@ -422,7 +422,7 @@ idRenderModel* idRenderModelManagerLocal::DefaultModel() {
 idRenderModelManagerLocal::AddModel
 =================
 */
-void idRenderModelManagerLocal::AddModel(idRenderModel* model) {
+void idRenderModelManagerLocal::AddModel(idRenderModel *model) {
     hash.Add(hash.GenerateKey(model->Name(), false), models.Append(model));
 }
 
@@ -431,7 +431,7 @@ void idRenderModelManagerLocal::AddModel(idRenderModel* model) {
 idRenderModelManagerLocal::RemoveModel
 =================
 */
-void idRenderModelManagerLocal::RemoveModel(idRenderModel* model) {
+void idRenderModelManagerLocal::RemoveModel(idRenderModel *model) {
     int index = models.FindIndex(model);
     hash.RemoveIndex(hash.GenerateKey(model->Name(), false), index);
     models.RemoveIndex(index);
@@ -453,7 +453,7 @@ void idRenderModelManagerLocal::ReloadModels(bool forceAll) {
 
     // skip the default model at index 0
     for (int i = 1 ; i < models.Num() ; i++) {
-        idRenderModel*   model = models[i];
+        idRenderModel   *model = models[i];
 
         // we may want to allow world model reloading in the future, but we don't now
         if (!model->IsReloadable()) {
@@ -488,7 +488,7 @@ idRenderModelManagerLocal::FreeModelVertexCaches
 */
 void idRenderModelManagerLocal::FreeModelVertexCaches() {
     for (int i = 0 ; i < models.Num() ; i++) {
-        idRenderModel* model = models[i];
+        idRenderModel *model = models[i];
         model->FreeVertexCache();
     }
 }
@@ -502,7 +502,7 @@ void idRenderModelManagerLocal::BeginLevelLoad() {
     insideLevelLoad = true;
 
     for (int i = 0 ; i < models.Num() ; i++) {
-        idRenderModel* model = models[i];
+        idRenderModel *model = models[i];
 
         if (com_purgeAll.GetBool() && model->IsReloadable()) {
             R_CheckForEntityDefsUsingModel(model);
@@ -533,7 +533,7 @@ void idRenderModelManagerLocal::EndLevelLoad() {
 
     // purge any models not touched
     for (int i = 0 ; i < models.Num() ; i++) {
-        idRenderModel* model = models[i];
+        idRenderModel *model = models[i];
 
         if (!model->IsLevelLoadReferenced() && model->IsLoaded() && model->IsReloadable()) {
 
@@ -558,7 +558,7 @@ void idRenderModelManagerLocal::EndLevelLoad() {
 
     // load any new ones
     for (int i = 0 ; i < models.Num() ; i++) {
-        idRenderModel* model = models[i];
+        idRenderModel *model = models[i];
 
         if (model->IsLevelLoadReferenced() && !model->IsLoaded() && model->IsReloadable()) {
 
@@ -586,10 +586,10 @@ void idRenderModelManagerLocal::EndLevelLoad() {
 idRenderModelManagerLocal::PrintMemInfo
 =================
 */
-void idRenderModelManagerLocal::PrintMemInfo(MemInfo_t* mi) {
+void idRenderModelManagerLocal::PrintMemInfo(MemInfo_t *mi) {
     int i, j, totalMem = 0;
-    int* sortIndex;
-    idFile* f;
+    int *sortIndex;
+    idFile *f;
 
     f = fileSystem->OpenFileWrite(mi->filebase + "_models.txt");
 
@@ -616,7 +616,7 @@ void idRenderModelManagerLocal::PrintMemInfo(MemInfo_t* mi) {
 
     // print next
     for (int i = 0 ; i < localModelManager.models.Num() ; i++) {
-        idRenderModel*   model = localModelManager.models[sortIndex[i]];
+        idRenderModel   *model = localModelManager.models[sortIndex[i]];
         int mem;
 
         if (!model->IsLoaded()) {

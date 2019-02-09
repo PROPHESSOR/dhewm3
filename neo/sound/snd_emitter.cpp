@@ -85,7 +85,7 @@ permute 4 = 201
 permute 5 = 210
 =======================
 */
-void PermuteList_r(int* list, int listLength, int permute, int maxPermute) {
+void PermuteList_r(int *list, int listLength, int permute, int maxPermute) {
     if (listLength < 2) {
         return;
     }
@@ -111,7 +111,7 @@ int Factorial(int val) {
     return fact;
 }
 
-void GeneratePermutedList(int* list, int listLength, int permute) {
+void GeneratePermutedList(int *list, int listLength, int permute) {
     for (int i = 0 ; i < listLength ; i++) {
         list[i] = i;
     }
@@ -269,8 +269,8 @@ out of the range of the unlooped samples.  Handles looping between multiple diff
 samples and leadins
 ===================
 */
-void idSoundChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float* dest) const {
-    float*   dest_p = dest;
+void idSoundChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float *dest) const {
+    float   *dest_p = dest;
     int     len;
 
 //Sys_DebugPrintf( "msec:%i sample:%i : %i : %i\n", Sys_Milliseconds(), soundSystemLocal.GetCurrent44kHzTime(), sampleOffset44k, sampleCount44k );  //!@#
@@ -290,7 +290,7 @@ void idSoundChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44
     }
 
     // grab part of the leadin sample
-    idSoundSample* leadin = leadinSample;
+    idSoundSample *leadin = leadinSample;
 
     if (!leadin || sampleOffset44k < 0 || sampleCount44k <= 0) {
         memset(dest_p, 0, sampleCount44k * sizeof(dest_p[0]));
@@ -319,7 +319,7 @@ void idSoundChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44
     }
 
     // fill the remainder with looped samples
-    idSoundSample* loop = soundShader->entries[0];
+    idSoundSample *loop = soundShader->entries[0];
 
     if (!loop) {
         memset(dest_p, 0, sampleCount44k * sizeof(dest_p[0]));
@@ -404,8 +404,8 @@ void idSoundEmitterLocal::Clear(void) {
 idSoundEmitterLocal::OverrideParms
 ==================
 */
-void idSoundEmitterLocal::OverrideParms(const soundShaderParms_t* base,
-                                        const soundShaderParms_t* over, soundShaderParms_t* out) {
+void idSoundEmitterLocal::OverrideParms(const soundShaderParms_t *base,
+                                        const soundShaderParms_t *over, soundShaderParms_t *out) {
     if (!over) {
         *out = *base;
         return;
@@ -461,13 +461,13 @@ void idSoundEmitterLocal::CheckForCompletion(int current44kHzTime) {
 
     if (playing) {
         for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-            idSoundChannel*  chan = &channels[i];
+            idSoundChannel  *chan = &channels[i];
 
             if (!chan->triggerState) {
                 continue;
             }
 
-            const idSoundShader* shader = chan->soundShader;
+            const idSoundShader *shader = chan->soundShader;
 
             if (!shader) {
                 continue;
@@ -536,7 +536,7 @@ idSoundEmitterLocal::Spatialize
 Called once each sound frame by the main thread from idSoundWorldLocal::PlaceOrigin
 ===================
 */
-void idSoundEmitterLocal::Spatialize(idVec3 listenerPos, int listenerArea, idRenderWorld* rw) {
+void idSoundEmitterLocal::Spatialize(idVec3 listenerPos, int listenerArea, idRenderWorld *rw) {
     int         i;
 
     //
@@ -545,7 +545,7 @@ void idSoundEmitterLocal::Spatialize(idVec3 listenerPos, int listenerArea, idRen
     maxDistance = 0;
 
     for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-        idSoundChannel*  chan = &channels[i];
+        idSoundChannel  *chan = &channels[i];
 
         if (!chan->triggerState) {
             continue;
@@ -622,7 +622,7 @@ PUBLIC FUNCTIONS
 idSoundEmitterLocal::UpdateEmitter
 =====================
 */
-void idSoundEmitterLocal::UpdateEmitter(const idVec3& origin, int listenerId, const soundShaderParms_t* parms) {
+void idSoundEmitterLocal::UpdateEmitter(const idVec3 &origin, int listenerId, const soundShaderParms_t *parms) {
     if (!parms) {
         common->Error("idSoundEmitterLocal::UpdateEmitter: NULL parms");
     }
@@ -685,7 +685,7 @@ idSoundEmitterLocal::StartSound
 returns the length of the started sound in msec
 =====================
 */
-int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channelType channel, float diversity, int soundShaderFlags, bool allowSlow) {
+int idSoundEmitterLocal::StartSound(const idSoundShader *shader, const s_channelType channel, float diversity, int soundShaderFlags, bool allowSlow) {
     int i;
 
     if (!shader) {
@@ -751,7 +751,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
 
     // bump the choice if the exact sound was just played and we are NO_DUPS
     if (chanParms.soundShaderFlags & SSF_NO_DUPS) {
-        idSoundSample*   sample;
+        idSoundSample   *sample;
 
         if (shader->leadins[ choice ]) {
             sample = shader->leadins[ choice ];
@@ -760,7 +760,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
         }
 
         for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-            idSoundChannel*  chan = &channels[i];
+            idSoundChannel  *chan = &channels[i];
 
             if (chan->leadinSample == sample) {
                 choice = (choice + 1) % shader->numEntries;
@@ -772,7 +772,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
     // PLAY_ONCE sounds will never be restarted while they are running
     if (chanParms.soundShaderFlags & SSF_PLAY_ONCE) {
         for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-            idSoundChannel*  chan = &channels[i];
+            idSoundChannel  *chan = &channels[i];
 
             if (chan->triggerState && chan->soundShader == shader) {
                 if (idSoundSystemLocal::s_showStartSound.GetInteger()) {
@@ -787,7 +787,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
     // never play the same sound twice with the same starting time, even
     // if they are on different channels
     for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-        idSoundChannel*  chan = &channels[i];
+        idSoundChannel  *chan = &channels[i];
 
         if (chan->triggerState && chan->soundShader == shader && chan->trigger44kHzTime == start44kHz) {
             if (idSoundSystemLocal::s_showStartSound.GetInteger()) {
@@ -803,7 +803,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
     // kill any sound that is currently playing on this channel
     if (channel != SCHANNEL_ANY) {
         for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-            idSoundChannel*  chan = &channels[i];
+            idSoundChannel  *chan = &channels[i];
 
             if (chan->triggerState && chan->soundShader && chan->triggerChannel == channel) {
                 if (idSoundSystemLocal::s_showStartSound.GetInteger()) {
@@ -824,7 +824,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
     }
 
     // find a free channel to play the sound on
-    idSoundChannel*  chan;
+    idSoundChannel  *chan;
 
     for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
         chan = &channels[i];
@@ -925,7 +925,7 @@ int idSoundEmitterLocal::StartSound(const idSoundShader* shader, const s_channel
 idSoundEmitterLocal::ModifySound
 ===================
 */
-void idSoundEmitterLocal::ModifySound(const s_channelType channel, const soundShaderParms_t* parms) {
+void idSoundEmitterLocal::ModifySound(const s_channelType channel, const soundShaderParms_t *parms) {
     if (!parms) {
         common->Error("idSoundEmitterLocal::ModifySound: NULL parms");
     }
@@ -948,7 +948,7 @@ void idSoundEmitterLocal::ModifySound(const s_channelType channel, const soundSh
     }
 
     for (int i = 0; i < SOUND_MAX_CHANNELS; i++) {
-        idSoundChannel*  chan = &channels[i];
+        idSoundChannel  *chan = &channels[i];
 
         if (!chan->triggerState) {
             continue;
@@ -990,7 +990,7 @@ void idSoundEmitterLocal::StopSound(const s_channelType channel) {
     Sys_EnterCriticalSection();
 
     for (i = 0; i < SOUND_MAX_CHANNELS; i++) {
-        idSoundChannel*  chan = &channels[i];
+        idSoundChannel  *chan = &channels[i];
 
         if (!chan->triggerState) {
             continue;
@@ -1055,7 +1055,7 @@ void idSoundEmitterLocal::FadeSound(const s_channelType channel, float to, float
     int length44kHz = soundSystemLocal.MillisecondsToSamples(over * 1000);
 
     for (int i = 0; i < SOUND_MAX_CHANNELS ; i++) {
-        idSoundChannel*  chan = &channels[i];
+        idSoundChannel  *chan = &channels[i];
 
         if (!chan->triggerState) {
             continue;
@@ -1133,7 +1133,7 @@ float idSoundEmitterLocal::CurrentAmplitude(void) {
 idSoundEmitterLocal::GetSlowChannel
 ===================
 */
-idSlowChannel idSoundEmitterLocal::GetSlowChannel(const idSoundChannel* chan) {
+idSlowChannel idSoundEmitterLocal::GetSlowChannel(const idSoundChannel *chan) {
     return slowChannels[chan - channels];
 }
 
@@ -1142,7 +1142,7 @@ idSlowChannel idSoundEmitterLocal::GetSlowChannel(const idSoundChannel* chan) {
 idSoundEmitterLocal::SetSlowChannel
 ===================
 */
-void idSoundEmitterLocal::SetSlowChannel(const idSoundChannel* chan, idSlowChannel slow) {
+void idSoundEmitterLocal::SetSlowChannel(const idSoundChannel *chan, idSlowChannel slow) {
     slowChannels[chan - channels] = slow;
 }
 
@@ -1151,7 +1151,7 @@ void idSoundEmitterLocal::SetSlowChannel(const idSoundChannel* chan, idSlowChann
 idSoundEmitterLocal::ResetSlowChannel
 ===================
 */
-void idSoundEmitterLocal::ResetSlowChannel(const idSoundChannel* chan) {
+void idSoundEmitterLocal::ResetSlowChannel(const idSoundChannel *chan) {
     int index = chan - channels;
     slowChannels[index].Reset();
 }
@@ -1180,7 +1180,7 @@ void idSlowChannel::Reset() {
 idSlowChannel::AttachSoundChannel
 ===================
 */
-void idSlowChannel::AttachSoundChannel(const idSoundChannel* chan) {
+void idSlowChannel::AttachSoundChannel(const idSoundChannel *chan) {
     this->chan = chan;
 }
 
@@ -1190,7 +1190,7 @@ idSlowChannel::GetSlowmoSpeed
 ===================
 */
 float idSlowChannel::GetSlowmoSpeed() {
-    idSoundWorldLocal* sw = static_cast<idSoundWorldLocal*>(soundSystemLocal.GetPlayingSoundWorld());
+    idSoundWorldLocal *sw = static_cast<idSoundWorldLocal *>(soundSystemLocal.GetPlayingSoundWorld());
 
     if (sw) {
         return sw->slowmoSpeed;
@@ -1204,8 +1204,8 @@ float idSlowChannel::GetSlowmoSpeed() {
 idSlowChannel::GenerateSlowChannel
 ===================
 */
-void idSlowChannel::GenerateSlowChannel(FracTime& playPos, int sampleCount44k, float* finalBuffer) {
-    idSoundWorldLocal* sw = static_cast<idSoundWorldLocal*>(soundSystemLocal.GetPlayingSoundWorld());
+void idSlowChannel::GenerateSlowChannel(FracTime &playPos, int sampleCount44k, float *finalBuffer) {
+    idSoundWorldLocal *sw = static_cast<idSoundWorldLocal *>(soundSystemLocal.GetPlayingSoundWorld());
     float in[MIXBUFFER_SAMPLES+3], out[MIXBUFFER_SAMPLES+3], *src, *spline, slowmoSpeed;
     int i, neededSamples, zeroedPos, count = 0;
 
@@ -1239,7 +1239,7 @@ void idSlowChannel::GenerateSlowChannel(FracTime& playPos, int sampleCount44k, f
     }
 
     // lowpass filter
-    float* in_p = in + 2, *out_p = out + 2;
+    float *in_p = in + 2, *out_p = out + 2;
     int numSamples = sampleCount44k >> 1;
 
     lowpass.GetContinuitySamples(in_p[-1], in_p[-2], out_p[-1], out_p[-2]);
@@ -1260,7 +1260,7 @@ void idSlowChannel::GenerateSlowChannel(FracTime& playPos, int sampleCount44k, f
 idSlowChannel::GatherChannelSamples
 ===================
 */
-void idSlowChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float* dest) {
+void idSlowChannel::GatherChannelSamples(int sampleOffset44k, int sampleCount44k, float *dest) {
     int state = 0;
 
     // setup chan

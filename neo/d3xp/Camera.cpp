@@ -59,8 +59,8 @@ void idCamera::Spawn(void) {
 idCamera::GetRenderView
 =====================
 */
-renderView_t* idCamera::GetRenderView() {
-    renderView_t* rv = idEntity::GetRenderView();
+renderView_t *idCamera::GetRenderView() {
+    renderView_t *rv = idEntity::GetRenderView();
     GetViewParms(rv);
     return rv;
 }
@@ -94,7 +94,7 @@ idCameraView::idCameraView() {
 idCameraView::Save
 ================
 */
-void idCameraView::Save(idSaveGame* savefile) const {
+void idCameraView::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(fov);
     savefile->WriteObject(attachedTo);
     savefile->WriteObject(attachedView);
@@ -105,10 +105,10 @@ void idCameraView::Save(idSaveGame* savefile) const {
 idCameraView::Restore
 ================
 */
-void idCameraView::Restore(idRestoreGame* savefile) {
+void idCameraView::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(fov);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(attachedTo));
-    savefile->ReadObject(reinterpret_cast<idClass*&>(attachedView));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(attachedTo));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(attachedView));
 }
 
 /*
@@ -126,7 +126,7 @@ void idCameraView::Event_SetAttachments() {
 idCameraView::Event_Activate
 ================
 */
-void idCameraView::Event_Activate(idEntity* activator) {
+void idCameraView::Event_Activate(idEntity *activator) {
     if (spawnArgs.GetBool("trigger")) {
         if (gameLocal.GetCamera() != this) {
             if (g_debugCinematic.GetBool()) {
@@ -164,8 +164,8 @@ void idCameraView::Stop(void) {
 idCameraView::Spawn
 =====================
 */
-void idCameraView::SetAttachment(idEntity** e, const char* p) {
-    const char* cam = spawnArgs.GetString(p);
+void idCameraView::SetAttachment(idEntity **e, const char *p) {
+    const char *cam = spawnArgs.GetString(p);
 
     if (strlen(cam)) {
         *e = gameLocal.FindEntity(cam);
@@ -180,7 +180,7 @@ idCameraView::Spawn
 */
 void idCameraView::Spawn(void) {
     // if no target specified use ourself
-    const char* cam = spawnArgs.GetString("cameraTarget");
+    const char *cam = spawnArgs.GetString("cameraTarget");
 
     if (strlen(cam) == 0) {
         spawnArgs.Set("cameraTarget", spawnArgs.GetString("name"));
@@ -198,7 +198,7 @@ void idCameraView::Spawn(void) {
 idCameraView::GetViewParms
 =====================
 */
-void idCameraView::GetViewParms(renderView_t* view) {
+void idCameraView::GetViewParms(renderView_t *view) {
     assert(view);
 
     if (view == NULL) {
@@ -206,7 +206,7 @@ void idCameraView::GetViewParms(renderView_t* view) {
     }
 
     idVec3 dir;
-    idEntity* ent;
+    idEntity *ent;
 
     if (attachedTo) {
         ent = attachedTo;
@@ -277,7 +277,7 @@ idCameraAnim::~idCameraAnim() {
 idCameraAnim::Save
 ================
 */
-void idCameraAnim::Save(idSaveGame* savefile) const {
+void idCameraAnim::Save(idSaveGame *savefile) const {
     savefile->WriteInt(threadNum);
     savefile->WriteVec3(offset);
     savefile->WriteInt(frameRate);
@@ -291,7 +291,7 @@ void idCameraAnim::Save(idSaveGame* savefile) const {
 idCameraAnim::Restore
 ================
 */
-void idCameraAnim::Restore(idRestoreGame* savefile) {
+void idCameraAnim::Restore(idRestoreGame *savefile) {
     savefile->ReadInt(threadNum);
     savefile->ReadVec3(offset);
     savefile->ReadInt(frameRate);
@@ -333,7 +333,7 @@ void idCameraAnim::LoadAnim(void) {
     int         numCuts;
     int         i;
     idStr       filename;
-    const char*  key;
+    const char  *key;
 
     key = spawnArgs.GetString("anim");
 
@@ -565,13 +565,13 @@ void idCameraAnim::Think(void) {
 idCameraAnim::GetViewParms
 =====================
 */
-void idCameraAnim::GetViewParms(renderView_t* view) {
+void idCameraAnim::GetViewParms(renderView_t *view) {
     int             realFrame;
     int             frame;
     int             frameTime;
     float           lerp;
     float           invlerp;
-    cameraFrame_t*   camFrame;
+    cameraFrame_t   *camFrame;
     int             i;
     int             cut;
     idQuat          q1, q2, q3;
@@ -714,7 +714,7 @@ void idCameraAnim::GetViewParms(renderView_t* view) {
 idCameraAnim::Event_Activate
 ================
 */
-void idCameraAnim::Event_Activate(idEntity* _activator) {
+void idCameraAnim::Event_Activate(idEntity *_activator) {
     activator = _activator;
 
     if (thinkFlags & TH_THINK) {

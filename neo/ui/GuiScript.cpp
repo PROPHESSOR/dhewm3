@@ -41,13 +41,13 @@ If you have questions concerning this license or the applicable additional terms
 Script_Set
 =========================
 */
-void Script_Set(idWindow* window, idList<idGSWinVar>* src) {
+void Script_Set(idWindow *window, idList<idGSWinVar> *src) {
     idStr key, val;
-    idWinStr* dest = dynamic_cast<idWinStr*>((*src)[0].var);
+    idWinStr *dest = dynamic_cast<idWinStr *>((*src)[0].var);
 
     if (dest) {
         if (idStr::Icmp(*dest, "cmd") == 0) {
-            dest = dynamic_cast<idWinStr*>((*src)[1].var);
+            dest = dynamic_cast<idWinStr *>((*src)[1].var);
             int parmCount = src->Num();
 
             if (parmCount > 2) {
@@ -79,11 +79,11 @@ void Script_Set(idWindow* window, idList<idGSWinVar>* src) {
 Script_SetFocus
 =========================
 */
-void Script_SetFocus(idWindow* window, idList<idGSWinVar>* src) {
-    idWinStr* parm = dynamic_cast<idWinStr*>((*src)[0].var);
+void Script_SetFocus(idWindow *window, idList<idGSWinVar> *src) {
+    idWinStr *parm = dynamic_cast<idWinStr *>((*src)[0].var);
 
     if (parm) {
-        drawWin_t* win = window->GetGui()->GetDesktop()->FindChildByName(*parm);
+        drawWin_t *win = window->GetGui()->GetDesktop()->FindChildByName(*parm);
 
         if (win && win->win) {
             window->SetFocus(win->win);
@@ -96,8 +96,8 @@ void Script_SetFocus(idWindow* window, idList<idGSWinVar>* src) {
 Script_ShowCursor
 =========================
 */
-void Script_ShowCursor(idWindow* window, idList<idGSWinVar>* src) {
-    idWinStr* parm = dynamic_cast<idWinStr*>((*src)[0].var);
+void Script_ShowCursor(idWindow *window, idList<idGSWinVar> *src) {
+    idWinStr *parm = dynamic_cast<idWinStr *>((*src)[0].var);
 
     if (parm) {
         if (atoi(*parm)) {
@@ -115,8 +115,8 @@ Script_RunScript
  run scripts must come after any set cmd set's in the script
 =========================
 */
-void Script_RunScript(idWindow* window, idList<idGSWinVar>* src) {
-    idWinStr* parm = dynamic_cast<idWinStr*>((*src)[0].var);
+void Script_RunScript(idWindow *window, idList<idGSWinVar> *src) {
+    idWinStr *parm = dynamic_cast<idWinStr *>((*src)[0].var);
 
     if (parm) {
         idStr str = window->cmd;
@@ -131,8 +131,8 @@ void Script_RunScript(idWindow* window, idList<idGSWinVar>* src) {
 Script_LocalSound
 =========================
 */
-void Script_LocalSound(idWindow* window, idList<idGSWinVar>* src) {
-    idWinStr* parm = dynamic_cast<idWinStr*>((*src)[0].var);
+void Script_LocalSound(idWindow *window, idList<idGSWinVar> *src) {
+    idWinStr *parm = dynamic_cast<idWinStr *>((*src)[0].var);
 
     if (parm) {
         session->sw->PlayShaderDirectly(*parm);
@@ -144,7 +144,7 @@ void Script_LocalSound(idWindow* window, idList<idGSWinVar>* src) {
 Script_EvalRegs
 =========================
 */
-void Script_EvalRegs(idWindow* window, idList<idGSWinVar>* src) {
+void Script_EvalRegs(idWindow *window, idList<idGSWinVar> *src) {
     window->EvalRegs(-1, true);
 }
 
@@ -153,7 +153,7 @@ void Script_EvalRegs(idWindow* window, idList<idGSWinVar>* src) {
 Script_EndGame
 =========================
 */
-void Script_EndGame(idWindow* window, idList<idGSWinVar>* src) {
+void Script_EndGame(idWindow *window, idList<idGSWinVar> *src) {
     cvarSystem->SetCVarBool("g_nightmare", true);
     cmdSystem->BufferCommandText(CMD_EXEC_APPEND, "disconnect\n");
 }
@@ -163,13 +163,13 @@ void Script_EndGame(idWindow* window, idList<idGSWinVar>* src) {
 Script_ResetTime
 =========================
 */
-void Script_ResetTime(idWindow* window, idList<idGSWinVar>* src) {
-    idWinStr* parm = dynamic_cast<idWinStr*>((*src)[0].var);
-    drawWin_t* win = NULL;
+void Script_ResetTime(idWindow *window, idList<idGSWinVar> *src) {
+    idWinStr *parm = dynamic_cast<idWinStr *>((*src)[0].var);
+    drawWin_t *win = NULL;
 
     if (parm && src->Num() > 1) {
         win = window->GetGui()->GetDesktop()->FindChildByName(*parm);
-        parm = dynamic_cast<idWinStr*>((*src)[1].var);
+        parm = dynamic_cast<idWinStr *>((*src)[1].var);
     }
 
     if (win && win->win) {
@@ -186,7 +186,7 @@ void Script_ResetTime(idWindow* window, idList<idGSWinVar>* src) {
 Script_ResetCinematics
 =========================
 */
-void Script_ResetCinematics(idWindow* window, idList<idGSWinVar>* src) {
+void Script_ResetCinematics(idWindow *window, idList<idGSWinVar> *src) {
     window->ResetCinematics();
 }
 
@@ -195,31 +195,31 @@ void Script_ResetCinematics(idWindow* window, idList<idGSWinVar>* src) {
 Script_Transition
 =========================
 */
-void Script_Transition(idWindow* window, idList<idGSWinVar>* src) {
+void Script_Transition(idWindow *window, idList<idGSWinVar> *src) {
     // transitions always affect rect or vec4 vars
     if (src->Num() >= 4) {
-        idWinRectangle* rect = NULL;
-        idWinVec4* vec4 = dynamic_cast<idWinVec4*>((*src)[0].var);
+        idWinRectangle *rect = NULL;
+        idWinVec4 *vec4 = dynamic_cast<idWinVec4 *>((*src)[0].var);
         //
         //  added float variable
-        idWinFloat* val = NULL;
+        idWinFloat *val = NULL;
 
         //
         if (vec4 == NULL) {
-            rect = dynamic_cast<idWinRectangle*>((*src)[0].var);
+            rect = dynamic_cast<idWinRectangle *>((*src)[0].var);
 
             //
             //  added float variable
             if (NULL == rect) {
-                val = dynamic_cast<idWinFloat*>((*src)[0].var);
+                val = dynamic_cast<idWinFloat *>((*src)[0].var);
             }
 
             //
         }
 
-        idWinVec4* from = dynamic_cast<idWinVec4*>((*src)[1].var);
-        idWinVec4* to = dynamic_cast<idWinVec4*>((*src)[2].var);
-        idWinStr* timeStr = dynamic_cast<idWinStr*>((*src)[3].var);
+        idWinVec4 *from = dynamic_cast<idWinVec4 *>((*src)[1].var);
+        idWinVec4 *to = dynamic_cast<idWinVec4 *>((*src)[2].var);
+        idWinStr *timeStr = dynamic_cast<idWinStr *>((*src)[3].var);
 
         //
         //  added float variable
@@ -234,8 +234,8 @@ void Script_Transition(idWindow* window, idList<idGSWinVar>* src) {
         float dc = 0.0f;
 
         if (src->Num() > 4) {
-            idWinStr* acv = dynamic_cast<idWinStr*>((*src)[4].var);
-            idWinStr* dcv = dynamic_cast<idWinStr*>((*src)[5].var);
+            idWinStr *acv = dynamic_cast<idWinStr *>((*src)[4].var);
+            idWinStr *dcv = dynamic_cast<idWinStr *>((*src)[5].var);
             assert(acv && dcv);
             ac = atof(*acv);
             dc = atof(*dcv);
@@ -260,8 +260,8 @@ void Script_Transition(idWindow* window, idList<idGSWinVar>* src) {
 }
 
 typedef struct {
-    const char* name;
-    void (*handler)(idWindow* window, idList<idGSWinVar>* src);
+    const char *name;
+    void (*handler)(idWindow *window, idList<idGSWinVar> *src);
     int mMinParms;
     int mMaxParms;
 } guiCommandDef_t;
@@ -317,7 +317,7 @@ idGuiScript::~idGuiScript() {
 idGuiScript::WriteToSaveGame
 =========================
 */
-void idGuiScript::WriteToSaveGame(idFile* savefile) {
+void idGuiScript::WriteToSaveGame(idFile *savefile) {
     int i;
 
     if (ifList) {
@@ -342,7 +342,7 @@ void idGuiScript::WriteToSaveGame(idFile* savefile) {
 idGuiScript::ReadFromSaveGame
 =========================
 */
-void idGuiScript::ReadFromSaveGame(idFile* savefile) {
+void idGuiScript::ReadFromSaveGame(idFile *savefile) {
     int i;
 
     if (ifList) {
@@ -367,7 +367,7 @@ void idGuiScript::ReadFromSaveGame(idFile* savefile) {
 idGuiScript::Parse
 =========================
 */
-bool idGuiScript::Parse(idParser* src) {
+bool idGuiScript::Parse(idParser *src) {
     int i;
 
     // first token should be function call
@@ -411,7 +411,7 @@ bool idGuiScript::Parse(idParser* src) {
             break;
         }
 
-        idWinStr* str = new idWinStr();
+        idWinStr *str = new idWinStr();
         *str = token;
         idGSWinVar wv;
         wv.own = true;
@@ -435,11 +435,11 @@ bool idGuiScript::Parse(idParser* src) {
 idGuiScriptList::Execute
 =========================
 */
-void idGuiScriptList::Execute(idWindow* win) {
+void idGuiScriptList::Execute(idWindow *win) {
     int c = list.Num();
 
     for (int i = 0; i < c; i++) {
-        idGuiScript* gs = list[i];
+        idGuiScript *gs = list[i];
         assert(gs);
 
         if (gs->conditionReg >= 0) {
@@ -465,20 +465,20 @@ void idGuiScriptList::Execute(idWindow* win) {
 idGuiScriptList::FixupParms
 =========================
 */
-void idGuiScript::FixupParms(idWindow* win) {
+void idGuiScript::FixupParms(idWindow *win) {
     if (handler == &Script_Set) {
         bool precacheBackground = false;
         bool precacheSounds = false;
-        idWinStr* str = dynamic_cast<idWinStr*>(parms[0].var);
+        idWinStr *str = dynamic_cast<idWinStr *>(parms[0].var);
         assert(str);
-        idWinVar* dest = win->GetWinVarByName(*str, true);
+        idWinVar *dest = win->GetWinVarByName(*str, true);
 
         if (dest) {
             delete parms[0].var;
             parms[0].var = dest;
             parms[0].own = false;
 
-            if (dynamic_cast<idWinBackground*>(dest) != NULL) {
+            if (dynamic_cast<idWinBackground *>(dest) != NULL) {
                 precacheBackground = true;
             }
         } else if (idStr::Icmp(str->c_str(), "cmd") == 0) {
@@ -488,14 +488,14 @@ void idGuiScript::FixupParms(idWindow* win) {
         int parmCount = parms.Num();
 
         for (int i = 1; i < parmCount; i++) {
-            idWinStr* str = dynamic_cast<idWinStr*>(parms[i].var);
+            idWinStr *str = dynamic_cast<idWinStr *>(parms[i].var);
 
             if (idStr::Icmpn(*str, "gui::", 5) == 0) {
 
                 //  always use a string here, no point using a float if it is one
                 //  FIXME: This creates duplicate variables, while not technically a problem since they
                 //  are all bound to the same guiDict, it does consume extra memory and is generally a bad thing
-                idWinStr* defvar = new idWinStr();
+                idWinStr *defvar = new idWinStr();
                 defvar->Init(*str, win);
                 win->AddDefinedVar(defvar);
                 delete parms[i].var;
@@ -512,7 +512,7 @@ void idGuiScript::FixupParms(idWindow* win) {
             } else if ((*str[0]) == '$') {
                 //
                 //  dont include the $ when asking for variable
-                dest = win->GetGui()->GetDesktop()->GetWinVarByName((const char*)(*str) + 1, true);
+                dest = win->GetGui()->GetDesktop()->GetWinVarByName((const char *)(*str) + 1, true);
 
                 //
                 if (dest) {
@@ -523,7 +523,7 @@ void idGuiScript::FixupParms(idWindow* win) {
             } else if (idStr::Cmpn(str->c_str(), STRTABLE_ID, STRTABLE_ID_LENGTH) == 0) {
                 str->Set(common->GetLanguageDict()->GetString(str->c_str()));
             } else if (precacheBackground) {
-                const idMaterial* mat = declManager->FindMaterial(str->c_str());
+                const idMaterial *mat = declManager->FindMaterial(str->c_str());
                 mat->SetSort(SS_GUI);
             } else if (precacheSounds) {
                 // Search for "play <...>"
@@ -545,12 +545,12 @@ void idGuiScript::FixupParms(idWindow* win) {
             common->Warning("Window %s in gui %s has a bad transition definition", win->GetName(), win->GetGui()->GetSourceFile());
         }
 
-        idWinStr* str = dynamic_cast<idWinStr*>(parms[0].var);
+        idWinStr *str = dynamic_cast<idWinStr *>(parms[0].var);
         assert(str);
 
         //
-        drawWin_t* destowner;
-        idWinVar* dest = win->GetWinVarByName(*str, true, &destowner);
+        drawWin_t *destowner;
+        idWinVar *dest = win->GetWinVarByName(*str, true, &destowner);
         //
 
         if (dest) {
@@ -566,23 +566,23 @@ void idGuiScript::FixupParms(idWindow* win) {
         int c;
 
         for (c = 1; c < 3; c ++) {
-            str = dynamic_cast<idWinStr*>(parms[c].var);
+            str = dynamic_cast<idWinStr *>(parms[c].var);
 
-            idWinVec4* v4 = new idWinVec4;
+            idWinVec4 *v4 = new idWinVec4;
             parms[c].var = v4;
             parms[c].own = true;
 
-            drawWin_t* owner;
+            drawWin_t *owner;
 
             if ((*str[0]) == '$') {
-                dest = win->GetWinVarByName((const char*)(*str) + 1, true, &owner);
+                dest = win->GetWinVarByName((const char *)(*str) + 1, true, &owner);
             } else {
                 dest = NULL;
             }
 
             if (dest) {
-                idWindow* ownerparent;
-                idWindow* destparent;
+                idWindow *ownerparent;
+                idWindow *destparent;
 
                 if (owner) {
                     ownerparent = owner->simp?owner->simp->GetParent():owner->win->GetParent();
@@ -592,7 +592,7 @@ void idGuiScript::FixupParms(idWindow* win) {
                     if (ownerparent && destparent &&
                             (dest == (owner->simp?owner->simp->GetWinVarByName("rect"):owner->win->GetWinVarByName("rect")))) {
                         idRectangle rect;
-                        rect = *(dynamic_cast<idWinRectangle*>(dest));
+                        rect = *(dynamic_cast<idWinRectangle *>(dest));
                         ownerparent->ClientToScreen(&rect);
                         destparent->ScreenToClient(&rect);
                         *v4 = rect.ToVec4();
@@ -625,11 +625,11 @@ void idGuiScript::FixupParms(idWindow* win) {
 idGuiScriptList::FixupParms
 =========================
 */
-void idGuiScriptList::FixupParms(idWindow* win) {
+void idGuiScriptList::FixupParms(idWindow *win) {
     int c = list.Num();
 
     for (int i = 0; i < c; i++) {
-        idGuiScript* gs = list[i];
+        idGuiScript *gs = list[i];
         gs->FixupParms(win);
 
         if (gs->ifList) {
@@ -647,7 +647,7 @@ void idGuiScriptList::FixupParms(idWindow* win) {
 idGuiScriptList::WriteToSaveGame
 =========================
 */
-void idGuiScriptList::WriteToSaveGame(idFile* savefile) {
+void idGuiScriptList::WriteToSaveGame(idFile *savefile) {
     int i;
 
     for (i = 0; i < list.Num(); i++) {
@@ -660,7 +660,7 @@ void idGuiScriptList::WriteToSaveGame(idFile* savefile) {
 idGuiScriptList::ReadFromSaveGame
 =========================
 */
-void idGuiScriptList::ReadFromSaveGame(idFile* savefile) {
+void idGuiScriptList::ReadFromSaveGame(idFile *savefile) {
     int i;
 
     for (i = 0; i < list.Num(); i++) {

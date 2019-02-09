@@ -50,10 +50,10 @@ class idBitMsg {
     idBitMsg();
     ~idBitMsg() {}
 
-    void            Init(byte* data, int length);
-    void            Init(const byte* data, int length);
-    byte*           GetData(void);                       // get data for writing
-    const byte*     GetData(void) const;                     // get data for reading
+    void            Init(byte *data, int length);
+    void            Init(const byte *data, int length);
+    byte           *GetData(void);                       // get data for writing
+    const byte     *GetData(void) const;                     // get data for reading
     int             GetMaxSize(void) const;                  // get the maximum message size
     void            SetAllowOverflow(bool set);              // generate error if not set and message is overflowed
     bool            IsOverflowed(void) const;                // returns true if the message was overflowed
@@ -64,7 +64,7 @@ class idBitMsg {
     void            SetWriteBit(int bit);                    // set current write bit
     int             GetNumBitsWritten(void) const;       // returns number of bits written
     int             GetRemainingWriteBits(void) const;   // space left in bits for writing
-    void            SaveWriteState(int& s, int& b) const;    // save the write state
+    void            SaveWriteState(int &s, int &b) const;    // save the write state
     void            RestoreWriteState(int s, int b);         // restore the write state
 
     int             GetReadCount(void) const;                // bytes read so far
@@ -73,7 +73,7 @@ class idBitMsg {
     void            SetReadBit(int bit);                     // set current read bit
     int             GetNumBitsRead(void) const;              // returns number of bits read
     int             GetRemainingReadBits(void) const;        // number of bits left to read
-    void            SaveReadState(int& c, int& b) const;     // save the read state
+    void            SaveReadState(int &c, int &b) const;     // save the read state
     void            RestoreReadState(int c, int b);          // restore the read state
 
     void            BeginWriting(void);                      // begin writing
@@ -89,9 +89,9 @@ class idBitMsg {
     void            WriteFloat(float f, int exponentBits, int mantissaBits);
     void            WriteAngle8(float f);
     void            WriteAngle16(float f);
-    void            WriteDir(const idVec3& dir, int numBits);
-    void            WriteString(const char* s, int maxLength = -1, bool make7Bit = true);
-    void            WriteData(const void* data, int length);
+    void            WriteDir(const idVec3 &dir, int numBits);
+    void            WriteString(const char *s, int maxLength = -1, bool make7Bit = true);
+    void            WriteData(const void *data, int length);
     void            WriteNetadr(const netadr_t adr);
 
     void            WriteDeltaChar(int oldValue, int newValue);
@@ -103,7 +103,7 @@ class idBitMsg {
     void            WriteDeltaByteCounter(int oldValue, int newValue);
     void            WriteDeltaShortCounter(int oldValue, int newValue);
     void            WriteDeltaIntCounter(int oldValue, int newValue);
-    bool            WriteDeltaDict(const idDict& dict, const idDict* base);
+    bool            WriteDeltaDict(const idDict &dict, const idDict *base);
 
     void            BeginReading(void) const;                // begin reading.
     int             GetRemaingData(void) const;              // number of bytes left to read
@@ -119,9 +119,9 @@ class idBitMsg {
     float           ReadAngle8(void) const;
     float           ReadAngle16(void) const;
     idVec3          ReadDir(int numBits) const;
-    int             ReadString(char* buffer, int bufferSize) const;
-    int             ReadData(void* data, int length) const;
-    void            ReadNetadr(netadr_t* adr) const;
+    int             ReadString(char *buffer, int bufferSize) const;
+    int             ReadData(void *data, int length) const;
+    void            ReadNetadr(netadr_t *adr) const;
 
     int             ReadDeltaChar(int oldValue) const;
     int             ReadDeltaByte(int oldValue) const;
@@ -132,14 +132,14 @@ class idBitMsg {
     int             ReadDeltaByteCounter(int oldValue) const;
     int             ReadDeltaShortCounter(int oldValue) const;
     int             ReadDeltaIntCounter(int oldValue) const;
-    bool            ReadDeltaDict(idDict& dict, const idDict* base) const;
+    bool            ReadDeltaDict(idDict &dict, const idDict *base) const;
 
-    static int      DirToBits(const idVec3& dir, int numBits);
+    static int      DirToBits(const idVec3 &dir, int numBits);
     static idVec3   BitsToDir(int bits, int numBits);
 
   private:
-    byte*           writeData;          // pointer to data for writing
-    const byte*     readData;           // pointer to data for reading
+    byte           *writeData;          // pointer to data for writing
+    const byte     *readData;           // pointer to data for reading
     int             maxSize;            // maximum size of message in bytes
     int             curSize;            // current size of message in bytes
     int             writeBit;           // number of bits written to the last written byte
@@ -150,29 +150,29 @@ class idBitMsg {
 
   private:
     bool            CheckOverflow(int numBits);
-    byte*           GetByteSpace(int length);
+    byte           *GetByteSpace(int length);
     void            WriteDelta(int oldValue, int newValue, int numBits);
     int             ReadDelta(int oldValue, int numBits) const;
 };
 
 
-ID_INLINE void idBitMsg::Init(byte* data, int length) {
+ID_INLINE void idBitMsg::Init(byte *data, int length) {
     writeData = data;
     readData = data;
     maxSize = length;
 }
 
-ID_INLINE void idBitMsg::Init(const byte* data, int length) {
+ID_INLINE void idBitMsg::Init(const byte *data, int length) {
     writeData = NULL;
     readData = data;
     maxSize = length;
 }
 
-ID_INLINE byte* idBitMsg::GetData(void) {
+ID_INLINE byte *idBitMsg::GetData(void) {
     return writeData;
 }
 
-ID_INLINE const byte* idBitMsg::GetData(void) const {
+ID_INLINE const byte *idBitMsg::GetData(void) const {
     return readData;
 }
 
@@ -220,7 +220,7 @@ ID_INLINE int idBitMsg::GetRemainingWriteBits(void) const {
     return (maxSize << 3) - GetNumBitsWritten();
 }
 
-ID_INLINE void idBitMsg::SaveWriteState(int& s, int& b) const {
+ID_INLINE void idBitMsg::SaveWriteState(int &s, int &b) const {
     s = curSize;
     b = writeBit;
 }
@@ -258,7 +258,7 @@ ID_INLINE int idBitMsg::GetRemainingReadBits(void) const {
     return (curSize << 3) - GetNumBitsRead();
 }
 
-ID_INLINE void idBitMsg::SaveReadState(int& c, int& b) const {
+ID_INLINE void idBitMsg::SaveReadState(int &c, int &b) const {
     c = readCount;
     b = readBit;
 }
@@ -303,7 +303,7 @@ ID_INLINE void idBitMsg::WriteInt(int c) {
 }
 
 ID_INLINE void idBitMsg::WriteFloat(float f) {
-    WriteBits(*reinterpret_cast<int*>(&f), 32);
+    WriteBits(*reinterpret_cast<int *>(&f), 32);
 }
 
 ID_INLINE void idBitMsg::WriteFloat(float f, int exponentBits, int mantissaBits) {
@@ -319,7 +319,7 @@ ID_INLINE void idBitMsg::WriteAngle16(float f) {
     WriteShort(ANGLE2SHORT(f));
 }
 
-ID_INLINE void idBitMsg::WriteDir(const idVec3& dir, int numBits) {
+ID_INLINE void idBitMsg::WriteDir(const idVec3 &dir, int numBits) {
     WriteBits(DirToBits(dir, numBits), numBits);
 }
 
@@ -340,7 +340,7 @@ ID_INLINE void idBitMsg::WriteDeltaInt(int oldValue, int newValue) {
 }
 
 ID_INLINE void idBitMsg::WriteDeltaFloat(float oldValue, float newValue) {
-    WriteDelta(*reinterpret_cast<int*>(&oldValue), *reinterpret_cast<int*>(&newValue), 32);
+    WriteDelta(*reinterpret_cast<int *>(&oldValue), *reinterpret_cast<int *>(&newValue), 32);
 }
 
 ID_INLINE void idBitMsg::WriteDeltaFloat(float oldValue, float newValue, int exponentBits, int mantissaBits) {
@@ -384,7 +384,7 @@ ID_INLINE int idBitMsg::ReadInt(void) const {
 
 ID_INLINE float idBitMsg::ReadFloat(void) const {
     float value;
-    *reinterpret_cast<int*>(&value) = ReadBits(32);
+    *reinterpret_cast<int *>(&value) = ReadBits(32);
     return value;
 }
 
@@ -423,7 +423,7 @@ ID_INLINE int idBitMsg::ReadDeltaInt(int oldValue) const {
 
 ID_INLINE float idBitMsg::ReadDeltaFloat(float oldValue) const {
     float value;
-    *reinterpret_cast<int*>(&value) = ReadDelta(*reinterpret_cast<int*>(&oldValue), 32);
+    *reinterpret_cast<int *>(&value) = ReadDelta(*reinterpret_cast<int *>(&oldValue), 32);
     return value;
 }
 
@@ -447,8 +447,8 @@ class idBitMsgDelta {
     idBitMsgDelta();
     ~idBitMsgDelta() {}
 
-    void            Init(const idBitMsg* base, idBitMsg* newBase, idBitMsg* delta);
-    void            Init(const idBitMsg* base, idBitMsg* newBase, const idBitMsg* delta);
+    void            Init(const idBitMsg *base, idBitMsg *newBase, idBitMsg *delta);
+    void            Init(const idBitMsg *base, idBitMsg *newBase, const idBitMsg *delta);
     bool            HasChanged(void) const;
 
     void            WriteBits(int value, int numBits);
@@ -461,10 +461,10 @@ class idBitMsgDelta {
     void            WriteFloat(float f, int exponentBits, int mantissaBits);
     void            WriteAngle8(float f);
     void            WriteAngle16(float f);
-    void            WriteDir(const idVec3& dir, int numBits);
-    void            WriteString(const char* s, int maxLength = -1);
-    void            WriteData(const void* data, int length);
-    void            WriteDict(const idDict& dict);
+    void            WriteDir(const idVec3 &dir, int numBits);
+    void            WriteString(const char *s, int maxLength = -1);
+    void            WriteData(const void *data, int length);
+    void            WriteDict(const idDict &dict);
 
     void            WriteDeltaChar(int oldValue, int newValue);
     void            WriteDeltaByte(int oldValue, int newValue);
@@ -487,9 +487,9 @@ class idBitMsgDelta {
     float           ReadAngle8(void) const;
     float           ReadAngle16(void) const;
     idVec3          ReadDir(int numBits) const;
-    void            ReadString(char* buffer, int bufferSize) const;
-    void            ReadData(void* data, int length) const;
-    void            ReadDict(idDict& dict);
+    void            ReadString(char *buffer, int bufferSize) const;
+    void            ReadData(void *data, int length) const;
+    void            ReadDict(idDict &dict);
 
     int             ReadDeltaChar(int oldValue) const;
     int             ReadDeltaByte(int oldValue) const;
@@ -502,10 +502,10 @@ class idBitMsgDelta {
     int             ReadDeltaIntCounter(int oldValue) const;
 
   private:
-    const idBitMsg* base;           // base
-    idBitMsg*       newBase;        // new base
-    idBitMsg*       writeDelta;     // delta from base to new base for writing
-    const idBitMsg* readDelta;      // delta from base to new base for reading
+    const idBitMsg *base;           // base
+    idBitMsg       *newBase;        // new base
+    idBitMsg       *writeDelta;     // delta from base to new base for writing
+    const idBitMsg *readDelta;      // delta from base to new base for reading
     mutable bool    changed;        // true if the new base is different from the base
 
   private:
@@ -521,7 +521,7 @@ ID_INLINE idBitMsgDelta::idBitMsgDelta() {
     changed = false;
 }
 
-ID_INLINE void idBitMsgDelta::Init(const idBitMsg* base, idBitMsg* newBase, idBitMsg* delta) {
+ID_INLINE void idBitMsgDelta::Init(const idBitMsg *base, idBitMsg *newBase, idBitMsg *delta) {
     this->base = base;
     this->newBase = newBase;
     this->writeDelta = delta;
@@ -529,7 +529,7 @@ ID_INLINE void idBitMsgDelta::Init(const idBitMsg* base, idBitMsg* newBase, idBi
     this->changed = false;
 }
 
-ID_INLINE void idBitMsgDelta::Init(const idBitMsg* base, idBitMsg* newBase, const idBitMsg* delta) {
+ID_INLINE void idBitMsgDelta::Init(const idBitMsg *base, idBitMsg *newBase, const idBitMsg *delta) {
     this->base = base;
     this->newBase = newBase;
     this->writeDelta = NULL;
@@ -562,7 +562,7 @@ ID_INLINE void idBitMsgDelta::WriteInt(int c) {
 }
 
 ID_INLINE void idBitMsgDelta::WriteFloat(float f) {
-    WriteBits(*reinterpret_cast<int*>(&f), 32);
+    WriteBits(*reinterpret_cast<int *>(&f), 32);
 }
 
 ID_INLINE void idBitMsgDelta::WriteFloat(float f, int exponentBits, int mantissaBits) {
@@ -578,7 +578,7 @@ ID_INLINE void idBitMsgDelta::WriteAngle16(float f) {
     WriteBits(ANGLE2SHORT(f), 16);
 }
 
-ID_INLINE void idBitMsgDelta::WriteDir(const idVec3& dir, int numBits) {
+ID_INLINE void idBitMsgDelta::WriteDir(const idVec3 &dir, int numBits) {
     WriteBits(idBitMsg::DirToBits(dir, numBits), numBits);
 }
 
@@ -599,7 +599,7 @@ ID_INLINE void idBitMsgDelta::WriteDeltaInt(int oldValue, int newValue) {
 }
 
 ID_INLINE void idBitMsgDelta::WriteDeltaFloat(float oldValue, float newValue) {
-    WriteDelta(*reinterpret_cast<int*>(&oldValue), *reinterpret_cast<int*>(&newValue), 32);
+    WriteDelta(*reinterpret_cast<int *>(&oldValue), *reinterpret_cast<int *>(&newValue), 32);
 }
 
 ID_INLINE void idBitMsgDelta::WriteDeltaFloat(float oldValue, float newValue, int exponentBits, int mantissaBits) {
@@ -630,7 +630,7 @@ ID_INLINE int idBitMsgDelta::ReadInt(void) const {
 
 ID_INLINE float idBitMsgDelta::ReadFloat(void) const {
     float value;
-    *reinterpret_cast<int*>(&value) = ReadBits(32);
+    *reinterpret_cast<int *>(&value) = ReadBits(32);
     return value;
 }
 
@@ -669,7 +669,7 @@ ID_INLINE int idBitMsgDelta::ReadDeltaInt(int oldValue) const {
 
 ID_INLINE float idBitMsgDelta::ReadDeltaFloat(float oldValue) const {
     float value;
-    *reinterpret_cast<int*>(&value) = ReadDelta(*reinterpret_cast<int*>(&oldValue), 32);
+    *reinterpret_cast<int *>(&value) = ReadDelta(*reinterpret_cast<int *>(&oldValue), 32);
     return value;
 }
 

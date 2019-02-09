@@ -78,14 +78,14 @@ debugPolygon_t  rb_debugPolygons[ MAX_DEBUG_POLYGONS ];
 int             rb_numDebugPolygons = 0;
 int             rb_debugPolygonTime = 0;
 
-static void RB_DrawText(const char* text, const idVec3& origin, float scale, const idVec4& color, const idMat3& viewAxis, const int align);
+static void RB_DrawText(const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align);
 
 /*
 ================
 RB_DrawBounds
 ================
 */
-void RB_DrawBounds(const idBounds& bounds) {
+void RB_DrawBounds(const idBounds &bounds) {
     if (bounds.IsCleared()) {
         return;
     }
@@ -124,7 +124,7 @@ void RB_DrawBounds(const idBounds& bounds) {
 RB_SimpleSurfaceSetup
 ================
 */
-void RB_SimpleSurfaceSetup(const drawSurf_t* drawSurf) {
+void RB_SimpleSurfaceSetup(const drawSurf_t *drawSurf) {
     // change the matrix if needed
     if (drawSurf->space != backEnd.currentSpace) {
         qglLoadMatrixf(drawSurf->space->modelViewMatrix);
@@ -206,11 +206,11 @@ Debugging tool to see what values are in the stencil buffer
 void RB_ScanStencilBuffer(void) {
     int     counts[256];
     int     i;
-    byte*    stencilReadback;
+    byte    *stencilReadback;
 
     memset(counts, 0, sizeof(counts));
 
-    stencilReadback = (byte*)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight);
+    stencilReadback = (byte *)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight);
     qglReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stencilReadback);
 
     for (i = 0; i < glConfig.vidWidth * glConfig.vidHeight; i++) {
@@ -240,10 +240,10 @@ Print an overdraw count based on stencil index values
 void RB_CountStencilBuffer(void) {
     int     count;
     int     i;
-    byte*    stencilReadback;
+    byte    *stencilReadback;
 
 
-    stencilReadback = (byte*)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight);
+    stencilReadback = (byte *)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight);
     qglReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stencilReadback);
 
     count = 0;
@@ -305,12 +305,12 @@ RB_ShowOverdraw
 ==================
 */
 void RB_ShowOverdraw(void) {
-    const idMaterial*   material;
+    const idMaterial   *material;
     int                 i;
     drawSurf_t * *      drawSurfs;
-    const drawSurf_t*   surf;
+    const drawSurf_t   *surf;
     int                 numDrawSurfs;
-    viewLight_t*        vLight;
+    viewLight_t        *vLight;
 
     if (r_showOverDraw.GetInteger() == 0) {
         return;
@@ -337,27 +337,27 @@ void RB_ShowOverdraw(void) {
         }
     }
 
-    drawSurf_t** newDrawSurfs = (drawSurf_t**)R_FrameAlloc(numDrawSurfs + interactions * sizeof(newDrawSurfs[0]));
+    drawSurf_t **newDrawSurfs = (drawSurf_t **)R_FrameAlloc(numDrawSurfs + interactions * sizeof(newDrawSurfs[0]));
 
     for (i = 0; i < numDrawSurfs; i++) {
         surf = drawSurfs[i];
 
         if (surf->material) {
-            const_cast<drawSurf_t*>(surf)->material = material;
+            const_cast<drawSurf_t *>(surf)->material = material;
         }
 
-        newDrawSurfs[i] = const_cast<drawSurf_t*>(surf);
+        newDrawSurfs[i] = const_cast<drawSurf_t *>(surf);
     }
 
     for (vLight = backEnd.viewDef->viewLights; vLight; vLight = vLight->next) {
         for (surf = vLight->localInteractions; surf; surf = surf->nextOnLight) {
-            const_cast<drawSurf_t*>(surf)->material = material;
-            newDrawSurfs[i++] = const_cast<drawSurf_t*>(surf);
+            const_cast<drawSurf_t *>(surf)->material = material;
+            newDrawSurfs[i++] = const_cast<drawSurf_t *>(surf);
         }
 
         for (surf = vLight->globalInteractions; surf; surf = surf->nextOnLight) {
-            const_cast<drawSurf_t*>(surf)->material = material;
-            newDrawSurfs[i++] = const_cast<drawSurf_t*>(surf);
+            const_cast<drawSurf_t *>(surf)->material = material;
+            newDrawSurfs[i++] = const_cast<drawSurf_t *>(surf);
         }
 
         vLight->localInteractions = NULL;
@@ -366,18 +366,18 @@ void RB_ShowOverdraw(void) {
 
     switch (r_showOverDraw.GetInteger()) {
         case 1: // geometry overdraw
-            const_cast<viewDef_t*>(backEnd.viewDef)->drawSurfs = newDrawSurfs;
-            const_cast<viewDef_t*>(backEnd.viewDef)->numDrawSurfs = numDrawSurfs;
+            const_cast<viewDef_t *>(backEnd.viewDef)->drawSurfs = newDrawSurfs;
+            const_cast<viewDef_t *>(backEnd.viewDef)->numDrawSurfs = numDrawSurfs;
             break;
 
         case 2: // light interaction overdraw
-            const_cast<viewDef_t*>(backEnd.viewDef)->drawSurfs = &newDrawSurfs[numDrawSurfs];
-            const_cast<viewDef_t*>(backEnd.viewDef)->numDrawSurfs = interactions;
+            const_cast<viewDef_t *>(backEnd.viewDef)->drawSurfs = &newDrawSurfs[numDrawSurfs];
+            const_cast<viewDef_t *>(backEnd.viewDef)->numDrawSurfs = interactions;
             break;
 
         case 3: // geometry + light interaction overdraw
-            const_cast<viewDef_t*>(backEnd.viewDef)->drawSurfs = newDrawSurfs;
-            const_cast<viewDef_t*>(backEnd.viewDef)->numDrawSurfs += interactions;
+            const_cast<viewDef_t *>(backEnd.viewDef)->drawSurfs = newDrawSurfs;
+            const_cast<viewDef_t *>(backEnd.viewDef)->numDrawSurfs += interactions;
             break;
     }
 }
@@ -392,14 +392,14 @@ the resulting color shading from red at 0 to green at 128 to blue at 255
 ===================
 */
 void RB_ShowIntensity(void) {
-    byte*    colorReadback;
+    byte    *colorReadback;
     int     i, j, c;
 
     if (!r_showIntensity.GetBool()) {
         return;
     }
 
-    colorReadback = (byte*)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight * 4);
+    colorReadback = (byte *)R_StaticAlloc(glConfig.vidWidth * glConfig.vidHeight * 4);
     qglReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGBA, GL_UNSIGNED_BYTE, colorReadback);
 
     c = glConfig.vidWidth * glConfig.vidHeight * 4;
@@ -453,7 +453,7 @@ Draw the depth buffer as colors
 ===================
 */
 void RB_ShowDepthBuffer(void) {
-    void*    depthReadback;
+    void    *depthReadback;
 
     if (!r_showDepth.GetBool()) {
         return;
@@ -482,10 +482,10 @@ void RB_ShowDepthBuffer(void) {
     #if 0
 
     for (i = 0 ; i < glConfig.vidWidth * glConfig.vidHeight ; i++) {
-        ((byte*)depthReadback)[i*4] =
-            ((byte*)depthReadback)[i*4+1] =
-                ((byte*)depthReadback)[i*4+2] = 255 * ((float*)depthReadback)[i];
-        ((byte*)depthReadback)[i*4+3] = 1;
+        ((byte *)depthReadback)[i*4] =
+            ((byte *)depthReadback)[i*4+1] =
+                ((byte *)depthReadback)[i*4+2] = 255 * ((float *)depthReadback)[i];
+        ((byte *)depthReadback)[i*4+3] = 1;
     }
 
     #endif
@@ -504,8 +504,8 @@ based on how many lights are effecting it
 */
 void RB_ShowLightCount(void) {
     int     i;
-    const drawSurf_t*    surf;
-    const viewLight_t*   vLight;
+    const drawSurf_t    *surf;
+    const viewLight_t   *vLight;
 
     if (!r_showLightCount.GetBool()) {
         return;
@@ -532,14 +532,14 @@ void RB_ShowLightCount(void) {
 
     for (vLight = backEnd.viewDef->viewLights ; vLight ; vLight = vLight->next) {
         for (i = 0 ; i < 2 ; i++) {
-            for (surf = i ? vLight->localInteractions: vLight->globalInteractions; surf; surf = (drawSurf_t*)surf->nextOnLight) {
+            for (surf = i ? vLight->localInteractions: vLight->globalInteractions; surf; surf = (drawSurf_t *)surf->nextOnLight) {
                 RB_SimpleSurfaceSetup(surf);
 
                 if (!surf->geo->ambientCache) {
                     continue;
                 }
 
-                const idDrawVert*    ac = (idDrawVert*)vertexCache.Position(surf->geo->ambientCache);
+                const idDrawVert    *ac = (idDrawVert *)vertexCache.Position(surf->geo->ambientCache);
                 qglVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), &ac->xyz);
                 RB_DrawElementsWithCounters(surf->geo);
             }
@@ -565,8 +565,8 @@ plane extends from, allowing you to see doubled edges
 */
 void RB_ShowSilhouette(void) {
     int     i;
-    const drawSurf_t*    surf;
-    const viewLight_t*   vLight;
+    const drawSurf_t    *surf;
+    const viewLight_t   *vLight;
 
     if (!r_showSilhouette.GetBool()) {
         return;
@@ -601,10 +601,10 @@ void RB_ShowSilhouette(void) {
     for (vLight = backEnd.viewDef->viewLights ; vLight ; vLight = vLight->next) {
         for (i = 0 ; i < 2 ; i++) {
             for (surf = i ? vLight->localShadows : vLight->globalShadows
-                        ; surf ; surf = (drawSurf_t*)surf->nextOnLight) {
+                        ; surf ; surf = (drawSurf_t *)surf->nextOnLight) {
                 RB_SimpleSurfaceSetup(surf);
 
-                const srfTriangles_t*    tri = surf->geo;
+                const srfTriangles_t    *tri = surf->geo;
 
                 qglVertexPointer(3, GL_FLOAT, sizeof(shadowCache_t), vertexCache.Position(tri->shadowCache));
                 qglBegin(GL_LINES);
@@ -650,8 +650,8 @@ and count up the total fill usage
 */
 static void RB_ShowShadowCount(void) {
     int     i;
-    const drawSurf_t*    surf;
-    const viewLight_t*   vLight;
+    const drawSurf_t    *surf;
+    const viewLight_t   *vLight;
 
     if (!r_showShadowCount.GetBool()) {
         return;
@@ -676,9 +676,9 @@ static void RB_ShowShadowCount(void) {
     for (vLight = backEnd.viewDef->viewLights ; vLight ; vLight = vLight->next) {
         for (i = 0 ; i < 2 ; i++) {
             for (surf = i ? vLight->localShadows : vLight->globalShadows
-                        ; surf ; surf = (drawSurf_t*)surf->nextOnLight) {
+                        ; surf ; surf = (drawSurf_t *)surf->nextOnLight) {
                 RB_SimpleSurfaceSetup(surf);
-                const srfTriangles_t*    tri = surf->geo;
+                const srfTriangles_t    *tri = surf->geo;
 
                 if (!tri->shadowCache) {
                     continue;
@@ -698,7 +698,7 @@ static void RB_ShowShadowCount(void) {
                     }
                 }
 
-                shadowCache_t* cache = (shadowCache_t*)vertexCache.Position(tri->shadowCache);
+                shadowCache_t *cache = (shadowCache_t *)vertexCache.Position(tri->shadowCache);
                 qglVertexPointer(4, GL_FLOAT, sizeof(*cache), &cache->xyz);
                 RB_DrawElementsWithCounters(tri);
             }
@@ -730,8 +730,8 @@ RB_T_RenderTriangleSurfaceAsLines
 
 ===============
 */
-void RB_T_RenderTriangleSurfaceAsLines(const drawSurf_t* surf) {
-    const srfTriangles_t* tri = surf->geo;
+void RB_T_RenderTriangleSurfaceAsLines(const drawSurf_t *surf) {
+    const srfTriangles_t *tri = surf->geo;
 
     if (!tri->verts) {
         return;
@@ -758,7 +758,7 @@ RB_ShowTris
 Debugging tool
 =====================
 */
-static void RB_ShowTris(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowTris(drawSurf_t **drawSurfs, int numDrawSurfs) {
     idVec3 end;
 
     if (!r_showTris.GetInteger()) {
@@ -811,7 +811,7 @@ RB_ShowSurfaceInfo
 Debugging tool
 =====================
 */
-static void RB_ShowSurfaceInfo(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowSurfaceInfo(drawSurf_t **drawSurfs, int numDrawSurfs) {
     modelTrace_t mt;
     idVec3 start, end;
 
@@ -865,7 +865,7 @@ RB_ShowViewEntitys
 Debugging tool
 =====================
 */
-static void RB_ShowViewEntitys(viewEntity_t* vModels) {
+static void RB_ShowViewEntitys(viewEntity_t *vModels) {
     if (!r_showViewEntitys.GetBool()) {
         return;
     }
@@ -912,7 +912,7 @@ static void RB_ShowViewEntitys(viewEntity_t* vModels) {
         // draw the model bounds in white
         qglColor3f(1, 1, 1);
 
-        idRenderModel* model = R_EntityDefDynamicModel(vModels->entityDef);
+        idRenderModel *model = R_EntityDefDynamicModel(vModels->entityDef);
 
         if (!model) {
             continue;   // particles won't instantiate without a current view
@@ -938,10 +938,10 @@ Shade triangle red if they have a positive texture area
 green if they have a negative texture area, or blue if degenerate area
 =====================
 */
-static void RB_ShowTexturePolarity(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowTexturePolarity(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int     i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (!r_showTexturePolarity.GetBool()) {
         return;
@@ -968,7 +968,7 @@ static void RB_ShowTexturePolarity(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_TRIANGLES);
 
         for (j = 0 ; j < tri->numIndexes ; j+=3) {
-            idDrawVert*  a, *b, *c;
+            idDrawVert  *a, *b, *c;
             float       d0[5], d1[5];
             float       area;
 
@@ -1012,10 +1012,10 @@ RB_ShowUnsmoothedTangents
 Shade materials that are using unsmoothed tangents
 =====================
 */
-static void RB_ShowUnsmoothedTangents(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowUnsmoothedTangents(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int     i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (!r_showUnsmoothedTangents.GetBool()) {
         return;
@@ -1042,7 +1042,7 @@ static void RB_ShowUnsmoothedTangents(drawSurf_t** drawSurfs, int numDrawSurfs) 
         qglBegin(GL_TRIANGLES);
 
         for (j = 0 ; j < tri->numIndexes ; j+=3) {
-            idDrawVert*  a, *b, *c;
+            idDrawVert  *a, *b, *c;
 
             a = tri->verts + tri->indexes[j];
             b = tri->verts + tri->indexes[j+1];
@@ -1070,10 +1070,10 @@ Shade a triangle by the RGB colors of its tangent space
 3 = normal
 =====================
 */
-static void RB_ShowTangentSpace(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowTangentSpace(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int     i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (!r_showTangentSpace.GetInteger()) {
         return;
@@ -1099,7 +1099,7 @@ static void RB_ShowTangentSpace(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_TRIANGLES);
 
         for (j = 0 ; j < tri->numIndexes ; j++) {
-            const idDrawVert* v;
+            const idDrawVert *v;
 
             v = &tri->verts[tri->indexes[j]];
 
@@ -1130,10 +1130,10 @@ RB_ShowVertexColor
 Draw each triangle with the solid vertex colors
 =====================
 */
-static void RB_ShowVertexColor(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowVertexColor(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int     i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (!r_showVertexColor.GetBool()) {
         return;
@@ -1159,7 +1159,7 @@ static void RB_ShowVertexColor(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_TRIANGLES);
 
         for (j = 0 ; j < tri->numIndexes ; j++) {
-            const idDrawVert* v;
+            const idDrawVert *v;
 
             v = &tri->verts[tri->indexes[j]];
             qglColor4ubv(v->color);
@@ -1180,11 +1180,11 @@ RB_ShowNormals
 Debugging tool
 =====================
 */
-static void RB_ShowNormals(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowNormals(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int         i, j;
-    drawSurf_t*  drawSurf;
+    drawSurf_t  *drawSurf;
     idVec3      end;
-    const srfTriangles_t*    tri;
+    const srfTriangles_t    *tri;
     float       size;
     bool        showNumbers;
     idVec3      pos;
@@ -1282,11 +1282,11 @@ Debugging tool
 =====================
 */
 #if 0
-static void RB_AltShowNormals(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_AltShowNormals(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int         i, j, k;
-    drawSurf_t*  drawSurf;
+    drawSurf_t  *drawSurf;
     idVec3      end;
-    const srfTriangles_t*    tri;
+    const srfTriangles_t    *tri;
 
     if (r_showNormals.GetFloat() == 0.0f) {
         return;
@@ -1308,7 +1308,7 @@ static void RB_AltShowNormals(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_LINES);
 
         for (j = 0 ; j < tri->numIndexes ; j += 3) {
-            const idDrawVert* v[3];
+            const idDrawVert *v[3];
             idVec3      mid;
 
             v[0] = &tri->verts[tri->indexes[j+0]];
@@ -1362,10 +1362,10 @@ RB_ShowTextureVectors
 Draw texture vectors in the center of each triangle
 =====================
 */
-static void RB_ShowTextureVectors(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowTextureVectors(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int         i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (r_showTextureVectors.GetFloat() == 0.0f) {
         return;
@@ -1395,7 +1395,7 @@ static void RB_ShowTextureVectors(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_LINES);
 
         for (j = 0 ; j < tri->numIndexes ; j+= 3) {
-            const idDrawVert* a, *b, *c;
+            const idDrawVert *a, *b, *c;
             float   area, inva;
             idVec3  temp;
             float       d0[5], d1[5];
@@ -1462,10 +1462,10 @@ RB_ShowDominantTris
 Draw lines from each vertex to the dominant triangle center
 =====================
 */
-static void RB_ShowDominantTris(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowDominantTris(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int         i, j;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
 
     if (!r_showDominantTri.GetBool()) {
         return;
@@ -1498,7 +1498,7 @@ static void RB_ShowDominantTris(drawSurf_t** drawSurfs, int numDrawSurfs) {
         qglBegin(GL_LINES);
 
         for (j = 0 ; j < tri->numVerts ; j++) {
-            const idDrawVert* a, *b, *c;
+            const idDrawVert *a, *b, *c;
             idVec3      mid;
 
             // find the midpoint of the dominant tri
@@ -1526,11 +1526,11 @@ RB_ShowEdges
 Debugging tool
 =====================
 */
-static void RB_ShowEdges(drawSurf_t** drawSurfs, int numDrawSurfs) {
+static void RB_ShowEdges(drawSurf_t **drawSurfs, int numDrawSurfs) {
     int         i, j, k, m, n, o;
-    drawSurf_t*  drawSurf;
-    const srfTriangles_t*    tri;
-    const silEdge_t*         edge;
+    drawSurf_t  *drawSurf;
+    const srfTriangles_t    *tri;
+    const silEdge_t         *edge;
     int         danglePlane;
 
     if (!r_showEdges.GetBool()) {
@@ -1548,7 +1548,7 @@ static void RB_ShowEdges(drawSurf_t** drawSurfs, int numDrawSurfs) {
 
         tri = drawSurf->geo;
 
-        idDrawVert* ac = (idDrawVert*)tri->verts;
+        idDrawVert *ac = (idDrawVert *)tri->verts;
 
         if (!ac) {
             continue;
@@ -1634,10 +1634,10 @@ r_showLights 3  : also draw edges of each volume
 ==============
 */
 void RB_ShowLights(void) {
-    const idRenderLightLocal*    light;
+    const idRenderLightLocal    *light;
     int                 count;
-    srfTriangles_t*      tri;
-    viewLight_t*         vLight;
+    srfTriangles_t      *tri;
+    viewLight_t         *vLight;
 
     if (!r_showLights.GetInteger()) {
         return;
@@ -1723,7 +1723,7 @@ void RB_ShowPortals(void) {
 
     GL_State(GLS_DEFAULT);
 
-    ((idRenderWorldLocal*)backEnd.viewDef->renderWorld)->ShowPortals();
+    ((idRenderWorldLocal *)backEnd.viewDef->renderWorld)->ShowPortals();
 
     qglEnable(GL_DEPTH_TEST);
 }
@@ -1736,7 +1736,7 @@ RB_ClearDebugText
 void RB_ClearDebugText(int time) {
     int         i;
     int         num;
-    debugText_t* text;
+    debugText_t *text;
 
     rb_debugTextTime = time;
 
@@ -1774,8 +1774,8 @@ void RB_ClearDebugText(int time) {
 RB_AddDebugText
 ================
 */
-void RB_AddDebugText(const char* text, const idVec3& origin, float scale, const idVec4& color, const idMat3& viewAxis, const int align, const int lifetime, const bool depthTest) {
-    debugText_t* debugText;
+void RB_AddDebugText(const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align, const int lifetime, const bool depthTest) {
+    debugText_t *debugText;
 
     if (rb_numDebugText < MAX_DEBUG_TEXT) {
         debugText = &rb_debugText[ rb_numDebugText++ ];
@@ -1797,7 +1797,7 @@ RB_DrawTextLength
   returns the length of the given text
 ================
 */
-float RB_DrawTextLength(const char* text, float scale, int len) {
+float RB_DrawTextLength(const char *text, float scale, int len) {
     int i, num, index, charIndex;
     float spacing, textLen = 0.0f;
 
@@ -1846,7 +1846,7 @@ RB_DrawText
   align can be 0-left, 1-center (default), 2-right
 ================
 */
-static void RB_DrawText(const char* text, const idVec3& origin, float scale, const idVec4& color, const idMat3& viewAxis, const int align) {
+static void RB_DrawText(const char *text, const idVec3 &origin, float scale, const idVec4 &color, const idMat3 &viewAxis, const int align) {
     int i, j, len, num, index, charIndex, line;
     float textLen = 0.0f, spacing;
     idVec3 org, p1, p2;
@@ -1934,7 +1934,7 @@ RB_ShowDebugText
 void RB_ShowDebugText(void) {
     int         i;
     int         width;
-    debugText_t* text;
+    debugText_t *text;
 
     if (!rb_numDebugText) {
         return;
@@ -1993,7 +1993,7 @@ RB_ClearDebugLines
 void RB_ClearDebugLines(int time) {
     int         i;
     int         num;
-    debugLine_t* line;
+    debugLine_t *line;
 
     rb_debugLineTime = time;
 
@@ -2024,8 +2024,8 @@ void RB_ClearDebugLines(int time) {
 RB_AddDebugLine
 ================
 */
-void RB_AddDebugLine(const idVec4& color, const idVec3& start, const idVec3& end, const int lifeTime, const bool depthTest) {
-    debugLine_t* line;
+void RB_AddDebugLine(const idVec4 &color, const idVec3 &start, const idVec3 &end, const int lifeTime, const bool depthTest) {
+    debugLine_t *line;
 
     if (rb_numDebugLines < MAX_DEBUG_LINES) {
         line = &rb_debugLines[ rb_numDebugLines++ ];
@@ -2045,7 +2045,7 @@ RB_ShowDebugLines
 void RB_ShowDebugLines(void) {
     int         i;
     int         width;
-    debugLine_t* line;
+    debugLine_t *line;
 
     if (!rb_numDebugLines) {
         return;
@@ -2116,7 +2116,7 @@ RB_ClearDebugPolygons
 void RB_ClearDebugPolygons(int time) {
     int             i;
     int             num;
-    debugPolygon_t*  poly;
+    debugPolygon_t  *poly;
 
     rb_debugPolygonTime = time;
 
@@ -2148,8 +2148,8 @@ void RB_ClearDebugPolygons(int time) {
 RB_AddDebugPolygon
 ================
 */
-void RB_AddDebugPolygon(const idVec4& color, const idWinding& winding, const int lifeTime, const bool depthTest) {
-    debugPolygon_t* poly;
+void RB_AddDebugPolygon(const idVec4 &color, const idWinding &winding, const int lifeTime, const bool depthTest) {
+    debugPolygon_t *poly;
 
     if (rb_numDebugPolygons < MAX_DEBUG_POLYGONS) {
         poly = &rb_debugPolygons[ rb_numDebugPolygons++ ];
@@ -2167,7 +2167,7 @@ RB_ShowDebugPolygons
 */
 void RB_ShowDebugPolygons(void) {
     int             i, j;
-    debugPolygon_t*  poly;
+    debugPolygon_t  *poly;
 
     if (!rb_numDebugPolygons) {
         return;
@@ -2387,7 +2387,7 @@ Display a single image over most of the screen
 ================
 */
 void RB_TestImage(void) {
-    idImage* image;
+    idImage *image;
     int     max;
     float   w, h;
 
@@ -2455,7 +2455,7 @@ void RB_TestImage(void) {
 RB_RenderDebugTools
 =================
 */
-void RB_RenderDebugTools(drawSurf_t** drawSurfs, int numDrawSurfs) {
+void RB_RenderDebugTools(drawSurf_t **drawSurfs, int numDrawSurfs) {
     // don't do anything if this was a 2D rendering
     if (!backEnd.viewDef->viewEntitys) {
         return;

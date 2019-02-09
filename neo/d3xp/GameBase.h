@@ -76,6 +76,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define DEFAULT_GRAVITY_STRING  "1066"
 
-extern void gameError(const char* fmt, ...);
+extern void gameError(const char *fmt, ...);
 
 #endif

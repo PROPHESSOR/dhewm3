@@ -40,8 +40,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "framework/Console.h"
 
-void SCR_DrawTextLeftAlign(float& y, const char* text, ...) id_attribute((format(printf,2,3)));
-void SCR_DrawTextRightAlign(float& y, const char* text, ...) id_attribute((format(printf,2,3)));
+void SCR_DrawTextLeftAlign(float &y, const char *text, ...) id_attribute((format(printf,2,3)));
+void SCR_DrawTextRightAlign(float &y, const char *text, ...) id_attribute((format(printf,2,3)));
 
 #define LINE_WIDTH              78
 #define NUM_CON_TIMES           4
@@ -60,14 +60,14 @@ class idConsoleLocal : public idConsole {
     virtual void        Init(void);
     virtual void        Shutdown(void);
     virtual void        LoadGraphics(void);
-    virtual bool        ProcessEvent(const sysEvent_t* event, bool forceAccept);
+    virtual bool        ProcessEvent(const sysEvent_t *event, bool forceAccept);
     virtual bool        Active(void);
     virtual void        ClearNotifyLines(void);
     virtual void        Close(void);
-    virtual void        Print(const char* text);
+    virtual void        Print(const char *text);
     virtual void        Draw(bool forceFullScreen);
 
-    void                Dump(const char* toFile);
+    void                Dump(const char *toFile);
     void                Clear();
 
     virtual void        SaveHistory();
@@ -75,7 +75,7 @@ class idConsoleLocal : public idConsole {
 
     //============================
 
-    const idMaterial*   charSetShader;
+    const idMaterial   *charSetShader;
 
   private:
     void                KeyDownEvent(int key);
@@ -128,12 +128,12 @@ class idConsoleLocal : public idConsole {
     static idCVar       con_notifyTime;
     static idCVar       con_noPrint;
 
-    const idMaterial*   whiteShader;
-    const idMaterial*   consoleShader;
+    const idMaterial   *whiteShader;
+    const idMaterial   *consoleShader;
 };
 
 static idConsoleLocal localConsole;
-idConsole*   console = &localConsole;
+idConsole   *console = &localConsole;
 
 idCVar idConsoleLocal::con_speed("con_speed", "3", CVAR_SYSTEM, "speed at which the console moves up and down");
 idCVar idConsoleLocal::con_notifyTime("con_notifyTime", "3", CVAR_SYSTEM, "time messages are displayed onscreen when console is pulled up");
@@ -158,7 +158,7 @@ idCVar idConsoleLocal::con_notifyTime("con_notifyTime", "3", CVAR_SYSTEM, "time 
 SCR_DrawTextLeftAlign
 ==================
 */
-void SCR_DrawTextLeftAlign(float& y, const char* text, ...) {
+void SCR_DrawTextLeftAlign(float &y, const char *text, ...) {
     char string[MAX_STRING_CHARS];
     va_list argptr;
     va_start(argptr, text);
@@ -173,7 +173,7 @@ void SCR_DrawTextLeftAlign(float& y, const char* text, ...) {
 SCR_DrawTextRightAlign
 ==================
 */
-void SCR_DrawTextRightAlign(float& y, const char* text, ...) {
+void SCR_DrawTextRightAlign(float &y, const char *text, ...) {
     char string[MAX_STRING_CHARS];
     va_list argptr;
     va_start(argptr, text);
@@ -193,7 +193,7 @@ SCR_DrawFPS
 */
 #define FPS_FRAMES  4
 float SCR_DrawFPS(float y) {
-    char*        s;
+    char        *s;
     int         w;
     static int  previousTimes[FPS_FRAMES];
     static int  index;
@@ -349,7 +349,7 @@ float SCR_DrawSoundDecoders(float y) {
 Con_Clear_f
 ==============
 */
-static void Con_Clear_f(const idCmdArgs& args) {
+static void Con_Clear_f(const idCmdArgs &args) {
     localConsole.Clear();
 }
 
@@ -358,7 +358,7 @@ static void Con_Clear_f(const idCmdArgs& args) {
 Con_Dump_f
 ==============
 */
-static void Con_Dump_f(const idCmdArgs& args) {
+static void Con_Dump_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         common->Printf("usage: conDump <filename>\n");
         return;
@@ -478,10 +478,10 @@ idConsoleLocal::Dump
 Save the console contents out to a file
 ================
 */
-void idConsoleLocal::Dump(const char* fileName) {
+void idConsoleLocal::Dump(const char *fileName) {
     int     l, x, i;
-    short*  line;
-    idFile* f;
+    short  *line;
+    idFile *f;
     char    buffer[LINE_WIDTH + 3];
 
     f = fileSystem->OpenFileWrite(fileName);
@@ -537,12 +537,12 @@ void idConsoleLocal::Dump(const char* fileName) {
 }
 
 void idConsoleLocal::SaveHistory() {
-    idFile* f = fileSystem->OpenFileWrite("consolehistory.dat");
+    idFile *f = fileSystem->OpenFileWrite("consolehistory.dat");
 
     for (int i=0; i < COMMAND_HISTORY; ++i) {
         // make sure the history is in the right order
         int line = (nextHistoryLine + i) % COMMAND_HISTORY;
-        const char* s = historyEditLines[line].GetBuffer();
+        const char *s = historyEditLines[line].GetBuffer();
 
         if (s && s[0]) {
             f->WriteString(s);
@@ -553,7 +553,7 @@ void idConsoleLocal::SaveHistory() {
 }
 
 void idConsoleLocal::LoadHistory() {
-    idFile* f = fileSystem->OpenFileRead("consolehistory.dat");
+    idFile *f = fileSystem->OpenFileRead("consolehistory.dat");
 
     if (f == NULL) { // file doesn't exist
         return;
@@ -824,7 +824,7 @@ void idConsoleLocal::UpdateDisplayFraction(void) {
 ProcessEvent
 ==============
 */
-bool    idConsoleLocal::ProcessEvent(const sysEvent_t* event, bool forceAccept) {
+bool    idConsoleLocal::ProcessEvent(const sysEvent_t *event, bool forceAccept) {
     bool consoleKey = false;
 
     if (event->evType == SE_KEY) {
@@ -948,7 +948,7 @@ Print
 Handles cursor positioning, line wrapping, etc
 ================
 */
-void idConsoleLocal::Print(const char* txt) {
+void idConsoleLocal::Print(const char *txt) {
     int     y;
     int     c, l;
     int     color;
@@ -964,7 +964,7 @@ void idConsoleLocal::Print(const char* txt) {
 
     color = idStr::ColorIndex(C_COLOR_CYAN);
 
-    while ((c = *(const unsigned char*)txt) != 0) {
+    while ((c = *(const unsigned char *)txt) != 0) {
         if (idStr::IsColor(txt)) {
             if (*(txt+1) == C_COLOR_DEFAULT) {
                 color = idStr::ColorIndex(C_COLOR_CYAN);
@@ -1089,7 +1089,7 @@ Draws the last few lines of output transparently over the game top
 */
 void idConsoleLocal::DrawNotify() {
     int     x, v;
-    short*   text_p;
+    short   *text_p;
     int     i;
     int     time;
     int     currentColor;
@@ -1152,7 +1152,7 @@ void idConsoleLocal::DrawSolidConsole(float frac) {
     int             i, x;
     float           y;
     int             rows;
-    short*           text_p;
+    short           *text_p;
     int             row;
     int             lines;
     int             currentColor;

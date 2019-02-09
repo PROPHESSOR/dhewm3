@@ -41,7 +41,7 @@ The ambientCache is on the stack, so we don't want to leave a reference
 to it that would try to be freed later.  Create the ambientCache immediately.
 =================
 */
-static void R_FinishDeform(drawSurf_t* drawSurf, srfTriangles_t* newTri, idDrawVert* ac) {
+static void R_FinishDeform(drawSurf_t *drawSurf, srfTriangles_t *newTri, idDrawVert *ac) {
     if (!newTri) {
         return;
     }
@@ -74,15 +74,15 @@ Assuming all the triangles for this shader are independant
 quads, rebuild them as forward facing sprites
 =====================
 */
-static void R_AutospriteDeform(drawSurf_t* surf) {
+static void R_AutospriteDeform(drawSurf_t *surf) {
     int     i;
-    const idDrawVert*    v;
+    const idDrawVert    *v;
     idVec3  mid, delta;
     float   radius;
     idVec3  left, up;
     idVec3  leftDir, upDir;
-    const srfTriangles_t*    tri;
-    srfTriangles_t*  newTri;
+    const srfTriangles_t    *tri;
+    srfTriangles_t  *newTri;
 
     tri = surf->geo;
 
@@ -105,12 +105,12 @@ static void R_AutospriteDeform(drawSurf_t* surf) {
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
-    newTri->indexes = (glIndex_t*)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
+    newTri->indexes = (glIndex_t *)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
 
-    idDrawVert*  ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert  *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
 
     for (i = 0 ; i < tri->numVerts ; i+=4) {
         // find the midpoint
@@ -163,10 +163,10 @@ Make sure this is used with twosided translucent shaders, because the exact side
 order may not be correct.
 =====================
 */
-static void R_TubeDeform(drawSurf_t* surf) {
+static void R_TubeDeform(drawSurf_t *surf) {
     int     i, j;
     int     indexes;
-    const srfTriangles_t* tri;
+    const srfTriangles_t *tri;
     static int edgeVerts[6][2] = {
         { 0, 1 },
         { 1, 2 },
@@ -193,13 +193,13 @@ static void R_TubeDeform(drawSurf_t* surf) {
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    srfTriangles_t* newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    srfTriangles_t *newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
-    newTri->indexes = (glIndex_t*)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
+    newTri->indexes = (glIndex_t *)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
     memcpy(newTri->indexes, tri->indexes, newTri->numIndexes * sizeof(newTri->indexes[0]));
 
-    idDrawVert*  ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert  *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
     memset(ac, 0, sizeof(idDrawVert) * newTri->numVerts);
 
     // this is a lot of work for two triangles...
@@ -210,7 +210,7 @@ static void R_TubeDeform(drawSurf_t* surf) {
         int     nums[2];
         idVec3  mid[2];
         idVec3  major, minor;
-        const idDrawVert* v1, *v2;
+        const idDrawVert *v1, *v2;
 
         // identify the two shortest edges out of the six defined by the indexes
         nums[0] = nums[1] = 0;
@@ -255,11 +255,11 @@ static void R_TubeDeform(drawSurf_t* surf) {
             int i1 = tri->indexes[i+edgeVerts[nums[j]][0]];
             int i2 = tri->indexes[i+edgeVerts[nums[j]][1]];
 
-            idDrawVert* av1 = &ac[i1];
-            idDrawVert* av2 = &ac[i2];
+            idDrawVert *av1 = &ac[i1];
+            idDrawVert *av2 = &ac[i2];
 
-            *av1 = *(idDrawVert*)&tri->verts[i1];
-            *av2 = *(idDrawVert*)&tri->verts[i2];
+            *av1 = *(idDrawVert *)&tri->verts[i1];
+            *av2 = *(idDrawVert *)&tri->verts[i2];
 
             l = 0.5 * lengths[j];
 
@@ -288,7 +288,7 @@ R_WindingFromTriangles
 =====================
 */
 #define MAX_TRI_WINDING_INDEXES     16
-int R_WindingFromTriangles(const srfTriangles_t* tri, glIndex_t indexes[MAX_TRI_WINDING_INDEXES]) {
+int R_WindingFromTriangles(const srfTriangles_t *tri, glIndex_t indexes[MAX_TRI_WINDING_INDEXES]) {
     int         i, j, k, l;
 
     indexes[0] = tri->indexes[0];
@@ -521,9 +521,9 @@ static void R_FlareDeform( drawSurf_t *surf ) {
 }
 */
 
-static void R_FlareDeform(drawSurf_t* surf) {
-    const srfTriangles_t* tri;
-    srfTriangles_t*      newTri;
+static void R_FlareDeform(drawSurf_t *surf) {
+    const srfTriangles_t *tri;
+    srfTriangles_t      *newTri;
     idPlane plane;
     float   dot;
     idVec3  localViewer;
@@ -539,12 +539,12 @@ static void R_FlareDeform(drawSurf_t* surf) {
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = 16;
     newTri->numIndexes = 18*3;
-    newTri->indexes = (glIndex_t*)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
+    newTri->indexes = (glIndex_t *)R_FrameAlloc(newTri->numIndexes * sizeof(newTri->indexes[0]));
 
-    idDrawVert* ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
 
     // find the plane
     if (!plane.FromPoints(tri->verts[tri->indexes[0]].xyz, tri->verts[tri->indexes[1]].xyz, tri->verts[tri->indexes[2]].xyz)) {
@@ -723,26 +723,26 @@ R_ExpandDeform
 Expands the surface along it's normals by a shader amount
 =====================
 */
-static void R_ExpandDeform(drawSurf_t* surf) {
+static void R_ExpandDeform(drawSurf_t *surf) {
     int     i;
-    const srfTriangles_t*    tri;
-    srfTriangles_t*  newTri;
+    const srfTriangles_t    *tri;
+    srfTriangles_t  *newTri;
 
     tri = surf->geo;
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
     newTri->indexes = tri->indexes;
 
-    idDrawVert* ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
 
     float dist = surf->shaderRegisters[ surf->material->GetDeformRegister(0) ];
 
     for (i = 0 ; i < tri->numVerts ; i++) {
-        ac[i] = *(idDrawVert*)&tri->verts[i];
+        ac[i] = *(idDrawVert *)&tri->verts[i];
         ac[i].xyz = tri->verts[i].xyz + tri->verts[i].normal * dist;
     }
 
@@ -756,26 +756,26 @@ R_MoveDeform
 Moves the surface along the X axis, mostly just for demoing the deforms
 =====================
 */
-static void  R_MoveDeform(drawSurf_t* surf) {
+static void  R_MoveDeform(drawSurf_t *surf) {
     int     i;
-    const srfTriangles_t*    tri;
-    srfTriangles_t*  newTri;
+    const srfTriangles_t    *tri;
+    srfTriangles_t  *newTri;
 
     tri = surf->geo;
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
     newTri->indexes = tri->indexes;
 
-    idDrawVert* ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
 
     float dist = surf->shaderRegisters[ surf->material->GetDeformRegister(0) ];
 
     for (i = 0 ; i < tri->numVerts ; i++) {
-        ac[i] = *(idDrawVert*)&tri->verts[i];
+        ac[i] = *(idDrawVert *)&tri->verts[i];
         ac[i].xyz[0] += dist;
     }
 
@@ -791,23 +791,23 @@ R_TurbulentDeform
 Turbulently deforms the XYZ, S, and T values
 =====================
 */
-static void  R_TurbulentDeform(drawSurf_t* surf) {
+static void  R_TurbulentDeform(drawSurf_t *surf) {
     int     i;
-    const srfTriangles_t*    tri;
-    srfTriangles_t*  newTri;
+    const srfTriangles_t    *tri;
+    srfTriangles_t  *newTri;
 
     tri = surf->geo;
 
     // this srfTriangles_t and all its indexes and caches are in frame
     // memory, and will be automatically disposed of
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
     newTri->indexes = tri->indexes;
 
-    idDrawVert* ac = (idDrawVert*)_alloca16(newTri->numVerts * sizeof(idDrawVert));
+    idDrawVert *ac = (idDrawVert *)_alloca16(newTri->numVerts * sizeof(idDrawVert));
 
-    idDeclTable* table = (idDeclTable*)surf->material->GetDeformDecl();
+    idDeclTable *table = (idDeclTable *)surf->material->GetDeformDecl();
     float range = surf->shaderRegisters[ surf->material->GetDeformRegister(0) ];
     float timeOfs = surf->shaderRegisters[ surf->material->GetDeformRegister(1) ];
     float domain = surf->shaderRegisters[ surf->material->GetDeformRegister(2) ];
@@ -819,7 +819,7 @@ static void  R_TurbulentDeform(drawSurf_t* surf) {
         f = timeOfs + domain * f;
         f += timeOfs;
 
-        ac[i] = *(idDrawVert*)&tri->verts[i];
+        ac[i] = *(idDrawVert *)&tri->verts[i];
 
         ac[i].st[0] += range * table->TableLookup(f);
         ac[i].st[1] += range * table->TableLookup(f + tOfs);
@@ -846,7 +846,7 @@ typedef struct {
     idVec3      mid;
 } eyeIsland_t;
 
-static void AddTriangleToIsland_r(const srfTriangles_t* tri, int triangleNum, bool* usedList, eyeIsland_t* island) {
+static void AddTriangleToIsland_r(const srfTriangles_t *tri, int triangleNum, bool *usedList, eyeIsland_t *island) {
     int     a, b, c;
 
     usedList[triangleNum] = true;
@@ -897,10 +897,10 @@ Each eyeball surface should have an separate upright triangle behind it, long en
 pointing out the eye, and another single triangle in front of the eye for the focus point.
 =====================
 */
-static void R_EyeballDeform(drawSurf_t* surf) {
+static void R_EyeballDeform(drawSurf_t *surf) {
     int     i, j, k;
-    const srfTriangles_t*    tri;
-    srfTriangles_t*  newTri;
+    const srfTriangles_t    *tri;
+    srfTriangles_t  *newTri;
     eyeIsland_t islands[MAX_EYEBALL_ISLANDS];
     int         numIslands;
     bool        triUsed[MAX_EYEBALL_ISLANDS*MAX_EYEBALL_TRIS];
@@ -943,12 +943,12 @@ static void R_EyeballDeform(drawSurf_t* surf) {
     // memory, and will be automatically disposed of
 
     // the surface cannot have more indexes or verts than the original
-    newTri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*newTri));
+    newTri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*newTri));
     memset(newTri, 0, sizeof(*newTri));
     newTri->numVerts = tri->numVerts;
     newTri->numIndexes = tri->numIndexes;
-    newTri->indexes = (glIndex_t*)R_FrameAlloc(tri->numIndexes * sizeof(newTri->indexes[0]));
-    idDrawVert* ac = (idDrawVert*)_alloca16(tri->numVerts * sizeof(idDrawVert));
+    newTri->indexes = (glIndex_t *)R_FrameAlloc(tri->numIndexes * sizeof(newTri->indexes[0]));
+    idDrawVert *ac = (idDrawVert *)_alloca16(tri->numVerts * sizeof(idDrawVert));
 
     newTri->numIndexes = 0;
 
@@ -958,7 +958,7 @@ static void R_EyeballDeform(drawSurf_t* surf) {
     }
 
     for (i = 0 ; i < numIslands ; i++) {
-        eyeIsland_t*     island = &islands[i];
+        eyeIsland_t     *island = &islands[i];
 
         if (island->numTris == 1) {
             continue;
@@ -997,9 +997,9 @@ static void R_EyeballDeform(drawSurf_t* surf) {
         idVec3  dir = focus - origin;
         dir.Normalize();
 
-        const idVec3& p1 = tri->verts[tri->indexes[islands[originIsland].tris[0]+0]].xyz;
-        const idVec3& p2 = tri->verts[tri->indexes[islands[originIsland].tris[0]+1]].xyz;
-        const idVec3& p3 = tri->verts[tri->indexes[islands[originIsland].tris[0]+2]].xyz;
+        const idVec3 &p1 = tri->verts[tri->indexes[islands[originIsland].tris[0]+0]].xyz;
+        const idVec3 &p2 = tri->verts[tri->indexes[islands[originIsland].tris[0]+1]].xyz;
+        const idVec3 &p3 = tri->verts[tri->indexes[islands[originIsland].tris[0]+2]].xyz;
 
         idVec3  v1 = p2 - p1;
         v1.Normalize();
@@ -1050,10 +1050,10 @@ R_ParticleDeform
 Emit particles from the surface instead of drawing it
 =====================
 */
-static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
-    const struct renderEntity_s* renderEntity = &surf->space->entityDef->parms;
-    const struct viewDef_s* viewDef = tr.viewDef;
-    const idDeclParticle* particleSystem = (idDeclParticle*)surf->material->GetDeformDecl();
+static void R_ParticleDeform(drawSurf_t *surf, bool useArea) {
+    const struct renderEntity_s *renderEntity = &surf->space->entityDef->parms;
+    const struct viewDef_s *viewDef = tr.viewDef;
+    const idDeclParticle *particleSystem = (idDeclParticle *)surf->material->GetDeformDecl();
 
     if (r_skipParticles.GetBool()) {
         return;
@@ -1074,11 +1074,11 @@ static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
     //
     int     numSourceTris = surf->geo->numIndexes / 3;
     float   totalArea = 0;
-    float*   sourceTriAreas = NULL;
-    const srfTriangles_t*    srcTri = surf->geo;
+    float   *sourceTriAreas = NULL;
+    const srfTriangles_t    *srcTri = surf->geo;
 
     if (useArea) {
-        sourceTriAreas = (float*)_alloca(sizeof(*sourceTriAreas) * numSourceTris);
+        sourceTriAreas = (float *)_alloca(sizeof(*sourceTriAreas) * numSourceTris);
         int triNum = 0;
 
         for (int i = 0 ; i < srcTri->numIndexes ; i += 3, triNum++) {
@@ -1102,7 +1102,7 @@ static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
     for (int currentTri = 0; currentTri < ((useArea) ? 1 : numSourceTris); currentTri++) {
 
         for (int stageNum = 0 ; stageNum < particleSystem->stages.Num() ; stageNum++) {
-            idParticleStage* stage = particleSystem->stages[stageNum];
+            idParticleStage *stage = particleSystem->stages[stageNum];
 
             if (!stage->material) {
                 continue;
@@ -1123,13 +1123,13 @@ static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
             int count = totalParticles * stage->NumQuadsPerParticle();
 
             // allocate a srfTriangles in temp memory that can hold all the particles
-            srfTriangles_t*  tri;
+            srfTriangles_t  *tri;
 
-            tri = (srfTriangles_t*)R_ClearedFrameAlloc(sizeof(*tri));
+            tri = (srfTriangles_t *)R_ClearedFrameAlloc(sizeof(*tri));
             tri->numVerts = 4 * count;
             tri->numIndexes = 6 * count;
-            tri->verts = (idDrawVert*)R_FrameAlloc(tri->numVerts * sizeof(tri->verts[0]));
-            tri->indexes = (glIndex_t*)R_FrameAlloc(tri->numIndexes * sizeof(tri->indexes[0]));
+            tri->verts = (idDrawVert *)R_FrameAlloc(tri->numVerts * sizeof(tri->verts[0]));
+            tri->indexes = (glIndex_t *)R_FrameAlloc(tri->numIndexes * sizeof(tri->indexes[0]));
 
             // just always draw the particles
             tri->bounds = stage->bounds;
@@ -1207,9 +1207,9 @@ static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
                 }
 
                 // now pick a random point inside pointTri
-                const idDrawVert* v1 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 0 ] ];
-                const idDrawVert* v2 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 1 ] ];
-                const idDrawVert* v3 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 2 ] ];
+                const idDrawVert *v1 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 0 ] ];
+                const idDrawVert *v2 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 1 ] ];
+                const idDrawVert *v3 = &srcTri->verts[ srcTri->indexes[ pointTri * 3 + 2 ] ];
 
                 float   f1 = g.random.RandomFloat();
                 float   f2 = g.random.RandomFloat();
@@ -1271,7 +1271,7 @@ static void R_ParticleDeform(drawSurf_t* surf, bool useArea) {
 R_DeformDrawSurf
 =================
 */
-void R_DeformDrawSurf(drawSurf_t* drawSurf) {
+void R_DeformDrawSurf(drawSurf_t *drawSurf) {
     if (!drawSurf->material) {
         return;
     }

@@ -119,7 +119,7 @@ class idCommon {
     // Initialize everything.
     // if the OS allows, pass argc/argv directly (without executable name)
     // otherwise pass the command line in a single string (without executable name)
-    virtual void                Init(int argc, char** argv) = 0;
+    virtual void                Init(int argc, char **argv) = 0;
 
     // Shuts down everything.
     virtual void                Shutdown(void) = 0;
@@ -144,22 +144,22 @@ class idCommon {
     // If match is NULL, all set commands will be executed, otherwise
     // only a set with the exact name.  Only used during startup.
     // set once to clear the cvar from +set for early init code
-    virtual void                StartupVariable(const char* match, bool once) = 0;
+    virtual void                StartupVariable(const char *match, bool once) = 0;
 
     // Initializes a tool with the given dictionary.
-    virtual void                InitTool(const toolFlag_t tool, const idDict* dict) = 0;
+    virtual void                InitTool(const toolFlag_t tool, const idDict *dict) = 0;
 
     // Activates or deactivates a tool.
     virtual void                ActivateTool(bool active) = 0;
 
     // Writes the user's configuration to a file
-    virtual void                WriteConfigToFile(const char* filename) = 0;
+    virtual void                WriteConfigToFile(const char *filename) = 0;
 
     // Writes cvars with the given flags to a file.
-    virtual void                WriteFlaggedCVarsToFile(const char* filename, int flags, const char* setCmd) = 0;
+    virtual void                WriteFlaggedCVarsToFile(const char *filename, int flags, const char *setCmd) = 0;
 
     // Begins redirection of console output to the given buffer.
-    virtual void                BeginRedirect(char* buffer, int buffersize, void (*flush)(const char*)) = 0;
+    virtual void                BeginRedirect(char *buffer, int buffersize, void (*flush)(const char *)) = 0;
 
     // Stops redirection of console output.
     virtual void                EndRedirect(void) = 0;
@@ -168,43 +168,43 @@ class idCommon {
     virtual void                SetRefreshOnPrint(bool set) = 0;
 
     // Prints message to the console, which may cause a screen update if com_refreshOnPrint is set.
-    virtual void                Printf(const char* fmt, ...)id_attribute((format(printf,2,3))) = 0;
+    virtual void                Printf(const char *fmt, ...)id_attribute((format(printf,2,3))) = 0;
 
     // Same as Printf, with a more usable API - Printf pipes to this.
-    virtual void                VPrintf(const char* fmt, va_list arg) = 0;
+    virtual void                VPrintf(const char *fmt, va_list arg) = 0;
 
     // Prints message that only shows up if the "developer" cvar is set,
     // and NEVER forces a screen update, which could cause reentrancy problems.
-    virtual void                DPrintf(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void                DPrintf(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
     // Prints WARNING %s message and adds the warning message to a queue for printing later on.
-    virtual void                Warning(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void                Warning(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
     // Prints WARNING %s message in yellow that only shows up if the "developer" cvar is set.
-    virtual void                DWarning(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void                DWarning(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
     // Prints all queued warnings.
     virtual void                PrintWarnings(void) = 0;
 
     // Removes all queued warnings.
-    virtual void                ClearWarnings(const char* reason) = 0;
+    virtual void                ClearWarnings(const char *reason) = 0;
 
     // Issues a C++ throw. Normal errors just abort to the game loop,
     // which is appropriate for media or dynamic logic errors.
-    virtual void                Error(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void                Error(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
     // Fatal errors quit all the way to a system dialog box, which is appropriate for
     // static internal errors or cases where the system may be corrupted.
-    virtual void                FatalError(const char* fmt, ...) id_attribute((format(printf,2,3))) = 0;
+    virtual void                FatalError(const char *fmt, ...) id_attribute((format(printf,2,3))) = 0;
 
     // Returns a pointer to the dictionary with language specific strings.
-    virtual const idLangDict*   GetLanguageDict(void) = 0;
+    virtual const idLangDict   *GetLanguageDict(void) = 0;
 
     // Returns key bound to the command
-    virtual const char*         KeysFromBinding(const char* bind) = 0;
+    virtual const char         *KeysFromBinding(const char *bind) = 0;
 
     // Returns the binding bound to the key
-    virtual const char*         BindingFromKey(const char* key) = 0;
+    virtual const char         *BindingFromKey(const char *key) = 0;
 
     // Directly sample a button.
     virtual int                 ButtonState(int key) = 0;
@@ -246,7 +246,7 @@ class idCommon {
      * Right now it's only used for a Doom3 Demo specific hack only relevant for base.dll (not for Mods)
      */
 
-    typedef void* (*FunctionPointer)(void*); // needs to be cast to/from real type!
+    typedef void *(*FunctionPointer)(void *); // needs to be cast to/from real type!
     enum CallbackType {
         // called on reloadImages and vid_restart commands (before anything "real" happens)
         // expecting callback to be like void cb(void* userarg, const idCmdArgs& cmdArgs)
@@ -258,7 +258,7 @@ class idCommon {
     // When a game DLL is unloaded the callbacks are automatically removed from the Engine
     // so you usually don't have to worry about that; but you can call this with cb = NULL
     // and userArg = NULL to remove a callback manually (e.g. if userArg refers to an object you deleted)
-    virtual bool                SetCallback(CallbackType cbt, FunctionPointer cb, void* userArg) = 0;
+    virtual bool                SetCallback(CallbackType cbt, FunctionPointer cb, void *userArg) = 0;
 
     enum FunctionType {
         // the function's signature is bool fn(void) - no arguments.
@@ -270,9 +270,9 @@ class idCommon {
     // returns true if that function is available in this version of dhewm3
     // *out_fnptr will be the function (you'll have to cast it probably)
     // *out_userArg will be an argument you have to pass to the function, if appropriate (else NULL)
-    virtual bool                GetAdditionalFunction(FunctionType ft, FunctionPointer* out_fnptr, void** out_userArg) = 0;
+    virtual bool                GetAdditionalFunction(FunctionType ft, FunctionPointer *out_fnptr, void **out_userArg) = 0;
 };
 
-extern idCommon*        common;
+extern idCommon        *common;
 
 #endif /* !__COMMON_H__ */

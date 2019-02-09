@@ -38,7 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 idCmdArgs::operator=
 ============
 */
-void idCmdArgs::operator=(const idCmdArgs& args) {
+void idCmdArgs::operator=(const idCmdArgs &args) {
     int i;
 
     argc = args.argc;
@@ -54,7 +54,7 @@ void idCmdArgs::operator=(const idCmdArgs& args) {
 idCmdArgs::Args
 ============
 */
-const char* idCmdArgs::Args(int start, int end, bool escapeArgs) const {
+const char *idCmdArgs::Args(int start, int end, bool escapeArgs) const {
     static char cmd_args[MAX_COMMAND_STRING];
     int     i;
 
@@ -80,7 +80,7 @@ const char* idCmdArgs::Args(int start, int end, bool escapeArgs) const {
         }
 
         if (escapeArgs && strchr(argv[i], '\\')) {
-            char* p = argv[i];
+            char *p = argv[i];
 
             while (*p != '\0') {
                 if (*p == '\\') {
@@ -115,7 +115,7 @@ are inserted in the appropriate place. The argv array
 will point into this temporary buffer.
 ============
 */
-void idCmdArgs::TokenizeString(const char* text, bool keepAsStrings) {
+void idCmdArgs::TokenizeString(const char *text, bool keepAsStrings) {
     idLexer     lex;
     idToken     token, number;
     int         len, totalLen;
@@ -187,7 +187,7 @@ void idCmdArgs::TokenizeString(const char* text, bool keepAsStrings) {
 idCmdArgs::AppendArg
 ============
 */
-void idCmdArgs::AppendArg(const char* text) {
+void idCmdArgs::AppendArg(const char *text) {
     if (!argc) {
         argc = 1;
         argv[ 0 ] = tokenized;
@@ -204,7 +204,7 @@ void idCmdArgs::AppendArg(const char* text) {
 idCmdArgs::GetArgs
 ============
 */
-const char** idCmdArgs::GetArgs(int* _argc) {
+const char **idCmdArgs::GetArgs(int *_argc) {
     *_argc = argc;
-    return (const char**)&argv[0];
+    return (const char **)&argv[0];
 }

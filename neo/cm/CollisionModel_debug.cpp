@@ -52,7 +52,7 @@ Visualisation code
 ===============================================================================
 */
 
-const char* cm_contentsNameByIndex[] = {
+const char *cm_contentsNameByIndex[] = {
     "none",                         // 0
     "solid",                        // 1
     "opaque",                       // 2
@@ -105,7 +105,7 @@ static idVec4 cm_color;
 idCollisionModelManagerLocal::ContentsFromString
 ================
 */
-int idCollisionModelManagerLocal::ContentsFromString(const char* string) const {
+int idCollisionModelManagerLocal::ContentsFromString(const char *string) const {
     int i, contents = 0;
     idLexer src(string, idStr::Length(string), "ContentsFromString");
     idToken token;
@@ -131,7 +131,7 @@ int idCollisionModelManagerLocal::ContentsFromString(const char* string) const {
 idCollisionModelManagerLocal::StringFromContents
 ================
 */
-const char* idCollisionModelManagerLocal::StringFromContents(const int contents) const {
+const char *idCollisionModelManagerLocal::StringFromContents(const int contents) const {
     int i, length = 0;
     static char contentsString[MAX_STRING_CHARS];
 
@@ -155,9 +155,9 @@ const char* idCollisionModelManagerLocal::StringFromContents(const int contents)
 idCollisionModelManagerLocal::DrawEdge
 ================
 */
-void idCollisionModelManagerLocal::DrawEdge(cm_model_t* model, int edgeNum, const idVec3& origin, const idMat3& axis) {
+void idCollisionModelManagerLocal::DrawEdge(cm_model_t *model, int edgeNum, const idVec3 &origin, const idMat3 &axis) {
     int side;
-    cm_edge_t* edge;
+    cm_edge_t *edge;
     idVec3 start, end, mid;
     bool isRotated;
 
@@ -207,9 +207,9 @@ void idCollisionModelManagerLocal::DrawEdge(cm_model_t* model, int edgeNum, cons
 idCollisionModelManagerLocal::DrawPolygon
 ================
 */
-void idCollisionModelManagerLocal::DrawPolygon(cm_model_t* model, cm_polygon_t* p, const idVec3& origin, const idMat3& axis, const idVec3& viewOrigin) {
+void idCollisionModelManagerLocal::DrawPolygon(cm_model_t *model, cm_polygon_t *p, const idVec3 &origin, const idMat3 &axis, const idVec3 &viewOrigin) {
     int i, edgeNum;
-    cm_edge_t* edge;
+    cm_edge_t *edge;
     idVec3 center, end, dir;
 
     if (cm_backFaceCull.GetBool()) {
@@ -274,12 +274,12 @@ void idCollisionModelManagerLocal::DrawPolygon(cm_model_t* model, cm_polygon_t* 
 idCollisionModelManagerLocal::DrawNodePolygons
 ================
 */
-void idCollisionModelManagerLocal::DrawNodePolygons(cm_model_t* model, cm_node_t* node,
-        const idVec3& origin, const idMat3& axis,
-        const idVec3& viewOrigin, const float radius) {
+void idCollisionModelManagerLocal::DrawNodePolygons(cm_model_t *model, cm_node_t *node,
+        const idVec3 &origin, const idMat3 &axis,
+        const idVec3 &viewOrigin, const float radius) {
     int i;
-    cm_polygon_t* p;
-    cm_polygonRef_t* pref;
+    cm_polygon_t *p;
+    cm_polygonRef_t *pref;
 
     while (1) {
         for (pref = node->polygons; pref; pref = pref->next) {
@@ -334,10 +334,10 @@ void idCollisionModelManagerLocal::DrawNodePolygons(cm_model_t* model, cm_node_t
 idCollisionModelManagerLocal::DrawModel
 ================
 */
-void idCollisionModelManagerLocal::DrawModel(cmHandle_t handle, const idVec3& modelOrigin, const idMat3& modelAxis,
-        const idVec3& viewOrigin, const float radius) {
+void idCollisionModelManagerLocal::DrawModel(cmHandle_t handle, const idVec3 &modelOrigin, const idMat3 &modelAxis,
+        const idVec3 &viewOrigin, const float radius) {
 
-    cm_model_t* model;
+    cm_model_t *model;
     idVec3 viewPos;
 
     if (handle < 0 && handle >= numModels) {
@@ -386,9 +386,9 @@ static unsigned int min_rotation = 999999;
 static unsigned int max_rotation = 0;
 static int num_rotation = 0;
 static idVec3 start;
-static idVec3* testend;
+static idVec3 *testend;
 
-void idCollisionModelManagerLocal::DebugOutput(const idVec3& origin) {
+void idCollisionModelManagerLocal::DebugOutput(const idVec3 &origin) {
     int i, k;
     unsigned int t;
     char buf[128];
@@ -402,7 +402,7 @@ void idCollisionModelManagerLocal::DebugOutput(const idVec3& origin) {
         return;
     }
 
-    testend = (idVec3*) Mem_Alloc(cm_testTimes.GetInteger() * sizeof(idVec3));
+    testend = (idVec3 *) Mem_Alloc(cm_testTimes.GetInteger() * sizeof(idVec3));
 
     if (cm_testReset.GetBool() || (cm_testWalk.GetBool() && !start.Compare(start))) {
         total_translation = total_rotation = 0;

@@ -103,7 +103,7 @@ idEFXFile::~idEFXFile(void) {
 idEFXFile::FindEffect
 ===============
 */
-bool idEFXFile::FindEffect(idStr& name, ALuint* effect) {
+bool idEFXFile::FindEffect(idStr &name, ALuint *effect) {
     int i;
 
     for (i = 0; i < effects.Num(); i++) {
@@ -158,7 +158,7 @@ idEFXFile::ReadEffect
                             "failed: 0x%x", _v[0], _v[1], _v[2], err);      \
     } while (false)
 
-bool idEFXFile::ReadEffect(idLexer& src, idSoundEffect* effect) {
+bool idEFXFile::ReadEffect(idLexer &src, idSoundEffect *effect) {
     idToken name, token;
 
     if (!src.ReadToken(&token)) {
@@ -268,7 +268,7 @@ bool idEFXFile::ReadEffect(idLexer& src, idSoundEffect* effect) {
 idEFXFile::LoadFile
 ===============
 */
-bool idEFXFile::LoadFile(const char* filename, bool OSPath) {
+bool idEFXFile::LoadFile(const char *filename, bool OSPath) {
     idLexer src(LEXFL_NOSTRINGCONCAT);
     idToken token;
 
@@ -288,7 +288,7 @@ bool idEFXFile::LoadFile(const char* filename, bool OSPath) {
     }
 
     while (!src.EndOfFile()) {
-        idSoundEffect* effect = new idSoundEffect;
+        idSoundEffect *effect = new idSoundEffect;
 
         if (!effect->alloc()) {
             delete effect;

@@ -197,7 +197,7 @@ void idMaterial::FreeData() {
 idMaterial::GetEditorImage
 ==============
 */
-idImage* idMaterial::GetEditorImage(void) const {
+idImage *idMaterial::GetEditorImage(void) const {
     if (editorImage) {
         return editorImage;
     }
@@ -236,7 +236,7 @@ idImage* idMaterial::GetEditorImage(void) const {
 
 // info parms
 typedef struct {
-    const char*  name;
+    const char  *name;
     int     clearSolid, surfaceFlags, contents;
 } infoParm_t;
 
@@ -303,7 +303,7 @@ idMaterial::CheckSurfaceParm
 See if the current token matches one of the surface parm bit flags
 ===============
 */
-bool idMaterial::CheckSurfaceParm(idToken* token) {
+bool idMaterial::CheckSurfaceParm(idToken *token) {
 
     for (int i = 0 ; i < numInfoParms ; i++) {
         if (!token->Icmp(infoParms[i].name)) {
@@ -333,7 +333,7 @@ idMaterial::MatchToken
 Sets defaultShader and returns false if the next token doesn't match
 ===============
 */
-bool idMaterial::MatchToken(idLexer& src, const char* match) {
+bool idMaterial::MatchToken(idLexer &src, const char *match) {
     if (!src.ExpectTokenString(match)) {
         SetMaterialFlag(MF_DEFAULTED);
         return false;
@@ -347,7 +347,7 @@ bool idMaterial::MatchToken(idLexer& src, const char* match) {
 idMaterial::ParseSort
 =================
 */
-void idMaterial::ParseSort(idLexer& src) {
+void idMaterial::ParseSort(idLexer &src) {
     idToken token;
 
     if (!src.ReadTokenOnLine(&token)) {
@@ -386,7 +386,7 @@ void idMaterial::ParseSort(idLexer& src) {
 idMaterial::ParseDecalInfo
 =================
 */
-void idMaterial::ParseDecalInfo(idLexer& src) {
+void idMaterial::ParseDecalInfo(idLexer &src) {
     idToken token;
 
     decalInfo.stayTime = src.ParseFloat() * 1000;
@@ -450,7 +450,7 @@ int idMaterial::GetExpressionTemporary(void) {
 idMaterial::GetExpressionOp
 =============
 */
-expOp_t* idMaterial::GetExpressionOp(void) {
+expOp_t *idMaterial::GetExpressionOp(void) {
     if (numOps == MAX_EXPRESSION_OPS) {
         common->Warning("GetExpressionOp: material '%s' hit MAX_EXPRESSION_OPS", GetName());
         SetMaterialFlag(MF_DEFAULTED);
@@ -466,7 +466,7 @@ idMaterial::EmitOp
 =================
 */
 int idMaterial::EmitOp(int a, int b, expOpType_t opType) {
-    expOp_t* op;
+    expOp_t *op;
 
     // optimize away identity operations
     if (opType == OP_TYPE_ADD) {
@@ -519,7 +519,7 @@ int idMaterial::EmitOp(int a, int b, expOpType_t opType) {
 idMaterial::ParseEmitOp
 =================
 */
-int idMaterial::ParseEmitOp(idLexer& src, int a, expOpType_t opType, int priority) {
+int idMaterial::ParseEmitOp(idLexer &src, int a, expOpType_t opType, int priority) {
     int     b;
 
     b = ParseExpressionPriority(src, priority);
@@ -533,7 +533,7 @@ idMaterial::ParseTerm
 Returns a register index
 =================
 */
-int idMaterial::ParseTerm(idLexer& src) {
+int idMaterial::ParseTerm(idLexer &src) {
     idToken token;
     int     a, b;
 
@@ -677,7 +677,7 @@ int idMaterial::ParseTerm(idLexer& src) {
     }
 
     // see if it is a table name
-    const idDeclTable* table = static_cast<const idDeclTable*>(declManager->FindType(DECL_TABLE, token.c_str(), false));
+    const idDeclTable *table = static_cast<const idDeclTable *>(declManager->FindType(DECL_TABLE, token.c_str(), false));
 
     if (!table) {
         src.Warning("Bad term '%s'", token.c_str());
@@ -703,7 +703,7 @@ Returns a register index
 =================
 */
 #define TOP_PRIORITY 4
-int idMaterial::ParseExpressionPriority(idLexer& src, int priority) {
+int idMaterial::ParseExpressionPriority(idLexer &src, int priority) {
     idToken token;
     int     a;
 
@@ -790,7 +790,7 @@ idMaterial::ParseExpression
 Returns a register index
 =================
 */
-int idMaterial::ParseExpression(idLexer& src) {
+int idMaterial::ParseExpression(idLexer &src) {
     return ParseExpressionPriority(src, TOP_PRIORITY);
 }
 
@@ -800,7 +800,7 @@ int idMaterial::ParseExpression(idLexer& src) {
 idMaterial::ClearStage
 ===============
 */
-void idMaterial::ClearStage(shaderStage_t* ss) {
+void idMaterial::ClearStage(shaderStage_t *ss) {
     ss->drawStateBits = 0;
     ss->conditionRegister = GetExpressionConstant(1);
     ss->color.registers[0] =
@@ -814,7 +814,7 @@ void idMaterial::ClearStage(shaderStage_t* ss) {
 idMaterial::NameToSrcBlendMode
 ===============
 */
-int idMaterial::NameToSrcBlendMode(const idStr& name) {
+int idMaterial::NameToSrcBlendMode(const idStr &name) {
     if (!name.Icmp("GL_ONE")) {
         return GLS_SRCBLEND_ONE;
     } else if (!name.Icmp("GL_ZERO")) {
@@ -846,7 +846,7 @@ int idMaterial::NameToSrcBlendMode(const idStr& name) {
 idMaterial::NameToDstBlendMode
 ===============
 */
-int idMaterial::NameToDstBlendMode(const idStr& name) {
+int idMaterial::NameToDstBlendMode(const idStr &name) {
     if (!name.Icmp("GL_ONE")) {
         return GLS_DSTBLEND_ONE;
     } else if (!name.Icmp("GL_ZERO")) {
@@ -876,7 +876,7 @@ int idMaterial::NameToDstBlendMode(const idStr& name) {
 idMaterial::ParseBlend
 ================
 */
-void idMaterial::ParseBlend(idLexer& src, shaderStage_t* stage) {
+void idMaterial::ParseBlend(idLexer &src, shaderStage_t *stage) {
     idToken token;
     int     srcBlend, dstBlend;
 
@@ -943,7 +943,7 @@ If there are two values, 3 = 0.0, 4 = 1.0
 if there are three values, 4 = 1.0
 ================
 */
-void idMaterial::ParseVertexParm(idLexer& src, newShaderStage_t* newStage) {
+void idMaterial::ParseVertexParm(idLexer &src, newShaderStage_t *newStage) {
     idToken             token;
 
     src.ReadTokenOnLine(&token);
@@ -998,8 +998,8 @@ void idMaterial::ParseVertexParm(idLexer& src, newShaderStage_t* newStage) {
 idMaterial::ParseFragmentMap
 ================
 */
-void idMaterial::ParseFragmentMap(idLexer& src, newShaderStage_t* newStage) {
-    const char*          str;
+void idMaterial::ParseFragmentMap(idLexer &src, newShaderStage_t *newStage) {
+    const char          *str;
     textureFilter_t     tf;
     textureRepeat_t     trp;
     textureDepth_t      td;
@@ -1112,7 +1112,7 @@ void idMaterial::ParseFragmentMap(idLexer& src, newShaderStage_t* newStage) {
 idMaterial::MultiplyTextureMatrix
 ===============
 */
-void idMaterial::MultiplyTextureMatrix(textureStage_t* ts, int registers[2][3]) {
+void idMaterial::MultiplyTextureMatrix(textureStage_t *ts, int registers[2][3]) {
     int     old[2][3];
 
     if (!ts->hasMatrix) {
@@ -1166,11 +1166,11 @@ An open brace has been parsed
 
 =================
 */
-void idMaterial::ParseStage(idLexer& src, const textureRepeat_t trpDefault) {
+void idMaterial::ParseStage(idLexer &src, const textureRepeat_t trpDefault) {
     idToken             token;
-    const char*          str;
-    shaderStage_t*       ss;
-    textureStage_t*      ts;
+    const char          *str;
+    shaderStage_t       *ss;
+    textureStage_t      *ts;
     textureFilter_t     tf;
     textureRepeat_t     trp;
     textureDepth_t      td;
@@ -1484,13 +1484,13 @@ void idMaterial::ParseStage(idLexer& src, const textureRepeat_t trpDefault) {
         }
 
         if (!token.Icmp("rotate")) {
-            const idDeclTable* table;
+            const idDeclTable *table;
             int     sinReg, cosReg;
 
             // in cycles
             a = ParseExpression(src);
 
-            table = static_cast<const idDeclTable*>(declManager->FindType(DECL_TABLE, "sinTable", false));
+            table = static_cast<const idDeclTable *>(declManager->FindType(DECL_TABLE, "sinTable", false));
 
             if (!table) {
                 common->Warning("no sinTable for rotate defined");
@@ -1500,7 +1500,7 @@ void idMaterial::ParseStage(idLexer& src, const textureRepeat_t trpDefault) {
 
             sinReg = EmitOp(table->Index(), a, OP_TYPE_TABLE);
 
-            table = static_cast<const idDeclTable*>(declManager->FindType(DECL_TABLE, "cosTable", false));
+            table = static_cast<const idDeclTable *>(declManager->FindType(DECL_TABLE, "cosTable", false));
 
             if (!table) {
                 common->Warning("no cosTable for rotate defined");
@@ -1684,7 +1684,7 @@ void idMaterial::ParseStage(idLexer& src, const textureRepeat_t trpDefault) {
 
     // if we are using newStage, allocate a copy of it
     if (newStage.fragmentProgram || newStage.vertexProgram) {
-        ss->newStage = (newShaderStage_t*)Mem_Alloc(sizeof(newStage));
+        ss->newStage = (newShaderStage_t *)Mem_Alloc(sizeof(newStage));
         *(ss->newStage) = newStage;
     }
 
@@ -1729,7 +1729,7 @@ void idMaterial::ParseStage(idLexer& src, const textureRepeat_t trpDefault) {
 idMaterial::ParseDeform
 ===============
 */
-void idMaterial::ParseDeform(idLexer& src) {
+void idMaterial::ParseDeform(idLexer &src) {
     idToken token;
 
     if (!src.ExpectAnyToken(&token)) {
@@ -1946,10 +1946,10 @@ Parse it into the global material variable. Later functions will optimize it.
 If there is any error during parsing, defaultShader will be set.
 =================
 */
-void idMaterial::ParseMaterial(idLexer& src) {
+void idMaterial::ParseMaterial(idLexer &src) {
     idToken     token;
     char        buffer[1024];
-    const char*  str;
+    const char  *str;
     idLexer     newSrc;
     int         i;
 
@@ -2274,7 +2274,7 @@ void idMaterial::ParseMaterial(idLexer& src) {
 idMaterial::SetGui
 =========================
 */
-void idMaterial::SetGui(const char* _gui) const {
+void idMaterial::SetGui(const char *_gui) const {
     gui = uiManager->FindGui(_gui, true, false, true);
 }
 
@@ -2285,7 +2285,7 @@ idMaterial::Parse
 Parses the current material definition and finds all necessary images.
 =========================
 */
-bool idMaterial::Parse(const char* text, const int textLength) {
+bool idMaterial::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
     mtrParsingData_t parsingData;
@@ -2387,7 +2387,7 @@ bool idMaterial::Parse(const char* text, const int textLength) {
     // and coverage = MC_TRANSLUCENT
 
     for (i = 0 ; i < numStages ; i++) {
-        shaderStage_t*   pStage = &pd->parseStages[i];
+        shaderStage_t   *pStage = &pd->parseStages[i];
 
         if (pStage->texture.image == globalImages->currentRenderImage) {
             if (sort != SS_PORTAL_SKY) {
@@ -2415,7 +2415,7 @@ bool idMaterial::Parse(const char* text, const int textLength) {
 
     // set the drawStateBits depth flags
     for (i = 0 ; i < numStages ; i++) {
-        shaderStage_t*   pStage = &pd->parseStages[i];
+        shaderStage_t   *pStage = &pd->parseStages[i];
 
         if (sort == SS_POST_PROCESS) {
             // post-process effects fill the depth buffer as they draw, so only the
@@ -2467,17 +2467,17 @@ bool idMaterial::Parse(const char* text, const int textLength) {
     */
 
     if (numStages) {
-        stages = (shaderStage_t*)R_StaticAlloc(numStages * sizeof(stages[0]));
+        stages = (shaderStage_t *)R_StaticAlloc(numStages * sizeof(stages[0]));
         memcpy(stages, pd->parseStages, numStages * sizeof(stages[0]));
     }
 
     if (numOps) {
-        ops = (expOp_t*)R_StaticAlloc(numOps * sizeof(ops[0]));
+        ops = (expOp_t *)R_StaticAlloc(numOps * sizeof(ops[0]));
         memcpy(ops, pd->shaderOps, numOps * sizeof(ops[0]));
     }
 
     if (numRegisters) {
-        expressionRegisters = (float*)R_StaticAlloc(numRegisters * sizeof(expressionRegisters[0]));
+        expressionRegisters = (float *)R_StaticAlloc(numRegisters * sizeof(expressionRegisters[0]));
         memcpy(expressionRegisters, pd->shaderRegisters, numRegisters * sizeof(expressionRegisters[0]));
     }
 
@@ -2501,7 +2501,7 @@ bool idMaterial::Parse(const char* text, const int textLength) {
 idMaterial::Print
 ===================
 */
-static const char* opNames[] = {
+static const char *opNames[] = {
     "OP_TYPE_ADD",
     "OP_TYPE_SUBTRACT",
     "OP_TYPE_MULTIPLY",
@@ -2528,7 +2528,7 @@ void idMaterial::Print() const {
     common->Printf("\n");
 
     for (i = 0 ; i < numOps ; i++) {
-        const expOp_t* op = &ops[i];
+        const expOp_t *op = &ops[i];
 
         if (op->opType == OP_TYPE_TABLE) {
             common->Printf("%i = %s[ %i ]\n", op->c, declManager->DeclByIndex(DECL_TABLE, op->a)->GetName(), op->b);
@@ -2543,7 +2543,7 @@ void idMaterial::Print() const {
 idMaterial::Save
 ===============
 */
-bool idMaterial::Save(const char* fileName) {
+bool idMaterial::Save(const char *fileName) {
     return ReplaceSourceFileText();
 }
 
@@ -2556,7 +2556,7 @@ void idMaterial::AddReference() {
     refCount++;
 
     for (int i = 0; i < numStages; i++) {
-        shaderStage_t* s = &stages[i];
+        shaderStage_t *s = &stages[i];
 
         if (s->texture.image) {
             s->texture.image->AddReference();
@@ -2573,10 +2573,10 @@ then all expressions are evaluated, leaving the material registers
 set to their apropriate values.
 ===============
 */
-void idMaterial::EvaluateRegisters(float* registers, const float shaderParms[MAX_ENTITY_SHADER_PARMS],
-                                   const viewDef_t* view, idSoundEmitter* soundEmitter) const {
+void idMaterial::EvaluateRegisters(float *registers, const float shaderParms[MAX_ENTITY_SHADER_PARMS],
+                                   const viewDef_t *view, idSoundEmitter *soundEmitter) const {
     int     i, b;
-    expOp_t* op;
+    expOp_t *op;
 
     // copy the material constants
     for (i = EXP_REG_NUM_PREDEFINED ; i < numRegisters ; i++) {
@@ -2633,7 +2633,7 @@ void idMaterial::EvaluateRegisters(float* registers, const float shaderParms[MAX
                 break;
 
             case OP_TYPE_TABLE: {
-                    const idDeclTable* table = static_cast<const idDeclTable*>(declManager->DeclByIndex(DECL_TABLE, op->a));
+                    const idDeclTable *table = static_cast<const idDeclTable *>(declManager->DeclByIndex(DECL_TABLE, op->a));
                     registers[op->c] = table->TableLookup(registers[op->b]);
                 }
                 break;
@@ -2782,7 +2782,7 @@ void idMaterial::ResetCinematicTime(int time) const {
 idMaterial::ConstantRegisters
 =============
 */
-const float* idMaterial::ConstantRegisters() const {
+const float *idMaterial::ConstantRegisters() const {
     if (!r_useConstantMaterials.GetBool()) {
         return NULL;
     }
@@ -2805,7 +2805,7 @@ void idMaterial::CheckForConstantRegisters() {
     }
 
     // evaluate the registers once, and save them
-    constantRegisters = (float*)R_ClearedStaticAlloc(GetNumRegisters() * sizeof(float));
+    constantRegisters = (float *)R_ClearedStaticAlloc(GetNumRegisters() * sizeof(float));
 
     float shaderParms[MAX_ENTITY_SHADER_PARMS];
     memset(shaderParms, 0, sizeof(shaderParms));
@@ -2820,12 +2820,12 @@ void idMaterial::CheckForConstantRegisters() {
 idMaterial::ImageName
 ===================
 */
-const char* idMaterial::ImageName(void) const {
+const char *idMaterial::ImageName(void) const {
     if (numStages == 0) {
         return "_scratch";
     }
 
-    idImage* image = stages[0].texture.image;
+    idImage *image = stages[0].texture.image;
 
     if (image) {
         return image->imgName;
@@ -2843,7 +2843,7 @@ Just for image resource tracking.
 */
 void idMaterial::SetImageClassifications(int tag) const {
     for (int i = 0 ; i < numStages ; i++) {
-        idImage* image = stages[i].texture.image;
+        idImage *image = stages[i].texture.image;
 
         if (image) {
             image->SetClassification(tag);
@@ -2891,7 +2891,7 @@ bool idMaterial::SetDefaultText(void) {
 idMaterial::DefaultDefinition
 ===================
 */
-const char* idMaterial::DefaultDefinition() const {
+const char *idMaterial::DefaultDefinition() const {
     return
         "{\n"
         "\t"    "{\n"
@@ -2907,7 +2907,7 @@ const char* idMaterial::DefaultDefinition() const {
 idMaterial::GetBumpStage
 ===================
 */
-const shaderStage_t* idMaterial::GetBumpStage(void) const {
+const shaderStage_t *idMaterial::GetBumpStage(void) const {
     for (int i = 0 ; i < numStages ; i++) {
         if (stages[i].lighting == SL_BUMP) {
             return &stages[i];

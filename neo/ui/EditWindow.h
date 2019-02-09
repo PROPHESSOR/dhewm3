@@ -38,28 +38,28 @@ class idSliderWindow;
 
 class idEditWindow : public idWindow {
   public:
-    idEditWindow(idUserInterfaceLocal* gui);
-    idEditWindow(idDeviceContext* d, idUserInterfaceLocal* gui);
+    idEditWindow(idUserInterfaceLocal *gui);
+    idEditWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
     virtual             ~idEditWindow();
 
     virtual void        Draw(int time, float x, float y);
-    virtual const char* HandleEvent(const sysEvent_t* event, bool* updateVisuals);
+    virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
     virtual void        PostParse();
     virtual void        GainFocus();
     virtual size_t      Allocated() {
         return idWindow::Allocated();
     };
 
-    virtual idWinVar*   GetWinVarByName(const char* _name, bool winLookup = false, drawWin_t** owner = NULL);
+    virtual idWinVar   *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
-    virtual void        HandleBuddyUpdate(idWindow* buddy);
-    virtual void        Activate(bool activate, idStr& act);
+    virtual void        HandleBuddyUpdate(idWindow *buddy);
+    virtual void        Activate(bool activate, idStr &act);
 
-    void                RunNamedEvent(const char* eventName);
+    void                RunNamedEvent(const char *eventName);
 
   private:
 
-    virtual bool        ParseInternalVar(const char* name, idParser* src);
+    virtual bool        ParseInternalVar(const char *name, idParser *src);
 
     void                InitCvar();
     // true: read the updated cvar from cvar system
@@ -80,7 +80,7 @@ class idEditWindow : public idWindow {
     bool                readonly;
     bool                numeric;
     idStr               sourceFile;
-    idSliderWindow*     scroller;
+    idSliderWindow     *scroller;
     idList<int>         breaks;
     float               sizeBias;
     int                 textIndex;
@@ -89,7 +89,7 @@ class idEditWindow : public idWindow {
     idWinBool           password;
 
     idWinStr            cvarStr;
-    idCVar*             cvar;
+    idCVar             *cvar;
 
     idWinBool           liveUpdate;
     idWinStr            cvarGroup;

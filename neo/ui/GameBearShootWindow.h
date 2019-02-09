@@ -34,7 +34,7 @@ class idGameBearShootWindow;
 
 class BSEntity {
   public:
-    const idMaterial*       material;
+    const idMaterial       *material;
     idStr                   materialName;
     float                   width, height;
     bool                    visible;
@@ -48,21 +48,21 @@ class BSEntity {
     bool                    fadeIn;
     bool                    fadeOut;
 
-    idGameBearShootWindow*  game;
+    idGameBearShootWindow  *game;
 
   public:
-    BSEntity(idGameBearShootWindow* _game);
+    BSEntity(idGameBearShootWindow *_game);
     virtual             ~BSEntity();
 
-    virtual void        WriteToSaveGame(idFile* savefile);
-    virtual void        ReadFromSaveGame(idFile* savefile, idGameBearShootWindow* _game);
+    virtual void        WriteToSaveGame(idFile *savefile);
+    virtual void        ReadFromSaveGame(idFile *savefile, idGameBearShootWindow *_game);
 
-    void                SetMaterial(const char* name);
+    void                SetMaterial(const char *name);
     void                SetSize(float _width, float _height);
     void                SetVisible(bool isVisible);
 
     virtual void        Update(float timeslice);
-    virtual void        Draw(idDeviceContext* dc);
+    virtual void        Draw(idDeviceContext *dc);
 
   private:
 };
@@ -70,17 +70,17 @@ class BSEntity {
 
 class idGameBearShootWindow : public idWindow {
   public:
-    idGameBearShootWindow(idUserInterfaceLocal* gui);
-    idGameBearShootWindow(idDeviceContext* d, idUserInterfaceLocal* gui);
+    idGameBearShootWindow(idUserInterfaceLocal *gui);
+    idGameBearShootWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
     ~idGameBearShootWindow();
 
-    virtual void        WriteToSaveGame(idFile* savefile);
-    virtual void        ReadFromSaveGame(idFile* savefile);
+    virtual void        WriteToSaveGame(idFile *savefile);
+    virtual void        ReadFromSaveGame(idFile *savefile);
 
-    virtual const char* HandleEvent(const sysEvent_t* event, bool* updateVisuals);
+    virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
     virtual void        PostParse();
     virtual void        Draw(int time, float x, float y);
-    virtual idWinVar*   GetWinVarByName(const char* _name, bool winLookup = false, drawWin_t** owner = NULL);
+    virtual idWinVar   *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
   private:
     void                CommonInit();
@@ -93,7 +93,7 @@ class idGameBearShootWindow : public idWindow {
     void                UpdateGame();
     void                UpdateScore();
 
-    virtual bool        ParseInternalVar(const char* name, idParser* src);
+    virtual bool        ParseInternalVar(const char *name, idParser *src);
 
   private:
 
@@ -121,14 +121,14 @@ class idGameBearShootWindow : public idWindow {
     float               windForce;
     int                 windUpdateTime;
 
-    idList<BSEntity*>   entities;
+    idList<BSEntity *>   entities;
 
-    BSEntity*            turret;
-    BSEntity*            bear;
-    BSEntity*            helicopter;
-    BSEntity*            goal;
-    BSEntity*            wind;
-    BSEntity*            gunblast;
+    BSEntity            *turret;
+    BSEntity            *bear;
+    BSEntity            *helicopter;
+    BSEntity            *goal;
+    BSEntity            *wind;
+    BSEntity            *gunblast;
 };
 
 #endif //__GAME_BEARSHOOT_WINDOW_H__

@@ -52,10 +52,10 @@ class idTrigger : public idEntity {
     idTrigger();
     void                Spawn(void);
 
-    const function_t*   GetScriptFunction(void) const;
+    const function_t   *GetScriptFunction(void) const;
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Enable(void);
     virtual void        Disable(void);
@@ -66,7 +66,7 @@ class idTrigger : public idEntity {
     void                Event_Enable(void);
     void                Event_Disable(void);
 
-    const function_t*   scriptFunction;
+    const function_t   *scriptFunction;
 };
 
 
@@ -86,8 +86,8 @@ class idTrigger_Multi : public idTrigger {
 
     void                Spawn(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
   private:
     float               wait;
@@ -102,11 +102,11 @@ class idTrigger_Multi : public idTrigger {
     bool                triggerFirst;
     bool                triggerWithSelf;
 
-    bool                CheckFacing(idEntity* activator);
-    void                TriggerAction(idEntity* activator);
-    void                Event_TriggerAction(idEntity* activator);
-    void                Event_Trigger(idEntity* activator);
-    void                Event_Touch(idEntity* other, trace_t* trace);
+    bool                CheckFacing(idEntity *activator);
+    void                TriggerAction(idEntity *activator);
+    void                Event_TriggerAction(idEntity *activator);
+    void                Event_Trigger(idEntity *activator);
+    void                Event_Touch(idEntity *other, trace_t *trace);
 };
 
 
@@ -124,8 +124,8 @@ class idTrigger_EntityName : public idTrigger {
 
     idTrigger_EntityName(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
@@ -138,10 +138,10 @@ class idTrigger_EntityName : public idTrigger {
     bool                triggerFirst;
     idStr               entityName;
 
-    void                TriggerAction(idEntity* activator);
-    void                Event_TriggerAction(idEntity* activator);
-    void                Event_Trigger(idEntity* activator);
-    void                Event_Touch(idEntity* other, trace_t* trace);
+    void                TriggerAction(idEntity *activator);
+    void                Event_TriggerAction(idEntity *activator);
+    void                Event_Trigger(idEntity *activator);
+    void                Event_Touch(idEntity *other, trace_t *trace);
 };
 
 /*
@@ -158,8 +158,8 @@ class idTrigger_Timer : public idTrigger {
 
     idTrigger_Timer(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
@@ -175,7 +175,7 @@ class idTrigger_Timer : public idTrigger {
     idStr               offName;
 
     void                Event_Timer(void);
-    void                Event_Use(idEntity* activator);
+    void                Event_Use(idEntity *activator);
 };
 
 
@@ -193,8 +193,8 @@ class idTrigger_Count : public idTrigger {
 
     idTrigger_Count(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
@@ -203,8 +203,8 @@ class idTrigger_Count : public idTrigger {
     int                 count;
     float               delay;
 
-    void                Event_Trigger(idEntity* activator);
-    void                Event_TriggerAction(idEntity* activator);
+    void                Event_Trigger(idEntity *activator);
+    void                Event_TriggerAction(idEntity *activator);
 };
 
 
@@ -222,8 +222,8 @@ class idTrigger_Hurt : public idTrigger {
 
     idTrigger_Hurt(void);
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
     void                Spawn(void);
 
@@ -232,8 +232,8 @@ class idTrigger_Hurt : public idTrigger {
     float               delay;
     int                 nextTime;
 
-    void                Event_Touch(idEntity* other, trace_t* trace);
-    void                Event_Toggle(idEntity* activator);
+    void                Event_Touch(idEntity *other, trace_t *trace);
+    void                Event_Toggle(idEntity *activator);
 };
 
 
@@ -251,7 +251,7 @@ class idTrigger_Fade : public idTrigger {
     CLASS_PROTOTYPE(idTrigger_Fade);
 
   private:
-    void                Event_Trigger(idEntity* activator);
+    void                Event_Trigger(idEntity *activator);
 };
 
 
@@ -273,8 +273,8 @@ class idTrigger_Touch : public idTrigger {
     void                Spawn(void);
     virtual void        Think(void);
 
-    void                Save(idSaveGame* savefile);
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile);
+    void                Restore(idRestoreGame *savefile);
 
     virtual void        Enable(void);
     virtual void        Disable(void);
@@ -282,9 +282,9 @@ class idTrigger_Touch : public idTrigger {
     void                TouchEntities(void);
 
   private:
-    idClipModel*        clipModel;
+    idClipModel        *clipModel;
 
-    void                Event_Trigger(idEntity* activator);
+    void                Event_Trigger(idEntity *activator);
 };
 
 #endif /* !__GAME_TRIGGER_H__ */

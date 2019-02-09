@@ -64,7 +64,7 @@ void idDeclPDA::List(void) const {
 idDeclPDA::Parse
 ================
 */
-bool idDeclPDA::Parse(const char* text, const int textLength) {
+bool idDeclPDA::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -163,7 +163,7 @@ bool idDeclPDA::Parse(const char* text, const int textLength) {
 idDeclPDA::DefaultDefinition
 ===================
 */
-const char* idDeclPDA::DefaultDefinition(void) const {
+const char *idDeclPDA::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"        "name  \"default pda\"\n"
@@ -188,7 +188,7 @@ void idDeclPDA::FreeData(void) {
 idDeclPDA::AddVideo
 =================
 */
-void idDeclPDA::AddVideo(const char* name, bool unique) const {
+void idDeclPDA::AddVideo(const char *name, bool unique) const {
     if (unique && (videos.Find(name) != NULL)) {
         return;
     }
@@ -206,7 +206,7 @@ void idDeclPDA::AddVideo(const char* name, bool unique) const {
 idDeclPDA::AddAudio
 =================
 */
-void idDeclPDA::AddAudio(const char* name, bool unique) const {
+void idDeclPDA::AddAudio(const char *name, bool unique) const {
     if (unique && (audios.Find(name) != NULL)) {
         return;
     }
@@ -224,7 +224,7 @@ void idDeclPDA::AddAudio(const char* name, bool unique) const {
 idDeclPDA::AddEmail
 =================
 */
-void idDeclPDA::AddEmail(const char* name, bool unique) const {
+void idDeclPDA::AddEmail(const char *name, bool unique) const {
     if (unique && (emails.Find(name) != NULL)) {
         return;
     }
@@ -265,7 +265,7 @@ void idDeclPDA::RemoveAddedEmailsAndVideos() const {
 idDeclPDA::SetSecurity
 =================
 */
-void idDeclPDA::SetSecurity(const char* sec) const {
+void idDeclPDA::SetSecurity(const char *sec) const {
     security = sec;
 }
 
@@ -301,9 +301,9 @@ const int idDeclPDA::GetNumEmails() const {
 idDeclPDA::GetVideoByIndex
 =================
 */
-const idDeclVideo* idDeclPDA::GetVideoByIndex(int index) const {
+const idDeclVideo *idDeclPDA::GetVideoByIndex(int index) const {
     if (index >= 0 && index < videos.Num()) {
-        return static_cast< const idDeclVideo* >(declManager->FindType(DECL_VIDEO, videos[index], false));
+        return static_cast< const idDeclVideo * >(declManager->FindType(DECL_VIDEO, videos[index], false));
     }
 
     return NULL;
@@ -314,9 +314,9 @@ const idDeclVideo* idDeclPDA::GetVideoByIndex(int index) const {
 idDeclPDA::GetAudioByIndex
 =================
 */
-const idDeclAudio* idDeclPDA::GetAudioByIndex(int index) const {
+const idDeclAudio *idDeclPDA::GetAudioByIndex(int index) const {
     if (index >= 0 && index < audios.Num()) {
-        return static_cast< const idDeclAudio* >(declManager->FindType(DECL_AUDIO, audios[index], false));
+        return static_cast< const idDeclAudio * >(declManager->FindType(DECL_AUDIO, audios[index], false));
     }
 
     return NULL;
@@ -327,9 +327,9 @@ const idDeclAudio* idDeclPDA::GetAudioByIndex(int index) const {
 idDeclPDA::GetEmailByIndex
 =================
 */
-const idDeclEmail* idDeclPDA::GetEmailByIndex(int index) const {
+const idDeclEmail *idDeclPDA::GetEmailByIndex(int index) const {
     if (index >= 0 && index < emails.Num()) {
-        return static_cast< const idDeclEmail* >(declManager->FindType(DECL_EMAIL, emails[index], false));
+        return static_cast< const idDeclEmail * >(declManager->FindType(DECL_EMAIL, emails[index], false));
     }
 
     return NULL;
@@ -367,7 +367,7 @@ void idDeclEmail::List(void) const {
 idDeclEmail::Parse
 ================
 */
-bool idDeclEmail::Parse(const char* _text, const int textLength) {
+bool idDeclEmail::Parse(const char *_text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -447,7 +447,7 @@ bool idDeclEmail::Parse(const char* _text, const int textLength) {
 idDeclEmail::DefaultDefinition
 ===================
 */
-const char* idDeclEmail::DefaultDefinition(void) const {
+const char *idDeclEmail::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "{\n"
@@ -498,7 +498,7 @@ void idDeclVideo::List(void) const {
 idDeclVideo::Parse
 ================
 */
-bool idDeclVideo::Parse(const char* text, const int textLength) {
+bool idDeclVideo::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -564,7 +564,7 @@ bool idDeclVideo::Parse(const char* text, const int textLength) {
 idDeclVideo::DefaultDefinition
 ===================
 */
-const char* idDeclVideo::DefaultDefinition(void) const {
+const char *idDeclVideo::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "{\n"
@@ -613,7 +613,7 @@ void idDeclAudio::List(void) const {
 idDeclAudio::Parse
 ================
 */
-bool idDeclAudio::Parse(const char* text, const int textLength) {
+bool idDeclAudio::Parse(const char *text, const int textLength) {
     idLexer src;
     idToken token;
 
@@ -672,7 +672,7 @@ bool idDeclAudio::Parse(const char* text, const int textLength) {
 idDeclAudio::DefaultDefinition
 ===================
 */
-const char* idDeclAudio::DefaultDefinition(void) const {
+const char *idDeclAudio::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "{\n"

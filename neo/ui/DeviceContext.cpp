@@ -48,7 +48,7 @@ idCVar gui_mediumFontLimit("gui_mediumFontLimit", "0.60", CVAR_GUI | CVAR_ARCHIV
 
 idList<fontInfoEx_t> idDeviceContext::fonts;
 
-int idDeviceContext::FindFont(const char* name) {
+int idDeviceContext::FindFont(const char *name) {
     int c = fonts.Num();
 
     for (int i = 0; i < c; i++) {
@@ -157,14 +157,14 @@ idDeviceContext::idDeviceContext() {
     Clear();
 }
 
-void idDeviceContext::SetTransformInfo(const idVec3& org, const idMat3& m) {
+void idDeviceContext::SetTransformInfo(const idVec3 &org, const idMat3 &m) {
     origin = org;
     mat = m;
 }
 
 //
 //  added method
-void idDeviceContext::GetTransformInfo(idVec3& org, idMat3& m) {
+void idDeviceContext::GetTransformInfo(idVec3 &org, idMat3 &m) {
     m = mat;
     org = origin;
 }
@@ -184,7 +184,7 @@ void idDeviceContext::PushClipRect(float x, float y, float w, float h) {
     clipRects.Append(idRectangle(x, y, w, h));
 }
 
-bool idDeviceContext::ClippedCoords(float* x, float* y, float* w, float* h, float* s1, float* t1, float* s2, float* t2) {
+bool idDeviceContext::ClippedCoords(float *x, float *y, float *w, float *h, float *s1, float *t1, float *s2, float *t2) {
 
     if (enableClipping == false || clipRects.Num() == 0) {
         return false;
@@ -193,7 +193,7 @@ bool idDeviceContext::ClippedCoords(float* x, float* y, float* w, float* h, floa
     int c = clipRects.Num();
 
     while (--c > 0) {
-        idRectangle* clipRect = &clipRects[c];
+        idRectangle *clipRect = &clipRects[c];
 
         float ox = *x;
         float oy = *y;
@@ -260,7 +260,7 @@ bool idDeviceContext::ClippedCoords(float* x, float* y, float* w, float* h, floa
 }
 
 
-void idDeviceContext::AdjustCoords(float* x, float* y, float* w, float* h) {
+void idDeviceContext::AdjustCoords(float *x, float *y, float *w, float *h) {
     if (x) {
         *x *= xScale;
     }
@@ -278,7 +278,7 @@ void idDeviceContext::AdjustCoords(float* x, float* y, float* w, float* h) {
     }
 }
 
-void idDeviceContext::DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial* shader) {
+void idDeviceContext::DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial *shader) {
     idDrawVert verts[4];
     glIndex_t indexes[6];
     indexes[0] = 3;
@@ -366,7 +366,7 @@ void idDeviceContext::DrawStretchPic(float x, float y, float w, float h, float s
 }
 
 
-void idDeviceContext::DrawMaterial(float x, float y, float w, float h, const idMaterial* mat, const idVec4& color, float scalex, float scaley) {
+void idDeviceContext::DrawMaterial(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex, float scaley) {
 
     renderSystem->SetColor(color);
 
@@ -412,7 +412,7 @@ void idDeviceContext::DrawMaterial(float x, float y, float w, float h, const idM
     DrawStretchPic(x, y, w, h, s0, t0, s1, t1, mat);
 }
 
-void idDeviceContext::DrawMaterialRotated(float x, float y, float w, float h, const idMaterial* mat, const idVec4& color, float scalex, float scaley, float angle) {
+void idDeviceContext::DrawMaterialRotated(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex, float scaley, float angle) {
 
     renderSystem->SetColor(color);
 
@@ -458,7 +458,7 @@ void idDeviceContext::DrawMaterialRotated(float x, float y, float w, float h, co
     DrawStretchPicRotated(x, y, w, h, s0, t0, s1, t1, mat, angle);
 }
 
-void idDeviceContext::DrawStretchPicRotated(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial* shader, float angle) {
+void idDeviceContext::DrawStretchPicRotated(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial *shader, float angle) {
 
     idDrawVert verts[4];
     glIndex_t indexes[6];
@@ -574,7 +574,7 @@ void idDeviceContext::DrawStretchPicRotated(float x, float y, float w, float h, 
     renderSystem->DrawStretchPic(&verts[0], &indexes[0], 4, 6, shader, (angle == 0.0) ? false : true);
 }
 
-void idDeviceContext::DrawFilledRect(float x, float y, float w, float h, const idVec4& color) {
+void idDeviceContext::DrawFilledRect(float x, float y, float w, float h, const idVec4 &color) {
 
     if (color.w == 0.0f) {
         return;
@@ -591,7 +591,7 @@ void idDeviceContext::DrawFilledRect(float x, float y, float w, float h, const i
 }
 
 
-void idDeviceContext::DrawRect(float x, float y, float w, float h, float size, const idVec4& color) {
+void idDeviceContext::DrawRect(float x, float y, float w, float h, float size, const idVec4 &color) {
 
     if (color.w == 0.0f) {
         return;
@@ -610,7 +610,7 @@ void idDeviceContext::DrawRect(float x, float y, float w, float h, float size, c
     DrawStretchPic(x, y + h - size, w, size, 0, 0, 0, 0, whiteImage);
 }
 
-void idDeviceContext::DrawMaterialRect(float x, float y, float w, float h, float size, const idMaterial* mat, const idVec4& color) {
+void idDeviceContext::DrawMaterialRect(float x, float y, float w, float h, float size, const idMaterial *mat, const idVec4 &color) {
 
     if (color.w == 0.0f) {
         return;
@@ -628,7 +628,7 @@ void idDeviceContext::SetCursor(int n) {
     cursor = (n < CURSOR_ARROW || n >= CURSOR_COUNT) ? CURSOR_ARROW : n;
 }
 
-void idDeviceContext::DrawCursor(float* x, float* y, float size) {
+void idDeviceContext::DrawCursor(float *x, float *y, float size) {
     if (*x < 0) {
         *x = 0;
     }
@@ -654,7 +654,7 @@ void idDeviceContext::DrawCursor(float* x, float* y, float size) {
  =======================================================================================================================
  */
 
-void idDeviceContext::PaintChar(float x,float y,float width,float height,float scale,float  s,float t,float s2,float t2,const idMaterial* hShader) {
+void idDeviceContext::PaintChar(float x,float y,float width,float height,float scale,float  s,float t,float s2,float t2,const idMaterial *hShader) {
     float   w, h;
     w = width * scale;
     h = height * scale;
@@ -684,17 +684,17 @@ void idDeviceContext::SetFontByScale(float scale) {
     }
 }
 
-int idDeviceContext::DrawText(float x, float y, float scale, idVec4 color, const char* text, float adjust, int limit, int style, int cursor) {
+int idDeviceContext::DrawText(float x, float y, float scale, idVec4 color, const char *text, float adjust, int limit, int style, int cursor) {
     int         len, count;
     idVec4      newColor;
-    const glyphInfo_t* glyph;
+    const glyphInfo_t *glyph;
     float       useScale;
     SetFontByScale(scale);
     useScale = scale * useFont->glyphScale;
     count = 0;
 
     if (text && color.w != 0.0f) {
-        const unsigned char* s = (const unsigned char*)text;
+        const unsigned char *s = (const unsigned char *)text;
         renderSystem->SetColor(color);
         memcpy(&newColor[0], &color[0], sizeof(idVec4));
         len = strlen(text);
@@ -717,7 +717,7 @@ int idDeviceContext::DrawText(float x, float y, float scale, idVec4 color, const
             // (Assets.textFont.glyphs[text[i]].imageHeight -
             // Assets.textFont.glyphs[text[i]].height);
             //
-            if (idStr::IsColor((const char*)s)) {
+            if (idStr::IsColor((const char *)s)) {
                 if (*(s+1) == C_COLOR_DEFAULT) {
                     newColor = color;
                 } else {
@@ -775,20 +775,20 @@ void idDeviceContext::SetSize(float width, float height) {
 }
 
 int idDeviceContext::CharWidth(const char c, float scale) {
-    glyphInfo_t* glyph;
+    glyphInfo_t *glyph;
     float       useScale;
     SetFontByScale(scale);
-    fontInfo_t*  font = useFont;
+    fontInfo_t  *font = useFont;
     useScale = scale * font->glyphScale;
     glyph = &font->glyphs[(const unsigned char)c];
     return idMath::FtoiFast(glyph->xSkip * useScale);
 }
 
-int idDeviceContext::TextWidth(const char* text, float scale, int limit) {
+int idDeviceContext::TextWidth(const char *text, float scale, int limit) {
     int i, width;
 
     SetFontByScale(scale);
-    const glyphInfo_t* glyphs = useFont->glyphs;
+    const glyphInfo_t *glyphs = useFont->glyphs;
 
     if (text == NULL) {
         return 0;
@@ -801,7 +801,7 @@ int idDeviceContext::TextWidth(const char* text, float scale, int limit) {
             if (idStr::IsColor(text + i)) {
                 i++;
             } else {
-                width += glyphs[((const unsigned char*)text)[i]].xSkip;
+                width += glyphs[((const unsigned char *)text)[i]].xSkip;
             }
         }
     } else {
@@ -809,7 +809,7 @@ int idDeviceContext::TextWidth(const char* text, float scale, int limit) {
             if (idStr::IsColor(text + i)) {
                 i++;
             } else {
-                width += glyphs[((const unsigned char*)text)[i]].xSkip;
+                width += glyphs[((const unsigned char *)text)[i]].xSkip;
             }
         }
     }
@@ -817,14 +817,14 @@ int idDeviceContext::TextWidth(const char* text, float scale, int limit) {
     return idMath::FtoiFast(scale * useFont->glyphScale * width);
 }
 
-int idDeviceContext::TextHeight(const char* text, float scale, int limit) {
+int idDeviceContext::TextHeight(const char *text, float scale, int limit) {
     int         len, count;
     float       max;
-    glyphInfo_t* glyph;
+    glyphInfo_t *glyph;
     float       useScale;
-    const char*  s = text;
+    const char  *s = text;
     SetFontByScale(scale);
-    fontInfo_t*  font = useFont;
+    fontInfo_t  *font = useFont;
 
     useScale = scale * font->glyphScale;
     max = 0;
@@ -843,7 +843,7 @@ int idDeviceContext::TextHeight(const char* text, float scale, int limit) {
                 s += 2;
                 continue;
             } else {
-                glyph = &font->glyphs[*(const unsigned char*)s];
+                glyph = &font->glyphs[*(const unsigned char *)s];
 
                 if (max < glyph->height) {
                     max = glyph->height;
@@ -870,7 +870,7 @@ int idDeviceContext::MaxCharHeight(float scale) {
     return idMath::FtoiFast(activeFont->maxHeight * useScale);
 }
 
-const idMaterial* idDeviceContext::GetScrollBarImage(int index) {
+const idMaterial *idDeviceContext::GetScrollBarImage(int index) {
     if (index >= SCROLLBAR_HBACK && index < SCROLLBAR_COUNT) {
         return scrollBarImages[index];
     }
@@ -879,9 +879,9 @@ const idMaterial* idDeviceContext::GetScrollBarImage(int index) {
 }
 
 // this only supports left aligned text
-idRegion* idDeviceContext::GetTextRegion(const char* text, float textScale, idRectangle rectDraw, float xStart, float yStart) {
+idRegion *idDeviceContext::GetTextRegion(const char *text, float textScale, idRectangle rectDraw, float xStart, float yStart) {
     #if 0
-    const char*  p, *textPtr, *newLinePtr;
+    const char  *p, *textPtr, *newLinePtr;
     char        buff[1024];
     int         len, textWidth, newLine, newLineWidth;
     float       y;
@@ -956,13 +956,13 @@ void idDeviceContext::DrawEditCursor(float x, float y, float scale) {
 
     SetFontByScale(scale);
     float useScale = scale * useFont->glyphScale;
-    const glyphInfo_t* glyph2 = &useFont->glyphs[overStrikeMode ? int('_') : int('|')];
+    const glyphInfo_t *glyph2 = &useFont->glyphs[overStrikeMode ? int('_') : int('|')];
     float   yadj = useScale * glyph2->top;
     PaintChar(x, y - yadj,glyph2->imageWidth,glyph2->imageHeight,useScale,glyph2->s,glyph2->t,glyph2->s2,glyph2->t2,glyph2->glyph);
 }
 
-int idDeviceContext::DrawText(const char* text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor, bool calcOnly, idList<int>* breaks, int limit) {
-    const char*  p, *textPtr, *newLinePtr;
+int idDeviceContext::DrawText(const char *text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor, bool calcOnly, idList<int> *breaks, int limit) {
+    const char  *p, *textPtr, *newLinePtr;
     char        buff[1024];
     int         len, newLine, newLineWidth, count;
     float       y;
@@ -1116,10 +1116,10 @@ int idDeviceContext::DrawText(const char* text, float textScale, int textAlign, 
 idRectangle::String
 =============
 */
-char* idRectangle::String(void) const {
+char *idRectangle::String(void) const {
     static  int     index = 0;
     static  char    str[ 8 ][ 48 ];
-    char*    s;
+    char    *s;
 
     // use an array so that multiple toString's won't collide
     s = str[ index ];

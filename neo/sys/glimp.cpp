@@ -39,10 +39,10 @@ idCVar r_waylandcompat("r_waylandcompat", "0", CVAR_SYSTEM | CVAR_NOCHEAT | CVAR
 static bool grabbed = false;
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
-    static SDL_Window* window = NULL;
+    static SDL_Window *window = NULL;
     static SDL_GLContext context = NULL;
 #else
-    static SDL_Surface* window = NULL;
+    static SDL_Surface *window = NULL;
     #define SDL_WINDOW_OPENGL SDL_OPENGL
     #define SDL_WINDOW_FULLSCREEN SDL_FULLSCREEN
 #endif
@@ -66,7 +66,7 @@ static void SetSDLIcon() {
 
 #include "doom_icon.h" // contains the struct d3_icon
 
-    SDL_Surface* icon = SDL_CreateRGBSurfaceFrom((void*)d3_icon.pixel_data, d3_icon.width, d3_icon.height,
+    SDL_Surface *icon = SDL_CreateRGBSurfaceFrom((void *)d3_icon.pixel_data, d3_icon.width, d3_icon.height,
                         d3_icon.bytes_per_pixel*8, d3_icon.bytes_per_pixel*d3_icon.width,
                         rmask, gmask, bmask, amask);
 
@@ -340,7 +340,7 @@ void GLimp_DeactivateContext() {
 GLimp_ExtensionPointer
 ===================
 */
-GLExtension_t GLimp_ExtensionPointer(const char* name) {
+GLExtension_t GLimp_ExtensionPointer(const char *name) {
     assert(SDL_WasInit(SDL_INIT_VIDEO));
 
     return (GLExtension_t)SDL_GL_GetProcAddress(name);

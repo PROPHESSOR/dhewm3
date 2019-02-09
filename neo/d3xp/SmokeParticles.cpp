@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "SmokeParticles.h"
 
-static const char* smokeParticle_SnapshotName = "_SmokeParticle_Snapshot_";
+static const char *smokeParticle_SnapshotName = "_SmokeParticle_Snapshot_";
 
 /*
 ================
@@ -126,10 +126,10 @@ idSmokeParticles::FreeSmokes
 */
 void idSmokeParticles::FreeSmokes(void) {
     for (int activeStageNum = 0; activeStageNum < activeStages.Num(); activeStageNum++) {
-        singleSmoke_t* smoke, *next, *last;
+        singleSmoke_t *smoke, *next, *last;
 
-        activeSmokeStage_t* active = &activeStages[activeStageNum];
-        const idParticleStage* stage = active->stage;
+        activeSmokeStage_t *active = &activeStages[activeStageNum];
+        const idParticleStage *stage = active->stage;
 
         for (last = NULL, smoke = active->smokes; smoke; smoke = next) {
             next = smoke->next;
@@ -180,7 +180,7 @@ idSmokeParticles::EmitSmoke
 Called by game code to drop another particle into the list
 ================
 */
-bool idSmokeParticles::EmitSmoke(const idDeclParticle* smoke, const int systemStartTime, const float diversity, const idVec3& origin, const idMat3& axis, int timeGroup /*_D3XP*/) {
+bool idSmokeParticles::EmitSmoke(const idDeclParticle *smoke, const int systemStartTime, const float diversity, const idVec3 &origin, const idMat3 &axis, int timeGroup /*_D3XP*/) {
     bool    continues = false;
     #ifdef _D3XP
     SetTimeState ts(timeGroup);
@@ -209,7 +209,7 @@ bool idSmokeParticles::EmitSmoke(const idDeclParticle* smoke, const int systemSt
 
     // for each stage in the smoke that is still emitting particles, emit a new singleSmoke_t
     for (int stageNum = 0; stageNum < smoke->stages.Num(); stageNum++) {
-        const idParticleStage* stage = smoke->stages[stageNum];
+        const idParticleStage *stage = smoke->stages[stageNum];
 
         if (!stage->cycleMsec) {
             continue;
@@ -263,7 +263,7 @@ bool idSmokeParticles::EmitSmoke(const idDeclParticle* smoke, const int systemSt
         }
 
         // find an activeSmokeStage that matches this
-        activeSmokeStage_t*  active = NULL;
+        activeSmokeStage_t  *active = NULL;
         int i;
 
         for (i = 0 ; i < activeStages.Num() ; i++) {
@@ -291,7 +291,7 @@ bool idSmokeParticles::EmitSmoke(const idDeclParticle* smoke, const int systemSt
                 return true;
             }
 
-            singleSmoke_t*   newSmoke = freeSmokes;
+            singleSmoke_t   *newSmoke = freeSmokes;
             freeSmokes = freeSmokes->next;
             numActiveSmokes++;
 
@@ -318,7 +318,7 @@ bool idSmokeParticles::EmitSmoke(const idDeclParticle* smoke, const int systemSt
 idSmokeParticles::UpdateRenderEntity
 ================
 */
-bool idSmokeParticles::UpdateRenderEntity(renderEntity_s* renderEntity, const renderView_t* renderView) {
+bool idSmokeParticles::UpdateRenderEntity(renderEntity_s *renderEntity, const renderView_t *renderView) {
 
     // FIXME: re-use model surfaces
     renderEntity->hModel->InitEmpty(smokeParticle_SnapshotName);
@@ -342,10 +342,10 @@ bool idSmokeParticles::UpdateRenderEntity(renderEntity_s* renderEntity, const re
     g.renderView = renderView;
 
     for (int activeStageNum = 0; activeStageNum < activeStages.Num(); activeStageNum++) {
-        singleSmoke_t* smoke, *next, *last;
+        singleSmoke_t *smoke, *next, *last;
 
-        activeSmokeStage_t* active = &activeStages[activeStageNum];
-        const idParticleStage* stage = active->stage;
+        activeSmokeStage_t *active = &activeStages[activeStageNum];
+        const idParticleStage *stage = active->stage;
 
         if (!stage->material) {
             continue;
@@ -359,7 +359,7 @@ bool idSmokeParticles::UpdateRenderEntity(renderEntity_s* renderEntity, const re
         }
 
         int quads = count * stage->NumQuadsPerParticle();
-        srfTriangles_t* tri = renderEntity->hModel->AllocSurfaceTriangles(quads * 4, quads * 6);
+        srfTriangles_t *tri = renderEntity->hModel->AllocSurfaceTriangles(quads * 4, quads * 6);
         tri->numIndexes = quads * 6;
         tri->numVerts = quads * 4;
 
@@ -464,7 +464,7 @@ bool idSmokeParticles::UpdateRenderEntity(renderEntity_s* renderEntity, const re
 idSmokeParticles::ModelCallback
 ================
 */
-bool idSmokeParticles::ModelCallback(renderEntity_s* renderEntity, const renderView_t* renderView) {
+bool idSmokeParticles::ModelCallback(renderEntity_s *renderEntity, const renderView_t *renderView) {
     // update the particles
     if (gameLocal.smokeParticles) {
         return gameLocal.smokeParticles->UpdateRenderEntity(renderEntity, renderView);

@@ -180,7 +180,7 @@ idWeapon::Spawn
 void idWeapon::Spawn(void) {
     if (!gameLocal.isClient) {
         // setup the world model
-        worldModel = static_cast< idAnimatedEntity* >(gameLocal.SpawnEntityType(idAnimatedEntity::Type, NULL));
+        worldModel = static_cast< idAnimatedEntity * >(gameLocal.SpawnEntityType(idAnimatedEntity::Type, NULL));
         worldModel.GetEntity()->fl.networkSync = true;
     }
 
@@ -196,7 +196,7 @@ idWeapon::SetOwner
 Only called at player spawn time, not each weapon switch
 ================
 */
-void idWeapon::SetOwner(idPlayer* _owner) {
+void idWeapon::SetOwner(idPlayer *_owner) {
     assert(!owner);
     owner = _owner;
     SetName(va("%s_weapon", owner->name.c_str()));
@@ -223,12 +223,12 @@ bool idWeapon::ShouldConstructScriptObjectAtSpawn(void) const {
 idWeapon::CacheWeapon
 ================
 */
-void idWeapon::CacheWeapon(const char* weaponName) {
-    const idDeclEntityDef* weaponDef;
-    const char* brassDefName;
-    const char* clipModelName;
+void idWeapon::CacheWeapon(const char *weaponName) {
+    const idDeclEntityDef *weaponDef;
+    const char *brassDefName;
+    const char *clipModelName;
     idTraceModel trm;
-    const char* guiName;
+    const char *guiName;
 
     weaponDef = gameLocal.FindEntityDef(weaponName, false);
 
@@ -240,7 +240,7 @@ void idWeapon::CacheWeapon(const char* weaponName) {
     brassDefName = weaponDef->dict.GetString("def_ejectBrass");
 
     if (brassDefName[0]) {
-        const idDeclEntityDef* brassDef = gameLocal.FindEntityDef(brassDefName, false);
+        const idDeclEntityDef *brassDef = gameLocal.FindEntityDef(brassDefName, false);
 
         if (brassDef) {
             brassDef->dict.GetString("clipmodel", "", &clipModelName);
@@ -266,7 +266,7 @@ void idWeapon::CacheWeapon(const char* weaponName) {
 idWeapon::Save
 ================
 */
-void idWeapon::Save(idSaveGame* savefile) const {
+void idWeapon::Save(idSaveGame *savefile) const {
 
     savefile->WriteInt(status);
     savefile->WriteObject(thread);
@@ -392,10 +392,10 @@ void idWeapon::Save(idSaveGame* savefile) const {
 idWeapon::Restore
 ================
 */
-void idWeapon::Restore(idRestoreGame* savefile) {
+void idWeapon::Restore(idRestoreGame *savefile) {
 
-    savefile->ReadInt((int&)status);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(thread));
+    savefile->ReadInt((int &)status);
+    savefile->ReadObject(reinterpret_cast<idClass *&>(thread));
     savefile->ReadString(state);
     savefile->ReadString(idealState);
     savefile->ReadInt(animBlendFrames);
@@ -415,7 +415,7 @@ void idWeapon::Restore(idRestoreGame* savefile) {
     WEAPON_RAISEWEAPON.LinkTo(scriptObject, "WEAPON_RAISEWEAPON");
     WEAPON_LOWERWEAPON.LinkTo(scriptObject, "WEAPON_LOWERWEAPON");
 
-    savefile->ReadObject(reinterpret_cast<idClass*&>(owner));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(owner));
     worldModel.Restore(savefile);
 
     savefile->ReadInt(hideTime);
@@ -445,7 +445,7 @@ void idWeapon::Restore(idRestoreGame* savefile) {
     weaponDef = gameLocal.FindEntityDef(objectname);
     meleeDef = gameLocal.FindEntityDef(weaponDef->dict.GetString("def_melee"), false);
 
-    const idDeclEntityDef* projectileDef = gameLocal.FindEntityDef(weaponDef->dict.GetString("def_projectile"), false);
+    const idDeclEntityDef *projectileDef = gameLocal.FindEntityDef(weaponDef->dict.GetString("def_projectile"), false);
 
     if (projectileDef) {
         projectileDict = projectileDef->dict;
@@ -453,7 +453,7 @@ void idWeapon::Restore(idRestoreGame* savefile) {
         projectileDict.Clear();
     }
 
-    const idDeclEntityDef* brassDef = gameLocal.FindEntityDef(weaponDef->dict.GetString("def_ejectBrass"), false);
+    const idDeclEntityDef *brassDef = gameLocal.FindEntityDef(weaponDef->dict.GetString("def_ejectBrass"), false);
 
     if (brassDef) {
         brassDict = brassDef->dict;
@@ -488,7 +488,7 @@ void idWeapon::Restore(idRestoreGame* savefile) {
     savefile->ReadAngles(muzzle_kick_angles);
     savefile->ReadVec3(muzzle_kick_offset);
 
-    savefile->ReadInt((int&)ammoType);
+    savefile->ReadInt((int &)ammoType);
     savefile->ReadInt(ammoRequired);
     savefile->ReadInt(clipSize);
     savefile->ReadInt(ammoClip);
@@ -543,7 +543,7 @@ void idWeapon::Restore(idRestoreGame* savefile) {
     savefile->ReadFloat(weaponOffsetScale);
 
     savefile->ReadBool(allowDrop);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(projectileEnt));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(projectileEnt));
 }
 
 /***********************************************************************
@@ -632,7 +632,7 @@ void idWeapon::Clear(void) {
     }
 
     // clear out the sounds from our spawnargs since we'll copy them from the weapon def
-    const idKeyValue* kv = spawnArgs.MatchPrefix("snd_");
+    const idKeyValue *kv = spawnArgs.MatchPrefix("snd_");
 
     while (kv) {
         spawnArgs.Delete(kv->GetKey());
@@ -741,16 +741,16 @@ void idWeapon::Clear(void) {
 idWeapon::InitWorldModel
 ================
 */
-void idWeapon::InitWorldModel(const idDeclEntityDef* def) {
-    idEntity* ent;
+void idWeapon::InitWorldModel(const idDeclEntityDef *def) {
+    idEntity *ent;
 
     ent = worldModel.GetEntity();
 
     assert(ent);
     assert(def);
 
-    const char* model = def->dict.GetString("model_world");
-    const char* attach = def->dict.GetString("joint_attach");
+    const char *model = def->dict.GetString("model_world");
+    const char *attach = def->dict.GetString("joint_attach");
 
     ent->SetSkin(NULL);
 
@@ -769,7 +769,7 @@ void idWeapon::InitWorldModel(const idDeclEntityDef* def) {
         ent->GetPhysics()->SetAxis(mat3_identity);
 
         // supress model in player views, but allow it in mirrors and remote views
-        renderEntity_t* worldModelRenderEntity = ent->GetRenderEntity();
+        renderEntity_t *worldModelRenderEntity = ent->GetRenderEntity();
 
         if (worldModelRenderEntity) {
             worldModelRenderEntity->suppressSurfaceInViewID = owner->entityNumber+1;
@@ -791,14 +791,14 @@ void idWeapon::InitWorldModel(const idDeclEntityDef* def) {
 idWeapon::GetWeaponDef
 ================
 */
-void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
-    const char* shader;
-    const char* objectType;
-    const char* vmodel;
-    const char* guiName;
-    const char* projectileName;
-    const char* brassDefName;
-    const char* smokeName;
+void idWeapon::GetWeaponDef(const char *objectname, int ammoinclip) {
+    const char *shader;
+    const char *objectType;
+    const char *vmodel;
+    const char *guiName;
+    const char *projectileName;
+    const char *brassDefName;
+    const char *smokeName;
     int         ammoAvail;
 
     Clear();
@@ -832,7 +832,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     smokeName = weaponDef->dict.GetString("smoke_muzzle");
 
     if (*smokeName != '\0') {
-        weaponSmoke = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, smokeName));
+        weaponSmoke = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, smokeName));
     } else {
         weaponSmoke = NULL;
     }
@@ -843,7 +843,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     smokeName = weaponDef->dict.GetString("smoke_strike");
 
     if (*smokeName != '\0') {
-        strikeSmoke = static_cast<const idDeclParticle*>(declManager->FindType(DECL_PARTICLE, smokeName));
+        strikeSmoke = static_cast<const idDeclParticle *>(declManager->FindType(DECL_PARTICLE, smokeName));
     } else {
         strikeSmoke = NULL;
     }
@@ -855,7 +855,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
 
     // setup gui light
     memset(&guiLight, 0, sizeof(guiLight));
-    const char* guiLightShader = weaponDef->dict.GetString("mtr_guiLightShader");
+    const char *guiLightShader = weaponDef->dict.GetString("mtr_guiLightShader");
 
     if (*guiLightShader != '\0') {
         guiLight.shader = declManager->FindMaterial(guiLightShader, false);
@@ -871,7 +871,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     InitWorldModel(weaponDef);
 
     // copy the sounds from the weapon view model def into out spawnargs
-    const idKeyValue* kv = weaponDef->dict.MatchPrefix("snd_");
+    const idKeyValue *kv = weaponDef->dict.MatchPrefix("snd_");
 
     while (kv) {
         spawnArgs.Set(kv->GetKey(), kv->GetValue());
@@ -891,13 +891,13 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     projectileName = weaponDef->dict.GetString("def_projectile");
 
     if (projectileName[0] != '\0') {
-        const idDeclEntityDef* projectileDef = gameLocal.FindEntityDef(projectileName, false);
+        const idDeclEntityDef *projectileDef = gameLocal.FindEntityDef(projectileName, false);
 
         if (!projectileDef) {
             gameLocal.Warning("Unknown projectile '%s' in weapon '%s'", projectileName, objectname);
         } else {
-            const char* spawnclass = projectileDef->dict.GetString("spawnclass");
-            idTypeInfo* cls = idClass::GetClass(spawnclass);
+            const char *spawnclass = projectileDef->dict.GetString("spawnclass");
+            idTypeInfo *cls = idClass::GetClass(spawnclass);
 
             if (!cls || !cls->IsType(idProjectile::Type)) {
                 gameLocal.Warning("Invalid spawnclass '%s' on projectile '%s' (used by weapon '%s')", spawnclass, projectileName, objectname);
@@ -908,7 +908,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     }
 
     // set up muzzleflash render light
-    const idMaterial* flashShader;
+    const idMaterial *flashShader;
     idVec3          flashTarget;
     idVec3          flashUp;
     idVec3          flashRight;
@@ -984,7 +984,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
     brassDefName = weaponDef->dict.GetString("def_ejectBrass");
 
     if (brassDefName[0]) {
-        const idDeclEntityDef* brassDef = gameLocal.FindEntityDef(brassDefName, false);
+        const idDeclEntityDef *brassDef = gameLocal.FindEntityDef(brassDefName, false);
 
         if (!brassDef) {
             gameLocal.Warning("Unknown brass '%s'", brassDefName);
@@ -1076,7 +1076,7 @@ void idWeapon::GetWeaponDef(const char* objectname, int ammoinclip) {
 idWeapon::Icon
 ================
 */
-const char* idWeapon::Icon(void) const {
+const char *idWeapon::Icon(void) const {
     return icon;
 }
 
@@ -1102,7 +1102,7 @@ void idWeapon::UpdateGUI(void) {
     if (gameLocal.localClientNum != owner->entityNumber) {
         // if updating the hud for a followed client
         if (gameLocal.localClientNum >= 0 && gameLocal.entities[ gameLocal.localClientNum ] && gameLocal.entities[ gameLocal.localClientNum ]->IsType(idPlayer::Type)) {
-            idPlayer* p = static_cast< idPlayer* >(gameLocal.entities[ gameLocal.localClientNum ]);
+            idPlayer *p = static_cast< idPlayer * >(gameLocal.entities[ gameLocal.localClientNum ]);
 
             if (!p->spectating || p->spectator != owner->entityNumber) {
                 return;
@@ -1200,7 +1200,7 @@ idWeapon::UpdateSkin
 ================
 */
 bool idWeapon::UpdateSkin(void) {
-    const function_t* func;
+    const function_t *func;
 
     if (!isLinked) {
         return false;
@@ -1225,7 +1225,7 @@ bool idWeapon::UpdateSkin(void) {
 idWeapon::SetModel
 ================
 */
-void idWeapon::SetModel(const char* modelname) {
+void idWeapon::SetModel(const char *modelname) {
     assert(modelname);
 
     if (modelDefHandle >= 0) {
@@ -1255,7 +1255,7 @@ idWeapon::GetGlobalJointTransform
 This returns the offset and axis of a weapon bone in world space, suitable for attaching models or lights
 ================
 */
-bool idWeapon::GetGlobalJointTransform(bool viewModel, const jointHandle_t jointHandle, idVec3& offset, idMat3& axis) {
+bool idWeapon::GetGlobalJointTransform(bool viewModel, const jointHandle_t jointHandle, idVec3 &offset, idMat3 &axis) {
     if (viewModel) {
         // view model
         if (animator.GetJointTransform(jointHandle, gameLocal.time, offset, axis)) {
@@ -1282,7 +1282,7 @@ bool idWeapon::GetGlobalJointTransform(bool viewModel, const jointHandle_t joint
 idWeapon::SetPushVelocity
 ================
 */
-void idWeapon::SetPushVelocity(const idVec3& pushVelocity) {
+void idWeapon::SetPushVelocity(const idVec3 &pushVelocity) {
     this->pushVelocity = pushVelocity;
 }
 
@@ -1544,7 +1544,7 @@ bool idWeapon::CanDrop(void) const {
         return false;
     }
 
-    const char* classname = weaponDef->dict.GetString("def_dropItem");
+    const char *classname = weaponDef->dict.GetString("def_dropItem");
 
     if (!classname[ 0 ]) {
         return false;
@@ -1581,7 +1581,7 @@ void idWeapon::WeaponStolen(void) {
 idWeapon::DropItem
 =====================
 */
-idEntity* idWeapon::DropItem(const idVec3& velocity, int activateDelay, int removeDelay, bool died) {
+idEntity *idWeapon::DropItem(const idVec3 &velocity, int activateDelay, int removeDelay, bool died) {
     if (!weaponDef || !worldModel.GetEntity()) {
         return NULL;
     }
@@ -1590,7 +1590,7 @@ idEntity* idWeapon::DropItem(const idVec3& velocity, int activateDelay, int remo
         return NULL;
     }
 
-    const char* classname = weaponDef->dict.GetString("def_dropItem");
+    const char *classname = weaponDef->dict.GetString("def_dropItem");
 
     if (!classname[0]) {
         return NULL;
@@ -1613,8 +1613,8 @@ idEntity* idWeapon::DropItem(const idVec3& velocity, int activateDelay, int remo
 idWeapon::SetState
 =====================
 */
-void idWeapon::SetState(const char* statename, int blendFrames) {
-    const function_t* func;
+void idWeapon::SetState(const char *statename, int blendFrames) {
+    const function_t *func;
 
     if (!isLinked) {
         return;
@@ -1755,7 +1755,7 @@ bool idWeapon::BloodSplat(float size) {
     localPlane[1] = localAxis[1];
     localPlane[1][3] = -(localOrigin * localAxis[1]) + 0.5f;
 
-    const idMaterial* mtr = declManager->FindMaterial("textures/decals/duffysplatgun");
+    const idMaterial *mtr = declManager->FindMaterial("textures/decals/duffysplatgun");
 
     gameRenderWorld->ProjectOverlay(modelDefHandle, localPlane, mtr);
 
@@ -1776,7 +1776,7 @@ idWeapon::MuzzleRise
 The machinegun and chaingun will incrementally back up as they are being fired
 ================
 */
-void idWeapon::MuzzleRise(idVec3& origin, idMat3& axis) {
+void idWeapon::MuzzleRise(idVec3 &origin, idMat3 &axis) {
     int         time;
     float       amount;
     idAngles    ang;
@@ -1812,8 +1812,8 @@ Called during idEntity::Spawn.  Calls the constructor on the script object.
 Can be overridden by subclasses when a thread doesn't need to be allocated.
 ================
 */
-idThread* idWeapon::ConstructScriptObject(void) {
-    const function_t* constructor;
+idThread *idWeapon::ConstructScriptObject(void) {
+    const function_t *constructor;
 
     thread->EndThread();
 
@@ -1842,7 +1842,7 @@ Not called during idGameLocal::MapShutdown.
 ================
 */
 void idWeapon::DeconstructScriptObject(void) {
-    const function_t* destructor;
+    const function_t *destructor;
 
     if (!thread) {
         return;
@@ -1910,7 +1910,7 @@ idWeapon::AlertMonsters
 */
 void idWeapon::AlertMonsters(void) {
     trace_t tr;
-    idEntity* ent;
+    idEntity *ent;
     idVec3 end = muzzleFlash.origin + muzzleFlash.axis * muzzleFlash.target;
 
     gameLocal.clip.TracePoint(tr, muzzleFlash.origin, end, CONTENTS_OPAQUE | MASK_SHOT_RENDERMODEL | CONTENTS_FLASHLIGHT_TRIGGER, owner);
@@ -1924,7 +1924,7 @@ void idWeapon::AlertMonsters(void) {
         ent = gameLocal.GetTraceEntity(tr);
 
         if (ent->IsType(idAI::Type)) {
-            static_cast<idAI*>(ent)->TouchedByFlashlight(owner);
+            static_cast<idAI *>(ent)->TouchedByFlashlight(owner);
         } else if (ent->IsType(idTrigger::Type)) {
             ent->Signal(SIG_TOUCH);
             ent->ProcessEvent(&EV_Touch, owner, &tr);
@@ -1945,7 +1945,7 @@ void idWeapon::AlertMonsters(void) {
         ent = gameLocal.GetTraceEntity(tr);
 
         if (ent->IsType(idAI::Type)) {
-            static_cast<idAI*>(ent)->TouchedByFlashlight(owner);
+            static_cast<idAI *>(ent)->TouchedByFlashlight(owner);
         } else if (ent->IsType(idTrigger::Type)) {
             ent->Signal(SIG_TOUCH);
             ent->ProcessEvent(&EV_Touch, owner, &tr);
@@ -2171,7 +2171,7 @@ int idWeapon::GetZoomFov(void) {
 idWeapon::GetWeaponAngleOffsets
 ================
 */
-void idWeapon::GetWeaponAngleOffsets(int* average, float* scale, float* max) {
+void idWeapon::GetWeaponAngleOffsets(int *average, float *scale, float *max) {
     *average = weaponAngleOffsetAverages;
     *scale = weaponAngleOffsetScale;
     *max = weaponAngleOffsetMax;
@@ -2182,7 +2182,7 @@ void idWeapon::GetWeaponAngleOffsets(int* average, float* scale, float* max) {
 idWeapon::GetWeaponTimeOffsets
 ================
 */
-void idWeapon::GetWeaponTimeOffsets(float* time, float* scale) {
+void idWeapon::GetWeaponTimeOffsets(float *time, float *scale) {
     *time = weaponOffsetTime;
     *scale = weaponOffsetScale;
 }
@@ -2199,9 +2199,9 @@ void idWeapon::GetWeaponTimeOffsets(float* time, float* scale) {
 idWeapon::GetAmmoNumForName
 ================
 */
-ammo_t idWeapon::GetAmmoNumForName(const char* ammoname) {
+ammo_t idWeapon::GetAmmoNumForName(const char *ammoname) {
     int num;
-    const idDict* ammoDict;
+    const idDict *ammoDict;
 
     assert(ammoname);
 
@@ -2231,11 +2231,11 @@ ammo_t idWeapon::GetAmmoNumForName(const char* ammoname) {
 idWeapon::GetAmmoNameForNum
 ================
 */
-const char* idWeapon::GetAmmoNameForNum(ammo_t ammonum) {
+const char *idWeapon::GetAmmoNameForNum(ammo_t ammonum) {
     int i;
     int num;
-    const idDict* ammoDict;
-    const idKeyValue* kv;
+    const idDict *ammoDict;
+    const idKeyValue *kv;
     char text[ 32 ];
 
     ammoDict = gameLocal.FindEntityDefDict("ammo_types", false);
@@ -2264,11 +2264,11 @@ const char* idWeapon::GetAmmoNameForNum(ammo_t ammonum) {
 idWeapon::GetAmmoPickupNameForNum
 ================
 */
-const char* idWeapon::GetAmmoPickupNameForNum(ammo_t ammonum) {
+const char *idWeapon::GetAmmoPickupNameForNum(ammo_t ammonum) {
     int i;
     int num;
-    const idDict* ammoDict;
-    const idKeyValue* kv;
+    const idDict *ammoDict;
+    const idKeyValue *kv;
 
     ammoDict = gameLocal.FindEntityDefDict("ammo_names", false);
 
@@ -2276,7 +2276,7 @@ const char* idWeapon::GetAmmoPickupNameForNum(ammo_t ammonum) {
         gameLocal.Error("Could not find entity definition for 'ammo_names'\n");
     }
 
-    const char* name = GetAmmoNameForNum(ammonum);
+    const char *name = GetAmmoNameForNum(ammonum);
 
     if (name && *name) {
         num = ammoDict->GetNumKeyVals();
@@ -2365,7 +2365,7 @@ int idWeapon::AmmoRequired(void) const {
 idWeapon::WriteToSnapshot
 ================
 */
-void idWeapon::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idWeapon::WriteToSnapshot(idBitMsgDelta &msg) const {
     msg.WriteBits(ammoClip, ASYNC_PLAYER_INV_CLIP_BITS);
     msg.WriteBits(worldModel.GetSpawnId(), 32);
     msg.WriteBits(lightOn, 1);
@@ -2377,7 +2377,7 @@ void idWeapon::WriteToSnapshot(idBitMsgDelta& msg) const {
 idWeapon::ReadFromSnapshot
 ================
 */
-void idWeapon::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idWeapon::ReadFromSnapshot(const idBitMsgDelta &msg) {
     ammoClip = msg.ReadBits(ASYNC_PLAYER_INV_CLIP_BITS);
     worldModel.SetSpawnId(msg.ReadBits(32));
     bool snapLight = msg.ReadBits(1) != 0;
@@ -2409,7 +2409,7 @@ void idWeapon::ReadFromSnapshot(const idBitMsgDelta& msg) {
 idWeapon::ClientReceiveEvent
 ================
 */
-bool idWeapon::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
+bool idWeapon::ClientReceiveEvent(int event, int time, const idBitMsg &msg) {
 
     switch (event) {
         case EVENT_RELOAD: {
@@ -2433,7 +2433,7 @@ bool idWeapon::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
 
         case EVENT_CHANGESKIN: {
                 int index = gameLocal.ClientRemapDecl(DECL_SKIN, msg.ReadInt());
-                renderEntity.customSkin = (index != -1) ? static_cast<const idDeclSkin*>(declManager->DeclByIndex(DECL_SKIN, index)) : NULL;
+                renderEntity.customSkin = (index != -1) ? static_cast<const idDeclSkin *>(declManager->DeclByIndex(DECL_SKIN, index)) : NULL;
                 UpdateVisuals();
 
                 if (worldModel.GetEntity()) {
@@ -2479,8 +2479,8 @@ void idWeapon::Event_GetOwner(void) {
 idWeapon::Event_WeaponState
 ===============
 */
-void idWeapon::Event_WeaponState(const char* statename, int blendFrames) {
-    const function_t* func;
+void idWeapon::Event_WeaponState(const char *statename, int blendFrames) {
+    const function_t *func;
 
     func = scriptObject.GetFunction(statename);
 
@@ -2716,7 +2716,7 @@ void idWeapon::Event_NetEndReload(void) {
 idWeapon::Event_PlayAnim
 ===============
 */
-void idWeapon::Event_PlayAnim(int channel, const char* animname) {
+void idWeapon::Event_PlayAnim(int channel, const char *animname) {
     int anim;
 
     anim = animator.GetAnim(animname);
@@ -2751,7 +2751,7 @@ void idWeapon::Event_PlayAnim(int channel, const char* animname) {
 idWeapon::Event_PlayCycle
 ===============
 */
-void idWeapon::Event_PlayCycle(int channel, const char* animname) {
+void idWeapon::Event_PlayCycle(int channel, const char *animname) {
     int anim;
 
     anim = animator.GetAnim(animname);
@@ -2824,8 +2824,8 @@ void idWeapon::Event_Next(void) {
 idWeapon::Event_SetSkin
 ================
 */
-void idWeapon::Event_SetSkin(const char* skinname) {
-    const idDeclSkin* skinDecl;
+void idWeapon::Event_SetSkin(const char *skinname) {
+    const idDeclSkin *skinDecl;
 
     if (!skinname || !skinname[ 0 ]) {
         skinDecl = NULL;
@@ -2940,8 +2940,8 @@ idWeapon::Event_LaunchProjectiles
 ================
 */
 void idWeapon::Event_LaunchProjectiles(int num_projectiles, float spread, float fuseOffset, float launchPower, float dmgPower) {
-    idProjectile*    proj;
-    idEntity*        ent;
+    idProjectile    *proj;
+    idEntity        *ent;
     int             i;
     idVec3          dir;
     float           ang;
@@ -2957,7 +2957,7 @@ void idWeapon::Event_LaunchProjectiles(int num_projectiles, float spread, float 
     }
 
     if (!projectileDict.GetNumKeyVals()) {
-        const char* classname = weaponDef->dict.GetString("classname");
+        const char *classname = weaponDef->dict.GetString("classname");
         gameLocal.Warning("No projectile defined on '%s'", classname);
         return;
     }
@@ -3074,7 +3074,7 @@ void idWeapon::Event_LaunchProjectiles(int num_projectiles, float spread, float 
             }
 
             if (!ent || !ent->IsType(idProjectile::Type)) {
-                const char* projectileName = weaponDef->dict.GetString("def_projectile");
+                const char *projectileName = weaponDef->dict.GetString("def_projectile");
                 gameLocal.Error("'%s' is not an idProjectile", projectileName);
             }
 
@@ -3083,7 +3083,7 @@ void idWeapon::Event_LaunchProjectiles(int num_projectiles, float spread, float 
                 ent->fl.networkSync = false;
             }
 
-            proj = static_cast<idProjectile*>(ent);
+            proj = static_cast<idProjectile *>(ent);
             proj->Create(owner, muzzleOrigin, dir);
 
             projBounds = proj->GetPhysics()->GetBounds().Rotate(proj->GetPhysics()->GetAxis());
@@ -3132,7 +3132,7 @@ idWeapon::Event_Melee
 =====================
 */
 void idWeapon::Event_Melee(void) {
-    idEntity*    ent;
+    idEntity    *ent;
     trace_t     tr;
 
     if (!meleeDef) {
@@ -3159,7 +3159,7 @@ void idWeapon::Event_Melee(void) {
         }
 
         bool hit = false;
-        const char* hitSound = meleeDef->dict.GetString("snd_miss");
+        const char *hitSound = meleeDef->dict.GetString("snd_miss");
 
         if (ent) {
 
@@ -3178,9 +3178,9 @@ void idWeapon::Event_Melee(void) {
                     && weaponDef && weaponDef->dict.GetBool("stealing")
                     && ent->IsType(idPlayer::Type)
                     && !owner->PowerUpActive(BERSERK)
-                    && (gameLocal.gameType != GAME_TDM || gameLocal.serverInfo.GetBool("si_teamDamage") || (owner->team != static_cast< idPlayer* >(ent)->team))
+                    && (gameLocal.gameType != GAME_TDM || gameLocal.serverInfo.GetBool("si_teamDamage") || (owner->team != static_cast< idPlayer * >(ent)->team))
                ) {
-                owner->StealWeapon(static_cast< idPlayer* >(ent));
+                owner->StealWeapon(static_cast< idPlayer * >(ent));
             }
 
             if (ent->fl.takedamage) {
@@ -3207,7 +3207,7 @@ void idWeapon::Event_Melee(void) {
                         type = GetDefaultSurfaceType();
                     }
 
-                    const char* materialType = gameLocal.sufaceTypeNames[ type ];
+                    const char *materialType = gameLocal.sufaceTypeNames[ type ];
 
                     // start impact sound based on material type
                     hitSound = meleeDef->dict.GetString(va("snd_%s", materialType));
@@ -3217,7 +3217,7 @@ void idWeapon::Event_Melee(void) {
                     }
 
                     if (gameLocal.time > nextStrikeFx) {
-                        const char* decal;
+                        const char *decal;
                         // project decal
                         decal = weaponDef->dict.GetString("mtr_strike");
 
@@ -3238,7 +3238,7 @@ void idWeapon::Event_Melee(void) {
         }
 
         if (*hitSound != '\0') {
-            const idSoundShader* snd = declManager->FindSound(hitSound);
+            const idSoundShader *snd = declManager->FindSound(hitSound);
             StartSoundShader(snd, SND_CHANNEL_BODY2, 0, true, NULL);
         }
 
@@ -3295,7 +3295,7 @@ void idWeapon::Event_EjectBrass(void) {
 
     idMat3 axis;
     idVec3 origin, linear_velocity, angular_velocity;
-    idEntity* ent;
+    idEntity *ent;
 
     if (!GetGlobalJointTransform(true, ejectJointView, origin, axis)) {
         return;
@@ -3307,7 +3307,7 @@ void idWeapon::Event_EjectBrass(void) {
         gameLocal.Error("'%s' is not an idDebris", weaponDef ? weaponDef->dict.GetString("def_ejectBrass") : "def_ejectBrass");
     }
 
-    idDebris* debris = static_cast<idDebris*>(ent);
+    idDebris *debris = static_cast<idDebris *>(ent);
     debris->Create(owner, origin, axis);
     debris->Launch();
 

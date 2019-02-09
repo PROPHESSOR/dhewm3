@@ -52,7 +52,7 @@ void usercmd_t::ByteSwap(void) {
 usercmd_t::operator==
 ================
 */
-bool usercmd_t::operator==(const usercmd_t& rhs) const {
+bool usercmd_t::operator==(const usercmd_t &rhs) const {
     return (buttons == rhs.buttons &&
             forwardmove == rhs.forwardmove &&
             rightmove == rhs.rightmove &&
@@ -168,7 +168,7 @@ typedef enum {
 } usercmdButton_t;
 
 typedef struct {
-    const char* string;
+    const char *string;
     usercmdButton_t button;
 } userCmdString_t;
 
@@ -332,13 +332,13 @@ class idUsercmdGenLocal : public idUsercmdGen {
 
     void            UsercmdInterrupt(void);
 
-    int             CommandStringUsercmdData(const char* cmdString);
+    int             CommandStringUsercmdData(const char *cmdString);
 
     int             GetNumUserCommands(void);
 
-    const char*     GetUserCommandName(int index);
+    const char     *GetUserCommandName(int index);
 
-    void            MouseState(int* x, int* y, int* button, bool* down);
+    void            MouseState(int *x, int *y, int *button, bool *down);
 
     int             ButtonState(int key);
     int             KeyState(int key);
@@ -422,7 +422,7 @@ idCVar idUsercmdGenLocal::m_strafeSmooth("m_strafeSmooth", "4", CVAR_SYSTEM | CV
 idCVar idUsercmdGenLocal::m_showMouseRate("m_showMouseRate", "0", CVAR_SYSTEM | CVAR_BOOL, "shows mouse movement");
 
 static idUsercmdGenLocal localUsercmdGen;
-idUsercmdGen*    usercmdGen = &localUsercmdGen;
+idUsercmdGen    *usercmdGen = &localUsercmdGen;
 
 /*
 ================
@@ -507,7 +507,7 @@ int idUsercmdGenLocal::GetNumUserCommands(void) {
 idUsercmdGenLocal::GetNumUserCommands
 ================
 */
-const char* idUsercmdGenLocal::GetUserCommandName(int index) {
+const char *idUsercmdGenLocal::GetUserCommandName(int index) {
     if (index >= 0 && index < NUM_USER_COMMANDS) {
         return userCmdStrings[index].string;
     }
@@ -840,8 +840,8 @@ idUsercmdGenLocal::CommandStringUsercmdData
 Returns the button if the command string is used by the async usercmd generator.
 ================
 */
-int idUsercmdGenLocal::CommandStringUsercmdData(const char* cmdString) {
-    for (userCmdString_t* ucs = userCmdStrings ; ucs->string ; ucs++) {
+int idUsercmdGenLocal::CommandStringUsercmdData(const char *cmdString) {
+    for (userCmdString_t *ucs = userCmdStrings ; ucs->string ; ucs++) {
         if (idStr::Icmp(cmdString, ucs->string) == 0) {
             return ucs->button;
         }
@@ -1107,7 +1107,7 @@ void idUsercmdGenLocal::UsercmdInterrupt(void) {
 idUsercmdGenLocal::MouseState
 ================
 */
-void idUsercmdGenLocal::MouseState(int* x, int* y, int* button, bool* down) {
+void idUsercmdGenLocal::MouseState(int *x, int *y, int *button, bool *down) {
     *x = continuousMouseX;
     *y = continuousMouseY;
     *button = mouseButton;

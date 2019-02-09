@@ -47,7 +47,7 @@ class idRestoreGame;
 
 // screenBlob_t are for the on-screen damage claw marks, etc
 typedef struct {
-    const idMaterial*   material;
+    const idMaterial   *material;
     float               x, y, w, h;
     float               s1, t1, s2, t2;
     int                 finishTime;
@@ -122,8 +122,8 @@ class FxFader {
     // primary functions
     bool                    SetTriggerState(bool active);
 
-    virtual void            Save(idSaveGame* savefile);
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Save(idSaveGame *savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 
     // fader functions
     void                    SetFadeTime(int t)     {
@@ -149,7 +149,7 @@ class FullscreenFX {
   protected:
     idStr                   name;
     FxFader                 fader;
-    FullscreenFXManager*     fxman;
+    FullscreenFXManager     *fxman;
 
   public:
     FullscreenFX()                          {
@@ -161,7 +161,7 @@ class FullscreenFX {
     virtual bool            Active()                                = 0;
     virtual void            HighQuality()                           = 0;
     virtual void            LowQuality()                            { };
-    virtual void            AccumPass(const renderView_t* view)    { };
+    virtual void            AccumPass(const renderView_t *view)    { };
     virtual bool            HasAccum()                              {
         return false;
     };
@@ -173,7 +173,7 @@ class FullscreenFX {
         return name;
     };
 
-    void                    SetFXManager(FullscreenFXManager* fx)  {
+    void                    SetFXManager(FullscreenFXManager *fx)  {
         fxman = fx;
     };
 
@@ -187,8 +187,8 @@ class FullscreenFX {
         return fader.GetAlpha();
     };
 
-    virtual void            Save(idSaveGame* savefile);
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Save(idSaveGame *savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 };
 
 /*
@@ -197,11 +197,11 @@ FullscreenFX_Helltime
 ==================
 */
 class FullscreenFX_Helltime : public FullscreenFX {
-    const idMaterial*       acInitMaterials[3];
-    const idMaterial*       acCaptureMaterials[3];
-    const idMaterial*       acDrawMaterials[3];
-    const idMaterial*       crCaptureMaterials[3];
-    const idMaterial*       crDrawMaterials[3];
+    const idMaterial       *acInitMaterials[3];
+    const idMaterial       *acCaptureMaterials[3];
+    const idMaterial       *acDrawMaterials[3];
+    const idMaterial       *crCaptureMaterials[3];
+    const idMaterial       *crDrawMaterials[3];
     bool                    clearAccumBuffer;
 
     int                     DetermineLevel();
@@ -210,12 +210,12 @@ class FullscreenFX_Helltime : public FullscreenFX {
     virtual void            Initialize();
     virtual bool            Active();
     virtual void            HighQuality();
-    virtual void            AccumPass(const renderView_t* view);
+    virtual void            AccumPass(const renderView_t *view);
     virtual bool            HasAccum()      {
         return true;
     };
 
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 };
 
 /*
@@ -224,11 +224,11 @@ FullscreenFX_Multiplayer
 ==================
 */
 class FullscreenFX_Multiplayer : public FullscreenFX {
-    const idMaterial*       acInitMaterials;
-    const idMaterial*       acCaptureMaterials;
-    const idMaterial*       acDrawMaterials;
-    const idMaterial*       crCaptureMaterials;
-    const idMaterial*       crDrawMaterials;
+    const idMaterial       *acInitMaterials;
+    const idMaterial       *acCaptureMaterials;
+    const idMaterial       *acDrawMaterials;
+    const idMaterial       *crCaptureMaterials;
+    const idMaterial       *crDrawMaterials;
     bool                    clearAccumBuffer;
 
     int                     DetermineLevel();
@@ -237,12 +237,12 @@ class FullscreenFX_Multiplayer : public FullscreenFX {
     virtual void            Initialize();
     virtual bool            Active();
     virtual void            HighQuality();
-    virtual void            AccumPass(const renderView_t* view);
+    virtual void            AccumPass(const renderView_t *view);
     virtual bool            HasAccum()      {
         return true;
     };
 
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 };
 
 /*
@@ -251,7 +251,7 @@ FullscreenFX_Warp
 ==================
 */
 class FullscreenFX_Warp : public FullscreenFX {
-    const idMaterial*       material;
+    const idMaterial       *material;
     bool                    grabberEnabled;
     int                     startWarpTime;
 
@@ -267,8 +267,8 @@ class FullscreenFX_Warp : public FullscreenFX {
         startWarpTime = gameLocal.slow.time;
     };
 
-    virtual void            Save(idSaveGame* savefile);
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Save(idSaveGame *savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 };
 
 /*
@@ -277,7 +277,7 @@ FullscreenFX_EnviroSuit
 ==================
 */
 class FullscreenFX_EnviroSuit : public FullscreenFX {
-    const idMaterial*       material;
+    const idMaterial       *material;
 
   public:
     virtual void            Initialize();
@@ -291,7 +291,7 @@ FullscreenFX_DoubleVision
 ==================
 */
 class FullscreenFX_DoubleVision : public FullscreenFX {
-    const idMaterial*       material;
+    const idMaterial       *material;
 
   public:
     virtual void            Initialize();
@@ -318,9 +318,9 @@ FullscreenFX_Bloom
 ==================
 */
 class FullscreenFX_Bloom : public FullscreenFX {
-    const idMaterial*       drawMaterial;
-    const idMaterial*       initMaterial;
-    const idMaterial*       currentMaterial;
+    const idMaterial       *drawMaterial;
+    const idMaterial       *initMaterial;
+    const idMaterial       *currentMaterial;
 
     float                   currentIntensity;
     float                   targetIntensity;
@@ -330,8 +330,8 @@ class FullscreenFX_Bloom : public FullscreenFX {
     virtual bool            Active();
     virtual void            HighQuality();
 
-    virtual void            Save(idSaveGame* savefile);
-    virtual void            Restore(idRestoreGame* savefile);
+    virtual void            Save(idSaveGame *savefile);
+    virtual void            Restore(idRestoreGame *savefile);
 };
 
 
@@ -342,12 +342,12 @@ FullscreenFXManager
 ==================
 */
 class FullscreenFXManager {
-    idList<FullscreenFX*>   fx;
+    idList<FullscreenFX *>   fx;
     bool                    highQualityMode;
     idVec2                  shiftScale;
 
-    idPlayerView*            playerView;
-    const idMaterial*       blendBackMaterial;
+    idPlayerView            *playerView;
+    const idMaterial       *blendBackMaterial;
 
     void                    CreateFX(idStr name, idStr fxtype, int fade);
 
@@ -355,32 +355,32 @@ class FullscreenFXManager {
     FullscreenFXManager();
     virtual                 ~FullscreenFXManager();
 
-    void                    Initialize(idPlayerView* pv);
+    void                    Initialize(idPlayerView *pv);
 
-    void                    Process(const renderView_t* view);
+    void                    Process(const renderView_t *view);
     void                    CaptureCurrentRender();
     void                    Blendback(float alpha);
 
     idVec2                  GetShiftScale()         {
         return shiftScale;
     };
-    idPlayerView*           GetPlayerView()         {
+    idPlayerView           *GetPlayerView()         {
         return playerView;
     };
-    idPlayer*               GetPlayer()             {
+    idPlayer               *GetPlayer()             {
         return gameLocal.GetLocalPlayer();
     };
 
     int                     GetNum()                {
         return fx.Num();
     };
-    FullscreenFX*           GetFX(int index)       {
+    FullscreenFX           *GetFX(int index)       {
         return fx[index];
     };
-    FullscreenFX*           FindFX(idStr name);
+    FullscreenFX           *FindFX(idStr name);
 
-    void                    Save(idSaveGame* savefile);
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile);
+    void                    Restore(idRestoreGame *savefile);
 };
 
 #endif
@@ -397,16 +397,16 @@ class idPlayerView {
   public:
     idPlayerView();
 
-    void                Save(idSaveGame* savefile) const;
-    void                Restore(idRestoreGame* savefile);
+    void                Save(idSaveGame *savefile) const;
+    void                Restore(idRestoreGame *savefile);
 
-    void                SetPlayerEntity(class idPlayer* playerEnt);
+    void                SetPlayerEntity(class idPlayer *playerEnt);
 
     void                ClearEffects(void);
 
-    void                DamageImpulse(idVec3 localKickDir, const idDict* damageDef);
+    void                DamageImpulse(idVec3 localKickDir, const idDict *damageDef);
 
-    void                WeaponFireFeedback(const idDict* weaponDef);
+    void                WeaponFireFeedback(const idDict *weaponDef);
 
     idAngles            AngleOffset(void) const;             // returns the current kick angle
 
@@ -416,7 +416,7 @@ class idPlayerView {
 
     // this may involve rendering to a texture and displaying
     // that with a warp model or in double vision mode
-    void                RenderPlayerView(idUserInterface* hud);
+    void                RenderPlayerView(idUserInterface *hud);
 
     void                Fade(idVec4 color, int time);
 
@@ -430,29 +430,29 @@ class idPlayerView {
     };
 
   private:
-    void                SingleView(idUserInterface* hud, const renderView_t* view);
+    void                SingleView(idUserInterface *hud, const renderView_t *view);
     void                ScreenFade();
 
-    screenBlob_t*       GetScreenBlob();
+    screenBlob_t       *GetScreenBlob();
 
     screenBlob_t        screenBlobs[MAX_SCREEN_BLOBS];
 
   public:
     int                 dvFinishTime;       // double vision will be stopped at this time
-    const idMaterial*   dvMaterial;         // material to take the double vision screen shot
+    const idMaterial   *dvMaterial;         // material to take the double vision screen shot
 
     int                 kickFinishTime;     // view kick will be stopped at this time
     idAngles            kickAngles;
 
     bool                bfgVision;          //
 
-    const idMaterial*   tunnelMaterial;     // health tunnel vision
-    const idMaterial*   armorMaterial;      // armor damage view effect
-    const idMaterial*   berserkMaterial;    // berserk effect
-    const idMaterial*   irGogglesMaterial;  // ir effect
-    const idMaterial*   bloodSprayMaterial; // blood spray
-    const idMaterial*   bfgMaterial;        // when targeted with BFG
-    const idMaterial*   lagoMaterial;       // lagometer drawing
+    const idMaterial   *tunnelMaterial;     // health tunnel vision
+    const idMaterial   *armorMaterial;      // armor damage view effect
+    const idMaterial   *berserkMaterial;    // berserk effect
+    const idMaterial   *irGogglesMaterial;  // ir effect
+    const idMaterial   *bloodSprayMaterial; // blood spray
+    const idMaterial   *bfgMaterial;        // when targeted with BFG
+    const idMaterial   *lagoMaterial;       // lagometer drawing
     float               lastDamageTime;     // accentuate the tunnel effect for a while
 
     idVec4              fadeColor;          // fade color
@@ -463,11 +463,11 @@ class idPlayerView {
 
     idAngles            shakeAng;           // from the sound sources
 
-    idPlayer*           player;
+    idPlayer           *player;
     renderView_t        view;
 
     #ifdef _D3XP
-    FullscreenFXManager* fxManager;
+    FullscreenFXManager *fxManager;
 
   public:
     int                 AddWarp(idVec3 worldOrigin, float centerx, float centery, float initialRadius, float durationMsec);

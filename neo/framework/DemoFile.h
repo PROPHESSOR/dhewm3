@@ -54,38 +54,38 @@ class idDemoFile : public idFile {
     idDemoFile();
     ~idDemoFile();
 
-    const char*     GetName(void) {
+    const char     *GetName(void) {
         return (f?f->GetName():"");
     }
-    const char*     GetFullPath(void) {
+    const char     *GetFullPath(void) {
         return (f?f->GetFullPath():"");
     }
 
-    void            SetLog(bool b, const char* p);
-    void            Log(const char* p);
-    bool            OpenForReading(const char* fileName);
-    bool            OpenForWriting(const char* fileName);
+    void            SetLog(bool b, const char *p);
+    void            Log(const char *p);
+    bool            OpenForReading(const char *fileName);
+    bool            OpenForWriting(const char *fileName);
     void            Close();
 
-    const char*     ReadHashString();
-    void            WriteHashString(const char* str);
+    const char     *ReadHashString();
+    void            WriteHashString(const char *str);
 
-    void            ReadDict(idDict& dict);
-    void            WriteDict(const idDict& dict);
+    void            ReadDict(idDict &dict);
+    void            WriteDict(const idDict &dict);
 
-    int             Read(void* buffer, int len);
-    int             Write(const void* buffer, int len);
+    int             Read(void *buffer, int len);
+    int             Write(const void *buffer, int len);
 
   private:
-    static idCompressor* AllocCompressor(int type);
+    static idCompressor *AllocCompressor(int type);
 
     bool            writing;
-    byte*           fileImage;
-    idFile*         f;
-    idCompressor*   compressor;
+    byte           *fileImage;
+    idFile         *f;
+    idCompressor   *compressor;
 
-    idList<idStr*>  demoStrings;
-    idFile*         fLog;
+    idList<idStr *>  demoStrings;
+    idFile         *fLog;
     bool            log;
     idStr           logStr;
 

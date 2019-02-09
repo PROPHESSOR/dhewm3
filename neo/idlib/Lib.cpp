@@ -54,10 +54,10 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-idSys*          idLib::sys          = NULL;
-idCommon*       idLib::common       = NULL;
-idCVarSystem*   idLib::cvarSystem   = NULL;
-idFileSystem*   idLib::fileSystem   = NULL;
+idSys          *idLib::sys          = NULL;
+idCommon       *idLib::common       = NULL;
+idCVarSystem   *idLib::cvarSystem   = NULL;
+idFileSystem   *idLib::fileSystem   = NULL;
 int             idLib::frameNumber  = 0;
 
 /*
@@ -156,7 +156,7 @@ ID_INLINE static byte ColorFloatToByte(float c) {
 PackColor
 ================
 */
-dword PackColor(const idVec4& color) {
+dword PackColor(const idVec4 &color) {
     dword dw, dx, dy, dz;
 
     dx = ColorFloatToByte(color.x);
@@ -176,7 +176,7 @@ dword PackColor(const idVec4& color) {
 UnpackColor
 ================
 */
-void UnpackColor(const dword color, idVec4& unpackedColor) {
+void UnpackColor(const dword color, idVec4 &unpackedColor) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     unpackedColor.Set(((color >> 0) & 255) * (1.0f / 255.0f),
                       ((color >> 8) & 255) * (1.0f / 255.0f),
@@ -195,7 +195,7 @@ void UnpackColor(const dword color, idVec4& unpackedColor) {
 PackColor
 ================
 */
-dword PackColor(const idVec3& color) {
+dword PackColor(const idVec3 &color) {
     dword dx, dy, dz;
 
     dx = ColorFloatToByte(color.x);
@@ -214,7 +214,7 @@ dword PackColor(const idVec3& color) {
 UnpackColor
 ================
 */
-void UnpackColor(const dword color, idVec3& unpackedColor) {
+void UnpackColor(const dword color, idVec3 &unpackedColor) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     unpackedColor.Set(((color >> 0) & 255) * (1.0f / 255.0f),
                       ((color >> 8) & 255) * (1.0f / 255.0f),
@@ -231,7 +231,7 @@ void UnpackColor(const dword color, idVec3& unpackedColor) {
 idLib::Error
 ===============
 */
-void idLib::Error(const char* fmt, ...) {
+void idLib::Error(const char *fmt, ...) {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
 
@@ -247,7 +247,7 @@ void idLib::Error(const char* fmt, ...) {
 idLib::Warning
 ===============
 */
-void idLib::Warning(const char* fmt, ...) {
+void idLib::Warning(const char *fmt, ...) {
     va_list     argptr;
     char        text[MAX_STRING_CHARS];
 
@@ -297,10 +297,10 @@ INPUTS
 RESULTS
    Reverses the byte order in each of elcount elements.
 ===================================================================== */
-ID_INLINE static void RevBytesSwap(void* bp, int elsize, int elcount) {
-    register unsigned char* p, *q;
+ID_INLINE static void RevBytesSwap(void *bp, int elsize, int elcount) {
+    register unsigned char *p, *q;
 
-    p = (unsigned char*) bp;
+    p = (unsigned char *) bp;
 
     if (elsize == 2) {
         q = p + 1;
@@ -344,13 +344,13 @@ ID_INLINE static void RevBytesSwap(void* bp, int elsize, int elcount) {
  RESULTS
  Reverses the bitfield of size elsize.
  ===================================================================== */
-ID_INLINE static void RevBitFieldSwap(void* bp, int elsize) {
+ID_INLINE static void RevBitFieldSwap(void *bp, int elsize) {
     int i;
-    unsigned char* p, t, v;
+    unsigned char *p, t, v;
 
     LittleRevBytes(bp, elsize, 1);
 
-    p = (unsigned char*) bp;
+    p = (unsigned char *) bp;
 
     while (elsize--) {
         v = *p;
@@ -371,8 +371,8 @@ ID_INLINE static void RevBitFieldSwap(void* bp, int elsize) {
 SixtetsForIntLittle
 ================
 */
-ID_INLINE static void SixtetsForIntLittle(byte* out, int src) {
-    byte* b = (byte*)&src;
+ID_INLINE static void SixtetsForIntLittle(byte *out, int src) {
+    byte *b = (byte *)&src;
     out[0] = (b[0] & 0xfc) >> 2;
     out[1] = ((b[0] & 0x3) << 4) + ((b[1] & 0xf0) >> 4);
     out[2] = ((b[1] & 0xf) << 2) + ((b[2] & 0xc0) >> 6);
@@ -385,7 +385,7 @@ SixtetsForIntBig
 TTimo: untested - that's the version from initial base64 encode
 ================
 */
-ID_INLINE static void SixtetsForIntBig(byte* out, int src) {
+ID_INLINE static void SixtetsForIntBig(byte *out, int src) {
     for (int i = 0 ; i < 4 ; i++) {
         out[i] = src & 0x3f;
         src >>= 6;
@@ -397,9 +397,9 @@ ID_INLINE static void SixtetsForIntBig(byte* out, int src) {
 IntForSixtetsLittle
 ================
 */
-ID_INLINE static int IntForSixtetsLittle(byte* in) {
+ID_INLINE static int IntForSixtetsLittle(byte *in) {
     int ret = 0;
-    byte* b = (byte*)&ret;
+    byte *b = (byte *)&ret;
     b[0] |= in[0] << 2;
     b[0] |= (in[1] & 0x30) >> 4;
     b[1] |= (in[1] & 0xf) << 4;
@@ -415,7 +415,7 @@ IntForSixtetsBig
 TTimo: untested - that's the version from initial base64 decode
 ================
 */
-ID_INLINE static int IntForSixtetsBig(byte* in) {
+ID_INLINE static int IntForSixtetsBig(byte *in) {
     int ret = 0;
     ret |= in[0];
     ret |= in[1] << 6;
@@ -469,7 +469,7 @@ float   LittleFloat(float l) {
     #endif
 }
 
-void    BigRevBytes(void* bp, int elsize, int elcount) {
+void    BigRevBytes(void *bp, int elsize, int elcount) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     RevBytesSwap(bp, elsize, elcount);
     #else
@@ -477,7 +477,7 @@ void    BigRevBytes(void* bp, int elsize, int elcount) {
     #endif
 }
 
-void    LittleRevBytes(void* bp, int elsize, int elcount) {
+void    LittleRevBytes(void *bp, int elsize, int elcount) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     return;
     #else
@@ -485,7 +485,7 @@ void    LittleRevBytes(void* bp, int elsize, int elcount) {
     #endif
 }
 
-void    LittleBitField(void* bp, int elsize) {
+void    LittleBitField(void *bp, int elsize) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     return;
     #else
@@ -493,7 +493,7 @@ void    LittleBitField(void* bp, int elsize) {
     #endif
 }
 
-void    SixtetsForInt(byte* out, int src) {
+void    SixtetsForInt(byte *out, int src) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     SixtetsForIntLittle(out, src);
     #else
@@ -501,7 +501,7 @@ void    SixtetsForInt(byte* out, int src) {
     #endif
 }
 
-int     IntForSixtets(byte* in) {
+int     IntForSixtets(byte *in) {
     #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     return IntForSixtetsLittle(in);
     #else
@@ -517,7 +517,7 @@ int     IntForSixtets(byte* in) {
 ===============================================================================
 */
 
-void AssertFailed(const char* file, int line, const char* expression) {
+void AssertFailed(const char *file, int line, const char *expression) {
     idLib::sys->DebugPrintf("\n\nASSERTION FAILED!\n%s(%d): '%s'\n", file, line, expression);
     #ifdef _MSC_VER
     __debugbreak();

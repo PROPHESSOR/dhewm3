@@ -38,7 +38,7 @@ R_MeshCost
 #if 0
 #define CACHE_SIZE  24
 #define STALL_SIZE  8
-int R_MeshCost(int numIndexes, glIndex_t* indexes) {
+int R_MeshCost(int numIndexes, glIndex_t *indexes) {
     int inCache[CACHE_SIZE];
     int i, j, v;
     int c_stalls;
@@ -77,7 +77,7 @@ int R_MeshCost(int numIndexes, glIndex_t* indexes) {
 
 
 typedef struct vertRef_s {
-    struct vertRef_s*    next;
+    struct vertRef_s    *next;
     int         tri;
 } vertRef_t;
 
@@ -89,15 +89,15 @@ Reorganizes the indexes so they will take best advantage
 of the internal GPU vertex caches
 ====================
 */
-void R_OrderIndexes(int numIndexes, glIndex_t* indexes) {
-    bool*    triangleUsed;
+void R_OrderIndexes(int numIndexes, glIndex_t *indexes) {
+    bool    *triangleUsed;
     int         numTris;
-    glIndex_t*   oldIndexes;
-    glIndex_t*   base;
+    glIndex_t   *oldIndexes;
+    glIndex_t   *base;
     int         numOldIndexes;
     int         tri;
     int         i;
-    vertRef_t*   vref, **vrefs, *vrefTable;
+    vertRef_t   *vref, **vrefs, *vrefTable;
     int         numVerts;
     int         v1, v2;
     int         c_starts;
@@ -108,13 +108,13 @@ void R_OrderIndexes(int numIndexes, glIndex_t* indexes) {
     }
 
     // save off the original indexes
-    oldIndexes = (glIndex_t*)_alloca(numIndexes * sizeof(*oldIndexes));
+    oldIndexes = (glIndex_t *)_alloca(numIndexes * sizeof(*oldIndexes));
     memcpy(oldIndexes, indexes, numIndexes * sizeof(*oldIndexes));
     numOldIndexes = numIndexes;
 
     // make a table to mark the triangles when they are emited
     numTris = numIndexes / 3;
-    triangleUsed = (bool*)_alloca(numTris * sizeof(*triangleUsed));
+    triangleUsed = (bool *)_alloca(numTris * sizeof(*triangleUsed));
     memset(triangleUsed, 0, numTris * sizeof(*triangleUsed));
 
     // find the highest vertex number
@@ -129,10 +129,10 @@ void R_OrderIndexes(int numIndexes, glIndex_t* indexes) {
     numVerts++;
 
     // create a table of triangles used by each vertex
-    vrefs = (vertRef_t**)_alloca(numVerts * sizeof(*vrefs));
+    vrefs = (vertRef_t **)_alloca(numVerts * sizeof(*vrefs));
     memset(vrefs, 0, numVerts * sizeof(*vrefs));
 
-    vrefTable = (vertRef_t*)_alloca(numIndexes * sizeof(*vrefTable));
+    vrefTable = (vertRef_t *)_alloca(numIndexes * sizeof(*vrefTable));
 
     for (i = 0 ; i < numIndexes ; i++) {
         tri = i / 3;

@@ -52,7 +52,7 @@ R_CreateAmbientCache
 Create it if needed
 ==================
 */
-bool R_CreateAmbientCache(srfTriangles_t* tri, bool needsLighting) {
+bool R_CreateAmbientCache(srfTriangles_t *tri, bool needsLighting) {
     if (tri->ambientCache) {
         return true;
     }
@@ -78,7 +78,7 @@ R_CreateLightingCache
 Returns false if the cache couldn't be allocated, in which case the surface should be skipped.
 ==================
 */
-bool R_CreateLightingCache(const idRenderEntityLocal* ent, const idRenderLightLocal* light, srfTriangles_t* tri) {
+bool R_CreateLightingCache(const idRenderEntityLocal *ent, const idRenderLightLocal *light, srfTriangles_t *tri) {
     idVec3      localLightOrigin;
 
     // fogs and blends don't need light vectors
@@ -94,7 +94,7 @@ bool R_CreateLightingCache(const idRenderEntityLocal* ent, const idRenderLightLo
     R_GlobalPointToLocal(ent->modelMatrix, light->globalLightOrigin, localLightOrigin);
 
     int size = tri->ambientSurface->numVerts * sizeof(lightingCache_t);
-    lightingCache_t* cache = (lightingCache_t*)_alloca16(size);
+    lightingCache_t *cache = (lightingCache_t *)_alloca16(size);
 
     #if 1
 
@@ -103,7 +103,7 @@ bool R_CreateLightingCache(const idRenderEntityLocal* ent, const idRenderLightLo
 
     #else
 
-    bool* used = (bool*)_alloca16(tri->ambientSurface->numVerts * sizeof(used[0]));
+    bool *used = (bool *)_alloca16(tri->ambientSurface->numVerts * sizeof(used[0]));
     memset(used, 0, tri->ambientSurface->numVerts * sizeof(used[0]));
 
     // because the interaction may be a very small subset of the full surface,
@@ -118,7 +118,7 @@ bool R_CreateLightingCache(const idRenderEntityLocal* ent, const idRenderLightLo
         used[i] = true;
 
         idVec3 lightDir;
-        const idDrawVert* v;
+        const idDrawVert *v;
 
         v = &tri->ambientSurface->verts[i];
 
@@ -147,7 +147,7 @@ R_CreatePrivateShadowCache
 This is used only for a specific light
 ==================
 */
-void R_CreatePrivateShadowCache(srfTriangles_t* tri) {
+void R_CreatePrivateShadowCache(srfTriangles_t *tri) {
     if (!tri->shadowVertexes) {
         return;
     }
@@ -163,12 +163,12 @@ This is constant for any number of lights, the vertex program
 takes care of projecting the verts to infinity.
 ==================
 */
-void R_CreateVertexProgramShadowCache(srfTriangles_t* tri) {
+void R_CreateVertexProgramShadowCache(srfTriangles_t *tri) {
     if (tri->verts == NULL) {
         return;
     }
 
-    shadowCache_t* temp = (shadowCache_t*)_alloca16(tri->numVerts * 2 * sizeof(shadowCache_t));
+    shadowCache_t *temp = (shadowCache_t *)_alloca16(tri->numVerts * 2 * sizeof(shadowCache_t));
 
     #if 1
 
@@ -177,10 +177,10 @@ void R_CreateVertexProgramShadowCache(srfTriangles_t* tri) {
     #else
 
     int numVerts = tri->numVerts;
-    const idDrawVert* verts = tri->verts;
+    const idDrawVert *verts = tri->verts;
 
     for (int i = 0; i < numVerts; i++) {
-        const float* v = verts[i].xyz.ToFloatPtr();
+        const float *v = verts[i].xyz.ToFloatPtr();
         temp[i*2+0].xyz[0] = v[0];
         temp[i*2+1].xyz[0] = v[0];
         temp[i*2+0].xyz[1] = v[1];
@@ -201,7 +201,7 @@ void R_CreateVertexProgramShadowCache(srfTriangles_t* tri) {
 R_SkyboxTexGen
 ==================
 */
-void R_SkyboxTexGen(drawSurf_t* surf, const idVec3& viewOrg) {
+void R_SkyboxTexGen(drawSurf_t *surf, const idVec3 &viewOrg) {
     int     i;
     idVec3  localViewOrigin;
 
@@ -209,9 +209,9 @@ void R_SkyboxTexGen(drawSurf_t* surf, const idVec3& viewOrg) {
 
     int numVerts = surf->geo->numVerts;
     int size = numVerts * sizeof(idVec3);
-    idVec3* texCoords = (idVec3*) _alloca16(size);
+    idVec3 *texCoords = (idVec3 *) _alloca16(size);
 
-    const idDrawVert* verts = surf->geo->verts;
+    const idDrawVert *verts = surf->geo->verts;
 
     for (i = 0; i < numVerts; i++) {
         texCoords[i][0] = verts[i].xyz[0] - localViewOrigin[0];
@@ -227,11 +227,11 @@ void R_SkyboxTexGen(drawSurf_t* surf, const idVec3& viewOrg) {
 R_WobbleskyTexGen
 ==================
 */
-void R_WobbleskyTexGen(drawSurf_t* surf, const idVec3& viewOrg) {
+void R_WobbleskyTexGen(drawSurf_t *surf, const idVec3 &viewOrg) {
     int     i;
     idVec3  localViewOrigin;
 
-    const int* parms = surf->material->GetTexGenRegisters();
+    const int *parms = surf->material->GetTexGenRegisters();
 
     float   wobbleDegrees = surf->shaderRegisters[ parms[0] ];
     float   wobbleSpeed = surf->shaderRegisters[ parms[1] ];
@@ -288,9 +288,9 @@ void R_WobbleskyTexGen(drawSurf_t* surf, const idVec3& viewOrg) {
 
     int numVerts = surf->geo->numVerts;
     int size = numVerts * sizeof(idVec3);
-    idVec3* texCoords = (idVec3*) _alloca16(size);
+    idVec3 *texCoords = (idVec3 *) _alloca16(size);
 
-    const idDrawVert* verts = surf->geo->verts;
+    const idDrawVert *verts = surf->geo->verts;
 
     for (i = 0; i < numVerts; i++) {
         idVec3 v;
@@ -312,8 +312,8 @@ R_SpecularTexGen
 Calculates the specular coordinates for cards without vertex programs.
 =================
 */
-static void R_SpecularTexGen(drawSurf_t* surf, const idVec3& globalLightOrigin, const idVec3& viewOrg) {
-    const srfTriangles_t* tri;
+static void R_SpecularTexGen(drawSurf_t *surf, const idVec3 &globalLightOrigin, const idVec3 &viewOrg) {
+    const srfTriangles_t *tri;
     idVec3  localLightOrigin;
     idVec3  localViewOrigin;
 
@@ -324,7 +324,7 @@ static void R_SpecularTexGen(drawSurf_t* surf, const idVec3& globalLightOrigin, 
 
     // FIXME: change to 3 component?
     int size = tri->numVerts * sizeof(idVec4);
-    idVec4* texCoords = (idVec4*) _alloca16(size);
+    idVec4 *texCoords = (idVec4 *) _alloca16(size);
 
     #if 1
 
@@ -333,7 +333,7 @@ static void R_SpecularTexGen(drawSurf_t* surf, const idVec3& globalLightOrigin, 
 
     #else
 
-    bool* used = (bool*)_alloca16(tri->numVerts * sizeof(used[0]));
+    bool *used = (bool *)_alloca16(tri->numVerts * sizeof(used[0]));
     memset(used, 0, tri->numVerts * sizeof(used[0]));
 
     // because the interaction may be a very small subset of the full surface,
@@ -349,7 +349,7 @@ static void R_SpecularTexGen(drawSurf_t* surf, const idVec3& globalLightOrigin, 
 
         float ilength;
 
-        const idDrawVert* v = &tri->verts[i];
+        const idDrawVert *v = &tri->verts[i];
 
         idVec3 lightDir = localLightOrigin - v->xyz;
         idVec3 viewDir = localViewOrigin - v->xyz;
@@ -390,8 +390,8 @@ a viewEntity and add it to the list with an empty scissor rect.
 This does not instantiate dynamic models for the entity yet.
 =============
 */
-viewEntity_t* R_SetEntityDefViewEntity(idRenderEntityLocal* def) {
-    viewEntity_t*        vModel;
+viewEntity_t *R_SetEntityDefViewEntity(idRenderEntityLocal *def) {
+    viewEntity_t        *vModel;
 
     if (def->viewCount == tr.viewCount) {
         return def->viewEntity;
@@ -400,7 +400,7 @@ viewEntity_t* R_SetEntityDefViewEntity(idRenderEntityLocal* def) {
     def->viewCount = tr.viewCount;
 
     // set the model and modelview matricies
-    vModel = (viewEntity_t*)R_ClearedFrameAlloc(sizeof(*vModel));
+    vModel = (viewEntity_t *)R_ClearedFrameAlloc(sizeof(*vModel));
     vModel->entityDef = def;
 
     // the scissorRect will be expanded as the model bounds is accepted into visible portal chains
@@ -432,7 +432,7 @@ R_TestPointInViewLight
 */
 static const float INSIDE_LIGHT_FRUSTUM_SLOP = 32;
 // this needs to be greater than the dist from origin to corner of near clip plane
-static bool R_TestPointInViewLight(const idVec3& org, const idRenderLightLocal* light) {
+static bool R_TestPointInViewLight(const idVec3 &org, const idRenderLightLocal *light) {
     int     i;
     idVec3  local;
 
@@ -454,7 +454,7 @@ R_PointInFrustum
 Assumes positive sides face outward
 ===================
 */
-static bool R_PointInFrustum(idVec3& p, idPlane* planes, int numPlanes) {
+static bool R_PointInFrustum(idVec3 &p, idPlane *planes, int numPlanes) {
     for (int i = 0 ; i < numPlanes ; i++) {
         float d = planes[i].Distance(p);
 
@@ -474,8 +474,8 @@ If the lightDef isn't already on the viewLight list, create
 a viewLight and add it to the list with an empty scissor rect.
 =============
 */
-viewLight_t* R_SetLightDefViewLight(idRenderLightLocal* light) {
-    viewLight_t* vLight;
+viewLight_t *R_SetLightDefViewLight(idRenderLightLocal *light) {
+    viewLight_t *vLight;
 
     if (light->viewCount == tr.viewCount) {
         return light->viewLight;
@@ -484,7 +484,7 @@ viewLight_t* R_SetLightDefViewLight(idRenderLightLocal* light) {
     light->viewCount = tr.viewCount;
 
     // add to the view light chain
-    vLight = (viewLight_t*)R_ClearedFrameAlloc(sizeof(*vLight));
+    vLight = (viewLight_t *)R_ClearedFrameAlloc(sizeof(*vLight));
     vLight->lightDef = light;
 
     // the scissorRect will be expanded as the light bounds is accepted into visible portal chains
@@ -561,12 +561,12 @@ Both shadow and light surfaces have been generated.  Either or both surfaces may
 
 =================
 */
-void idRenderWorldLocal::CreateLightDefInteractions(idRenderLightLocal* ldef) {
-    areaReference_t*     eref;
-    areaReference_t*     lref;
-    idRenderEntityLocal*     edef;
-    portalArea_t*    area;
-    idInteraction*   inter;
+void idRenderWorldLocal::CreateLightDefInteractions(idRenderLightLocal *ldef) {
+    areaReference_t     *eref;
+    areaReference_t     *lref;
+    idRenderEntityLocal     *edef;
+    portalArea_t    *area;
+    idInteraction   *inter;
 
     for (lref = ldef->references ; lref ; lref = lref->ownerNext) {
         area = lref->area;
@@ -648,12 +648,12 @@ void idRenderWorldLocal::CreateLightDefInteractions(idRenderLightLocal* ldef) {
             //
             // create a new interaction, but don't do any work other than bbox to frustum culling
             //
-            idInteraction* inter = idInteraction::AllocAndLink(edef, ldef);
+            idInteraction *inter = idInteraction::AllocAndLink(edef, ldef);
 
             // do a check of the entity reference bounds against the light frustum,
             // trying to avoid creating a viewEntity if it hasn't been already
             float   modelMatrix[16];
-            float*   m;
+            float   *m;
 
             if (edef->viewCount == tr.viewCount) {
                 m = edef->viewEntity->modelMatrix;
@@ -683,15 +683,15 @@ void idRenderWorldLocal::CreateLightDefInteractions(idRenderLightLocal* ldef) {
 R_LinkLightSurf
 =================
 */
-void R_LinkLightSurf(const drawSurf_t** link, const srfTriangles_t* tri, const viewEntity_t* space,
-                     const idRenderLightLocal* light, const idMaterial* shader, const idScreenRect& scissor, bool viewInsideShadow) {
-    drawSurf_t*      drawSurf;
+void R_LinkLightSurf(const drawSurf_t **link, const srfTriangles_t *tri, const viewEntity_t *space,
+                     const idRenderLightLocal *light, const idMaterial *shader, const idScreenRect &scissor, bool viewInsideShadow) {
+    drawSurf_t      *drawSurf;
 
     if (!space) {
         space = &tr.viewDef->worldSpace;
     }
 
-    drawSurf = (drawSurf_t*)R_FrameAlloc(sizeof(*drawSurf));
+    drawSurf = (drawSurf_t *)R_FrameAlloc(sizeof(*drawSurf));
 
     drawSurf->geo = tri;
     drawSurf->space = space;
@@ -708,14 +708,14 @@ void R_LinkLightSurf(const drawSurf_t** link, const srfTriangles_t* tri, const v
         drawSurf->shaderRegisters = NULL;
     } else {
         // process the shader expressions for conditionals / color / texcoords
-        const float* constRegs = shader->ConstantRegisters();
+        const float *constRegs = shader->ConstantRegisters();
 
         if (constRegs) {
             // this shader has only constants for parameters
             drawSurf->shaderRegisters = constRegs;
         } else {
             // FIXME: share with the ambient surface?
-            float* regs = (float*)R_FrameAlloc(shader->GetNumRegisters() * sizeof(float));
+            float *regs = (float *)R_FrameAlloc(shader->GetNumRegisters() * sizeof(float));
             drawSurf->shaderRegisters = regs;
             shader->EvaluateRegisters(regs, space->entityDef->parms.shaderParms, tr.viewDef, space->entityDef->parms.referenceSound);
         }
@@ -741,16 +741,16 @@ void R_LinkLightSurf(const drawSurf_t** link, const srfTriangles_t* tri, const v
 R_ClippedLightScissorRectangle
 ======================
 */
-idScreenRect R_ClippedLightScissorRectangle(viewLight_t* vLight) {
+idScreenRect R_ClippedLightScissorRectangle(viewLight_t *vLight) {
     int i, j;
-    const idRenderLightLocal* light = vLight->lightDef;
+    const idRenderLightLocal *light = vLight->lightDef;
     idScreenRect r;
     idFixedWinding w;
 
     r.Clear();
 
     for (i = 0 ; i < 6 ; i++) {
-        const idWinding* ow = light->frustumWindings[i];
+        const idWinding *ow = light->frustumWindings[i];
 
         // projected lights may have one of the frustums degenerated
         if (!ow) {
@@ -822,15 +822,15 @@ stencil clears and interaction drawing
 */
 int c_clippedLight, c_unclippedLight;
 
-idScreenRect    R_CalcLightScissorRectangle(viewLight_t* vLight) {
+idScreenRect    R_CalcLightScissorRectangle(viewLight_t *vLight) {
     idScreenRect    r;
-    srfTriangles_t* tri;
+    srfTriangles_t *tri;
     idPlane         eye, clip;
     idVec3          ndc;
 
     if (vLight->lightDef->parms.pointLight) {
         idBounds bounds;
-        idRenderLightLocal* lightDef = vLight->lightDef;
+        idRenderLightLocal *lightDef = vLight->lightDef;
         tr.viewDef->viewFrustum.ProjectionBounds(idBox(lightDef->parms.origin, lightDef->parms.lightRadius, lightDef->parms.axis), bounds);
         return R_ScreenRectFromViewFrustumBounds(bounds);
     }
@@ -908,9 +908,9 @@ and the viewEntitys due to game movement
 =================
 */
 void R_AddLightSurfaces(void) {
-    viewLight_t*     vLight;
-    idRenderLightLocal* light;
-    viewLight_t**     ptr;
+    viewLight_t     *vLight;
+    idRenderLightLocal *light;
+    viewLight_t     **ptr;
 
     // go through each visible light, possibly removing some from the list
     ptr = &tr.viewDef->viewLights;
@@ -919,7 +919,7 @@ void R_AddLightSurfaces(void) {
         vLight = *ptr;
         light = vLight->lightDef;
 
-        const idMaterial*    lightShader = light->lightShader;
+        const idMaterial    *lightShader = light->lightShader;
 
         if (!lightShader) {
             common->Error("R_AddLightSurfaces: NULL lightShader");
@@ -943,7 +943,7 @@ void R_AddLightSurfaces(void) {
         }
 
         // evaluate the light shader registers
-        float* lightRegs =(float*)R_FrameAlloc(lightShader->GetNumRegisters() * sizeof(float));
+        float *lightRegs =(float *)R_FrameAlloc(lightShader->GetNumRegisters() * sizeof(float));
         vLight->shaderRegisters = lightRegs;
         lightShader->EvaluateRegisters(lightRegs, light->parms.shaderParms, tr.viewDef, light->parms.referenceSound);
 
@@ -953,14 +953,14 @@ void R_AddLightSurfaces(void) {
             int lightStageNum;
 
             for (lightStageNum = 0 ; lightStageNum < lightShader->GetNumStages() ; lightStageNum++) {
-                const shaderStage_t* lightStage = lightShader->GetStage(lightStageNum);
+                const shaderStage_t *lightStage = lightShader->GetStage(lightStageNum);
 
                 // ignore stages that fail the condition
                 if (!lightRegs[ lightStage->conditionRegister ]) {
                     continue;
                 }
 
-                const int* registers = lightStage->color.registers;
+                const int *registers = lightStage->color.registers;
 
                 // snap tiny values to zero to avoid lights showing up with the wrong color
                 if (lightRegs[ registers[0] ] < 0.001f) {
@@ -1060,7 +1060,7 @@ void R_AddLightSurfaces(void) {
                 common->Error("no surfs in prelight model '%s'", light->parms.prelightModel->Name());
             }
 
-            srfTriangles_t*  tri = light->parms.prelightModel->Surface(0)->geometry;
+            srfTriangles_t  *tri = light->parms.prelightModel->Surface(0)->geometry;
 
             if (!tri->shadowVertexes) {
                 common->Error("R_AddLightSurfaces: prelight model '%s' without shadowVertexes", light->parms.prelightModel->Name());
@@ -1105,7 +1105,7 @@ void R_AddLightSurfaces(void) {
 R_IssueEntityDefCallback
 ==================
 */
-bool R_IssueEntityDefCallback(idRenderEntityLocal* def) {
+bool R_IssueEntityDefCallback(idRenderEntityLocal *def) {
     bool update;
     idBounds    oldBounds;
     const bool checkBounds = r_checkBounds.GetBool();
@@ -1152,7 +1152,7 @@ Returns the cached dynamic model if present, otherwise creates
 it and any necessary overlays
 ===================
 */
-idRenderModel* R_EntityDefDynamicModel(idRenderEntityLocal* def) {
+idRenderModel *R_EntityDefDynamicModel(idRenderEntityLocal *def) {
     bool callbackUpdate;
 
     // allow deferred entities to construct themselves
@@ -1162,7 +1162,7 @@ idRenderModel* R_EntityDefDynamicModel(idRenderEntityLocal* def) {
         callbackUpdate = false;
     }
 
-    idRenderModel* model = def->parms.hModel;
+    idRenderModel *model = def->parms.hModel;
 
     if (!model) {
         common->Error("R_EntityDefDynamicModel: NULL model");
@@ -1232,14 +1232,14 @@ idRenderModel* R_EntityDefDynamicModel(idRenderEntityLocal* def) {
 R_AddDrawSurf
 =================
 */
-void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const renderEntity_t* renderEntity,
-                   const idMaterial* shader, const idScreenRect& scissor) {
-    drawSurf_t*      drawSurf;
-    const float*     shaderParms;
+void R_AddDrawSurf(const srfTriangles_t *tri, const viewEntity_t *space, const renderEntity_t *renderEntity,
+                   const idMaterial *shader, const idScreenRect &scissor) {
+    drawSurf_t      *drawSurf;
+    const float     *shaderParms;
     static float    refRegs[MAX_EXPRESSION_REGISTERS];  // don't put on stack, or VC++ will do a page touch
     float           generatedShaderParms[MAX_ENTITY_SHADER_PARMS];
 
-    drawSurf = (drawSurf_t*)R_FrameAlloc(sizeof(*drawSurf));
+    drawSurf = (drawSurf_t *)R_FrameAlloc(sizeof(*drawSurf));
     drawSurf->geo = tri;
     drawSurf->space = space;
     drawSurf->material = shader;
@@ -1253,7 +1253,7 @@ void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const r
 
     // if it doesn't fit, resize the list
     if (tr.viewDef->numDrawSurfs == tr.viewDef->maxDrawSurfs) {
-        drawSurf_t**  old = tr.viewDef->drawSurfs;
+        drawSurf_t  **old = tr.viewDef->drawSurfs;
         int         count;
 
         if (tr.viewDef->maxDrawSurfs == 0) {
@@ -1264,7 +1264,7 @@ void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const r
             tr.viewDef->maxDrawSurfs *= 2;
         }
 
-        tr.viewDef->drawSurfs = (drawSurf_t**)R_FrameAlloc(tr.viewDef->maxDrawSurfs * sizeof(tr.viewDef->drawSurfs[0]));
+        tr.viewDef->drawSurfs = (drawSurf_t **)R_FrameAlloc(tr.viewDef->maxDrawSurfs * sizeof(tr.viewDef->drawSurfs[0]));
         memcpy(tr.viewDef->drawSurfs, old, count);
     }
 
@@ -1272,13 +1272,13 @@ void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const r
     tr.viewDef->numDrawSurfs++;
 
     // process the shader expressions for conditionals / color / texcoords
-    const float* constRegs = shader->ConstantRegisters();
+    const float *constRegs = shader->ConstantRegisters();
 
     if (constRegs) {
         // shader only uses constant values
         drawSurf->shaderRegisters = constRegs;
     } else {
-        float* regs = (float*)R_FrameAlloc(shader->GetNumRegisters() * sizeof(float));
+        float *regs = (float *)R_FrameAlloc(shader->GetNumRegisters() * sizeof(float));
         drawSurf->shaderRegisters = regs;
 
         // a reference shader will take the calculated stage color value from another shader
@@ -1287,7 +1287,7 @@ void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const r
         // different light shaders
         if (renderEntity->referenceShader) {
             // evaluate the reference shader to find our shader parms
-            const shaderStage_t* pStage;
+            const shaderStage_t *pStage;
 
             renderEntity->referenceShader->EvaluateRegisters(refRegs, renderEntity->shaderParms, tr.viewDef, renderEntity->referenceSound);
             pStage = renderEntity->referenceShader->GetStage(0);
@@ -1337,7 +1337,7 @@ void R_AddDrawSurf(const srfTriangles_t* tri, const viewEntity_t* space, const r
     }
 
     // check for gui surfaces
-    idUserInterface* gui = NULL;
+    idUserInterface *gui = NULL;
 
     if (!space->entityDef) {
         gui = shader->GlobalGui();
@@ -1390,12 +1390,12 @@ Walks through the viewEntitys list and creates drawSurf_t for each surface of
 each viewEntity that has a non-empty scissorRect
 ===============
 */
-static void R_AddAmbientDrawsurfs(viewEntity_t* vEntity) {
+static void R_AddAmbientDrawsurfs(viewEntity_t *vEntity) {
     int                 i, total;
-    idRenderEntityLocal* def;
-    srfTriangles_t*      tri;
-    idRenderModel*       model;
-    const idMaterial*    shader;
+    idRenderEntityLocal *def;
+    srfTriangles_t      *tri;
+    idRenderModel       *model;
+    const idMaterial    *shader;
 
     def = vEntity->entityDef;
 
@@ -1409,7 +1409,7 @@ static void R_AddAmbientDrawsurfs(viewEntity_t* vEntity) {
     total = model->NumSurfaces();
 
     for (i = 0 ; i < total ; i++) {
-        const modelSurface_t*    surf = model->Surface(i);
+        const modelSurface_t    *surf = model->Surface(i);
 
         // for debugging, only show a single surface at a time
         if (r_singleSurface.GetInteger() >= 0 && i != r_singleSurface.GetInteger()) {
@@ -1495,7 +1495,7 @@ static void R_AddAmbientDrawsurfs(viewEntity_t* vEntity) {
     }
 
     // add the lightweight decal surfaces
-    for (idRenderModelDecal* decal = def->decals; decal; decal = decal->Next()) {
+    for (idRenderModelDecal *decal = def->decals; decal; decal = decal->Next()) {
         decal->AddDecalDrawSurf(vEntity);
     }
 }
@@ -1505,9 +1505,9 @@ static void R_AddAmbientDrawsurfs(viewEntity_t* vEntity) {
 R_CalcEntityScissorRectangle
 ==================
 */
-idScreenRect R_CalcEntityScissorRectangle(viewEntity_t* vEntity) {
+idScreenRect R_CalcEntityScissorRectangle(viewEntity_t *vEntity) {
     idBounds bounds;
-    idRenderEntityLocal* def = vEntity->entityDef;
+    idRenderEntityLocal *def = vEntity->entityDef;
 
     tr.viewDef->viewFrustum.ProjectionBounds(idBox(def->referenceBounds, def->parms.origin, def->parms.axis), bounds);
 
@@ -1526,9 +1526,9 @@ two or more lights.
 ===================
 */
 void R_AddModelSurfaces(void) {
-    viewEntity_t*        vEntity;
-    idInteraction*       inter, *next;
-    idRenderModel*       model;
+    viewEntity_t        *vEntity;
+    idInteraction       *inter, *next;
+    idRenderModel       *model;
 
     // clear the ambient surface list
     tr.viewDef->numDrawSurfs = 0;
@@ -1643,7 +1643,7 @@ R_RemoveUnecessaryViewLights
 =====================
 */
 void R_RemoveUnecessaryViewLights(void) {
-    viewLight_t*     vLight;
+    viewLight_t     *vLight;
 
     // go through each visible light
     for (vLight = tr.viewDef->viewLights ; vLight ; vLight = vLight->next) {
@@ -1661,7 +1661,7 @@ void R_RemoveUnecessaryViewLights(void) {
         // This doesn't seem to actually help, perhaps because the surface scissor
         // rects aren't actually the surface, but only the portal clippings.
         for (vLight = tr.viewDef->viewLights ; vLight ; vLight = vLight->next) {
-            const drawSurf_t*    surf;
+            const drawSurf_t    *surf;
             idScreenRect    surfRect;
 
             if (!vLight->lightShader->LightCastsShadows()) {
@@ -1675,7 +1675,7 @@ void R_RemoveUnecessaryViewLights(void) {
             }
 
             for (surf = vLight->localShadows ; surf ; surf = surf->nextOnLight) {
-                const_cast<drawSurf_t*>(surf)->scissorRect.Intersect(surfRect);
+                const_cast<drawSurf_t *>(surf)->scissorRect.Intersect(surfRect);
             }
 
             for (surf = vLight->localInteractions ; surf ; surf = surf->nextOnLight) {
@@ -1683,7 +1683,7 @@ void R_RemoveUnecessaryViewLights(void) {
             }
 
             for (surf = vLight->globalShadows ; surf ; surf = surf->nextOnLight) {
-                const_cast<drawSurf_t*>(surf)->scissorRect.Intersect(surfRect);
+                const_cast<drawSurf_t *>(surf)->scissorRect.Intersect(surfRect);
             }
 
             for (surf = vLight->translucentInteractions ; surf ; surf = surf->nextOnLight) {

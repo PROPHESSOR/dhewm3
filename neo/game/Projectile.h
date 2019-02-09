@@ -52,35 +52,35 @@ class idProjectile : public idEntity {
 
     void                    Spawn(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
-    void                    Create(idEntity* owner, const idVec3& start, const idVec3& dir);
-    virtual void            Launch(const idVec3& start, const idVec3& dir, const idVec3& pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
+    void                    Create(idEntity *owner, const idVec3 &start, const idVec3 &dir);
+    virtual void            Launch(const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
     virtual void            FreeLightDef(void);
 
-    idEntity*               GetOwner(void) const;
+    idEntity               *GetOwner(void) const;
 
     virtual void            Think(void);
-    virtual void            Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
-    virtual bool            Collide(const trace_t& collision, const idVec3& velocity);
-    virtual void            Explode(const trace_t& collision, idEntity* ignore);
+    virtual void            Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
+    virtual bool            Collide(const trace_t &collision, const idVec3 &velocity);
+    virtual void            Explode(const trace_t &collision, idEntity *ignore);
     void                    Fizzle(void);
 
-    static idVec3           GetVelocity(const idDict* projectile);
-    static idVec3           GetGravity(const idDict* projectile);
+    static idVec3           GetVelocity(const idDict *projectile);
+    static idVec3           GetGravity(const idDict *projectile);
 
     enum {
         EVENT_DAMAGE_EFFECT = idEntity::EVENT_MAXEVENTS,
         EVENT_MAXEVENTS
     };
 
-    static void             DefaultDamageEffect(idEntity* soundEnt, const idDict& projectileDef, const trace_t& collision, const idVec3& velocity);
-    static bool             ClientPredictionCollide(idEntity* soundEnt, const idDict& projectileDef, const trace_t& collision, const idVec3& velocity, bool addDamageEffect);
+    static void             DefaultDamageEffect(idEntity *soundEnt, const idDict &projectileDef, const trace_t &collision, const idVec3 &velocity);
+    static bool             ClientPredictionCollide(idEntity *soundEnt, const idDict &projectileDef, const trace_t &collision, const idVec3 &velocity, bool addDamageEffect);
     virtual void            ClientPredictionThink(void);
-    virtual void            WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void            ReadFromSnapshot(const idBitMsgDelta& msg);
-    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg& msg);
+    virtual void            WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void            ReadFromSnapshot(const idBitMsgDelta &msg);
+    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg &msg);
 
   protected:
     idEntityPtr<idEntity>   owner;
@@ -107,7 +107,7 @@ class idProjectile : public idEntity {
     idForce_Constant        thruster;
     idPhysics_RigidBody     physicsObj;
 
-    const idDeclParticle*   smokeFly;
+    const idDeclParticle   *smokeFly;
     int                     smokeFlyTime;
 
     typedef enum {
@@ -124,12 +124,12 @@ class idProjectile : public idEntity {
   private:
     bool                    netSyncPhysics;
 
-    void                    AddDefaultDamageEffect(const trace_t& collision, const idVec3& velocity);
+    void                    AddDefaultDamageEffect(const trace_t &collision, const idVec3 &velocity);
 
     void                    Event_Explode(void);
     void                    Event_Fizzle(void);
-    void                    Event_RadiusDamage(idEntity* ignore);
-    void                    Event_Touch(idEntity* other, trace_t* trace);
+    void                    Event_RadiusDamage(idEntity *ignore);
+    void                    Event_Touch(idEntity *other, trace_t *trace);
     void                    Event_GetProjectileState(void);
 };
 
@@ -140,17 +140,17 @@ class idGuidedProjectile : public idProjectile {
     idGuidedProjectile(void);
     ~idGuidedProjectile(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     void                    Spawn(void);
     virtual void            Think(void);
-    virtual void            Launch(const idVec3& start, const idVec3& dir, const idVec3& pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
+    virtual void            Launch(const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
 
   protected:
     float                   speed;
     idEntityPtr<idEntity>   enemy;
-    virtual void            GetSeekPos(idVec3& out);
+    virtual void            GetSeekPos(idVec3 &out);
 
   private:
     idAngles                rndScale;
@@ -169,17 +169,17 @@ class idSoulCubeMissile : public idGuidedProjectile {
   public:
     CLASS_PROTOTYPE(idSoulCubeMissile);
     ~idSoulCubeMissile();
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     void                    Spawn(void);
     virtual void            Think(void);
-    virtual void            Launch(const idVec3& start, const idVec3& dir, const idVec3& pushVelocity, const float timeSinceFire = 0.0f, const float power = 1.0f, const float dmgPower = 1.0f);
+    virtual void            Launch(const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float power = 1.0f, const float dmgPower = 1.0f);
 
   protected:
-    virtual void            GetSeekPos(idVec3& out);
+    virtual void            GetSeekPos(idVec3 &out);
     void                    ReturnToOwner(void);
-    void                    KillTarget(const idVec3& dir);
+    void                    KillTarget(const idVec3 &dir);
 
   private:
     idVec3                  startingVelocity;
@@ -192,7 +192,7 @@ class idSoulCubeMissile : public idGuidedProjectile {
     idVec3                  orbitOrg;
     int                     orbitTime;
     int                     smokeKillTime;
-    const idDeclParticle*   smokeKill;
+    const idDeclParticle   *smokeKill;
 };
 
 struct beamTarget_t {
@@ -208,13 +208,13 @@ class idBFGProjectile : public idProjectile {
     idBFGProjectile();
     ~idBFGProjectile();
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     void                    Spawn(void);
     virtual void            Think(void);
-    virtual void            Launch(const idVec3& start, const idVec3& dir, const idVec3& pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
-    virtual void            Explode(const trace_t& collision, idEntity* ignore);
+    virtual void            Launch(const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float launchPower = 1.0f, const float dmgPower = 1.0f);
+    virtual void            Explode(const trace_t &collision, idEntity *ignore);
 
   private:
     idList<beamTarget_t>    beamTargets;
@@ -244,26 +244,26 @@ class idDebris : public idEntity {
     ~idDebris();
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                    // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                    // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                    // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                    // unarchives object from save game file
 
     void                    Spawn(void);
 
-    void                    Create(idEntity* owner, const idVec3& start, const idMat3& axis);
+    void                    Create(idEntity *owner, const idVec3 &start, const idMat3 &axis);
     void                    Launch(void);
     void                    Think(void);
-    void                    Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
+    void                    Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location);
     void                    Explode(void);
     void                    Fizzle(void);
-    virtual bool            Collide(const trace_t& collision, const idVec3& velocity);
+    virtual bool            Collide(const trace_t &collision, const idVec3 &velocity);
 
 
   private:
     idEntityPtr<idEntity>   owner;
     idPhysics_RigidBody     physicsObj;
-    const idDeclParticle*   smokeFly;
+    const idDeclParticle   *smokeFly;
     int                     smokeFlyTime;
-    const idSoundShader*    sndBounce;
+    const idSoundShader    *sndBounce;
 
 
     void                    Event_Explode(void);

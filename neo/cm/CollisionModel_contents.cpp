@@ -53,10 +53,10 @@ idCollisionModelManagerLocal::TestTrmVertsInBrush
   returns true if any of the trm vertices is inside the brush
 ================
 */
-bool idCollisionModelManagerLocal::TestTrmVertsInBrush(cm_traceWork_t* tw, cm_brush_t* b) {
+bool idCollisionModelManagerLocal::TestTrmVertsInBrush(cm_traceWork_t *tw, cm_brush_t *b) {
     int i, j, numVerts, bestPlane;
     float d, bestd;
-    idVec3* p;
+    idVec3 *p;
 
     if (b->checkcount == idCollisionModelManagerLocal::checkCount) {
         return false;
@@ -157,13 +157,13 @@ idCollisionModelManagerLocal::TestTrmInPolygon
   returns true if the trm intersects the polygon
 ================
 */
-bool idCollisionModelManagerLocal::TestTrmInPolygon(cm_traceWork_t* tw, cm_polygon_t* p) {
+bool idCollisionModelManagerLocal::TestTrmInPolygon(cm_traceWork_t *tw, cm_polygon_t *p) {
     int i, j, k, edgeNum, flip, trmEdgeNum, bitNum, bestPlane;
     int sides[MAX_TRACEMODEL_VERTS];
     float d, bestd;
-    cm_trmEdge_t* trmEdge;
-    cm_edge_t* edge;
-    cm_vertex_t* v, *v1, *v2;
+    cm_trmEdge_t *trmEdge;
+    cm_edge_t *edge;
+    cm_vertex_t *v, *v1, *v2;
 
     // if already checked this polygon
     if (p->checkcount == idCollisionModelManagerLocal::checkCount) {
@@ -326,7 +326,7 @@ bool idCollisionModelManagerLocal::TestTrmInPolygon(cm_traceWork_t* tw, cm_polyg
             tw->trace.c.contents = p->contents;
             tw->trace.c.material = p->material;
             tw->trace.c.point = tw->vertices[tw->edges[i].vertexNum[ !flip ]].p;
-            tw->trace.c.modelFeature = *reinterpret_cast<int*>(&p);
+            tw->trace.c.modelFeature = *reinterpret_cast<int *>(&p);
             tw->trace.c.trmFeature = i;
             return true;
         }
@@ -432,8 +432,8 @@ bool idCollisionModelManagerLocal::TestTrmInPolygon(cm_traceWork_t* tw, cm_polyg
 idCollisionModelManagerLocal::PointNode
 ================
 */
-cm_node_t* idCollisionModelManagerLocal::PointNode(const idVec3& p, cm_model_t* model) {
-    cm_node_t* node;
+cm_node_t *idCollisionModelManagerLocal::PointNode(const idVec3 &p, cm_model_t *model) {
+    cm_node_t *node;
 
     node = model->node;
 
@@ -458,10 +458,10 @@ idCollisionModelManagerLocal::PointContents
 int idCollisionModelManagerLocal::PointContents(const idVec3 p, cmHandle_t model) {
     int i;
     float d;
-    cm_node_t* node;
-    cm_brushRef_t* bref;
-    cm_brush_t* b;
-    idPlane* plane;
+    cm_node_t *node;
+    cm_brushRef_t *bref;
+    cm_brush_t *b;
+    idPlane *plane;
 
     node = idCollisionModelManagerLocal::PointNode(p, idCollisionModelManagerLocal::models[model]);
 
@@ -507,7 +507,7 @@ int idCollisionModelManagerLocal::PointContents(const idVec3 p, cmHandle_t model
 idCollisionModelManagerLocal::TransformedPointContents
 ==================
 */
-int idCollisionModelManagerLocal::TransformedPointContents(const idVec3& p, cmHandle_t model, const idVec3& origin, const idMat3& modelAxis) {
+int idCollisionModelManagerLocal::TransformedPointContents(const idVec3 &p, cmHandle_t model, const idVec3 &origin, const idMat3 &modelAxis) {
     idVec3 p_l;
 
     // subtract origin offset
@@ -526,9 +526,9 @@ int idCollisionModelManagerLocal::TransformedPointContents(const idVec3& p, cmHa
 idCollisionModelManagerLocal::ContentsTrm
 ==================
 */
-int idCollisionModelManagerLocal::ContentsTrm(trace_t* results, const idVec3& start,
-        const idTraceModel* trm, const idMat3& trmAxis, int contentMask,
-        cmHandle_t model, const idVec3& modelOrigin, const idMat3& modelAxis) {
+int idCollisionModelManagerLocal::ContentsTrm(trace_t *results, const idVec3 &start,
+        const idTraceModel *trm, const idMat3 &trmAxis, int contentMask,
+        cmHandle_t model, const idVec3 &modelOrigin, const idMat3 &modelAxis) {
     int i;
     bool model_rotated, trm_rotated;
     idMat3 invModelAxis, tmpAxis;
@@ -682,9 +682,9 @@ int idCollisionModelManagerLocal::ContentsTrm(trace_t* results, const idVec3& st
 idCollisionModelManagerLocal::Contents
 ==================
 */
-int idCollisionModelManagerLocal::Contents(const idVec3& start,
-        const idTraceModel* trm, const idMat3& trmAxis, int contentMask,
-        cmHandle_t model, const idVec3& modelOrigin, const idMat3& modelAxis) {
+int idCollisionModelManagerLocal::Contents(const idVec3 &start,
+        const idTraceModel *trm, const idMat3 &trmAxis, int contentMask,
+        cmHandle_t model, const idVec3 &modelOrigin, const idMat3 &modelAxis) {
     trace_t results;
 
     if (model < 0 || model > idCollisionModelManagerLocal::maxModels || model > MAX_SUBMODELS) {

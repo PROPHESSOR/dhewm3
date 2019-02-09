@@ -76,13 +76,13 @@ void idChoiceWindow::CommonInit() {
     choices.Clear();
 }
 
-idChoiceWindow::idChoiceWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idChoiceWindow::idChoiceWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idChoiceWindow::idChoiceWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idChoiceWindow::idChoiceWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -91,7 +91,7 @@ idChoiceWindow::~idChoiceWindow() {
 
 }
 
-void idChoiceWindow::RunNamedEvent(const char* eventName) {
+void idChoiceWindow::RunNamedEvent(const char *eventName) {
     idStr event, group;
 
     if (!idStr::Cmpn(eventName, "cvar read ", 10)) {
@@ -127,7 +127,7 @@ void idChoiceWindow::UpdateVars(bool read, bool force) {
     }
 }
 
-const char* idChoiceWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idChoiceWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
     int key;
     bool runAction = false;
     bool runAction2 = false;
@@ -268,7 +268,7 @@ void idChoiceWindow::UpdateChoice() {
     }
 }
 
-bool idChoiceWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idChoiceWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "choicetype") == 0) {
         choiceType = src->ParseInt();
         return true;
@@ -283,7 +283,7 @@ bool idChoiceWindow::ParseInternalVar(const char* _name, idParser* src) {
 }
 
 
-idWinVar* idChoiceWindow::GetWinVarByName(const char* _name, bool fixup, drawWin_t** owner) {
+idWinVar *idChoiceWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner) {
     if (idStr::Icmp(_name, "choices") == 0) {
         return &choicesStr;
     }
@@ -419,17 +419,17 @@ void idChoiceWindow::PostParse() {
      * If that entry shoud be disabled for the mod, just add another entry:
      * "injectCustomResolutionMode 0"
      */
-    idWinVar* wv = GetWinVarByName("injectResolutions");
+    idWinVar *wv = GetWinVarByName("injectResolutions");
 
     if (wv != NULL) {
-        const char* val = wv->c_str();
+        const char *val = wv->c_str();
 
         if (val != NULL && *val != '\0' && idStr::Cmp(val, "0") != 0) {
             injectResolutions = true;
             wv = GetWinVarByName("injectCustomResolutionMode");
 
             if (wv != NULL) {
-                const char* val = wv->c_str();
+                const char *val = wv->c_str();
 
                 if (val != NULL && *val != '\0' && idStr::Cmp(val, "0") == 0) {
                     injectCustomMode = false;
@@ -492,7 +492,7 @@ void idChoiceWindow::Draw(int time, float x, float y) {
     dc->DrawText(choices[currentChoice], textScale, textAlign, color, textRect, false, -1);
 }
 
-void idChoiceWindow::Activate(bool activate, idStr& act) {
+void idChoiceWindow::Activate(bool activate, idStr &act) {
     idWindow::Activate(activate, act);
 
     if (activate) {

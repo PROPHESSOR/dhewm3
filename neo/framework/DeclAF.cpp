@@ -59,7 +59,7 @@ idAFVector::idAFVector(void) {
 idAFVector::Parse
 ================
 */
-bool idAFVector::Parse(idLexer& src) {
+bool idAFVector::Parse(idLexer &src) {
     idToken token;
 
     if (!src.ReadToken(&token)) {
@@ -121,7 +121,7 @@ bool idAFVector::Parse(idLexer& src) {
 idAFVector::Finish
 ================
 */
-bool idAFVector::Finish(const char* fileName, const getJointTransform_t GetJointTransform, const idJointMat* frame, void* model) const {
+bool idAFVector::Finish(const char *fileName, const getJointTransform_t GetJointTransform, const idJointMat *frame, void *model) const {
     idMat3 axis;
     idVec3 start, end;
 
@@ -187,7 +187,7 @@ bool idAFVector::Finish(const char* fileName, const getJointTransform_t GetJoint
 idAFVector::Write
 ================
 */
-bool idAFVector::Write(idFile* f) const {
+bool idAFVector::Write(idFile *f) const {
 
     if (negate) {
         f->WriteFloatString("-");
@@ -227,7 +227,7 @@ bool idAFVector::Write(idFile* f) const {
 idAFVector::ToString
 ================
 */
-const char* idAFVector::ToString(idStr& str, const int precision) {
+const char *idAFVector::ToString(idStr &str, const int precision) {
 
     switch (type) {
         case idAFVector::VEC_COORDS: {
@@ -269,7 +269,7 @@ const char* idAFVector::ToString(idStr& str, const int precision) {
 idDeclAF_Body::SetDefault
 ================
 */
-void idDeclAF_Body::SetDefault(const idDeclAF* file) {
+void idDeclAF_Body::SetDefault(const idDeclAF *file) {
     name = "noname";
     modelType = TRM_BOX;
     v1.type = idAFVector::VEC_COORDS;
@@ -299,7 +299,7 @@ void idDeclAF_Body::SetDefault(const idDeclAF* file) {
 idDeclAF_Constraint::SetDefault
 ================
 */
-void idDeclAF_Constraint::SetDefault(const idDeclAF* file) {
+void idDeclAF_Constraint::SetDefault(const idDeclAF *file) {
     name = "noname";
     type = DECLAF_CONSTRAINT_UNIVERSALJOINT;
 
@@ -328,7 +328,7 @@ void idDeclAF_Constraint::SetDefault(const idDeclAF* file) {
 idDeclAF::WriteBody
 ================
 */
-bool idDeclAF::WriteBody(idFile* f, const idDeclAF_Body& body) const {
+bool idDeclAF::WriteBody(idFile *f, const idDeclAF_Body &body) const {
     idStr str;
 
     f->WriteFloatString("\nbody \"%s\" {\n", body.name.c_str());
@@ -406,7 +406,7 @@ bool idDeclAF::WriteBody(idFile* f, const idDeclAF_Body& body) const {
     f->WriteFloatString("\tdensity %f\n", body.density);
 
     if (body.inertiaScale != mat3_identity) {
-        const idMat3& ic = body.inertiaScale;
+        const idMat3 &ic = body.inertiaScale;
         f->WriteFloatString("\tinertiaScale (%f %f %f %f %f %f %f %f %f)\n",
                             ic[0][0], ic[0][1], ic[0][2],
                             ic[1][0], ic[1][1], ic[1][2],
@@ -443,7 +443,7 @@ bool idDeclAF::WriteBody(idFile* f, const idDeclAF_Body& body) const {
 idDeclAF::WriteFixed
 ================
 */
-bool idDeclAF::WriteFixed(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteFixed(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nfixed \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -456,7 +456,7 @@ bool idDeclAF::WriteFixed(idFile* f, const idDeclAF_Constraint& c) const {
 idDeclAF::WriteBallAndSocketJoint
 ================
 */
-bool idDeclAF::WriteBallAndSocketJoint(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteBallAndSocketJoint(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nballAndSocketJoint \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -488,7 +488,7 @@ bool idDeclAF::WriteBallAndSocketJoint(idFile* f, const idDeclAF_Constraint& c) 
 idDeclAF::WriteUniversalJoint
 ================
 */
-bool idDeclAF::WriteUniversalJoint(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteUniversalJoint(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nuniversalJoint \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -521,7 +521,7 @@ bool idDeclAF::WriteUniversalJoint(idFile* f, const idDeclAF_Constraint& c) cons
 idDeclAF::WriteHinge
 ================
 */
-bool idDeclAF::WriteHinge(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteHinge(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nhinge \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -548,7 +548,7 @@ bool idDeclAF::WriteHinge(idFile* f, const idDeclAF_Constraint& c) const {
 idDeclAF::WriteSlider
 ================
 */
-bool idDeclAF::WriteSlider(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteSlider(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nslider \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -565,7 +565,7 @@ bool idDeclAF::WriteSlider(idFile* f, const idDeclAF_Constraint& c) const {
 idDeclAF::WriteSpring
 ================
 */
-bool idDeclAF::WriteSpring(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteSpring(idFile *f, const idDeclAF_Constraint &c) const {
     f->WriteFloatString("\nspring \"%s\" {\n", c.name.c_str());
     f->WriteFloatString("\tbody1 \"%s\"\n", c.body1.c_str());
     f->WriteFloatString("\tbody2 \"%s\"\n", c.body2.c_str());
@@ -591,7 +591,7 @@ bool idDeclAF::WriteSpring(idFile* f, const idDeclAF_Constraint& c) const {
 idDeclAF::WriteConstraint
 ================
 */
-bool idDeclAF::WriteConstraint(idFile* f, const idDeclAF_Constraint& c) const {
+bool idDeclAF::WriteConstraint(idFile *f, const idDeclAF_Constraint &c) const {
     switch (c.type) {
         case DECLAF_CONSTRAINT_FIXED:
             return WriteFixed(f, c);
@@ -623,7 +623,7 @@ bool idDeclAF::WriteConstraint(idFile* f, const idDeclAF_Constraint& c) const {
 idDeclAF::WriteSettings
 ================
 */
-bool idDeclAF::WriteSettings(idFile* f) const {
+bool idDeclAF::WriteSettings(idFile *f) const {
     idStr str;
 
     f->WriteFloatString("\nsettings {\n");
@@ -701,7 +701,7 @@ bool idDeclAF::Save(void) {
 idDeclAF::ContentsFromString
 ================
 */
-int idDeclAF::ContentsFromString(const char* str) {
+int idDeclAF::ContentsFromString(const char *str) {
     int c;
     idToken token;
     idLexer src(str, idStr::Length(str), "idDeclAF::ContentsFromString");
@@ -736,7 +736,7 @@ int idDeclAF::ContentsFromString(const char* str) {
 idDeclAF::ContentsToString
 ================
 */
-const char* idDeclAF::ContentsToString(const int contents, idStr& str) {
+const char *idDeclAF::ContentsToString(const int contents, idStr &str) {
     str = "";
 
     if (contents & CONTENTS_SOLID) {
@@ -791,7 +791,7 @@ const char* idDeclAF::ContentsToString(const int contents, idStr& str) {
 idDeclAF::JointModFromString
 ================
 */
-declAFJointMod_t idDeclAF::JointModFromString(const char* str) {
+declAFJointMod_t idDeclAF::JointModFromString(const char *str) {
     if (idStr::Icmp(str, "orientation") == 0) {
         return DECLAF_JOINTMOD_AXIS;
     }
@@ -812,7 +812,7 @@ declAFJointMod_t idDeclAF::JointModFromString(const char* str) {
 idDeclAF::JointModToString
 ================
 */
-const char* idDeclAF::JointModToString(declAFJointMod_t jointMod) {
+const char *idDeclAF::JointModToString(declAFJointMod_t jointMod) {
     switch (jointMod) {
         case DECLAF_JOINTMOD_AXIS: {
                 return "orientation";
@@ -844,7 +844,7 @@ size_t idDeclAF::Size(void) const {
 idDeclAF::ParseContents
 ================
 */
-bool idDeclAF::ParseContents(idLexer& src, int& c) const {
+bool idDeclAF::ParseContents(idLexer &src, int &c) const {
     idToken token;
     idStr str;
 
@@ -867,11 +867,11 @@ bool idDeclAF::ParseContents(idLexer& src, int& c) const {
 idDeclAF::ParseBody
 ================
 */
-bool idDeclAF::ParseBody(idLexer& src) {
+bool idDeclAF::ParseBody(idLexer &src) {
     bool hasJoint = false;
     idToken token;
     idAFVector angles;
-    idDeclAF_Body* body = new idDeclAF_Body;
+    idDeclAF_Body *body = new idDeclAF_Body;
 
     bodies.Alloc() = body;
 
@@ -1062,9 +1062,9 @@ bool idDeclAF::ParseBody(idLexer& src) {
 idDeclAF::ParseFixed
 ================
 */
-bool idDeclAF::ParseFixed(idLexer& src) {
+bool idDeclAF::ParseFixed(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1101,9 +1101,9 @@ bool idDeclAF::ParseFixed(idLexer& src) {
 idDeclAF::ParseBallAndSocketJoint
 ================
 */
-bool idDeclAF::ParseBallAndSocketJoint(idLexer& src) {
+bool idDeclAF::ParseBallAndSocketJoint(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1190,9 +1190,9 @@ bool idDeclAF::ParseBallAndSocketJoint(idLexer& src) {
 idDeclAF::ParseUniversalJoint
 ================
 */
-bool idDeclAF::ParseUniversalJoint(idLexer& src) {
+bool idDeclAF::ParseUniversalJoint(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1274,9 +1274,9 @@ bool idDeclAF::ParseUniversalJoint(idLexer& src) {
 idDeclAF::ParseHinge
 ================
 */
-bool idDeclAF::ParseHinge(idLexer& src) {
+bool idDeclAF::ParseHinge(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1342,9 +1342,9 @@ bool idDeclAF::ParseHinge(idLexer& src) {
 idDeclAF::ParseSlider
 ================
 */
-bool idDeclAF::ParseSlider(idLexer& src) {
+bool idDeclAF::ParseSlider(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1389,9 +1389,9 @@ bool idDeclAF::ParseSlider(idLexer& src) {
 idDeclAF::ParseSpring
 ================
 */
-bool idDeclAF::ParseSpring(idLexer& src) {
+bool idDeclAF::ParseSpring(idLexer &src) {
     idToken token;
-    idDeclAF_Constraint* constraint = new idDeclAF_Constraint;
+    idDeclAF_Constraint *constraint = new idDeclAF_Constraint;
 
     constraint->SetDefault(this);
     constraints.Alloc() = constraint;
@@ -1452,7 +1452,7 @@ bool idDeclAF::ParseSpring(idLexer& src) {
 idDeclAF::ParseSettings
 ================
 */
-bool idDeclAF::ParseSettings(idLexer& src) {
+bool idDeclAF::ParseSettings(idLexer &src) {
     idToken token;
 
     if (!src.ExpectTokenString("{")) {
@@ -1555,7 +1555,7 @@ bool idDeclAF::ParseSettings(idLexer& src) {
 idDeclAF::Parse
 ================
 */
-bool idDeclAF::Parse(const char* text, const int textLength) {
+bool idDeclAF::Parse(const char *text, const int textLength) {
     int i, j;
     idLexer src;
     idToken token;
@@ -1637,7 +1637,7 @@ bool idDeclAF::Parse(const char* text, const int textLength) {
     for (i = 0; i < bodies.Num(); i++) {
         if (bodies[i]->jointName == "origin") {
             if (i != 0) {
-                idDeclAF_Body* b = bodies[0];
+                idDeclAF_Body *b = bodies[0];
                 bodies[0] = bodies[i];
                 bodies[i] = b;
             }
@@ -1654,7 +1654,7 @@ bool idDeclAF::Parse(const char* text, const int textLength) {
 idDeclAF::DefaultDefinition
 ================
 */
-const char* idDeclAF::DefaultDefinition(void) const {
+const char *idDeclAF::DefaultDefinition(void) const {
     return
         "{\n"
         "\t"    "settings {\n"
@@ -1718,13 +1718,13 @@ void idDeclAF::FreeData(void) {
 idDeclAF::Finish
 ================
 */
-void idDeclAF::Finish(const getJointTransform_t GetJointTransform, const idJointMat* frame, void* model) const {
+void idDeclAF::Finish(const getJointTransform_t GetJointTransform, const idJointMat *frame, void *model) const {
     int i;
 
-    const char* name = GetName();
+    const char *name = GetName();
 
     for (i = 0; i < bodies.Num(); i++) {
-        idDeclAF_Body* body = bodies[i];
+        idDeclAF_Body *body = bodies[i];
         body->v1.Finish(name, GetJointTransform, frame, model);
         body->v2.Finish(name, GetJointTransform, frame, model);
         body->origin.Finish(name, GetJointTransform, frame, model);
@@ -1733,7 +1733,7 @@ void idDeclAF::Finish(const getJointTransform_t GetJointTransform, const idJoint
     }
 
     for (i = 0; i < constraints.Num(); i++) {
-        idDeclAF_Constraint* constraint = constraints[i];
+        idDeclAF_Constraint *constraint = constraints[i];
         constraint->anchor.Finish(name, GetJointTransform, frame, model);
         constraint->anchor2.Finish(name, GetJointTransform, frame, model);
         constraint->shaft[0].Finish(name, GetJointTransform, frame, model);
@@ -1748,8 +1748,8 @@ void idDeclAF::Finish(const getJointTransform_t GetJointTransform, const idJoint
 idDeclAF::NewBody
 ================
 */
-void idDeclAF::NewBody(const char* name) {
-    idDeclAF_Body* body;
+void idDeclAF::NewBody(const char *name) {
+    idDeclAF_Body *body;
 
     body = new idDeclAF_Body();
     body->SetDefault(this);
@@ -1765,7 +1765,7 @@ idDeclAF::RenameBody
   all constraint body references
 ================
 */
-void idDeclAF::RenameBody(const char* oldName, const char* newName) {
+void idDeclAF::RenameBody(const char *oldName, const char *newName) {
     int i;
 
     for (i = 0; i < bodies.Num(); i++) {
@@ -1792,7 +1792,7 @@ idDeclAF::DeleteBody
   all constraints that reference the body
 ================
 */
-void idDeclAF::DeleteBody(const char* name) {
+void idDeclAF::DeleteBody(const char *name) {
     int i;
 
     for (i = 0; i < bodies.Num(); i++) {
@@ -1818,8 +1818,8 @@ void idDeclAF::DeleteBody(const char* name) {
 idDeclAF::NewConstraint
 ================
 */
-void idDeclAF::NewConstraint(const char* name) {
-    idDeclAF_Constraint* constraint;
+void idDeclAF::NewConstraint(const char *name) {
+    idDeclAF_Constraint *constraint;
 
     constraint = new idDeclAF_Constraint;
     constraint->SetDefault(this);
@@ -1832,7 +1832,7 @@ void idDeclAF::NewConstraint(const char* name) {
 idDeclAF::RenameConstraint
 ================
 */
-void idDeclAF::RenameConstraint(const char* oldName, const char* newName) {
+void idDeclAF::RenameConstraint(const char *oldName, const char *newName) {
     int i;
 
     for (i = 0; i < constraints.Num(); i++) {
@@ -1848,7 +1848,7 @@ void idDeclAF::RenameConstraint(const char* oldName, const char* newName) {
 idDeclAF::DeleteConstraint
 ================
 */
-void idDeclAF::DeleteConstraint(const char* name) {
+void idDeclAF::DeleteConstraint(const char *name) {
     int i;
 
     for (i = 0; i < constraints.Num(); i++) {

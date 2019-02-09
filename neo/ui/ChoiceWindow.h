@@ -35,24 +35,24 @@ class idUserInterfaceLocal;
 
 class idChoiceWindow : public idWindow {
   public:
-    idChoiceWindow(idUserInterfaceLocal* gui);
-    idChoiceWindow(idDeviceContext* d, idUserInterfaceLocal* gui);
+    idChoiceWindow(idUserInterfaceLocal *gui);
+    idChoiceWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
     virtual             ~idChoiceWindow();
 
-    virtual const char*  HandleEvent(const sysEvent_t* event, bool* updateVisuals);
+    virtual const char  *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
     virtual void        PostParse();
     virtual void        Draw(int time, float x, float y);
-    virtual void        Activate(bool activate, idStr& act);
+    virtual void        Activate(bool activate, idStr &act);
     virtual size_t      Allocated() {
         return idWindow::Allocated();
     };
 
-    virtual idWinVar*    GetWinVarByName(const char* _name, bool winLookup = false, drawWin_t** owner = NULL);
+    virtual idWinVar    *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
-    void                RunNamedEvent(const char* eventName);
+    void                RunNamedEvent(const char *eventName);
 
   private:
-    virtual bool        ParseInternalVar(const char* name, idParser* src);
+    virtual bool        ParseInternalVar(const char *name, idParser *src);
     void                CommonInit();
     void                UpdateChoice();
     void                ValidateChoice();
@@ -76,7 +76,7 @@ class idChoiceWindow : public idWindow {
 
     idWinStr            guiStr;
     idWinStr            cvarStr;
-    idCVar*             cvar;
+    idCVar             *cvar;
     idMultiWinVar       updateStr;
 
     idWinBool           liveUpdate;

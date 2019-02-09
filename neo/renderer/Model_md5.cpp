@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "renderer/Model_local.h"
 
-static const char* MD5_SnapshotName = "_MD5_Snapshot_";
+static const char *MD5_SnapshotName = "_MD5_Snapshot_";
 
 /***********************************************************************
 
@@ -85,7 +85,7 @@ idMD5Mesh::~idMD5Mesh() {
 idMD5Mesh::ParseMesh
 ====================
 */
-void idMD5Mesh::ParseMesh(idLexer& parser, int numJoints, const idJointMat* joints) {
+void idMD5Mesh::ParseMesh(idLexer &parser, int numJoints, const idJointMat *joints) {
     idToken     token;
     idToken     name;
     int         num;
@@ -210,8 +210,8 @@ void idMD5Mesh::ParseMesh(idLexer& parser, int numJoints, const idJointMat* join
     }
 
     // create pre-scaled weights and an index for the vertex/joint lookup
-    scaledWeights = (idVec4*) Mem_Alloc16(numWeights * sizeof(scaledWeights[0]));
-    weightIndex = (int*) Mem_Alloc16(numWeights * 2 * sizeof(weightIndex[0]));
+    scaledWeights = (idVec4 *) Mem_Alloc16(numWeights * sizeof(scaledWeights[0]));
+    weightIndex = (int *) Mem_Alloc16(numWeights * 2 * sizeof(weightIndex[0]));
     memset(weightIndex, 0, numWeights * 2 * sizeof(weightIndex[0]));
 
     count = 0;
@@ -247,7 +247,7 @@ void idMD5Mesh::ParseMesh(idLexer& parser, int numJoints, const idJointMat* join
     // build the information that will be common to all animations of this mesh:
     // silhouette edge connectivity and normal / tangent generation information
     //
-    idDrawVert* verts = (idDrawVert*) _alloca16(texCoords.Num() * sizeof(idDrawVert));
+    idDrawVert *verts = (idDrawVert *) _alloca16(texCoords.Num() * sizeof(idDrawVert));
 
     for (i = 0; i < texCoords.Num(); i++) {
         verts[i].Clear();
@@ -263,7 +263,7 @@ void idMD5Mesh::ParseMesh(idLexer& parser, int numJoints, const idJointMat* join
 idMD5Mesh::TransformVerts
 ====================
 */
-void idMD5Mesh::TransformVerts(idDrawVert* verts, const idJointMat* entJoints) {
+void idMD5Mesh::TransformVerts(idDrawVert *verts, const idJointMat *entJoints) {
     SIMDProcessor->TransformVerts(verts, texCoords.Num(), entJoints, scaledWeights, weightIndex, numWeights);
 }
 
@@ -274,8 +274,8 @@ idMD5Mesh::TransformScaledVerts
 Special transform to make the mesh seem fat or skinny.  May be used for zombie deaths
 ====================
 */
-void idMD5Mesh::TransformScaledVerts(idDrawVert* verts, const idJointMat* entJoints, float scale) {
-    idVec4* scaledWeights = (idVec4*) _alloca16(numWeights * sizeof(scaledWeights[0]));
+void idMD5Mesh::TransformScaledVerts(idDrawVert *verts, const idJointMat *entJoints, float scale) {
+    idVec4 *scaledWeights = (idVec4 *) _alloca16(numWeights * sizeof(scaledWeights[0]));
     SIMDProcessor->Mul(scaledWeights[0].ToFloatPtr(), scale, scaledWeights[0].ToFloatPtr(), numWeights * 4);
     SIMDProcessor->TransformVerts(verts, texCoords.Num(), entJoints, scaledWeights, weightIndex, numWeights);
 }
@@ -285,9 +285,9 @@ void idMD5Mesh::TransformScaledVerts(idDrawVert* verts, const idJointMat* entJoi
 idMD5Mesh::UpdateSurface
 ====================
 */
-void idMD5Mesh::UpdateSurface(const struct renderEntity_s* ent, const idJointMat* entJoints, modelSurface_t* surf) {
+void idMD5Mesh::UpdateSurface(const struct renderEntity_s *ent, const idJointMat *entJoints, modelSurface_t *surf) {
     int i, base;
-    srfTriangles_t* tri;
+    srfTriangles_t *tri;
 
     tr.pc.c_deformedSurfaces++;
     tr.pc.c_deformedVerts += deformInfo->numOutputVerts;
@@ -366,9 +366,9 @@ void idMD5Mesh::UpdateSurface(const struct renderEntity_s* ent, const idJointMat
 idMD5Mesh::CalcBounds
 ====================
 */
-idBounds idMD5Mesh::CalcBounds(const idJointMat* entJoints) {
+idBounds idMD5Mesh::CalcBounds(const idJointMat *entJoints) {
     idBounds    bounds;
-    idDrawVert* verts = (idDrawVert*) _alloca16(texCoords.Num() * sizeof(idDrawVert));
+    idDrawVert *verts = (idDrawVert *) _alloca16(texCoords.Num() * sizeof(idDrawVert));
 
     TransformVerts(verts, entJoints);
 
@@ -457,7 +457,7 @@ int idMD5Mesh::NumWeights(void) const {
 idRenderModelMD5::ParseJoint
 ====================
 */
-void idRenderModelMD5::ParseJoint(idLexer& parser, idMD5Joint* joint, idJointQuat* defaultPose) {
+void idRenderModelMD5::ParseJoint(idLexer &parser, idMD5Joint *joint, idJointQuat *defaultPose) {
     idToken token;
     int     num;
 
@@ -495,7 +495,7 @@ void idRenderModelMD5::ParseJoint(idLexer& parser, idMD5Joint* joint, idJointQua
 idRenderModelMD5::InitFromFile
 ====================
 */
-void idRenderModelMD5::InitFromFile(const char* fileName) {
+void idRenderModelMD5::InitFromFile(const char *fileName) {
     name = fileName;
     LoadModel();
 }
@@ -515,9 +515,9 @@ void idRenderModelMD5::LoadModel() {
     int         parentNum;
     idToken     token;
     idLexer     parser(LEXFL_ALLOWPATHNAMES | LEXFL_NOSTRINGESCAPECHARS);
-    idJointQuat* pose;
-    idMD5Joint*  joint;
-    idJointMat* poseMat3;
+    idJointQuat *pose;
+    idMD5Joint  *joint;
+    idJointMat *poseMat3;
 
     if (!purged) {
         PurgeModel();
@@ -550,7 +550,7 @@ void idRenderModelMD5::LoadModel() {
     joints.SetNum(num);
     defaultPose.SetGranularity(1);
     defaultPose.SetNum(num);
-    poseMat3 = (idJointMat*)_alloca16(num * sizeof(*poseMat3));
+    poseMat3 = (idJointMat *)_alloca16(num * sizeof(*poseMat3));
 
     // parse num meshes
     parser.ExpectTokenString("numMeshes");
@@ -605,7 +605,7 @@ idRenderModelMD5::Print
 ==============
 */
 void idRenderModelMD5::Print() const {
-    const idMD5Mesh* mesh;
+    const idMD5Mesh *mesh;
     int         i;
 
     common->Printf("%s\n", name.c_str());
@@ -637,7 +637,7 @@ idRenderModelMD5::List
 */
 void idRenderModelMD5::List() const {
     int         i;
-    const idMD5Mesh* mesh;
+    const idMD5Mesh *mesh;
     int         totalTris = 0;
     int         totalVerts = 0;
 
@@ -660,9 +660,9 @@ void idRenderModelMD5::List() const {
 idRenderModelMD5::CalculateBounds
 ====================
 */
-void idRenderModelMD5::CalculateBounds(const idJointMat* entJoints) {
+void idRenderModelMD5::CalculateBounds(const idJointMat *entJoints) {
     int         i;
-    idMD5Mesh*   mesh;
+    idMD5Mesh   *mesh;
 
     bounds.Clear();
 
@@ -679,7 +679,7 @@ This calculates a rough bounds by using the joint radii without
 transforming all the points
 ====================
 */
-idBounds idRenderModelMD5::Bounds(const renderEntity_t* ent) const {
+idBounds idRenderModelMD5::Bounds(const renderEntity_t *ent) const {
     #if 0
 
     // we can't calculate a rational bounds without an entity,
@@ -704,12 +704,12 @@ idBounds idRenderModelMD5::Bounds(const renderEntity_t* ent) const {
 idRenderModelMD5::DrawJoints
 ====================
 */
-void idRenderModelMD5::DrawJoints(const renderEntity_t* ent, const struct viewDef_s* view) const {
+void idRenderModelMD5::DrawJoints(const renderEntity_t *ent, const struct viewDef_s *view) const {
     int                 i;
     int                 num;
     idVec3              pos;
-    const idJointMat*    joint;
-    const idMD5Joint*    md5Joint;
+    const idJointMat    *joint;
+    const idMD5Joint    *md5Joint;
     int                 parentNum;
 
     num = ent->numJoints;
@@ -754,10 +754,10 @@ void idRenderModelMD5::DrawJoints(const renderEntity_t* ent, const struct viewDe
 idRenderModelMD5::InstantiateDynamicModel
 ====================
 */
-idRenderModel* idRenderModelMD5::InstantiateDynamicModel(const struct renderEntity_s* ent, const struct viewDef_s* view, idRenderModel* cachedModel) {
+idRenderModel *idRenderModelMD5::InstantiateDynamicModel(const struct renderEntity_s *ent, const struct viewDef_s *view, idRenderModel *cachedModel) {
     int                 i, surfaceNum;
-    idMD5Mesh*           mesh;
-    idRenderModelStatic* staticModel;
+    idMD5Mesh           *mesh;
+    idRenderModelStatic *staticModel;
 
     if (cachedModel && !r_useCachedDynamicModels.GetBool()) {
         delete cachedModel;
@@ -782,9 +782,9 @@ idRenderModel* idRenderModelMD5::InstantiateDynamicModel(const struct renderEnti
     tr.pc.c_generateMd5++;
 
     if (cachedModel) {
-        assert(dynamic_cast<idRenderModelStatic*>(cachedModel) != NULL);
+        assert(dynamic_cast<idRenderModelStatic *>(cachedModel) != NULL);
         assert(idStr::Icmp(cachedModel->Name(), MD5_SnapshotName) == 0);
-        staticModel = static_cast<idRenderModelStatic*>(cachedModel);
+        staticModel = static_cast<idRenderModelStatic *>(cachedModel);
     } else {
         staticModel = new idRenderModelStatic;
         staticModel->InitEmpty(MD5_SnapshotName);
@@ -809,7 +809,7 @@ idRenderModel* idRenderModelMD5::InstantiateDynamicModel(const struct renderEnti
     for (mesh = meshes.Ptr(), i = 0; i < meshes.Num(); i++, mesh++) {
         // avoid deforming the surface if it will be a nodraw due to a skin remapping
         // FIXME: may have to still deform clipping hulls
-        const idMaterial* shader = mesh->shader;
+        const idMaterial *shader = mesh->shader;
 
         shader = R_RemapShaderBySkin(shader, ent->customSkin, ent->customShader);
 
@@ -819,7 +819,7 @@ idRenderModel* idRenderModelMD5::InstantiateDynamicModel(const struct renderEnti
             continue;
         }
 
-        modelSurface_t* surf;
+        modelSurface_t *surf;
 
         if (staticModel->FindSurfaceWithId(i, surfaceNum)) {
             mesh->surfaceNum = surfaceNum;
@@ -868,7 +868,7 @@ int idRenderModelMD5::NumJoints(void) const {
 idRenderModelMD5::GetJoints
 ====================
 */
-const idMD5Joint* idRenderModelMD5::GetJoints(void) const {
+const idMD5Joint *idRenderModelMD5::GetJoints(void) const {
     return joints.Ptr();
 }
 
@@ -877,7 +877,7 @@ const idMD5Joint* idRenderModelMD5::GetJoints(void) const {
 idRenderModelMD5::GetDefaultPose
 ====================
 */
-const idJointQuat* idRenderModelMD5::GetDefaultPose(void) const {
+const idJointQuat *idRenderModelMD5::GetDefaultPose(void) const {
     return defaultPose.Ptr();
 }
 
@@ -886,8 +886,8 @@ const idJointQuat* idRenderModelMD5::GetDefaultPose(void) const {
 idRenderModelMD5::GetJointHandle
 ====================
 */
-jointHandle_t idRenderModelMD5::GetJointHandle(const char* name) const {
-    const idMD5Joint* joint;
+jointHandle_t idRenderModelMD5::GetJointHandle(const char *name) const {
+    const idMD5Joint *joint;
     int i;
 
     joint = joints.Ptr();
@@ -906,7 +906,7 @@ jointHandle_t idRenderModelMD5::GetJointHandle(const char* name) const {
 idRenderModelMD5::GetJointName
 =====================
 */
-const char* idRenderModelMD5::GetJointName(jointHandle_t handle) const {
+const char *idRenderModelMD5::GetJointName(jointHandle_t handle) const {
     if ((handle < 0) || (handle >= joints.Num())) {
         return "<invalid joint>";
     }
@@ -921,7 +921,7 @@ idRenderModelMD5::NearestJoint
 */
 int idRenderModelMD5::NearestJoint(int surfaceNum, int a, int b, int c) const {
     int i;
-    const idMD5Mesh* mesh;
+    const idMD5Mesh *mesh;
 
     if (surfaceNum > meshes.Num()) {
         common->Error("idRenderModelMD5::NearestJoint: surfaceNum > meshes.Num()");
@@ -946,7 +946,7 @@ are kept loaded
 ====================
 */
 void idRenderModelMD5::TouchData() {
-    idMD5Mesh*   mesh;
+    idMD5Mesh   *mesh;
     int         i;
 
     for (mesh = meshes.Ptr(), i = 0; i < meshes.Num(); i++, mesh++) {
@@ -987,7 +987,7 @@ int idRenderModelMD5::Memory() const {
 
     // count up meshes
     for (i = 0 ; i < meshes.Num() ; i++) {
-        const idMD5Mesh* mesh = &meshes[i];
+        const idMD5Mesh *mesh = &meshes[i];
 
         total += mesh->texCoords.MemoryUsed() + mesh->numWeights * (sizeof(mesh->scaledWeights[0]) + sizeof(mesh->weightIndex[0]) * 2);
 

@@ -45,7 +45,7 @@ idVertexCache       vertexCache;
 R_ListVertexCache_f
 ==============
 */
-static void R_ListVertexCache_f(const idCmdArgs& args) {
+static void R_ListVertexCache_f(const idCmdArgs &args) {
     vertexCache.List();
 }
 
@@ -54,7 +54,7 @@ static void R_ListVertexCache_f(const idCmdArgs& args) {
 idVertexCache::ActuallyFree
 ==============
 */
-void idVertexCache::ActuallyFree(vertCache_t* block) {
+void idVertexCache::ActuallyFree(vertCache_t *block) {
     if (!block) {
         common->Error("idVertexCache Free: NULL pointer");
     }
@@ -113,7 +113,7 @@ ARB_vertex_buffer_object
 The ARB_vertex_buffer_object will be bound
 ==============
 */
-void* idVertexCache::Position(vertCache_t* buffer) {
+void *idVertexCache::Position(vertCache_t *buffer) {
     if (!buffer || buffer->tag == TAG_FREE) {
         common->FatalError("idVertexCache::Position: bad vertCache_t");
     }
@@ -134,11 +134,11 @@ void* idVertexCache::Position(vertCache_t* buffer) {
             qglBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer->vbo);
         }
 
-        return (void*)buffer->offset;
+        return (void *)buffer->offset;
     }
 
     // virtual memory is a real pointer
-    return (void*)((byte*)buffer->virtMem + buffer->offset);
+    return (void *)((byte *)buffer->virtMem + buffer->offset);
 }
 
 void idVertexCache::UnbindIndex() {
@@ -182,7 +182,7 @@ void idVertexCache::Init() {
     frameBytes = FRAME_MEMORY_BYTES;
     staticAllocTotal = 0;
 
-    byte*    junk = (byte*)Mem_Alloc(frameBytes);
+    byte    *junk = (byte *)Mem_Alloc(frameBytes);
 
     for (int i = 0 ; i < NUM_VERTEX_FRAMES ; i++) {
         allocatingTempBuffer = true;    // force the alloc to use GL_STREAM_DRAW_ARB
@@ -229,8 +229,8 @@ void idVertexCache::Shutdown() {
 idVertexCache::Alloc
 ===========
 */
-void idVertexCache::Alloc(void* data, int size, vertCache_t** buffer, bool indexBuffer) {
-    vertCache_t* block;
+void idVertexCache::Alloc(void *data, int size, vertCache_t **buffer, bool indexBuffer) {
+    vertCache_t *block;
 
     if (size <= 0) {
         common->Error("idVertexCache::Alloc: size = %i\n", size);
@@ -310,7 +310,7 @@ void idVertexCache::Alloc(void* data, int size, vertCache_t** buffer, bool index
 idVertexCache::Touch
 ===========
 */
-void idVertexCache::Touch(vertCache_t* block) {
+void idVertexCache::Touch(vertCache_t *block) {
     if (!block) {
         common->Error("idVertexCache Touch: NULL pointer");
     }
@@ -340,7 +340,7 @@ void idVertexCache::Touch(vertCache_t* block) {
 idVertexCache::Free
 ===========
 */
-void idVertexCache::Free(vertCache_t* block) {
+void idVertexCache::Free(vertCache_t *block) {
     if (!block) {
         return;
     }
@@ -375,8 +375,8 @@ We can't simply sync with the GPU and overwrite what we have, because
 there may still be future references to dynamically created surfaces.
 ===========
 */
-vertCache_t* idVertexCache::AllocFrameTemp(void* data, int size) {
-    vertCache_t* block;
+vertCache_t *idVertexCache::AllocFrameTemp(void *data, int size) {
+    vertCache_t *block;
 
     if (size <= 0) {
         common->Error("idVertexCache::AllocFrameTemp: size = %i\n", size);
@@ -431,7 +431,7 @@ vertCache_t* idVertexCache::AllocFrameTemp(void* data, int size) {
         qglBindBufferARB(GL_ARRAY_BUFFER_ARB, block->vbo);
         qglBufferSubDataARB(GL_ARRAY_BUFFER_ARB, block->offset, (GLsizeiptrARB)size, data);
     } else {
-        SIMDProcessor->Memcpy((byte*)block->virtMem + block->offset, data, size);
+        SIMDProcessor->Memcpy((byte *)block->virtMem + block->offset, data, size);
     }
 
     return block;
@@ -448,14 +448,14 @@ void idVertexCache::EndFrame() {
         int staticUseCount = 0;
         int staticUseSize = 0;
 
-        for (vertCache_t* block = staticHeaders.next ; block != &staticHeaders ; block = block->next) {
+        for (vertCache_t *block = staticHeaders.next ; block != &staticHeaders ; block = block->next) {
             if (block->frameUsed == currentFrame) {
                 staticUseCount++;
                 staticUseSize += block->size;
             }
         }
 
-        const char* frameOverflow = tempOverflow ? "(OVERFLOW)" : "";
+        const char *frameOverflow = tempOverflow ? "(OVERFLOW)" : "";
 
         common->Printf("vertex dynamic:%i=%ik%s, static alloc:%i=%ik used:%i=%ik total:%i=%ik\n",
                        dynamicCountThisFrame, dynamicAllocThisFrame/1024, frameOverflow,
@@ -496,7 +496,7 @@ void idVertexCache::EndFrame() {
     }
 
     // free all the frame temp headers
-    vertCache_t* block = dynamicHeaders.next;
+    vertCache_t *block = dynamicHeaders.next;
 
     if (block != &dynamicHeaders) {
         block->prev = &freeDynamicHeaders;
@@ -518,7 +518,7 @@ void idVertexCache::List(void) {
     int frameStatic = 0;
     int totalStatic = 0;
 
-    vertCache_t* block;
+    vertCache_t *block;
 
     for (block = staticHeaders.next ; block != &staticHeaders ; block = block->next) {
         numActive++;

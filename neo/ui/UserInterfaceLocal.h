@@ -36,34 +36,34 @@ class idUserInterfaceLocal : public idUserInterface {
     idUserInterfaceLocal();
     virtual                     ~idUserInterfaceLocal();
 
-    virtual const char*         Name() const;
-    virtual const char*         Comment() const;
+    virtual const char         *Name() const;
+    virtual const char         *Comment() const;
     virtual bool                IsInteractive() const;
-    virtual bool                InitFromFile(const char* qpath, bool rebuild = true, bool cache = true);
-    virtual const char*         HandleEvent(const sysEvent_t* event, int time, bool* updateVisuals);
-    virtual void                HandleNamedEvent(const char* namedEvent);
+    virtual bool                InitFromFile(const char *qpath, bool rebuild = true, bool cache = true);
+    virtual const char         *HandleEvent(const sysEvent_t *event, int time, bool *updateVisuals);
+    virtual void                HandleNamedEvent(const char *namedEvent);
     virtual void                Redraw(int time);
     virtual void                DrawCursor();
-    virtual const idDict&       State() const;
-    virtual void                DeleteStateVar(const char* varName);
-    virtual void                SetStateString(const char* varName, const char* value);
-    virtual void                SetStateBool(const char* varName, const bool value);
-    virtual void                SetStateInt(const char* varName, const int value);
-    virtual void                SetStateFloat(const char* varName, const float value);
+    virtual const idDict       &State() const;
+    virtual void                DeleteStateVar(const char *varName);
+    virtual void                SetStateString(const char *varName, const char *value);
+    virtual void                SetStateBool(const char *varName, const bool value);
+    virtual void                SetStateInt(const char *varName, const int value);
+    virtual void                SetStateFloat(const char *varName, const float value);
 
     // Gets a gui state variable
-    virtual const char*         GetStateString(const char* varName, const char* defaultString = "") const;
-    virtual bool                GetStateBool(const char* varName, const char* defaultString = "0") const;
-    virtual int                 GetStateInt(const char* varName, const char* defaultString = "0") const;
-    virtual float               GetStateFloat(const char* varName, const char* defaultString = "0") const;
+    virtual const char         *GetStateString(const char *varName, const char *defaultString = "") const;
+    virtual bool                GetStateBool(const char *varName, const char *defaultString = "0") const;
+    virtual int                 GetStateInt(const char *varName, const char *defaultString = "0") const;
+    virtual float               GetStateFloat(const char *varName, const char *defaultString = "0") const;
 
     virtual void                StateChanged(int time, bool redraw);
-    virtual const char*         Activate(bool activate, int time);
+    virtual const char         *Activate(bool activate, int time);
     virtual void                Trigger(int time);
-    virtual void                ReadFromDemoFile(class idDemoFile* f);
-    virtual void                WriteToDemoFile(class idDemoFile* f);
-    virtual bool                WriteToSaveGame(idFile* savefile) const;
-    virtual bool                ReadFromSaveGame(idFile* savefile);
+    virtual void                ReadFromDemoFile(class idDemoFile *f);
+    virtual void                WriteToDemoFile(class idDemoFile *f);
+    virtual bool                WriteToSaveGame(idFile *savefile) const;
+    virtual bool                ReadFromSaveGame(idFile *savefile);
     virtual void                SetKeyBindingNames(void);
     virtual bool                IsUniqued() const {
         return uniqued;
@@ -82,21 +82,21 @@ class idUserInterfaceLocal : public idUserInterface {
 
     size_t                      Size();
 
-    idDict*                     GetStateDict() {
+    idDict                     *GetStateDict() {
         return &state;
     }
 
-    const char*                 GetSourceFile(void) const {
+    const char                 *GetSourceFile(void) const {
         return source;
     }
     ID_TIME_T                       GetTimeStamp(void) const {
         return timeStamp;
     }
 
-    idWindow*                   GetDesktop() const {
+    idWindow                   *GetDesktop() const {
         return desktop;
     }
-    void                        SetBindHandler(idWindow* win) {
+    void                        SetBindHandler(idWindow *win) {
         bindHandler = win;
     }
     bool                        Active() const {
@@ -119,11 +119,11 @@ class idUserInterfaceLocal : public idUserInterface {
         return refs;
     }
 
-    void                        RecurseSetKeyBindingNames(idWindow* window);
-    idStr&                       GetPendingCmd() {
+    void                        RecurseSetKeyBindingNames(idWindow *window);
+    idStr                       &GetPendingCmd() {
         return pendingCmd;
     };
-    idStr&                       GetReturnCmd() {
+    idStr                       &GetReturnCmd() {
         return returnCmd;
     };
 
@@ -134,8 +134,8 @@ class idUserInterfaceLocal : public idUserInterface {
     bool                        uniqued;
 
     idDict                      state;
-    idWindow*                   desktop;
-    idWindow*                   bindHandler;
+    idWindow                   *desktop;
+    idWindow                   *bindHandler;
 
     idStr                       source;
     idStr                       activateStr;
@@ -157,26 +157,26 @@ class idUserInterfaceManagerLocal : public idUserInterfaceManager {
   public:
     virtual void                Init();
     virtual void                Shutdown();
-    virtual void                Touch(const char* name);
-    virtual void                WritePrecacheCommands(idFile* f);
+    virtual void                Touch(const char *name);
+    virtual void                WritePrecacheCommands(idFile *f);
     virtual void                SetSize(float width, float height);
     virtual void                BeginLevelLoad();
     virtual void                EndLevelLoad();
     virtual void                Reload(bool all);
     virtual void                ListGuis() const;
-    virtual bool                CheckGui(const char* qpath) const;
-    virtual idUserInterface*    Alloc(void) const;
-    virtual void                DeAlloc(idUserInterface* gui);
-    virtual idUserInterface*    FindGui(const char* qpath, bool autoLoad = false, bool needInteractive = false, bool forceUnique = false);
-    virtual idUserInterface*    FindDemoGui(const char* qpath);
-    virtual idListGUI*          AllocListGUI(void) const;
-    virtual void                FreeListGUI(idListGUI* listgui);
+    virtual bool                CheckGui(const char *qpath) const;
+    virtual idUserInterface    *Alloc(void) const;
+    virtual void                DeAlloc(idUserInterface *gui);
+    virtual idUserInterface    *FindGui(const char *qpath, bool autoLoad = false, bool needInteractive = false, bool forceUnique = false);
+    virtual idUserInterface    *FindDemoGui(const char *qpath);
+    virtual idListGUI          *AllocListGUI(void) const;
+    virtual void                FreeListGUI(idListGUI *listgui);
 
   private:
     idRectangle                 screenRect;
     idDeviceContext             dc;
 
-    idList<idUserInterfaceLocal*> guis;
-    idList<idUserInterfaceLocal*> demoGuis;
+    idList<idUserInterfaceLocal *> guis;
+    idList<idUserInterfaceLocal *> demoGuis;
 
 };

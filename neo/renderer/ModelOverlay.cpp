@@ -65,7 +65,7 @@ idRenderModelOverlay::~idRenderModelOverlay() {
 idRenderModelOverlay::Alloc
 ====================
 */
-idRenderModelOverlay* idRenderModelOverlay::Alloc(void) {
+idRenderModelOverlay *idRenderModelOverlay::Alloc(void) {
     return new idRenderModelOverlay;
 }
 
@@ -74,7 +74,7 @@ idRenderModelOverlay* idRenderModelOverlay::Alloc(void) {
 idRenderModelOverlay::Free
 ====================
 */
-void idRenderModelOverlay::Free(idRenderModelOverlay* overlay) {
+void idRenderModelOverlay::Free(idRenderModelOverlay *overlay) {
     delete overlay;
 }
 
@@ -83,7 +83,7 @@ void idRenderModelOverlay::Free(idRenderModelOverlay* overlay) {
 idRenderModelOverlay::FreeSurface
 ====================
 */
-void idRenderModelOverlay::FreeSurface(overlaySurface_t* surface) {
+void idRenderModelOverlay::FreeSurface(overlaySurface_t *surface) {
     if (surface->verts) {
         Mem_Free(surface->verts);
     }
@@ -104,7 +104,7 @@ The material should be clamped, because entire triangles are added, some of whic
 may extend well past the 0.0 to 1.0 texture range
 =====================
 */
-void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPlane localTextureAxis[2], const idMaterial* mtr) {
+void idRenderModelOverlay::CreateOverlay(const idRenderModel *model, const idPlane localTextureAxis[2], const idMaterial *mtr) {
     int i, maxVerts, maxIndexes, surfNum;
 
     // count up the maximum possible vertices and indexes per surface
@@ -112,7 +112,7 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
     maxIndexes = 0;
 
     for (surfNum = 0; surfNum < model->NumSurfaces(); surfNum++) {
-        const modelSurface_t* surf = model->Surface(surfNum);
+        const modelSurface_t *surf = model->Surface(surfNum);
 
         if (surf->geometry->numVerts > maxVerts) {
             maxVerts = surf->geometry->numVerts;
@@ -124,12 +124,12 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
     }
 
     // make temporary buffers for the building process
-    overlayVertex_t* overlayVerts = (overlayVertex_t*)_alloca(maxVerts * sizeof(*overlayVerts));
-    glIndex_t* overlayIndexes = (glIndex_t*)_alloca16(maxIndexes * sizeof(*overlayIndexes));
+    overlayVertex_t *overlayVerts = (overlayVertex_t *)_alloca(maxVerts * sizeof(*overlayVerts));
+    glIndex_t *overlayIndexes = (glIndex_t *)_alloca16(maxIndexes * sizeof(*overlayIndexes));
 
     // pull out the triangles we need from the base surfaces
     for (surfNum = 0; surfNum < model->NumBaseSurfaces(); surfNum++) {
-        const modelSurface_t* surf = model->Surface(surfNum);
+        const modelSurface_t *surf = model->Surface(surfNum);
         float d;
 
         if (!surf->geometry || !surf->shader) {
@@ -141,7 +141,7 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
             continue;
         }
 
-        const srfTriangles_t* stri = surf->geometry;
+        const srfTriangles_t *stri = surf->geometry;
 
         // try to cull the whole surface along the first texture axis
         d = stri->bounds.PlaneDistance(localTextureAxis[0]);
@@ -157,12 +157,12 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
             continue;
         }
 
-        byte* cullBits = (byte*)_alloca16(stri->numVerts * sizeof(cullBits[0]));
-        idVec2* texCoords = (idVec2*)_alloca16(stri->numVerts * sizeof(texCoords[0]));
+        byte *cullBits = (byte *)_alloca16(stri->numVerts * sizeof(cullBits[0]));
+        idVec2 *texCoords = (idVec2 *)_alloca16(stri->numVerts * sizeof(texCoords[0]));
 
         SIMDProcessor->OverlayPointCull(cullBits, texCoords, localTextureAxis, stri->verts, stri->numVerts);
 
-        glIndex_t* vertexRemap = (glIndex_t*)_alloca16(sizeof(vertexRemap[0]) * stri->numVerts);
+        glIndex_t *vertexRemap = (glIndex_t *)_alloca16(sizeof(vertexRemap[0]) * stri->numVerts);
         SIMDProcessor->Memset(vertexRemap, -1,  sizeof(vertexRemap[0]) * stri->numVerts);
 
         // find triangles that need the overlay
@@ -204,13 +204,13 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
             continue;
         }
 
-        overlaySurface_t* s = (overlaySurface_t*) Mem_Alloc(sizeof(overlaySurface_t));
+        overlaySurface_t *s = (overlaySurface_t *) Mem_Alloc(sizeof(overlaySurface_t));
         s->surfaceNum = surfNum;
         s->surfaceId = surf->id;
-        s->verts = (overlayVertex_t*)Mem_Alloc(numVerts * sizeof(s->verts[0]));
+        s->verts = (overlayVertex_t *)Mem_Alloc(numVerts * sizeof(s->verts[0]));
         memcpy(s->verts, overlayVerts, numVerts * sizeof(s->verts[0]));
         s->numVerts = numVerts;
-        s->indexes = (glIndex_t*)Mem_Alloc(numIndexes * sizeof(s->indexes[0]));
+        s->indexes = (glIndex_t *)Mem_Alloc(numIndexes * sizeof(s->indexes[0]));
         memcpy(s->indexes, overlayIndexes, numIndexes * sizeof(s->indexes[0]));
         s->numIndexes = numIndexes;
 
@@ -223,7 +223,7 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
         if (i < materials.Num()) {
             materials[i]->surfaces.Append(s);
         } else {
-            overlayMaterial_t* mat = new overlayMaterial_t;
+            overlayMaterial_t *mat = new overlayMaterial_t;
             mat->material = mtr;
             mat->surfaces.Append(s);
             materials.Append(mat);
@@ -244,13 +244,13 @@ void idRenderModelOverlay::CreateOverlay(const idRenderModel* model, const idPla
 idRenderModelOverlay::AddOverlaySurfacesToModel
 ====================
 */
-void idRenderModelOverlay::AddOverlaySurfacesToModel(idRenderModel* baseModel) {
+void idRenderModelOverlay::AddOverlaySurfacesToModel(idRenderModel *baseModel) {
     int i, j, k, numVerts, numIndexes, surfaceNum;
-    const modelSurface_t* baseSurf;
-    idRenderModelStatic* staticModel;
-    overlaySurface_t* surf;
-    srfTriangles_t* newTri;
-    modelSurface_t* newSurf;
+    const modelSurface_t *baseSurf;
+    idRenderModelStatic *staticModel;
+    overlaySurface_t *surf;
+    srfTriangles_t *newTri;
+    modelSurface_t *newSurf;
 
     if (baseModel == NULL || baseModel->IsDefaultModel()) {
         return;
@@ -265,8 +265,8 @@ void idRenderModelOverlay::AddOverlaySurfacesToModel(idRenderModel* baseModel) {
         common->Error("idRenderModelOverlay::AddOverlaySurfacesToModel: baseModel is not a static model");
     }
 
-    assert(dynamic_cast<idRenderModelStatic*>(baseModel) != NULL);
-    staticModel = static_cast<idRenderModelStatic*>(baseModel);
+    assert(dynamic_cast<idRenderModelStatic *>(baseModel) != NULL);
+    staticModel = static_cast<idRenderModelStatic *>(baseModel);
 
     staticModel->overlaysAdded = 0;
 
@@ -339,7 +339,7 @@ void idRenderModelOverlay::AddOverlaySurfacesToModel(idRenderModel* baseModel) {
 
             // copy vertices
             for (j = 0; j < surf->numVerts; j++) {
-                overlayVertex_t* overlayVert = &surf->verts[j];
+                overlayVertex_t *overlayVert = &surf->verts[j];
 
                 newTri->verts[numVerts].st[0] = overlayVert->st[0];
                 newTri->verts[numVerts].st[1] = overlayVert->st[1];
@@ -371,11 +371,11 @@ void idRenderModelOverlay::AddOverlaySurfacesToModel(idRenderModel* baseModel) {
 idRenderModelOverlay::RemoveOverlaySurfacesFromModel
 ====================
 */
-void idRenderModelOverlay::RemoveOverlaySurfacesFromModel(idRenderModel* baseModel) {
-    idRenderModelStatic* staticModel;
+void idRenderModelOverlay::RemoveOverlaySurfacesFromModel(idRenderModel *baseModel) {
+    idRenderModelStatic *staticModel;
 
-    assert(dynamic_cast<idRenderModelStatic*>(baseModel) != NULL);
-    staticModel = static_cast<idRenderModelStatic*>(baseModel);
+    assert(dynamic_cast<idRenderModelStatic *>(baseModel) != NULL);
+    staticModel = static_cast<idRenderModelStatic *>(baseModel);
 
     staticModel->DeleteSurfacesWithNegativeId();
     staticModel->overlaysAdded = 0;
@@ -386,7 +386,7 @@ void idRenderModelOverlay::RemoveOverlaySurfacesFromModel(idRenderModel* baseMod
 idRenderModelOverlay::ReadFromDemoFile
 ====================
 */
-void idRenderModelOverlay::ReadFromDemoFile(idDemoFile* f) {
+void idRenderModelOverlay::ReadFromDemoFile(idDemoFile *f) {
     // FIXME: implement
 }
 
@@ -395,6 +395,6 @@ void idRenderModelOverlay::ReadFromDemoFile(idDemoFile* f) {
 idRenderModelOverlay::WriteToDemoFile
 ====================
 */
-void idRenderModelOverlay::WriteToDemoFile(idDemoFile* f) const {
+void idRenderModelOverlay::WriteToDemoFile(idDemoFile *f) const {
     // FIXME: implement
 }

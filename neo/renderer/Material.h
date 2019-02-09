@@ -161,8 +161,8 @@ typedef enum {
 } texgen_t;
 
 typedef struct {
-    idCinematic*        cinematic;
-    idImage*            image;
+    idCinematic        *cinematic;
+    idImage            *image;
     texgen_t            texgen;
     bool                hasMatrix;
     int                 matrix[2][3];   // we only allow a subset of the full projection matrix
@@ -199,9 +199,9 @@ typedef struct {
 
     int                 fragmentProgram;
     int                 numFragmentProgramImages;
-    idImage*            fragmentProgramImages[MAX_FRAGMENT_IMAGES];
+    idImage            *fragmentProgramImages[MAX_FRAGMENT_IMAGES];
 
-    idMegaTexture*       megaTexture;       // handles all the binding and parameter setting
+    idMegaTexture       *megaTexture;       // handles all the binding and parameter setting
 } newShaderStage_t;
 
 typedef struct {
@@ -217,7 +217,7 @@ typedef struct {
     // if the surface is alpha tested
     float               privatePolygonOffset;   // a per-stage polygon offset
 
-    newShaderStage_t*    newStage;          // vertex / fragment program based stage
+    newShaderStage_t    *newStage;          // vertex / fragment program based stage
 } shaderStage_t;
 
 typedef enum {
@@ -350,18 +350,18 @@ class idMaterial : public idDecl {
 
     virtual size_t      Size(void) const;
     virtual bool        SetDefaultText(void);
-    virtual const char* DefaultDefinition(void) const;
-    virtual bool        Parse(const char* text, const int textLength);
+    virtual const char *DefaultDefinition(void) const;
+    virtual bool        Parse(const char *text, const int textLength);
     virtual void        FreeData(void);
     virtual void        Print(void) const;
 
     //BSM Nerve: Added for material editor
-    bool                Save(const char* fileName = NULL);
+    bool                Save(const char *fileName = NULL);
 
     // returns the internal image name for stage 0, which can be used
     // for the renderer CaptureRenderToImage() call
     // I'm not really sure why this needs to be virtual...
-    virtual const char*  ImageName(void) const;
+    virtual const char  *ImageName(void) const;
 
     void                ReloadImages(bool force) const;
 
@@ -371,14 +371,14 @@ class idMaterial : public idDecl {
     }
 
     // get a specific stage
-    const shaderStage_t* GetStage(const int index) const {
+    const shaderStage_t *GetStage(const int index) const {
         assert(index >= 0 && index < numStages);
         return &stages[index];
     }
 
     // get the first bump map stage, or NULL if not present.
     // used for bumpy-specular
-    const shaderStage_t* GetBumpStage(void) const;
+    const shaderStage_t *GetBumpStage(void) const;
 
     // returns true if the material will draw anything at all.  Triggers, portals,
     // etc, will not have anything to draw.  A not drawn surface can still castShadow,
@@ -461,13 +461,13 @@ class idMaterial : public idDecl {
     }
 
     // returns true if this material takes precedence over other in coplanar cases
-    bool                HasHigherDmapPriority(const idMaterial& other) const {
+    bool                HasHigherDmapPriority(const idMaterial &other) const {
         return (IsDrawn() && !other.IsDrawn()) ||
                (Coverage() < other.Coverage());
     }
 
     // returns a idUserInterface if it has a global gui, or NULL if no gui
-    idUserInterface*    GlobalGui(void) const {
+    idUserInterface    *GlobalGui(void) const {
         return gui;
     }
 
@@ -528,14 +528,14 @@ class idMaterial : public idDecl {
     }
 
     // NULL unless an image is explicitly specified in the shader with "lightFalloffShader <image>"
-    idImage*            LightFalloffImage() const {
+    idImage            *LightFalloffImage() const {
         return lightFalloffImage;
     }
 
     //------------------------------------------------------------------
 
     // returns the renderbump command line for this shader, or an empty string if not present
-    const char*         GetRenderBump() const {
+    const char         *GetRenderBump() const {
         return renderBump;
     };
 
@@ -570,7 +570,7 @@ class idMaterial : public idDecl {
     }
 
     // get material description
-    const char*         GetDescription(void) const {
+    const char         *GetDescription(void) const {
         return desc;
     }
 
@@ -596,7 +596,7 @@ class idMaterial : public idDecl {
     }
 
     // particle system to emit from surface and table for turbulent
-    const idDecl*        GetDeformDecl(void) const {
+    const idDecl        *GetDeformDecl(void) const {
         return deformDecl;
     }
 
@@ -604,7 +604,7 @@ class idMaterial : public idDecl {
     texgen_t            Texgen() const;
 
     // wobble sky parms
-    const int*          GetTexGenRegisters(void) const {
+    const int          *GetTexGenRegisters(void) const {
         return texGenRegisters;
     }
 
@@ -657,11 +657,11 @@ class idMaterial : public idDecl {
     //------------------------------------------------------------------
 
     // gets an image for the editor to use
-    idImage*            GetEditorImage(void) const;
+    idImage            *GetEditorImage(void) const;
     int                 GetImageWidth(void) const;
     int                 GetImageHeight(void) const;
 
-    void                SetGui(const char* _gui) const;
+    void                SetGui(const char *_gui) const;
 
     // just for resource tracking
     void                SetImageClassifications(int tag) const;
@@ -674,13 +674,13 @@ class idMaterial : public idDecl {
     }
 
     // regs should point to a float array large enough to hold GetNumRegisters() floats
-    void                EvaluateRegisters(float* regs, const float entityParms[MAX_ENTITY_SHADER_PARMS],
-                                          const struct viewDef_s* view, idSoundEmitter* soundEmitter = NULL) const;
+    void                EvaluateRegisters(float *regs, const float entityParms[MAX_ENTITY_SHADER_PARMS],
+                                          const struct viewDef_s *view, idSoundEmitter *soundEmitter = NULL) const;
 
     // if a material only uses constants (no entityParm or globalparm references), this
     // will return a pointer to an internal table, and EvaluateRegisters will not need
     // to be called.  If NULL is returned, EvaluateRegisters must be used.
-    const float*        ConstantRegisters() const;
+    const float        *ConstantRegisters() const;
 
     bool                SuppressInSubview() const               {
         return suppressInSubview;
@@ -693,28 +693,28 @@ class idMaterial : public idDecl {
   private:
     // parse the entire material
     void                CommonInit();
-    void                ParseMaterial(idLexer& src);
-    bool                MatchToken(idLexer& src, const char* match);
-    void                ParseSort(idLexer& src);
-    void                ParseBlend(idLexer& src, shaderStage_t* stage);
-    void                ParseVertexParm(idLexer& src, newShaderStage_t* newStage);
-    void                ParseFragmentMap(idLexer& src, newShaderStage_t* newStage);
-    void                ParseStage(idLexer& src, const textureRepeat_t trpDefault = TR_REPEAT);
-    void                ParseDeform(idLexer& src);
-    void                ParseDecalInfo(idLexer& src);
-    bool                CheckSurfaceParm(idToken* token);
+    void                ParseMaterial(idLexer &src);
+    bool                MatchToken(idLexer &src, const char *match);
+    void                ParseSort(idLexer &src);
+    void                ParseBlend(idLexer &src, shaderStage_t *stage);
+    void                ParseVertexParm(idLexer &src, newShaderStage_t *newStage);
+    void                ParseFragmentMap(idLexer &src, newShaderStage_t *newStage);
+    void                ParseStage(idLexer &src, const textureRepeat_t trpDefault = TR_REPEAT);
+    void                ParseDeform(idLexer &src);
+    void                ParseDecalInfo(idLexer &src);
+    bool                CheckSurfaceParm(idToken *token);
     int                 GetExpressionConstant(float f);
     int                 GetExpressionTemporary(void);
-    expOp_t*            GetExpressionOp(void);
+    expOp_t            *GetExpressionOp(void);
     int                 EmitOp(int a, int b, expOpType_t opType);
-    int                 ParseEmitOp(idLexer& src, int a, expOpType_t opType, int priority);
-    int                 ParseTerm(idLexer& src);
-    int                 ParseExpressionPriority(idLexer& src, int priority);
-    int                 ParseExpression(idLexer& src);
-    void                ClearStage(shaderStage_t* ss);
-    int                 NameToSrcBlendMode(const idStr& name);
-    int                 NameToDstBlendMode(const idStr& name);
-    void                MultiplyTextureMatrix(textureStage_t* ts, int registers[2][3]);      // FIXME: for some reason the const is bad for gcc and Mac
+    int                 ParseEmitOp(idLexer &src, int a, expOpType_t opType, int priority);
+    int                 ParseTerm(idLexer &src);
+    int                 ParseExpressionPriority(idLexer &src, int priority);
+    int                 ParseExpression(idLexer &src);
+    void                ClearStage(shaderStage_t *ss);
+    int                 NameToSrcBlendMode(const idStr &name);
+    int                 NameToDstBlendMode(const idStr &name);
+    void                MultiplyTextureMatrix(textureStage_t *ts, int registers[2][3]);      // FIXME: for some reason the const is bad for gcc and Mac
     void                SortInteractionStages();
     void                AddImplicitStages(const textureRepeat_t trpDefault = TR_REPEAT);
     void                CheckForConstantRegisters();
@@ -723,11 +723,11 @@ class idMaterial : public idDecl {
     idStr               desc;               // description
     idStr               renderBump;         // renderbump command options, without the "renderbump" at the start
 
-    idImage*            lightFalloffImage;
+    idImage            *lightFalloffImage;
 
     int                 entityGui;          // draw a gui with the idUserInterface from the renderEntity_t
     // non zero will draw gui, gui2, or gui3 from renderEnitty_t
-    mutable idUserInterface* gui;           // non-custom guis are shared by all users of a material
+    mutable idUserInterface *gui;           // non-custom guis are shared by all users of a material
 
     bool                noFog;              // surface does not create fog interactions
 
@@ -745,7 +745,7 @@ class idMaterial : public idDecl {
     mutable float       sort;               // lower numbered shaders draw before higher numbered
     deform_t            deform;
     int                 deformRegisters[4];     // numeric parameter for deforms
-    const idDecl*        deformDecl;            // for surface emitted particle deforms and tables
+    const idDecl        *deformDecl;            // for surface emitted particle deforms and tables
 
     int                 texGenRegisters[MAX_TEXGEN_REGISTERS];  // for wobbleSky
 
@@ -761,19 +761,19 @@ class idMaterial : public idDecl {
     bool                allowOverlays;
 
     int                 numOps;
-    expOp_t*            ops;                // evaluate to make expressionRegisters
+    expOp_t            *ops;                // evaluate to make expressionRegisters
 
     int                 numRegisters;                                                                           //
-    float*              expressionRegisters;
+    float              *expressionRegisters;
 
-    float*              constantRegisters;  // NULL if ops ever reference globalParms or entityParms
+    float              *constantRegisters;  // NULL if ops ever reference globalParms or entityParms
 
     int                 numStages;
     int                 numAmbientStages;
 
-    shaderStage_t*      stages;
+    shaderStage_t      *stages;
 
-    struct mtrParsingData_s* pd;            // only used during parsing
+    struct mtrParsingData_s *pd;            // only used during parsing
 
     float               surfaceArea;        // only for listSurfaceAreas
 
@@ -781,7 +781,7 @@ class idMaterial : public idDecl {
     // all the invisible and uncompressed images.
     // If editorImage is NULL, it will atempt to load editorImageName, and set editorImage to that or defaultImage
     idStr               editorImageName;
-    mutable idImage*    editorImage;        // image used for non-shaded preview
+    mutable idImage    *editorImage;        // image used for non-shaded preview
     float               editorAlpha;
 
     bool                suppressInSubview;
@@ -789,6 +789,6 @@ class idMaterial : public idDecl {
     int                 refCount;
 };
 
-typedef idList<const idMaterial*> idMatList;
+typedef idList<const idMaterial *> idMatList;
 
 #endif /* !__MATERIAL_H__ */

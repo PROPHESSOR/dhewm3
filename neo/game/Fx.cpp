@@ -58,7 +58,7 @@ END_CLASS
 idEntityFx::Save
 ================
 */
-void idEntityFx::Save(idSaveGame* savefile) const {
+void idEntityFx::Save(idSaveGame *savefile) const {
     int i;
 
     savefile->WriteInt(started);
@@ -98,7 +98,7 @@ void idEntityFx::Save(idSaveGame* savefile) const {
 idEntityFx::Restore
 ================
 */
-void idEntityFx::Restore(idRestoreGame* savefile) {
+void idEntityFx::Restore(idRestoreGame *savefile) {
     int i;
     int num;
     bool hasObject;
@@ -152,7 +152,7 @@ void idEntityFx::Restore(idRestoreGame* savefile) {
 idEntityFx::Setup
 ================
 */
-void idEntityFx::Setup(const char* fx) {
+void idEntityFx::Setup(const char *fx) {
 
     if (started >= 0) {
         return;                 // already started
@@ -166,7 +166,7 @@ void idEntityFx::Setup(const char* fx) {
     systemName = fx;
     started = 0;
 
-    fxEffect = static_cast<const idDeclFX*>(declManager->FindType(DECL_FX, systemName.c_str()));
+    fxEffect = static_cast<const idDeclFX *>(declManager->FindType(DECL_FX, systemName.c_str()));
 
     if (fxEffect) {
         idFXLocalAction localAction;
@@ -176,9 +176,9 @@ void idEntityFx::Setup(const char* fx) {
         actions.AssureSize(fxEffect->events.Num(), localAction);
 
         for (int i = 0; i<fxEffect->events.Num(); i++) {
-            const idFXSingleAction& fxaction = fxEffect->events[i];
+            const idFXSingleAction &fxaction = fxEffect->events[i];
 
-            idFXLocalAction& laction = actions[i];
+            idFXLocalAction &laction = actions[i];
 
             if (fxaction.random1 || fxaction.random2) {
                 laction.delay = fxaction.random1 + gameLocal.random.RandomFloat() * (fxaction.random2 - fxaction.random1);
@@ -202,7 +202,7 @@ void idEntityFx::Setup(const char* fx) {
 idEntityFx::EffectName
 ================
 */
-const char* idEntityFx::EffectName(void) {
+const char *idEntityFx::EffectName(void) {
     return fxEffect ? fxEffect->GetName() : NULL;
 }
 
@@ -211,7 +211,7 @@ const char* idEntityFx::EffectName(void) {
 idEntityFx::Joint
 ================
 */
-const char* idEntityFx::Joint(void) {
+const char *idEntityFx::Joint(void) {
     return fxEffect ? fxEffect->joint.c_str() : NULL;
 }
 
@@ -226,8 +226,8 @@ void idEntityFx::CleanUp(void) {
     }
 
     for (int i = 0; i < fxEffect->events.Num(); i++) {
-        const idFXSingleAction& fxaction = fxEffect->events[i];
-        idFXLocalAction& laction = actions[i];
+        const idFXSingleAction &fxaction = fxEffect->events[i];
+        idFXLocalAction &laction = actions[i];
         CleanUpSingleAction(fxaction, laction);
     }
 }
@@ -237,7 +237,7 @@ void idEntityFx::CleanUp(void) {
 idEntityFx::CleanUpSingleAction
 ================
 */
-void idEntityFx::CleanUpSingleAction(const idFXSingleAction& fxaction, idFXLocalAction& laction) {
+void idEntityFx::CleanUpSingleAction(const idFXSingleAction &fxaction, idFXLocalAction &laction) {
     if (laction.lightDefHandle != -1 && fxaction.sibling == -1 && fxaction.type != FX_ATTACHLIGHT) {
         gameRenderWorld->FreeLightDef(laction.lightDefHandle);
         laction.lightDefHandle = -1;
@@ -264,7 +264,7 @@ void idEntityFx::Start(int time) {
     started = time;
 
     for (int i = 0; i < fxEffect->events.Num(); i++) {
-        idFXLocalAction& laction = actions[i];
+        idFXLocalAction &laction = actions[i];
         laction.start = time;
         laction.soundStarted = false;
         laction.shakeStarted = false;
@@ -297,7 +297,7 @@ const int idEntityFx::Duration(void) {
     }
 
     for (int i = 0; i < fxEffect->events.Num(); i++) {
-        const idFXSingleAction& fxaction = fxEffect->events[i];
+        const idFXSingleAction &fxaction = fxEffect->events[i];
         int d = (fxaction.delay + fxaction.duration) * 1000.0f;
 
         if (d > max) {
@@ -327,7 +327,7 @@ const bool idEntityFx::Done() {
 idEntityFx::ApplyFade
 ================
 */
-void idEntityFx::ApplyFade(const idFXSingleAction& fxaction, idFXLocalAction& laction, const int time, const int actualStart) {
+void idEntityFx::ApplyFade(const idFXSingleAction &fxaction, idFXLocalAction &laction, const int time, const int actualStart) {
     if (fxaction.fadeInTime || fxaction.fadeOutTime) {
         float fadePct = (float)(time - actualStart) / (1000.0f * ((fxaction.fadeInTime != 0) ? fxaction.fadeInTime : fxaction.fadeOutTime));
 
@@ -360,17 +360,17 @@ idEntityFx::Run
 */
 void idEntityFx::Run(int time) {
     int ieff, j;
-    idEntity* ent = NULL;
-    const idDict* projectileDef = NULL;
-    idProjectile* projectile = NULL;
+    idEntity *ent = NULL;
+    const idDict *projectileDef = NULL;
+    idProjectile *projectile = NULL;
 
     if (!fxEffect) {
         return;
     }
 
     for (ieff = 0; ieff < fxEffect->events.Num(); ieff++) {
-        const idFXSingleAction& fxaction = fxEffect->events[ieff];
-        idFXLocalAction& laction = actions[ieff];
+        const idFXSingleAction &fxaction = fxEffect->events[ieff];
+        idFXLocalAction &laction = actions[ieff];
 
         //
         // if we're currently done with this one
@@ -420,7 +420,7 @@ void idEntityFx::Run(int time) {
             }
         }
 
-        idFXLocalAction* useAction;
+        idFXLocalAction *useAction;
 
         if (fxaction.sibling == -1) {
             useAction = &laction;
@@ -459,7 +459,7 @@ void idEntityFx::Run(int time) {
 
                         if (fxaction.noshadows) {
                             for (j = 0; j < fxEffect->events.Num(); j++) {
-                                idFXLocalAction& laction2 = actions[j];
+                                idFXLocalAction &laction2 = actions[j];
 
                                 if (laction2.modelDefHandle != -1) {
                                     laction2.renderEntity.noShadow = true;
@@ -475,11 +475,11 @@ void idEntityFx::Run(int time) {
             case FX_SOUND: {
                     if (!useAction->soundStarted) {
                         useAction->soundStarted = true;
-                        const idSoundShader* shader = declManager->FindSound(fxaction.data);
+                        const idSoundShader *shader = declManager->FindSound(fxaction.data);
                         StartSoundShader(shader, SND_CHANNEL_ANY, 0, false, NULL);
 
                         for (j = 0; j < fxEffect->events.Num(); j++) {
-                            idFXLocalAction& laction2 = actions[j];
+                            idFXLocalAction &laction2 = actions[j];
 
                             if (laction2.lightDefHandle != -1) {
                                 laction2.renderLight.referenceSound = refSound.referenceSound;
@@ -508,7 +508,7 @@ void idEntityFx::Run(int time) {
                         args.SetFloat("kick_amplitude", fxaction.shakeAmplitude);
 
                         for (j = 0; j < gameLocal.numClients; j++) {
-                            idPlayer* player = gameLocal.GetClientByNum(j);
+                            idPlayer *player = gameLocal.GetClientByNum(j);
 
                             if (player && (player->GetPhysics()->GetOrigin() - GetPhysics()->GetOrigin()).LengthSqr() < Square(fxaction.shakeDistance)) {
                                 if (!gameLocal.isMultiplayer || !fxaction.shakeIgnoreMaster || GetBindMaster() != player) {
@@ -518,7 +518,7 @@ void idEntityFx::Run(int time) {
                         }
 
                         if (fxaction.shakeImpulse != 0.0f && fxaction.shakeDistance != 0.0f) {
-                            idEntity* ignore_ent = NULL;
+                            idEntity *ignore_ent = NULL;
 
                             if (gameLocal.isMultiplayer) {
                                 ignore_ent = this;
@@ -586,7 +586,7 @@ void idEntityFx::Run(int time) {
                             gameLocal.SpawnEntityDef(*projectileDef, &ent, false);
 
                             if (ent && ent->IsType(idProjectile::Type)) {
-                                projectile = (idProjectile*)ent;
+                                projectile = (idProjectile *)ent;
                                 projectile->Create(this, GetPhysics()->GetOrigin(), GetPhysics()->GetAxis()[0]);
                                 projectile->Launch(GetPhysics()->GetOrigin(), GetPhysics()->GetAxis()[0], vec3_origin);
                             }
@@ -632,7 +632,7 @@ void idEntityFx::Spawn(void) {
         return;
     }
 
-    const char* fx;
+    const char *fx;
     nextTriggerTime = 0;
     fxEffect = NULL;
 
@@ -707,14 +707,14 @@ void idEntityFx::Event_ClearFx(void) {
 idEntityFx::Event_Trigger
 ================
 */
-void idEntityFx::Event_Trigger(idEntity* activator) {
+void idEntityFx::Event_Trigger(idEntity *activator) {
 
     if (g_skipFX.GetBool()) {
         return;
     }
 
     float       fxActionDelay;
-    const char* fx;
+    const char *fx;
 
     if (gameLocal.time < nextTriggerTime) {
         return;
@@ -745,7 +745,7 @@ void idEntityFx::Event_Trigger(idEntity* activator) {
 idEntityFx::StartFx
 ================
 */
-idEntityFx* idEntityFx::StartFx(const char* fx, const idVec3* useOrigin, const idMat3* useAxis, idEntity* ent, bool bind) {
+idEntityFx *idEntityFx::StartFx(const char *fx, const idVec3 *useOrigin, const idMat3 *useAxis, idEntity *ent, bool bind) {
 
     if (g_skipFX.GetBool() || !fx || !*fx) {
         return NULL;
@@ -754,7 +754,7 @@ idEntityFx* idEntityFx::StartFx(const char* fx, const idVec3* useOrigin, const i
     idDict args;
     args.SetBool("start", true);
     args.Set("fx", fx);
-    idEntityFx* nfx = static_cast<idEntityFx*>(gameLocal.SpawnEntityType(idEntityFx::Type, &args));
+    idEntityFx *nfx = static_cast<idEntityFx *>(gameLocal.SpawnEntityType(idEntityFx::Type, &args));
 
     if (nfx->Joint() && *nfx->Joint()) {
         nfx->BindToJoint(ent, nfx->Joint(), true);
@@ -780,7 +780,7 @@ idEntityFx* idEntityFx::StartFx(const char* fx, const idVec3* useOrigin, const i
 idEntityFx::WriteToSnapshot
 =================
 */
-void idEntityFx::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idEntityFx::WriteToSnapshot(idBitMsgDelta &msg) const {
     GetPhysics()->WriteToSnapshot(msg);
     WriteBindToSnapshot(msg);
     msg.WriteInt((fxEffect != NULL) ? gameLocal.ServerRemapDecl(-1, DECL_FX, fxEffect->Index()) : -1);
@@ -792,7 +792,7 @@ void idEntityFx::WriteToSnapshot(idBitMsgDelta& msg) const {
 idEntityFx::ReadFromSnapshot
 =================
 */
-void idEntityFx::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idEntityFx::ReadFromSnapshot(const idBitMsgDelta &msg) {
     int fx_index, start_time, max_lapse;
 
     GetPhysics()->ReadFromSnapshot(msg);
@@ -809,7 +809,7 @@ void idEntityFx::ReadFromSnapshot(const idBitMsgDelta& msg) {
             return;
         }
 
-        const idDeclFX* fx = static_cast<const idDeclFX*>(declManager->DeclByIndex(DECL_FX, fx_index));
+        const idDeclFX *fx = static_cast<const idDeclFX *>(declManager->DeclByIndex(DECL_FX, fx_index));
 
         if (!fx) {
             gameLocal.Error("FX at index %d not found", fx_index);
@@ -852,7 +852,7 @@ END_CLASS
 idTeleporter::Event_DoAction
 ================
 */
-void idTeleporter::Event_DoAction(idEntity* activator) {
+void idTeleporter::Event_DoAction(idEntity *activator) {
     idAngles a(0, spawnArgs.GetFloat("angle"), 0);
     activator->Teleport(GetPhysics()->GetOrigin(), a, NULL);
 }

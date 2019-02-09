@@ -198,7 +198,7 @@ void idMoveable::Spawn(void) {
 idMoveable::Save
 ================
 */
-void idMoveable::Save(idSaveGame* savefile) const {
+void idMoveable::Save(idSaveGame *savefile) const {
 
     savefile->WriteString(brokenModel);
     savefile->WriteString(damage);
@@ -227,14 +227,14 @@ void idMoveable::Save(idSaveGame* savefile) const {
 idMoveable::Restore
 ================
 */
-void idMoveable::Restore(idRestoreGame* savefile) {
+void idMoveable::Restore(idRestoreGame *savefile) {
     int initialSplineTime;
 
     savefile->ReadString(brokenModel);
     savefile->ReadString(damage);
     #ifdef _D3XP
     savefile->ReadString(monsterDamage);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(attacker));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(attacker));
     #endif
     savefile->ReadString(fxCollide);
     savefile->ReadInt(nextCollideFxTime);
@@ -287,10 +287,10 @@ void idMoveable::Show(void) {
 idMoveable::Collide
 =================
 */
-bool idMoveable::Collide(const trace_t& collision, const idVec3& velocity) {
+bool idMoveable::Collide(const trace_t &collision, const idVec3 &velocity) {
     float v, f;
     idVec3 dir;
-    idEntity* ent;
+    idEntity *ent;
 
     v = -(velocity * collision.c.normal);
 
@@ -358,7 +358,7 @@ bool idMoveable::Collide(const trace_t& collision, const idVec3& velocity) {
     #ifdef _D3XP
 
     if (this->IsType(idExplodingBarrel::Type)) {
-        idExplodingBarrel* ebarrel = static_cast<idExplodingBarrel*>(this);
+        idExplodingBarrel *ebarrel = static_cast<idExplodingBarrel *>(this);
 
         if (!ebarrel->IsStable()) {
             PostEventSec(&EV_Explode, 0.04f);
@@ -380,7 +380,7 @@ bool idMoveable::Collide(const trace_t& collision, const idVec3& velocity) {
 idMoveable::Killed
 ============
 */
-void idMoveable::Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
+void idMoveable::Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
     if (unbindOnDeath) {
         Unbind();
     }
@@ -514,7 +514,7 @@ void idMoveable::Think(void) {
 idMoveable::GetRenderModelMaterial
 ================
 */
-const idMaterial* idMoveable::GetRenderModelMaterial(void) const {
+const idMaterial *idMoveable::GetRenderModelMaterial(void) const {
     if (renderEntity.customShader) {
         return renderEntity.customShader;
     }
@@ -531,7 +531,7 @@ const idMaterial* idMoveable::GetRenderModelMaterial(void) const {
 idMoveable::WriteToSnapshot
 ================
 */
-void idMoveable::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idMoveable::WriteToSnapshot(idBitMsgDelta &msg) const {
     physicsObj.WriteToSnapshot(msg);
 }
 
@@ -540,7 +540,7 @@ void idMoveable::WriteToSnapshot(idBitMsgDelta& msg) const {
 idMoveable::ReadFromSnapshot
 ================
 */
-void idMoveable::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idMoveable::ReadFromSnapshot(const idBitMsgDelta &msg) {
     physicsObj.ReadFromSnapshot(msg);
 
     if (msg.HasChanged()) {
@@ -563,7 +563,7 @@ void idMoveable::Event_BecomeNonSolid(void) {
 idMoveable::SetAttacker
 ================
 */
-void idMoveable::SetAttacker(idEntity* ent) {
+void idMoveable::SetAttacker(idEntity *ent) {
     attacker = ent;
 }
 #endif
@@ -573,7 +573,7 @@ void idMoveable::SetAttacker(idEntity* ent) {
 idMoveable::Event_Activate
 ================
 */
-void idMoveable::Event_Activate(idEntity* activator) {
+void idMoveable::Event_Activate(idEntity *activator) {
     float delay;
     idVec3 init_velocity, init_avelocity;
 
@@ -675,7 +675,7 @@ idBarrel::idBarrel() {
 idBarrel::Save
 ================
 */
-void idBarrel::Save(idSaveGame* savefile) const {
+void idBarrel::Save(idSaveGame *savefile) const {
     savefile->WriteFloat(radius);
     savefile->WriteInt(barrelAxis);
     savefile->WriteVec3(lastOrigin);
@@ -689,7 +689,7 @@ void idBarrel::Save(idSaveGame* savefile) const {
 idBarrel::Restore
 ================
 */
-void idBarrel::Restore(idRestoreGame* savefile) {
+void idBarrel::Restore(idRestoreGame *savefile) {
     savefile->ReadFloat(radius);
     savefile->ReadInt(barrelAxis);
     savefile->ReadVec3(lastOrigin);
@@ -792,7 +792,7 @@ void idBarrel::Think(void) {
 idBarrel::GetPhysicsToVisualTransform
 ================
 */
-bool idBarrel::GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis) {
+bool idBarrel::GetPhysicsToVisualTransform(idVec3 &origin, idMat3 &axis) {
     origin = vec3_origin;
     axis = additionalAxis;
     return true;
@@ -804,7 +804,7 @@ idBarrel::Spawn
 ================
 */
 void idBarrel::Spawn(void) {
-    const idBounds& bounds = GetPhysics()->GetBounds();
+    const idBounds &bounds = GetPhysics()->GetBounds();
 
     // radius of the barrel cylinder
     radius = (bounds[1][0] - bounds[0][0]) * 0.5f;
@@ -891,7 +891,7 @@ idExplodingBarrel::~idExplodingBarrel() {
 idExplodingBarrel::Save
 ================
 */
-void idExplodingBarrel::Save(idSaveGame* savefile) const {
+void idExplodingBarrel::Save(idSaveGame *savefile) const {
     savefile->WriteVec3(spawnOrigin);
     savefile->WriteMat3(spawnAxis);
 
@@ -916,13 +916,13 @@ void idExplodingBarrel::Save(idSaveGame* savefile) const {
 idExplodingBarrel::Restore
 ================
 */
-void idExplodingBarrel::Restore(idRestoreGame* savefile) {
+void idExplodingBarrel::Restore(idRestoreGame *savefile) {
     savefile->ReadVec3(spawnOrigin);
     savefile->ReadMat3(spawnAxis);
 
-    savefile->ReadInt((int&)state);
-    savefile->ReadInt((int&)particleModelDefHandle);
-    savefile->ReadInt((int&)lightDefHandle);
+    savefile->ReadInt((int &)state);
+    savefile->ReadInt((int &)particleModelDefHandle);
+    savefile->ReadInt((int &)lightDefHandle);
 
     savefile->ReadRenderEntity(particleRenderEntity);
     savefile->ReadRenderLight(light);
@@ -1067,7 +1067,7 @@ void idExplodingBarrel::StopBurning(void) {
 idExplodingBarrel::AddParticles
 ================
 */
-void idExplodingBarrel::AddParticles(const char* name, bool burn) {
+void idExplodingBarrel::AddParticles(const char *name, bool burn) {
     if (name && *name) {
         #ifdef _D3XP
         int explicitTimeGroup = timeGroup;
@@ -1079,7 +1079,7 @@ void idExplodingBarrel::AddParticles(const char* name, bool burn) {
         }
 
         memset(&particleRenderEntity, 0, sizeof(particleRenderEntity));
-        const idDeclModelDef* modelDef = static_cast<const idDeclModelDef*>(declManager->FindType(DECL_MODELDEF, name));
+        const idDeclModelDef *modelDef = static_cast<const idDeclModelDef *>(declManager->FindType(DECL_MODELDEF, name));
 
         if (modelDef) {
             particleRenderEntity.origin = physicsObj.GetAbsBounds().GetCenter();
@@ -1116,7 +1116,7 @@ void idExplodingBarrel::AddParticles(const char* name, bool burn) {
 idExplodingBarrel::AddLight
 ================
 */
-void idExplodingBarrel::AddLight(const char* name, bool burn) {
+void idExplodingBarrel::AddLight(const char *name, bool burn) {
     if (lightDefHandle >= 0) {
         gameRenderWorld->FreeLightDef(lightDefHandle);
     }
@@ -1144,7 +1144,7 @@ idExplodingBarrel::ExplodingEffects
 ================
 */
 void idExplodingBarrel::ExplodingEffects(void) {
-    const char* temp;
+    const char *temp;
 
     StartSound("snd_explode", SND_CHANNEL_ANY, 0, false, NULL);
 
@@ -1179,7 +1179,7 @@ void idExplodingBarrel::ExplodingEffects(void) {
 idExplodingBarrel::Killed
 ================
 */
-void idExplodingBarrel::Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
+void idExplodingBarrel::Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
 
     if (IsHidden() || state == EXPLODING || state == BURNING) {
         return;
@@ -1210,7 +1210,7 @@ void idExplodingBarrel::Killed(idEntity* inflictor, idEntity* attacker, int dama
     Hide();
     physicsObj.SetContents(0);
 
-    const char* splash = spawnArgs.GetString("def_splash_damage", "damage_explosion");
+    const char *splash = spawnArgs.GetString("def_splash_damage", "damage_explosion");
 
     if (splash && *splash) {
         gameLocal.RadiusDamage(GetPhysics()->GetOrigin(), this, attacker, this, this, splash);
@@ -1219,16 +1219,16 @@ void idExplodingBarrel::Killed(idEntity* inflictor, idEntity* attacker, int dama
     ExplodingEffects();
 
     //FIXME: need to precache all the debris stuff here and in the projectiles
-    const idKeyValue* kv = spawnArgs.MatchPrefix("def_debris");
+    const idKeyValue *kv = spawnArgs.MatchPrefix("def_debris");
 
     // bool first = true;
     while (kv) {
-        const idDict* debris_args = gameLocal.FindEntityDefDict(kv->GetValue(), false);
+        const idDict *debris_args = gameLocal.FindEntityDefDict(kv->GetValue(), false);
 
         if (debris_args) {
-            idEntity* ent;
+            idEntity *ent;
             idVec3 dir;
-            idDebris* debris;
+            idDebris *debris;
             //if ( first ) {
             dir = physicsObj.GetAxis()[1];
             //  first = false;
@@ -1245,7 +1245,7 @@ void idExplodingBarrel::Killed(idEntity* inflictor, idEntity* attacker, int dama
                 gameLocal.Error("'projectile_debris' is not an idDebris");
             }
 
-            debris = static_cast<idDebris*>(ent);
+            debris = static_cast<idDebris *>(ent);
             debris->Create(this, physicsObj.GetOrigin(), dir.ToMat3());
             debris->Launch();
             debris->GetRenderEntity()->shaderParms[ SHADERPARM_TIME_OF_DEATH ] = (gameLocal.time + 1500) * 0.001f;
@@ -1278,10 +1278,10 @@ void idExplodingBarrel::Killed(idEntity* inflictor, idEntity* attacker, int dama
 idExplodingBarrel::Damage
 ================
 */
-void idExplodingBarrel::Damage(idEntity* inflictor, idEntity* attacker, const idVec3& dir,
-                               const char* damageDefName, const float damageScale, const int location) {
+void idExplodingBarrel::Damage(idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
+                               const char *damageDefName, const float damageScale, const int location) {
 
-    const idDict* damageDef = gameLocal.FindEntityDefDict(damageDefName);
+    const idDict *damageDef = gameLocal.FindEntityDefDict(damageDefName);
 
     if (!damageDef) {
         gameLocal.Error("Unknown damageDef '%s'\n", damageDefName);
@@ -1346,7 +1346,7 @@ void idExplodingBarrel::Event_Respawn() {
         }
     }
 
-    const char* temp = spawnArgs.GetString("model");
+    const char *temp = spawnArgs.GetString("model");
 
     if (temp && *temp) {
         SetModel(temp);
@@ -1368,7 +1368,7 @@ void idExplodingBarrel::Event_Respawn() {
 idMoveable::Event_Activate
 ================
 */
-void idExplodingBarrel::Event_Activate(idEntity* activator) {
+void idExplodingBarrel::Event_Activate(idEntity *activator) {
     Killed(activator, activator, 0, vec3_origin, 0);
 }
 
@@ -1377,7 +1377,7 @@ void idExplodingBarrel::Event_Activate(idEntity* activator) {
 idMoveable::WriteToSnapshot
 ================
 */
-void idExplodingBarrel::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idExplodingBarrel::WriteToSnapshot(idBitMsgDelta &msg) const {
     idMoveable::WriteToSnapshot(msg);
     msg.WriteBits(IsHidden(), 1);
 }
@@ -1387,7 +1387,7 @@ void idExplodingBarrel::WriteToSnapshot(idBitMsgDelta& msg) const {
 idMoveable::ReadFromSnapshot
 ================
 */
-void idExplodingBarrel::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idExplodingBarrel::ReadFromSnapshot(const idBitMsgDelta &msg) {
 
     idMoveable::ReadFromSnapshot(msg);
 
@@ -1403,7 +1403,7 @@ void idExplodingBarrel::ReadFromSnapshot(const idBitMsgDelta& msg) {
 idExplodingBarrel::ClientReceiveEvent
 ================
 */
-bool idExplodingBarrel::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
+bool idExplodingBarrel::ClientReceiveEvent(int event, int time, const idBitMsg &msg) {
 
     switch (event) {
         case EVENT_EXPLODE:

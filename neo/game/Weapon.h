@@ -70,29 +70,29 @@ class idWeapon : public idAnimatedEntity {
 
     // Init
     void                    Spawn(void);
-    void                    SetOwner(idPlayer* owner);
-    idPlayer*               GetOwner(void);
+    void                    SetOwner(idPlayer *owner);
+    idPlayer               *GetOwner(void);
     virtual bool            ShouldConstructScriptObjectAtSpawn(void) const;
 
-    static void             CacheWeapon(const char* weaponName);
+    static void             CacheWeapon(const char *weaponName);
 
     // save games
-    void                    Save(idSaveGame* savefile) const;                    // archives object for save game file
-    void                    Restore(idRestoreGame* savefile);                    // unarchives object from save game file
+    void                    Save(idSaveGame *savefile) const;                    // archives object for save game file
+    void                    Restore(idRestoreGame *savefile);                    // unarchives object from save game file
 
     // Weapon definition management
     void                    Clear(void);
-    void                    GetWeaponDef(const char* objectname, int ammoinclip);
+    void                    GetWeaponDef(const char *objectname, int ammoinclip);
     bool                    IsLinked(void);
     bool                    IsWorldModelReady(void);
 
     // GUIs
-    const char*             Icon(void) const;
+    const char             *Icon(void) const;
     void                    UpdateGUI(void);
 
-    virtual void            SetModel(const char* modelname);
-    bool                    GetGlobalJointTransform(bool viewModel, const jointHandle_t jointHandle, idVec3& offset, idMat3& axis);
-    void                    SetPushVelocity(const idVec3& pushVelocity);
+    virtual void            SetModel(const char *modelname);
+    bool                    GetGlobalJointTransform(bool viewModel, const jointHandle_t jointHandle, idVec3 &offset, idMat3 &axis);
+    void                    SetPushVelocity(const idVec3 &pushVelocity);
     bool                    UpdateSkin(void);
 
     // State control/player interface
@@ -113,14 +113,14 @@ class idWeapon : public idAnimatedEntity {
     bool                    IsReloading(void) const;
     bool                    IsHolstered(void) const;
     bool                    ShowCrosshair(void) const;
-    idEntity*               DropItem(const idVec3& velocity, int activateDelay, int removeDelay, bool died);
+    idEntity               *DropItem(const idVec3 &velocity, int activateDelay, int removeDelay, bool died);
     bool                    CanDrop(void) const;
     void                    WeaponStolen(void);
 
     // Script state management
-    virtual idThread*       ConstructScriptObject(void);
+    virtual idThread       *ConstructScriptObject(void);
     virtual void            DeconstructScriptObject(void);
-    void                    SetState(const char* statename, int blendFrames);
+    void                    SetState(const char *statename, int blendFrames);
     void                    UpdateScript(void);
     void                    EnterCinematic(void);
     void                    ExitCinematic(void);
@@ -129,14 +129,14 @@ class idWeapon : public idAnimatedEntity {
     // Visual presentation
     void                    PresentWeapon(bool showViewModel);
     int                     GetZoomFov(void);
-    void                    GetWeaponAngleOffsets(int* average, float* scale, float* max);
-    void                    GetWeaponTimeOffsets(float* time, float* scale);
+    void                    GetWeaponAngleOffsets(int *average, float *scale, float *max);
+    void                    GetWeaponTimeOffsets(float *time, float *scale);
     bool                    BloodSplat(float size);
 
     // Ammo
-    static ammo_t           GetAmmoNumForName(const char* ammoname);
-    static const char*       GetAmmoNameForNum(ammo_t ammonum);
-    static const char*       GetAmmoPickupNameForNum(ammo_t ammonum);
+    static ammo_t           GetAmmoNumForName(const char *ammoname);
+    static const char       *GetAmmoNameForNum(ammo_t ammonum);
+    static const char       *GetAmmoPickupNameForNum(ammo_t ammonum);
     ammo_t                  GetAmmoType(void) const;
     int                     AmmoAvailable(void) const;
     int                     AmmoInClip(void) const;
@@ -145,8 +145,8 @@ class idWeapon : public idAnimatedEntity {
     int                     LowAmmo(void) const;
     int                     AmmoRequired(void) const;
 
-    virtual void            WriteToSnapshot(idBitMsgDelta& msg) const;
-    virtual void            ReadFromSnapshot(const idBitMsgDelta& msg);
+    virtual void            WriteToSnapshot(idBitMsgDelta &msg) const;
+    virtual void            ReadFromSnapshot(const idBitMsgDelta &msg);
 
     enum {
         EVENT_RELOAD = idEntity::EVENT_MAXEVENTS,
@@ -154,7 +154,7 @@ class idWeapon : public idAnimatedEntity {
         EVENT_CHANGESKIN,
         EVENT_MAXEVENTS
     };
-    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg& msg);
+    virtual bool            ClientReceiveEvent(int event, int time, const idBitMsg &msg);
 
     virtual void            ClientPredictionThink(void);
 
@@ -168,7 +168,7 @@ class idWeapon : public idAnimatedEntity {
     idScriptBool            WEAPON_RAISEWEAPON;
     idScriptBool            WEAPON_LOWERWEAPON;
     weaponStatus_t          status;
-    idThread*               thread;
+    idThread               *thread;
     idStr                   state;
     idStr                   idealState;
     int                     animBlendFrames;
@@ -176,9 +176,9 @@ class idWeapon : public idAnimatedEntity {
     bool                    isLinked;
 
     // precreated projectile
-    idEntity*                projectileEnt;
+    idEntity                *projectileEnt;
 
-    idPlayer*               owner;
+    idPlayer               *owner;
     idEntityPtr<idAnimatedEntity>   worldModel;
 
     // hiding (for GUIs and NPCs)
@@ -211,8 +211,8 @@ class idWeapon : public idAnimatedEntity {
     // weapon definition
     // we maintain local copies of the projectile and brass dictionaries so they
     // do not have to be copied across the DLL boundary when entities are spawned
-    const idDeclEntityDef*  weaponDef;
-    const idDeclEntityDef*  meleeDef;
+    const idDeclEntityDef  *weaponDef;
+    const idDeclEntityDef  *meleeDef;
     idDict                  projectileDict;
     float                   meleeDistance;
     idStr                   meleeDefName;
@@ -274,13 +274,13 @@ class idWeapon : public idAnimatedEntity {
     jointHandle_t           ejectJointWorld;
 
     // sound
-    const idSoundShader*    sndHum;
+    const idSoundShader    *sndHum;
 
     // new style muzzle smokes
-    const idDeclParticle*   weaponSmoke;            // null if it doesn't smoke
+    const idDeclParticle   *weaponSmoke;            // null if it doesn't smoke
     int                     weaponSmokeStartTime;   // set to gameLocal.time every weapon fire
     bool                    continuousSmoke;        // if smoke is continuous ( chainsaw )
-    const idDeclParticle*   strikeSmoke;            // striking something in melee
+    const idDeclParticle   *strikeSmoke;            // striking something in melee
     int                     strikeSmokeStartTime;   // timing
     idVec3                  strikePos;              // position of last melee strike
     idMat3                  strikeAxis;             // axis of last melee strike
@@ -295,7 +295,7 @@ class idWeapon : public idAnimatedEntity {
     int                     nozzleGlowHandle;   // handle for nozzle light
 
     idVec3                  nozzleGlowColor;    // color of the nozzle glow
-    const idMaterial*       nozzleGlowShader;   // shader for glow light
+    const idMaterial       *nozzleGlowShader;   // shader for glow light
     float                   nozzleGlowRadius;   // radius of glow light
 
     // weighting for viewmodel angles
@@ -309,16 +309,16 @@ class idWeapon : public idAnimatedEntity {
     void                    AlertMonsters(void);
 
     // Visual presentation
-    void                    InitWorldModel(const idDeclEntityDef* def);
+    void                    InitWorldModel(const idDeclEntityDef *def);
     void                    MuzzleFlashLight(void);
-    void                    MuzzleRise(idVec3& origin, idMat3& axis);
+    void                    MuzzleRise(idVec3 &origin, idMat3 &axis);
     void                    UpdateNozzleFx(void);
     void                    UpdateFlashPosition(void);
 
     // script events
     void                    Event_Clear(void);
     void                    Event_GetOwner(void);
-    void                    Event_WeaponState(const char* statename, int blendFrames);
+    void                    Event_WeaponState(const char *statename, int blendFrames);
     void                    Event_SetWeaponStatus(float newStatus);
     void                    Event_WeaponReady(void);
     void                    Event_WeaponOutOfAmmo(void);
@@ -332,13 +332,13 @@ class idWeapon : public idAnimatedEntity {
     void                    Event_AmmoAvailable(void);
     void                    Event_TotalAmmoCount(void);
     void                    Event_ClipSize(void);
-    void                    Event_PlayAnim(int channel, const char* animname);
-    void                    Event_PlayCycle(int channel, const char* animname);
+    void                    Event_PlayAnim(int channel, const char *animname);
+    void                    Event_PlayCycle(int channel, const char *animname);
     void                    Event_AnimDone(int channel, int blendFrames);
     void                    Event_SetBlendFrames(int channel, int blendFrames);
     void                    Event_GetBlendFrames(int channel);
     void                    Event_Next(void);
-    void                    Event_SetSkin(const char* skinname);
+    void                    Event_SetSkin(const char *skinname);
     void                    Event_Flashlight(int enable);
     void                    Event_GetLightParm(int parmnum);
     void                    Event_SetLightParm(int parmnum, float value);
@@ -363,7 +363,7 @@ ID_INLINE bool idWeapon::IsWorldModelReady(void) {
     return (worldModel.GetEntity() != NULL);
 }
 
-ID_INLINE idPlayer* idWeapon::GetOwner(void) {
+ID_INLINE idPlayer *idWeapon::GetOwner(void) {
     return owner;
 }
 

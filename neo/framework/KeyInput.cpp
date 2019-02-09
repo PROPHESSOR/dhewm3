@@ -37,16 +37,16 @@ If you have questions concerning this license or the applicable additional terms
 #include "framework/KeyInput.h"
 
 typedef struct {
-    const char*  name;
+    const char  *name;
     int     keynum;
-    const char*  strId; // localized string id
+    const char  *strId; // localized string id
 } keyname_t;
 
 // keys that can be set without a special name
 static const char unnamedkeys[] = "*,-=./[\\]1234567890abcdefghijklmnopqrstuvwxyz";
 
 #if MACOS_X
-    const char* OSX_GetLocalizedString(const char*);
+    const char *OSX_GetLocalizedString(const char *);
 #endif
 
 // names not in this list can either be lowercase ascii, or '0xnn' hex sequences
@@ -203,13 +203,13 @@ class idKey {
 };
 
 bool        key_overstrikeMode = false;
-idKey*      keys = NULL;
+idKey      *keys = NULL;
 
 #define ID_DOOM_LEGACY
 
 #ifdef ID_DOOM_LEGACY
 
-static const char*      cheatCodes[] = {
+static const char      *cheatCodes[] = {
     "iddqd",        // Invincibility
     "idkfa",        // All weapons, keys, ammo, and 200% armor
     "idfa",         // Reset ammunition
@@ -242,8 +242,8 @@ int         lastKeyIndex;
 idKeyInput::ArgCompletion_KeyName
 ===================
 */
-void idKeyInput::ArgCompletion_KeyName(const idCmdArgs& args, void(*callback)(const char* s)) {
-    const keyname_t* kn;
+void idKeyInput::ArgCompletion_KeyName(const idCmdArgs &args, void(*callback)(const char *s)) {
+    const keyname_t *kn;
     int i;
 
     for (i = 0; i < sizeof(unnamedkeys) - 1; i++) {
@@ -298,8 +298,8 @@ the K_* names are matched up.
 to be configured even if they don't have defined names.
 ===================
 */
-int idKeyInput::StringToKeyNum(const char* str) {
-    const keyname_t* kn;
+int idKeyInput::StringToKeyNum(const char *str) {
+    const keyname_t *kn;
 
     if (!str || !str[0]) {
         return -1;
@@ -354,8 +354,8 @@ Returns a string (either a single ascii char, a K_* name, or a 0x11 hex string) 
 given keynum.
 ===================
 */
-const char* idKeyInput::KeyNumToString(int keynum, bool localized) {
-    const keyname_t* kn;
+const char *idKeyInput::KeyNumToString(int keynum, bool localized) {
+    const keyname_t *kn;
     static  char    tinystr[5];
     int         i, j;
 
@@ -428,7 +428,7 @@ const char* idKeyInput::KeyNumToString(int keynum, bool localized) {
 idKeyInput::SetBinding
 ===================
 */
-void idKeyInput::SetBinding(int keynum, const char* binding) {
+void idKeyInput::SetBinding(int keynum, const char *binding) {
     if (keynum == -1) {
         return;
     }
@@ -453,7 +453,7 @@ void idKeyInput::SetBinding(int keynum, const char* binding) {
 idKeyInput::GetBinding
 ===================
 */
-const char* idKeyInput::GetBinding(int keynum) {
+const char *idKeyInput::GetBinding(int keynum) {
     if (keynum == -1) {
         return "";
     }
@@ -475,7 +475,7 @@ int idKeyInput::GetUsercmdAction(int keynum) {
 Key_Unbind_f
 ===================
 */
-void Key_Unbind_f(const idCmdArgs& args) {
+void Key_Unbind_f(const idCmdArgs &args) {
     int     b;
 
     if (args.Argc() != 2) {
@@ -500,7 +500,7 @@ void Key_Unbind_f(const idCmdArgs& args) {
 Key_Unbindall_f
 ===================
 */
-void Key_Unbindall_f(const idCmdArgs& args) {
+void Key_Unbindall_f(const idCmdArgs &args) {
     int     i;
 
     for (i = 0; i < MAX_KEYS; i++) {
@@ -513,7 +513,7 @@ void Key_Unbindall_f(const idCmdArgs& args) {
 Key_Bind_f
 ===================
 */
-void Key_Bind_f(const idCmdArgs& args) {
+void Key_Bind_f(const idCmdArgs &args) {
     int         i, c, b;
     char        cmd[MAX_STRING_CHARS];
 
@@ -562,7 +562,7 @@ Key_BindUnBindTwo_f
 binds keynum to bindcommand and unbinds if there are already two binds on the key
 ============
 */
-void Key_BindUnBindTwo_f(const idCmdArgs& args) {
+void Key_BindUnBindTwo_f(const idCmdArgs &args) {
     int c = args.Argc();
 
     if (c < 3) {
@@ -589,14 +589,14 @@ idKeyInput::WriteBindings
 Writes lines containing "bind key value"
 ============
 */
-void idKeyInput::WriteBindings(idFile* f) {
+void idKeyInput::WriteBindings(idFile *f) {
     int     i;
 
     f->Printf("unbindall\n");
 
     for (i = 0; i < MAX_KEYS; i++) {
         if (keys[i].binding.Length()) {
-            const char* name = KeyNumToString(i, false);
+            const char *name = KeyNumToString(i, false);
 
             // handle the escape character nicely
             if (!strcmp(name, "\\")) {
@@ -613,7 +613,7 @@ void idKeyInput::WriteBindings(idFile* f) {
 Key_ListBinds_f
 ============
 */
-void Key_ListBinds_f(const idCmdArgs& args) {
+void Key_ListBinds_f(const idCmdArgs &args) {
     int     i;
 
     for (i = 0; i < MAX_KEYS; i++) {
@@ -629,7 +629,7 @@ idKeyInput::KeysFromBinding
 returns the localized name of the key for the binding
 ============
 */
-const char* idKeyInput::KeysFromBinding(const char* bind) {
+const char *idKeyInput::KeysFromBinding(const char *bind) {
     int i;
     static char keyName[MAX_STRING_CHARS];
 
@@ -661,7 +661,7 @@ idKeyInput::BindingFromKey
 returns the binding for the localized name of the key
 ============
 */
-const char* idKeyInput::BindingFromKey(const char* key) {
+const char *idKeyInput::BindingFromKey(const char *key) {
     const int keyNum = idKeyInput::StringToKeyNum(key);
 
     if (keyNum<0 || keyNum >= MAX_KEYS) {
@@ -676,7 +676,7 @@ const char* idKeyInput::BindingFromKey(const char* key) {
 idKeyInput::UnbindBinding
 ============
 */
-bool idKeyInput::UnbindBinding(const char* binding) {
+bool idKeyInput::UnbindBinding(const char *binding) {
     bool unbound = false;
     int i;
 
@@ -697,7 +697,7 @@ bool idKeyInput::UnbindBinding(const char* binding) {
 idKeyInput::NumBinds
 ============
 */
-int idKeyInput::NumBinds(const char* binding) {
+int idKeyInput::NumBinds(const char *binding) {
     int i, count = 0;
 
     if (binding && *binding) {
@@ -716,7 +716,7 @@ int idKeyInput::NumBinds(const char* binding) {
 idKeyInput::KeyIsBountTo
 ============
 */
-bool idKeyInput::KeyIsBoundTo(int keynum, const char* binding) {
+bool idKeyInput::KeyIsBoundTo(int keynum, const char *binding) {
     if (keynum >= 0 && keynum < MAX_KEYS) {
         return (keys[keynum].binding.Icmp(binding) == 0);
     }

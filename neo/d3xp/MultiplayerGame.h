@@ -160,17 +160,17 @@ class idMultiplayerGame {
     void            PlayerVote(int clientNum, playerVote_t vote);
 
     // updates frag counts and potentially ends the match in sudden death
-    void            PlayerDeath(idPlayer* dead, idPlayer* killer, bool telefrag);
+    void            PlayerDeath(idPlayer *dead, idPlayer *killer, bool telefrag);
 
-    void            AddChatLine(const char* fmt, ...) id_attribute((format(printf,2,3)));
+    void            AddChatLine(const char *fmt, ...) id_attribute((format(printf,2,3)));
 
     void            UpdateMainGui(void);
-    idUserInterface* StartMenu(void);
-    const char*     HandleGuiCommands(const char* menuCommand);
+    idUserInterface *StartMenu(void);
+    const char     *HandleGuiCommands(const char *menuCommand);
     void            SetMenuSkin(void);
 
-    void            WriteToSnapshot(idBitMsgDelta& msg) const;
-    void            ReadFromSnapshot(const idBitMsgDelta& msg);
+    void            WriteToSnapshot(idBitMsgDelta &msg) const;
+    void            ReadFromSnapshot(const idBitMsgDelta &msg);
 
     // game state
     typedef enum {
@@ -183,13 +183,13 @@ class idMultiplayerGame {
         NEXTGAME,
         STATE_COUNT
     } gameState_t;
-    static const char* GameStateStrings[ STATE_COUNT ];
+    static const char *GameStateStrings[ STATE_COUNT ];
     idMultiplayerGame::gameState_t      GetGameState(void) const;
 
-    static const char* GlobalSoundStrings[ SND_COUNT ];
-    void            PlayGlobalSound(int to, snd_evt_t evt, const char* shader = NULL);
+    static const char *GlobalSoundStrings[ SND_COUNT ];
+    void            PlayGlobalSound(int to, snd_evt_t evt, const char *shader = NULL);
     #ifdef CTF
-    void            PlayTeamSound(int toTeam, snd_evt_t evt, const char* shader = NULL);     // sound that's sent only to member of toTeam team
+    void            PlayTeamSound(int toTeam, snd_evt_t evt, const char *shader = NULL);     // sound that's sent only to member of toTeam team
     #endif
 
     // more compact than a chat line
@@ -224,11 +224,11 @@ class idMultiplayerGame {
     void            PrintMessageEvent(int to, msg_evt_t evt, int parm1 = -1, int parm2 = -1);
 
     void            DisconnectClient(int clientNum);
-    static void     ForceReady_f(const idCmdArgs& args);
-    static void     DropWeapon_f(const idCmdArgs& args);
-    static void     MessageMode_f(const idCmdArgs& args);
-    static void     VoiceChat_f(const idCmdArgs& args);
-    static void     VoiceChatTeam_f(const idCmdArgs& args);
+    static void     ForceReady_f(const idCmdArgs &args);
+    static void     DropWeapon_f(const idCmdArgs &args);
+    static void     MessageMode_f(const idCmdArgs &args);
+    static void     VoiceChat_f(const idCmdArgs &args);
+    static void     VoiceChatTeam_f(const idCmdArgs &args);
 
     typedef enum {
         VOTE_RESTART = 0,
@@ -251,24 +251,24 @@ class idMultiplayerGame {
         VOTE_RESET      // tell clients to reset vote state
     } vote_result_t;
 
-    static void     Vote_f(const idCmdArgs& args);
-    static void     CallVote_f(const idCmdArgs& args);
-    void            ClientCallVote(vote_flags_t voteIndex, const char* voteValue);
-    void            ServerCallVote(int clientNum, const idBitMsg& msg);
-    void            ClientStartVote(int clientNum, const char* voteString);
-    void            ServerStartVote(int clientNum, vote_flags_t voteIndex, const char* voteValue);
+    static void     Vote_f(const idCmdArgs &args);
+    static void     CallVote_f(const idCmdArgs &args);
+    void            ClientCallVote(vote_flags_t voteIndex, const char *voteValue);
+    void            ServerCallVote(int clientNum, const idBitMsg &msg);
+    void            ClientStartVote(int clientNum, const char *voteString);
+    void            ServerStartVote(int clientNum, vote_flags_t voteIndex, const char *voteValue);
     void            ClientUpdateVote(vote_result_t result, int yesCount, int noCount);
     void            CastVote(int clientNum, bool vote);
     void            ExecuteVote(void);
 
     void            WantKilled(int clientNum);
-    int             NumActualClients(bool countSpectators, int* teamcount = NULL);
+    int             NumActualClients(bool countSpectators, int *teamcount = NULL);
     void            DropWeapon(int clientNum);
     void            MapRestart(void);
     // called by idPlayer whenever it detects a team change (init or switch)
     void            SwitchToTeam(int clientNum, int oldteam, int newteam);
     bool            IsPureReady(void) const;
-    void            ProcessChatMessage(int clientNum, bool team, const char* name, const char* text, const char* sound);
+    void            ProcessChatMessage(int clientNum, bool team, const char *name, const char *text, const char *sound);
     void            ProcessVoiceChat(int clientNum, bool team, int index);
 
     void            Precache(void);
@@ -282,13 +282,13 @@ class idMultiplayerGame {
     void            ClearFrags(int clientNum);
 
     void            EnterGame(int clientNum);
-    bool            CanPlay(idPlayer* p);
+    bool            CanPlay(idPlayer *p);
     bool            IsInGame(int clientNum);
-    bool            WantRespawn(idPlayer* p);
+    bool            WantRespawn(idPlayer *p);
 
     void            ServerWriteInitialReliableMessages(int clientNum);
-    void            ClientReadStartState(const idBitMsg& msg);
-    void            ClientReadWarmupTime(const idBitMsg& msg);
+    void            ClientReadStartState(const idBitMsg &msg);
+    void            ClientReadWarmupTime(const idBitMsg &msg);
 
     void            ServerClientConnect(int clientNum);
     #ifdef CTF
@@ -302,12 +302,12 @@ class idMultiplayerGame {
     int             player_blue_flag;           // Ent num of blue flag carrier for HUD
 
     #endif
-    void            PlayerStats(int clientNum, char* data, const int len);
+    void            PlayerStats(int clientNum, char *data, const int len);
 
   private:
-    static const char*   MPGuis[];
-    static const char*   ThrottleVars[];
-    static const char*   ThrottleVarsInEnglish[];
+    static const char   *MPGuis[];
+    static const char   *ThrottleVars[];
+    static const char   *ThrottleVarsInEnglish[];
     static const int    ThrottleDelay[];
 
     // state vars
@@ -344,12 +344,12 @@ class idMultiplayerGame {
     bool            one, two, three;        // keeps count down voice from repeating
 
     // guis
-    idUserInterface* scoreBoard;            // scoreboard
-    idUserInterface* spectateGui;           // spectate info
-    idUserInterface* guiChat;               // chat text
-    idUserInterface* mainGui;               // ready / nick / votes etc.
-    idListGUI*       mapList;
-    idUserInterface* msgmodeGui;            // message mode
+    idUserInterface *scoreBoard;            // scoreboard
+    idUserInterface *spectateGui;           // spectate info
+    idUserInterface *guiChat;               // chat text
+    idUserInterface *mainGui;               // ready / nick / votes etc.
+    idListGUI       *mapList;
+    idUserInterface *msgmodeGui;            // message mode
     int             currentMenu;            // 0 - none, 1 - mainGui, 2 - msgmodeGui
     int             nextMenu;               // if 0, will do mainGui
     bool            bCurrentMenuMsg;        // send menu state updates to server
@@ -363,7 +363,7 @@ class idMultiplayerGame {
 
     // rankings are used by UpdateScoreboard and UpdateHud
     int             numRankedPlayers;       // ranked players, others may be empty slots or spectators
-    idPlayer*       rankedPlayers[MAX_CLIENTS];
+    idPlayer       *rankedPlayers[MAX_CLIENTS];
 
     bool            pureReady;              // defaults to false, set to true once server game is running with pure checksums
     int             fragLimitTimeout;
@@ -375,22 +375,22 @@ class idMultiplayerGame {
     int             startFragLimit;         // synchronize to clients in initial state, set on -> GAMEON
 
     #ifdef CTF
-    idItemTeam*     teamFlags[ 2 ];
+    idItemTeam     *teamFlags[ 2 ];
     int             teamPoints[ 2 ];
 
     bool            flagMsgOn;
 
-    const char*     gameTypeVoteMap[ GAME_COUNT ];
+    const char     *gameTypeVoteMap[ GAME_COUNT ];
     #endif
 
   private:
     void            UpdatePlayerRanks();
 
     // updates the passed gui with current score information
-    void            UpdateRankColor(idUserInterface* gui, const char* mask, int i, const idVec3& vec);
-    void            UpdateScoreboard(idUserInterface* scoreBoard, idPlayer* player);
+    void            UpdateRankColor(idUserInterface *gui, const char *mask, int i, const idVec3 &vec);
+    void            UpdateScoreboard(idUserInterface *scoreBoard, idPlayer *player);
     #ifdef CTF
-    void            UpdateCTFScoreboard(idUserInterface* scoreBoard, idPlayer* player);
+    void            UpdateCTFScoreboard(idUserInterface *scoreBoard, idPlayer *player);
     #endif
 
     #ifndef CTF
@@ -398,27 +398,27 @@ class idMultiplayerGame {
     void            ClearGuis(void);
     #endif
 
-    void            DrawScoreBoard(idPlayer* player);
-    void            UpdateHud(idPlayer* player, idUserInterface* hud);
+    void            DrawScoreBoard(idPlayer *player);
+    void            UpdateHud(idPlayer *player, idUserInterface *hud);
     bool            Warmup(void);
     void            CheckVote(void);
     bool            AllPlayersReady(void);
-    idPlayer*       FragLimitHit(void);
-    idPlayer*       FragLeader(void);
+    idPlayer       *FragLimitHit(void);
+    idPlayer       *FragLeader(void);
     bool            TimeLimitHit(void);
     #ifdef CTF
     bool            PointLimitHit(void);
     // return team with most points
     int             WinningTeam(void);
     #endif
-    void            NewState(gameState_t news, idPlayer* player = NULL);
-    void            UpdateWinsLosses(idPlayer* winner);
+    void            NewState(gameState_t news, idPlayer *player = NULL);
+    void            UpdateWinsLosses(idPlayer *winner);
     // fill any empty tourney slots based on the current tourney ranks
     void            FillTourneySlots(void);
     void            CycleTourneyPlayers(void);
     // walk through the tourneyRank to build a wait list for the clients
     void            UpdateTourneyLine(void);
-    const char*     GameTime(void);
+    const char     *GameTime(void);
     void            Clear(void);
     bool            EnoughClientsToPlay(void);
     void            ClearChatData(void);
@@ -426,16 +426,16 @@ class idMultiplayerGame {
     // go through the clients, and see if they want to be respawned, and if the game allows it
     // called during normal gameplay for death -> respawn cycles
     // and for a spectator who want back in the game (see param)
-    void            CheckRespawns(idPlayer* spectator = NULL);
+    void            CheckRespawns(idPlayer *spectator = NULL);
     void            ForceReady();
     // when clients disconnect or join spectate during game, check if we need to end the game
     void            CheckAbortGame(void);
-    void            MessageMode(const idCmdArgs& args);
+    void            MessageMode(const idCmdArgs &args);
     void            DisableMenu(void);
     void            SetMapShot(void);
     // scores in TDM
     void            TeamScore(int entityNumber, int team, int delta);
-    void            VoiceChat(const idCmdArgs& args, bool team);
+    void            VoiceChat(const idCmdArgs &args, bool team);
     void            DumpTourneyLine(void);
     void            SuddenRespawn(void);
 
@@ -446,7 +446,7 @@ class idMultiplayerGame {
   public:
 
     #ifdef CTF
-    idItemTeam*     GetTeamFlag(int team);
+    idItemTeam     *GetTeamFlag(int team);
     flagStatus_t    GetFlagStatus(int team);
     void            TeamScoreCTF(int team, int delta);
     void            PlayerScoreCTF(int playerIdx, int delta);
@@ -454,12 +454,12 @@ class idMultiplayerGame {
     int             GetFlagCarrier(int team);
     void            UpdateScoreboardFlagStatus(void);
 
-    void            SetBestGametype(const char* map);
+    void            SetBestGametype(const char *map);
     void            ReloadScoreboard();
     #endif
 
     #ifdef _D3XP
-    idStr           GetBestGametype(const char* map, const char* gametype);
+    idStr           GetBestGametype(const char *map, const char *gametype);
     #endif
 
     /* #ifdef CTF ... merge the below IsGametypeFlagBased */

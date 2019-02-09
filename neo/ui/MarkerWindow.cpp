@@ -47,13 +47,13 @@ void idMarkerWindow::CommonInit() {
     markerStop = NULL;
 }
 
-idMarkerWindow::idMarkerWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idMarkerWindow::idMarkerWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idMarkerWindow::idMarkerWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idMarkerWindow::idMarkerWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -61,7 +61,7 @@ idMarkerWindow::idMarkerWindow(idUserInterfaceLocal* g) : idWindow(g) {
 idMarkerWindow::~idMarkerWindow() {
 }
 
-bool idMarkerWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idMarkerWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "markerMat") == 0) {
         idStr str;
         ParseString(src, str);
@@ -86,7 +86,7 @@ bool idMarkerWindow::ParseInternalVar(const char* _name, idParser* src) {
     return idWindow::ParseInternalVar(_name, src);
 }
 
-const char* idMarkerWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idMarkerWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
 
     if (!(event->evType == SE_KEY && event->evValue2)) {
         return "";
@@ -101,7 +101,7 @@ const char* idMarkerWindow::HandleEvent(const sysEvent_t* event, bool* updateVis
         int i;
 
         for (i = 0; i < c; i++) {
-            markerData_t& md = markerTimes[i];
+            markerData_t &md = markerTimes[i];
 
             if (md.rect.Contains(gui->CursorX(), gui->CursorY())) {
                 currentMarker = i;
@@ -167,7 +167,7 @@ void idMarkerWindow::Draw(int time, float x, float y) {
 
         if (c > 0) {
             for (int i = 0; i < c; i++) {
-                markerData_t& md = markerTimes[i];
+                markerData_t &md = markerTimes[i];
 
                 if (md.rect.w == 0) {
                     md.rect.x = (r.x + r.w * ((float)md.time / len)) - 8;
@@ -206,8 +206,8 @@ void idMarkerWindow::Draw(int time, float x, float y) {
 
 
 
-const char* idMarkerWindow::RouteMouseCoords(float xd, float yd) {
-    const char* ret = idWindow::RouteMouseCoords(xd, yd);
+const char *idMarkerWindow::RouteMouseCoords(float xd, float yd) {
+    const char *ret = idWindow::RouteMouseCoords(xd, yd);
     idRectangle r;
     int i, c = markerTimes.Num();
     int len = gui->State().GetInt("loadLength");
@@ -217,7 +217,7 @@ const char* idMarkerWindow::RouteMouseCoords(float xd, float yd) {
     }
 
     for (i = 0; i < c; i++) {
-        markerData_t& md = markerTimes[i];
+        markerData_t &md = markerTimes[i];
 
         if (md.rect.Contains(gui->CursorY(), gui->CursorX())) {
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "background", md.mat->GetName());
@@ -232,7 +232,7 @@ const char* idMarkerWindow::RouteMouseCoords(float xd, float yd) {
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "matcolor", "0 0 0 0");
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "text", "No Preview");
         } else {
-            markerData_t& md = markerTimes[currentMarker];
+            markerData_t &md = markerTimes[currentMarker];
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "background", md.mat->GetName());
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "matcolor", "1 1 1 1");
             gui->GetDesktop()->SetChildWinVarVal("markerBackground", "text", "");
@@ -242,7 +242,7 @@ const char* idMarkerWindow::RouteMouseCoords(float xd, float yd) {
     return ret;
 }
 
-void idMarkerWindow::Point(int x, int y, dword* out, dword color) {
+void idMarkerWindow::Point(int x, int y, dword *out, dword color) {
     int index = (63-y) * 512 + x;
 
     if (index >= 0 && index < 512 * 64) {
@@ -252,7 +252,7 @@ void idMarkerWindow::Point(int x, int y, dword* out, dword color) {
     }
 }
 
-void idMarkerWindow::Line(int x1, int y1, int x2, int y2, dword* out, dword color) {
+void idMarkerWindow::Line(int x1, int y1, int x2, int y2, dword *out, dword color) {
     int deltax = abs(x2 - x1);
     int deltay = abs(y2 - y1);
     int incx = (x1 > x2) ? -1 : 1;
@@ -285,13 +285,13 @@ void idMarkerWindow::Line(int x1, int y1, int x2, int y2, dword* out, dword colo
 }
 
 
-void idMarkerWindow::Activate(bool activate, idStr& act) {
+void idMarkerWindow::Activate(bool activate, idStr &act) {
     idWindow::Activate(activate, act);
 
     if (activate) {
         int i;
         gui->GetDesktop()->SetChildWinVarVal("markerText", "text", "");
-        imageBuff = (dword*)Mem_Alloc(512*64*4);
+        imageBuff = (dword *)Mem_Alloc(512*64*4);
         markerTimes.Clear();
         currentMarker = -1;
         currentTime = -1;
@@ -300,7 +300,7 @@ void idMarkerWindow::Activate(bool activate, idStr& act) {
         numStats = 0;
 
         if (statData.Length()) {
-            idFile* file = fileSystem->OpenFileRead(statData);
+            idFile *file = fileSystem->OpenFileRead(statData);
 
             if (file) {
                 file->Read(&numStats, sizeof(numStats));
@@ -331,7 +331,7 @@ void idMarkerWindow::Activate(bool activate, idStr& act) {
         if (numStats > 1 && background) {
             idStr markerPath = statData;
             markerPath.StripFilename();
-            idFileList* markers;
+            idFileList *markers;
             markers = fileSystem->ListFiles(markerPath, ".tga", false, true);
             idStr name;
 
@@ -370,10 +370,10 @@ void idMarkerWindow::Activate(bool activate, idStr& act) {
                 Line(x1, y1, x2, y2, imageBuff, 0xff00ffff);
             }
 
-            const shaderStage_t* stage = background->GetStage(0);
+            const shaderStage_t *stage = background->GetStage(0);
 
             if (stage) {
-                stage->texture.image->UploadScratch((byte*)imageBuff, 512, 64);
+                stage->texture.image->UploadScratch((byte *)imageBuff, 512, 64);
             }
 
             Mem_Free(imageBuff);

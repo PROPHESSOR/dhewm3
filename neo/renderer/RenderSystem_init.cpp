@@ -51,7 +51,7 @@ If you have questions concerning this license or the applicable additional terms
 
 glconfig_t  glConfig;
 
-const char* r_rendererArgs[] = { "best", "arb2", NULL };
+const char *r_rendererArgs[] = { "best", "arb2", NULL };
 
 idCVar r_inhibitFragmentProgram("r_inhibitFragmentProgram", "0", CVAR_RENDERER | CVAR_BOOL, "ignore the fragment program extension");
 idCVar r_useLightPortalFlow("r_useLightPortalFlow", "1", CVAR_RENDERER | CVAR_BOOL, "use a more precise area reference determination");
@@ -227,14 +227,14 @@ idCVar r_debugRenderToTexture("r_debugRenderToTexture", "0", CVAR_RENDERER | CVA
 #define QGLPROC(name, rettype, args) rettype (APIENTRYP q##name) args;
 #include "renderer/qgl_proc.h"
 
-void (APIENTRY* qglMultiTexCoord2fARB)(GLenum texture, GLfloat s, GLfloat t);
-void (APIENTRY* qglMultiTexCoord2fvARB)(GLenum texture, GLfloat* st);
-void (APIENTRY* qglActiveTextureARB)(GLenum texture);
-void (APIENTRY* qglClientActiveTextureARB)(GLenum texture);
+void (APIENTRY *qglMultiTexCoord2fARB)(GLenum texture, GLfloat s, GLfloat t);
+void (APIENTRY *qglMultiTexCoord2fvARB)(GLenum texture, GLfloat *st);
+void (APIENTRY *qglActiveTextureARB)(GLenum texture);
+void (APIENTRY *qglClientActiveTextureARB)(GLenum texture);
 
-void (APIENTRY* qglTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*);
+void (APIENTRY *qglTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *);
 
-void (APIENTRY* qglColorTableEXT)(int, int, int, int, int, const void*);
+void (APIENTRY *qglColorTableEXT)(int, int, int, int, int, const void *);
 
 // EXT_stencil_two_side
 PFNGLACTIVESTENCILFACEEXTPROC           qglActiveStencilFaceEXT;
@@ -274,7 +274,7 @@ PFNGLDEPTHBOUNDSEXTPROC                 qglDepthBoundsEXT;
 R_CheckExtension
 =================
 */
-bool R_CheckExtension(const char* name) {
+bool R_CheckExtension(const char *name) {
     if (!strstr(glConfig.extensions_string, name)) {
         common->Printf("X..%s not found\n", name);
         return false;
@@ -297,11 +297,11 @@ static void R_CheckPortableExtensions(void) {
     glConfig.multitextureAvailable = R_CheckExtension("GL_ARB_multitexture");
 
     if (glConfig.multitextureAvailable) {
-        qglMultiTexCoord2fARB = (void(APIENTRY*)(GLenum, GLfloat, GLfloat))GLimp_ExtensionPointer("glMultiTexCoord2fARB");
-        qglMultiTexCoord2fvARB = (void(APIENTRY*)(GLenum, GLfloat*))GLimp_ExtensionPointer("glMultiTexCoord2fvARB");
-        qglActiveTextureARB = (void(APIENTRY*)(GLenum))GLimp_ExtensionPointer("glActiveTextureARB");
-        qglClientActiveTextureARB = (void(APIENTRY*)(GLenum))GLimp_ExtensionPointer("glClientActiveTextureARB");
-        qglGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, (GLint*)&glConfig.maxTextureUnits);
+        qglMultiTexCoord2fARB = (void(APIENTRY *)(GLenum, GLfloat, GLfloat))GLimp_ExtensionPointer("glMultiTexCoord2fARB");
+        qglMultiTexCoord2fvARB = (void(APIENTRY *)(GLenum, GLfloat *))GLimp_ExtensionPointer("glMultiTexCoord2fvARB");
+        qglActiveTextureARB = (void(APIENTRY *)(GLenum))GLimp_ExtensionPointer("glActiveTextureARB");
+        qglClientActiveTextureARB = (void(APIENTRY *)(GLenum))GLimp_ExtensionPointer("glClientActiveTextureARB");
+        qglGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, (GLint *)&glConfig.maxTextureUnits);
 
         if (glConfig.maxTextureUnits > MAX_MULTITEXTURE_UNITS) {
             glConfig.maxTextureUnits = MAX_MULTITEXTURE_UNITS;
@@ -311,8 +311,8 @@ static void R_CheckPortableExtensions(void) {
             glConfig.multitextureAvailable = false; // shouldn't ever happen
         }
 
-        qglGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, (GLint*)&glConfig.maxTextureCoords);
-        qglGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS_ARB, (GLint*)&glConfig.maxTextureImageUnits);
+        qglGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, (GLint *)&glConfig.maxTextureCoords);
+        qglGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS_ARB, (GLint *)&glConfig.maxTextureImageUnits);
     }
 
     // GL_ARB_texture_env_combine
@@ -365,7 +365,7 @@ static void R_CheckPortableExtensions(void) {
     glConfig.sharedTexturePaletteAvailable = R_CheckExtension("GL_EXT_shared_texture_palette");
 
     if (glConfig.sharedTexturePaletteAvailable) {
-        qglColorTableEXT = (void (APIENTRY*)(int, int, int, int, int, const void*)) GLimp_ExtensionPointer("glColorTableEXT");
+        qglColorTableEXT = (void (APIENTRY *)(int, int, int, int, int, const void *)) GLimp_ExtensionPointer("glColorTableEXT");
     }
 
     // GL_EXT_texture3D (not currently used for anything)
@@ -373,7 +373,7 @@ static void R_CheckPortableExtensions(void) {
 
     if (glConfig.texture3DAvailable) {
         qglTexImage3D =
-            (void (APIENTRY*)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*))
+            (void (APIENTRY *)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *))
             GLimp_ExtensionPointer("glTexImage3D");
     }
 
@@ -469,7 +469,7 @@ will be used instead.
 ====================
 */
 typedef struct vidmode_s {
-    const char* description;
+    const char *description;
     int         width, height;
 } vidmode_t;
 
@@ -503,8 +503,8 @@ vidmode_t r_vidModes[] = {
 // DG: made this an enum so even stupid compilers accept it as array length below
 enum {  s_numVidModes = sizeof(r_vidModes) / sizeof(r_vidModes[0]) };
 
-static bool R_GetModeInfo(int* width, int* height, int mode) {
-    vidmode_t*   vm;
+static bool R_GetModeInfo(int *width, int *height, int mode) {
+    vidmode_t   *vm;
 
     if (mode < -1) {
         return false;
@@ -539,15 +539,15 @@ static bool R_GetModeInfo(int* width, int* height, int mode) {
 //     sorted in the menu.
 
 struct vidModePtr {
-    vidmode_t* vidMode;
+    vidmode_t *vidMode;
     int modeIndex;
 };
 
 static vidModePtr sortedVidModes[s_numVidModes];
 
-static int vidModeCmp(const void* vm1, const void* vm2) {
-    const vidModePtr* v1 = static_cast<const vidModePtr*>(vm1);
-    const vidModePtr* v2 = static_cast<const vidModePtr*>(vm2);
+static int vidModeCmp(const void *vm1, const void *vm2) {
+    const vidModePtr *v1 = static_cast<const vidModePtr *>(vm1);
+    const vidModePtr *v2 = static_cast<const vidModePtr *>(vm2);
 
     // sort primarily by width, secondarily by height
     int wdiff = v1->vidMode->width - v2->vidMode->width;
@@ -681,10 +681,10 @@ void R_InitOpenGL(void) {
     soundSystem->InitHW();
 
     // get our config strings
-    glConfig.vendor_string = (const char*)qglGetString(GL_VENDOR);
-    glConfig.renderer_string = (const char*)qglGetString(GL_RENDERER);
-    glConfig.version_string = (const char*)qglGetString(GL_VERSION);
-    glConfig.extensions_string = (const char*)qglGetString(GL_EXTENSIONS);
+    glConfig.vendor_string = (const char *)qglGetString(GL_VENDOR);
+    glConfig.renderer_string = (const char *)qglGetString(GL_RENDERER);
+    glConfig.version_string = (const char *)qglGetString(GL_VERSION);
+    glConfig.extensions_string = (const char *)qglGetString(GL_EXTENSIONS);
 
     // OpenGL driver constants
     qglGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
@@ -814,7 +814,7 @@ R_ReloadSurface_f
 Reload the material displayed by r_showSurfaceInfo
 =====================
 */
-static void R_ReloadSurface_f(const idCmdArgs& args) {
+static void R_ReloadSurface_f(const idCmdArgs &args) {
     modelTrace_t mt;
     idVec3 start, end;
 
@@ -842,7 +842,7 @@ static void R_ReloadSurface_f(const idCmdArgs& args) {
 R_ListModes_f
 ==============
 */
-static void R_ListModes_f(const idCmdArgs& args) {
+static void R_ListModes_f(const idCmdArgs &args) {
     int i;
 
     common->Printf("\n");
@@ -865,7 +865,7 @@ testimage <number>
 testimage <filename>
 =============
 */
-void R_TestImage_f(const idCmdArgs& args) {
+void R_TestImage_f(const idCmdArgs &args) {
     int imageNum;
 
     if (tr.testVideo) {
@@ -897,7 +897,7 @@ R_TestVideo_f
 Plays the cinematic file in a testImage
 =============
 */
-void R_TestVideo_f(const idCmdArgs& args) {
+void R_TestVideo_f(const idCmdArgs &args) {
     if (tr.testVideo) {
         delete tr.testVideo;
         tr.testVideo = NULL;
@@ -937,11 +937,11 @@ void R_TestVideo_f(const idCmdArgs& args) {
     session->sw->PlayShaderDirectly(wavString.c_str());
 }
 
-static int R_QsortSurfaceAreas(const void* a, const void* b) {
-    const idMaterial*    ea, *eb;
+static int R_QsortSurfaceAreas(const void *a, const void *b) {
+    const idMaterial    *ea, *eb;
     int ac, bc;
 
-    ea = *(idMaterial**)a;
+    ea = *(idMaterial **)a;
 
     if (!ea->EverReferenced()) {
         ac = 0;
@@ -949,7 +949,7 @@ static int R_QsortSurfaceAreas(const void* a, const void* b) {
         ac = ea->GetSurfaceArea();
     }
 
-    eb = *(idMaterial**)b;
+    eb = *(idMaterial **)b;
 
     if (!eb->EverReferenced()) {
         bc = 0;
@@ -976,15 +976,15 @@ R_ReportSurfaceAreas_f
 Prints a list of the materials sorted by surface area
 ===================
 */
-void R_ReportSurfaceAreas_f(const idCmdArgs& args) {
+void R_ReportSurfaceAreas_f(const idCmdArgs &args) {
     int     i, count;
-    idMaterial**  list;
+    idMaterial  **list;
 
     count = declManager->GetNumDecls(DECL_MATERIAL);
-    list = (idMaterial**)_alloca(count * sizeof(*list));
+    list = (idMaterial **)_alloca(count * sizeof(*list));
 
     for (i = 0 ; i < count ; i++) {
-        list[i] = (idMaterial*)declManager->DeclByIndex(DECL_MATERIAL, i, false);
+        list[i] = (idMaterial *)declManager->DeclByIndex(DECL_MATERIAL, i, false);
     }
 
     qsort(list, count, sizeof(list[0]), R_QsortSurfaceAreas);
@@ -1010,7 +1010,7 @@ R_ReportImageDuplication_f
 Checks for images with the same hash value and does a better comparison
 ===================
 */
-void R_ReportImageDuplication_f(const idCmdArgs& args) {
+void R_ReportImageDuplication_f(const idCmdArgs &args) {
     int     i, j;
 
     common->Printf("Images with duplicated contents:\n");
@@ -1018,7 +1018,7 @@ void R_ReportImageDuplication_f(const idCmdArgs& args) {
     int count = 0;
 
     for (i = 0 ; i < globalImages->images.Num() ; i++) {
-        idImage* image1 = globalImages->images[i];
+        idImage *image1 = globalImages->images[i];
 
         if (image1->isPartialImage) {
             // ignore background loading stubs
@@ -1039,13 +1039,13 @@ void R_ReportImageDuplication_f(const idCmdArgs& args) {
             continue;
         }
 
-        byte*    data1;
+        byte    *data1;
         int     w1, h1;
 
         R_LoadImageProgram(image1->imgName, &data1, &w1, &h1, NULL);
 
         for (j = 0 ; j < i ; j++) {
-            idImage* image2 = globalImages->images[j];
+            idImage *image2 = globalImages->images[j];
 
             if (image2->isPartialImage) {
                 continue;
@@ -1077,7 +1077,7 @@ void R_ReportImageDuplication_f(const idCmdArgs& args) {
                 continue;
             }
 
-            byte*    data2;
+            byte    *data2;
             int     w2, h2;
 
             R_LoadImageProgram(image2->imgName, &data2, &w2, &h2, NULL);
@@ -1119,7 +1119,7 @@ void R_ReportImageDuplication_f(const idCmdArgs& args) {
 R_RenderingFPS
 ================
 */
-static float R_RenderingFPS(const renderView_t* renderView) {
+static float R_RenderingFPS(const renderView_t *renderView) {
     qglFinish();
 
     int     start = Sys_Milliseconds();
@@ -1151,7 +1151,7 @@ static float R_RenderingFPS(const renderView_t* renderView) {
 R_Benchmark_f
 ================
 */
-void R_Benchmark_f(const idCmdArgs& args) {
+void R_Benchmark_f(const idCmdArgs &args) {
     float   fps, msec;
     renderView_t    view;
 
@@ -1205,9 +1205,9 @@ tiling it into window-sized chunks and rendering each chunk separately
 If ref isn't specified, the full session UpdateScreen will be done.
 ====================
 */
-void R_ReadTiledPixels(int width, int height, byte* buffer, renderView_t* ref = NULL) {
+void R_ReadTiledPixels(int width, int height, byte *buffer, renderView_t *ref = NULL) {
     // include extra space for OpenGL padding to word boundaries
-    byte*    temp = (byte*)R_StaticAlloc((glConfig.vidWidth+3) * glConfig.vidHeight * 3);
+    byte    *temp = (byte *)R_StaticAlloc((glConfig.vidWidth+3) * glConfig.vidHeight * 3);
 
     int oldWidth = glConfig.vidWidth;
     int oldHeight = glConfig.vidHeight;
@@ -1280,21 +1280,21 @@ Downsample is the number of steps to mipmap the image before saving it
 If ref == NULL, session->updateScreen will be used
 ==================
 */
-void idRenderSystemLocal::TakeScreenshot(int width, int height, const char* fileName, int blends, renderView_t* ref) {
-    byte*        buffer;
+void idRenderSystemLocal::TakeScreenshot(int width, int height, const char *fileName, int blends, renderView_t *ref) {
+    byte        *buffer;
     int         i, j, c, temp;
 
     takingScreenshot = true;
 
     int pix = width * height;
 
-    buffer = (byte*)R_StaticAlloc(pix*3 + 18);
+    buffer = (byte *)R_StaticAlloc(pix*3 + 18);
     memset(buffer, 0, 18);
 
     if (blends <= 1) {
         R_ReadTiledPixels(width, height, buffer + 18, ref);
     } else {
-        unsigned short* shortBuffer = (unsigned short*)R_StaticAlloc(pix*2*3);
+        unsigned short *shortBuffer = (unsigned short *)R_StaticAlloc(pix*2*3);
         memset(shortBuffer, 0, pix*2*3);
 
         // enable anti-aliasing jitter
@@ -1358,7 +1358,7 @@ from the beginning, because recording demo avis can involve
 thousands of shots
 ==================
 */
-void R_ScreenshotFilename(int& lastNumber, const char* base, idStr& fileName) {
+void R_ScreenshotFilename(int &lastNumber, const char *base, idStr &fileName) {
     int a,b,c,d, e;
 
     bool fsrestrict = cvarSystem->GetCVarBool("fs_restrict");
@@ -1412,7 +1412,7 @@ screenshot [width] [height] [samples]
 ==================
 */
 #define MAX_BLENDS  256 // to keep the accumulation in shorts
-void R_ScreenShot_f(const idCmdArgs& args) {
+void R_ScreenShot_f(const idCmdArgs &args) {
     static int lastNumber = 0;
     idStr checkname;
 
@@ -1478,7 +1478,7 @@ Save out a screenshot showing the stencil buffer expanded by 16x range
 ===============
 */
 void R_StencilShot(void) {
-    byte*        buffer;
+    byte        *buffer;
     int         i, c;
 
     int width = tr.GetScreenWidth();
@@ -1487,10 +1487,10 @@ void R_StencilShot(void) {
     int pix = width * height;
 
     c = pix * 3 + 18;
-    buffer = (byte*)Mem_Alloc(c);
+    buffer = (byte *)Mem_Alloc(c);
     memset(buffer, 0, 18);
 
-    byte* byteBuffer = (byte*)Mem_Alloc(pix);
+    byte *byteBuffer = (byte *)Mem_Alloc(pix);
 
     qglReadPixels(0, 0, width, height, GL_STENCIL_INDEX , GL_UNSIGNED_BYTE, byteBuffer);
 
@@ -1524,15 +1524,15 @@ envshot <basename>
 Saves out env/<basename>_ft.tga, etc
 ==================
 */
-void R_EnvShot_f(const idCmdArgs& args) {
+void R_EnvShot_f(const idCmdArgs &args) {
     idStr       fullname;
-    const char*  baseName;
+    const char  *baseName;
     int         i;
     idMat3      axis[6];
     renderView_t    ref;
     viewDef_t   primary;
     int         blends;
-    const char*  extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
+    const char  *extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
                                     "_pz.tga", "_nz.tga"
                                   };
     int         size;
@@ -1613,7 +1613,7 @@ static idMat3       cubeAxis[6];
 R_SampleCubeMap
 ==================
 */
-void R_SampleCubeMap(const idVec3& dir, int size, byte* buffers[6], byte result[4]) {
+void R_SampleCubeMap(const idVec3 &dir, int size, byte *buffers[6], byte result[4]) {
     float   adir[3];
     int     axis, x, y;
 
@@ -1670,15 +1670,15 @@ R_MakeAmbientMap_f <basename> [size]
 Saves out env/<basename>_amb_ft.tga, etc
 ==================
 */
-void R_MakeAmbientMap_f(const idCmdArgs& args) {
+void R_MakeAmbientMap_f(const idCmdArgs &args) {
     idStr fullname;
-    const char*  baseName;
+    const char  *baseName;
     int         i;
-    const char*  extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
+    const char  *extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
                                     "_pz.tga", "_nz.tga"
                                   };
     int         outSize;
-    byte*        buffers[6];
+    byte        *buffers[6];
     int         width, height;
 
     if (args.Argc() != 2 && args.Argc() != 3) {
@@ -1740,7 +1740,7 @@ void R_MakeAmbientMap_f(const idCmdArgs& args) {
     // resample with hemispherical blending
     int samples = 1000;
 
-    byte*    outBuffer = (byte*)_alloca(outSize * outSize * 4);
+    byte    *outBuffer = (byte *)_alloca(outSize * outSize * 4);
 
     for (int map = 0 ; map < 2 ; map++) {
         for (i = 0 ; i < 6 ; i++) {
@@ -1860,8 +1860,8 @@ void R_SetColorMappings(void) {
 GfxInfo_f
 ================
 */
-static void GfxInfo_f(const idCmdArgs& args) {
-    const char* fsstrings[] = {
+static void GfxInfo_f(const idCmdArgs &args) {
+    const char *fsstrings[] = {
         "windowed",
         "fullscreen"
     };
@@ -1883,7 +1883,7 @@ static void GfxInfo_f(const idCmdArgs& args) {
         common->Printf("N/A\n");
     }
 
-    const char* active[2] = { "", " (ACTIVE)" };
+    const char *active[2] = { "", " (ACTIVE)" };
 
     if (glConfig.allowARB2Path) {
         common->Printf("ARB2 path ENABLED%s\n", active[tr.backEndRenderer == BE_ARB2]);
@@ -1919,7 +1919,7 @@ static void GfxInfo_f(const idCmdArgs& args) {
 R_VidRestart_f
 =================
 */
-void R_VidRestart_f(const idCmdArgs& args) {
+void R_VidRestart_f(const idCmdArgs &args) {
     int err;
 
     // if OpenGL isn't started, do nothing
@@ -2045,7 +2045,7 @@ R_SizeUp_f
 Keybinding command
 =================
 */
-static void R_SizeUp_f(const idCmdArgs& args) {
+static void R_SizeUp_f(const idCmdArgs &args) {
     if (r_screenFraction.GetInteger() + 10 > 100) {
         r_screenFraction.SetInteger(100);
     } else {
@@ -2061,7 +2061,7 @@ R_SizeDown_f
 Keybinding command
 =================
 */
-static void R_SizeDown_f(const idCmdArgs& args) {
+static void R_SizeDown_f(const idCmdArgs &args) {
     if (r_screenFraction.GetInteger() - 10 < 10) {
         r_screenFraction.SetInteger(10);
     } else {
@@ -2077,8 +2077,8 @@ TouchGui_f
   this is called from the main thread
 ===============
 */
-void R_TouchGui_f(const idCmdArgs& args) {
-    const char*  gui = args.Argv(1);
+void R_TouchGui_f(const idCmdArgs &args) {
+    const char  *gui = args.Argv(1);
 
     if (!gui[0]) {
         common->Printf("USAGE: touchGui <guiName>\n");

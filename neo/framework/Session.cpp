@@ -59,7 +59,7 @@ idCVar  idSessionLocal::com_wipeSeconds("com_wipeSeconds", "1", CVAR_SYSTEM, "")
 idCVar  idSessionLocal::com_guid("com_guid", "", CVAR_SYSTEM | CVAR_ARCHIVE | CVAR_ROM, "");
 
 idSessionLocal      sessLocal;
-idSession*           session = &sessLocal;
+idSession           *session = &sessLocal;
 
 // these must be kept up to date with window Levelshot in guis/mainmenu.gui
 const int PREVIEW_X = 211;
@@ -70,7 +70,7 @@ const int PREVIEW_HEIGHT = 298;
 void RandomizeStack(void) {
     // attempt to force uninitialized stack memory bugs
     int     bytes = 4000000;
-    byte*    buf = (byte*)_alloca(bytes);
+    byte    *buf = (byte *)_alloca(bytes);
 
     int fill = rand()&255;
 
@@ -84,7 +84,7 @@ void RandomizeStack(void) {
 Session_RescanSI_f
 =================
 */
-void Session_RescanSI_f(const idCmdArgs& args) {
+void Session_RescanSI_f(const idCmdArgs &args) {
     sessLocal.mapSpawnData.serverInfo = *cvarSystem->MoveCVarsToDict(CVAR_SERVERINFO);
 
     if (game && idAsyncNetwork::server.IsActive()) {
@@ -100,7 +100,7 @@ Session_Map_f
 Restart the server on a different map
 ==================
 */
-static void Session_Map_f(const idCmdArgs& args) {
+static void Session_Map_f(const idCmdArgs &args) {
     idStr       map, string;
     findFile_t  ff;
     idCmdArgs   rl_args;
@@ -146,7 +146,7 @@ Session_DevMap_f
 Restart the server on a different map in developer mode
 ==================
 */
-static void Session_DevMap_f(const idCmdArgs& args) {
+static void Session_DevMap_f(const idCmdArgs &args) {
     idStr map, string;
     findFile_t  ff;
     idCmdArgs   rl_args;
@@ -190,7 +190,7 @@ static void Session_DevMap_f(const idCmdArgs& args) {
 Session_TestMap_f
 ==================
 */
-static void Session_TestMap_f(const idCmdArgs& args) {
+static void Session_TestMap_f(const idCmdArgs &args) {
     idStr map, string;
 
     map = args.Argv(1);
@@ -216,7 +216,7 @@ static void Session_TestMap_f(const idCmdArgs& args) {
 Sess_WritePrecache_f
 ==================
 */
-static void Sess_WritePrecache_f(const idCmdArgs& args) {
+static void Sess_WritePrecache_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         common->Printf("USAGE: writePrecache <execFile>\n");
         return;
@@ -224,7 +224,7 @@ static void Sess_WritePrecache_f(const idCmdArgs& args) {
 
     idStr   str = args.Argv(1);
     str.DefaultFileExtension(".cfg");
-    idFile* f = fileSystem->OpenFileWrite(str, "fs_configpath");
+    idFile *f = fileSystem->OpenFileWrite(str, "fs_configpath");
     declManager->WritePrecacheCommands(f);
     renderModelManager->WritePrecacheCommands(f);
     uiManager->WritePrecacheCommands(f);
@@ -252,8 +252,8 @@ bool idSessionLocal::MaybeWaitOnCDKey(void) {
 Session_PromptKey_f
 ===================
 */
-static void Session_PromptKey_f(const idCmdArgs& args) {
-    const char*  retkey;
+static void Session_PromptKey_f(const idCmdArgs &args) {
+    const char  *retkey;
     bool        valid[ 2 ];
     static bool recursed = false;
 
@@ -274,7 +274,7 @@ static void Session_PromptKey_f(const idCmdArgs& args) {
         }
 
         // the auth server may have replied and set an error message, otherwise use a default
-        const char* prompt_msg = sessLocal.GetAuthMsg();
+        const char *prompt_msg = sessLocal.GetAuthMsg();
 
         if (prompt_msg[ 0 ] == '\0') {
             prompt_msg = common->GetLanguageDict()->GetString("#str_04308");
@@ -513,7 +513,7 @@ idSessionLocal::StartWipe
 Draws and captures the current state, then starts a wipe with that image
 ================
 */
-void idSessionLocal::StartWipe(const char* _wipeMaterial, bool hold) {
+void idSessionLocal::StartWipe(const char *_wipeMaterial, bool hold) {
     console->Close();
 
     // render the current screen into a texture for the wipe model
@@ -606,7 +606,7 @@ void idSessionLocal::ClearWipe(void) {
 Session_TestGUI_f
 ================
 */
-static void Session_TestGUI_f(const idCmdArgs& args) {
+static void Session_TestGUI_f(const idCmdArgs &args) {
     sessLocal.TestGUI(args.Argv(1));
 }
 
@@ -615,7 +615,7 @@ static void Session_TestGUI_f(const idCmdArgs& args) {
 idSessionLocal::TestGUI
 ================
 */
-void idSessionLocal::TestGUI(const char* guiName) {
+void idSessionLocal::TestGUI(const char *guiName) {
     if (guiName && *guiName) {
         guiTest = uiManager->FindGui(guiName, true, false, true);
     } else {
@@ -628,7 +628,7 @@ void idSessionLocal::TestGUI(const char* guiName) {
 FindUnusedFileName
 ================
 */
-static idStr FindUnusedFileName(const char* format) {
+static idStr FindUnusedFileName(const char *format) {
     int i;
     char    filename[1024];
 
@@ -649,7 +649,7 @@ static idStr FindUnusedFileName(const char* format) {
 Session_DemoShot_f
 ================
 */
-static void Session_DemoShot_f(const idCmdArgs& args) {
+static void Session_DemoShot_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         idStr filename = FindUnusedFileName("demos/shot%03i.demo");
         sessLocal.DemoShot(filename);
@@ -664,7 +664,7 @@ static void Session_DemoShot_f(const idCmdArgs& args) {
 Session_RecordDemo_f
 ================
 */
-static void Session_RecordDemo_f(const idCmdArgs& args) {
+static void Session_RecordDemo_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         idStr filename = FindUnusedFileName("demos/demo%03i.demo");
         sessLocal.StartRecordingRenderDemo(filename);
@@ -678,7 +678,7 @@ static void Session_RecordDemo_f(const idCmdArgs& args) {
 Session_CompressDemo_f
 ================
 */
-static void Session_CompressDemo_f(const idCmdArgs& args) {
+static void Session_CompressDemo_f(const idCmdArgs &args) {
     if (args.Argc() == 2) {
         sessLocal.CompressDemoFile("2", args.Argv(1));
     } else if (args.Argc() == 3) {
@@ -693,7 +693,7 @@ static void Session_CompressDemo_f(const idCmdArgs& args) {
 Session_StopRecordingDemo_f
 ================
 */
-static void Session_StopRecordingDemo_f(const idCmdArgs& args) {
+static void Session_StopRecordingDemo_f(const idCmdArgs &args) {
     sessLocal.StopRecordingRenderDemo();
 }
 
@@ -702,7 +702,7 @@ static void Session_StopRecordingDemo_f(const idCmdArgs& args) {
 Session_PlayDemo_f
 ================
 */
-static void Session_PlayDemo_f(const idCmdArgs& args) {
+static void Session_PlayDemo_f(const idCmdArgs &args) {
     if (args.Argc() >= 2) {
         sessLocal.StartPlayingRenderDemo(va("demos/%s", args.Argv(1)));
     }
@@ -713,7 +713,7 @@ static void Session_PlayDemo_f(const idCmdArgs& args) {
 Session_TimeDemo_f
 ================
 */
-static void Session_TimeDemo_f(const idCmdArgs& args) {
+static void Session_TimeDemo_f(const idCmdArgs &args) {
     if (args.Argc() >= 2) {
         sessLocal.TimeRenderDemo(va("demos/%s", args.Argv(1)), (args.Argc() > 2));
     }
@@ -724,7 +724,7 @@ static void Session_TimeDemo_f(const idCmdArgs& args) {
 Session_TimeDemoQuit_f
 ================
 */
-static void Session_TimeDemoQuit_f(const idCmdArgs& args) {
+static void Session_TimeDemoQuit_f(const idCmdArgs &args) {
     sessLocal.TimeRenderDemo(va("demos/%s", args.Argv(1)));
 
     if (sessLocal.timeDemo == TD_YES) {
@@ -738,7 +738,7 @@ static void Session_TimeDemoQuit_f(const idCmdArgs& args) {
 Session_RecordSound_f
 ================
 */
-static void Session_RecordSound_f(const idCmdArgs& args) {
+static void Session_RecordSound_f(const idCmdArgs &args) {
     if (args.Argc() != 2) {
         return common->Printf("Session_RecordSound_f: requires 1 arg. Demo's name");
     }
@@ -760,7 +760,7 @@ static void Session_EndRecordSound_f() {
 Session_AVIDemo_f
 ================
 */
-static void Session_AVIDemo_f(const idCmdArgs& args) {
+static void Session_AVIDemo_f(const idCmdArgs &args) {
     sessLocal.AVIRenderDemo(va("demos/%s", args.Argv(1)));
 }
 
@@ -769,7 +769,7 @@ static void Session_AVIDemo_f(const idCmdArgs& args) {
 Session_AVIGame_f
 ================
 */
-static void Session_AVIGame_f(const idCmdArgs& args) {
+static void Session_AVIGame_f(const idCmdArgs &args) {
     sessLocal.AVIGame(args.Argv(1));
 }
 
@@ -778,7 +778,7 @@ static void Session_AVIGame_f(const idCmdArgs& args) {
 Session_AVICmdDemo_f
 ================
 */
-static void Session_AVICmdDemo_f(const idCmdArgs& args) {
+static void Session_AVICmdDemo_f(const idCmdArgs &args) {
     sessLocal.AVICmdDemo(args.Argv(1));
 }
 
@@ -787,7 +787,7 @@ static void Session_AVICmdDemo_f(const idCmdArgs& args) {
 Session_WriteCmdDemo_f
 ================
 */
-static void Session_WriteCmdDemo_f(const idCmdArgs& args) {
+static void Session_WriteCmdDemo_f(const idCmdArgs &args) {
     if (args.Argc() == 1) {
         idStr   filename = FindUnusedFileName("demos/cmdDemo%03i.cdemo");
         sessLocal.WriteCmdDemo(filename);
@@ -803,7 +803,7 @@ static void Session_WriteCmdDemo_f(const idCmdArgs& args) {
 Session_PlayCmdDemo_f
 ================
 */
-static void Session_PlayCmdDemo_f(const idCmdArgs& args) {
+static void Session_PlayCmdDemo_f(const idCmdArgs &args) {
     sessLocal.StartPlayingCmdDemo(args.Argv(1));
 }
 
@@ -812,7 +812,7 @@ static void Session_PlayCmdDemo_f(const idCmdArgs& args) {
 Session_TimeCmdDemo_f
 ================
 */
-static void Session_TimeCmdDemo_f(const idCmdArgs& args) {
+static void Session_TimeCmdDemo_f(const idCmdArgs &args) {
     sessLocal.TimeCmdDemo(args.Argv(1));
 }
 #endif
@@ -822,7 +822,7 @@ static void Session_TimeCmdDemo_f(const idCmdArgs& args) {
 Session_Disconnect_f
 ================
 */
-static void Session_Disconnect_f(const idCmdArgs& args) {
+static void Session_Disconnect_f(const idCmdArgs &args) {
     sessLocal.Stop();
     sessLocal.StartMenu();
 
@@ -837,7 +837,7 @@ static void Session_Disconnect_f(const idCmdArgs& args) {
 Session_ExitCmdDemo_f
 ================
 */
-static void Session_ExitCmdDemo_f(const idCmdArgs& args) {
+static void Session_ExitCmdDemo_f(const idCmdArgs &args) {
     if (!sessLocal.cmdDemoFile) {
         common->Printf("not reading from a cmdDemo\n");
         return;
@@ -854,7 +854,7 @@ static void Session_ExitCmdDemo_f(const idCmdArgs& args) {
 idSessionLocal::StartRecordingRenderDemo
 ================
 */
-void idSessionLocal::StartRecordingRenderDemo(const char* demoName) {
+void idSessionLocal::StartRecordingRenderDemo(const char *demoName) {
     if (writeDemo) {
         // allow it to act like a toggle
         StopRecordingRenderDemo();
@@ -967,7 +967,7 @@ idSessionLocal::DemoShot
 A demoShot is a single frame demo
 ================
 */
-void idSessionLocal::DemoShot(const char* demoName) {
+void idSessionLocal::DemoShot(const char *demoName) {
     StartRecordingRenderDemo(demoName);
 
     // force draw one frame
@@ -1039,7 +1039,7 @@ void idSessionLocal::StartPlayingRenderDemo(idStr demoName) {
 idSessionLocal::TimeRenderDemo
 ================
 */
-void idSessionLocal::TimeRenderDemo(const char* demoName, bool twice) {
+void idSessionLocal::TimeRenderDemo(const char *demoName, bool twice) {
     idStr demo = demoName;
 
     // no sound in time demos
@@ -1076,7 +1076,7 @@ void idSessionLocal::TimeRenderDemo(const char* demoName, bool twice) {
 idSessionLocal::StartRecordingSound
 ================
 */
-void idSessionLocal::StartRecordingSound(const char* _demoName) {
+void idSessionLocal::StartRecordingSound(const char *_demoName) {
     idStr   demoName = _demoName;   // copy off from va() buffer
 
     StartPlayingRenderDemo(demoName);
@@ -1111,7 +1111,7 @@ void idSessionLocal::EndRecordSound() {
 idSessionLocal::BeginAVICapture
 ================
 */
-void idSessionLocal::BeginAVICapture(const char* demoName) {
+void idSessionLocal::BeginAVICapture(const char *demoName) {
     idStr name = demoName;
     name.ExtractFileBase(aviDemoShortName);
     aviCaptureMode = true;
@@ -1133,7 +1133,7 @@ void idSessionLocal::EndAVICapture() {
     sw->AVIClose();
 
     // write a .roqParam file so the demo can be converted to a roq file
-    idFile* f = fileSystem->OpenFileWrite(va("demos/%s/%s.roqParam",
+    idFile *f = fileSystem->OpenFileWrite(va("demos/%s/%s.roqParam",
                                           aviDemoShortName.c_str(), aviDemoShortName.c_str()));
     f->Printf("INPUT_DIR demos/%s\n", aviDemoShortName.c_str());
     f->Printf("FILENAME demos/%s/%s.RoQ\n", aviDemoShortName.c_str(), aviDemoShortName.c_str());
@@ -1153,7 +1153,7 @@ void idSessionLocal::EndAVICapture() {
 idSessionLocal::AVIRenderDemo
 ================
 */
-void idSessionLocal::AVIRenderDemo(const char* _demoName) {
+void idSessionLocal::AVIRenderDemo(const char *_demoName) {
     idStr   demoName = _demoName;   // copy off from va() buffer
 
     StartPlayingRenderDemo(demoName);
@@ -1174,7 +1174,7 @@ void idSessionLocal::AVIRenderDemo(const char* _demoName) {
 idSessionLocal::AVICmdDemo
 ================
 */
-void idSessionLocal::AVICmdDemo(const char* demoName) {
+void idSessionLocal::AVICmdDemo(const char *demoName) {
     StartPlayingCmdDemo(demoName);
 
     BeginAVICapture(demoName) ;
@@ -1187,7 +1187,7 @@ idSessionLocal::AVIGame
 Start AVI recording the current game session
 ================
 */
-void idSessionLocal::AVIGame(const char* demoName) {
+void idSessionLocal::AVIGame(const char *demoName) {
     if (aviCaptureMode) {
         EndAVICapture();
         return;
@@ -1218,7 +1218,7 @@ void idSessionLocal::AVIGame(const char* demoName) {
 idSessionLocal::CompressDemoFile
 ================
 */
-void idSessionLocal::CompressDemoFile(const char* scheme, const char* demoName) {
+void idSessionLocal::CompressDemoFile(const char *scheme, const char *demoName) {
     idStr   fullDemoName = "demos/";
     fullDemoName += demoName;
     fullDemoName.DefaultFileExtension(".demo");
@@ -1275,7 +1275,7 @@ void idSessionLocal::CompressDemoFile(const char* scheme, const char* demoName) 
 idSessionLocal::StartNewGame
 ===============
 */
-void idSessionLocal::StartNewGame(const char* mapName, bool devmap) {
+void idSessionLocal::StartNewGame(const char *mapName, bool devmap) {
     #ifdef  ID_DEDICATED
     common->Printf("Dedicated servers cannot start singleplayer games.\n");
     return;
@@ -1339,9 +1339,9 @@ void idSessionLocal::StartNewGame(const char* mapName, bool devmap) {
 idSessionLocal::GetAutoSaveName
 ===============
 */
-idStr idSessionLocal::GetAutoSaveName(const char* mapName) const {
-    const idDecl* mapDecl = declManager->FindType(DECL_MAPDEF, mapName, false);
-    const idDeclEntityDef* mapDef = static_cast<const idDeclEntityDef*>(mapDecl);
+idStr idSessionLocal::GetAutoSaveName(const char *mapName) const {
+    const idDecl *mapDecl = declManager->FindType(DECL_MAPDEF, mapName, false);
+    const idDeclEntityDef *mapDef = static_cast<const idDeclEntityDef *>(mapDecl);
 
     if (mapDef) {
         mapName = common->GetLanguageDict()->GetString(mapDef->dict.GetString("name", mapName));
@@ -1358,7 +1358,7 @@ idSessionLocal::MoveToNewMap
 Leaves the existing userinfo and serverinfo
 ===============
 */
-void idSessionLocal::MoveToNewMap(const char* mapName) {
+void idSessionLocal::MoveToNewMap(const char *mapName) {
     mapSpawnData.serverInfo.Set("si_map", mapName);
 
     ExecuteMapChange();
@@ -1376,7 +1376,7 @@ void idSessionLocal::MoveToNewMap(const char* mapName) {
 SaveCmdDemoFromFile
 ==============
 */
-void idSessionLocal::SaveCmdDemoToFile(idFile* file) {
+void idSessionLocal::SaveCmdDemoToFile(idFile *file) {
 
     mapSpawnData.serverInfo.WriteToFileHandle(file);
 
@@ -1399,7 +1399,7 @@ void idSessionLocal::SaveCmdDemoToFile(idFile* file) {
 idSessionLocal::LoadCmdDemoFromFile
 ==============
 */
-void idSessionLocal::LoadCmdDemoFromFile(idFile* file) {
+void idSessionLocal::LoadCmdDemoFromFile(idFile *file) {
 
     mapSpawnData.serverInfo.ReadFromFileHandle(file);
 
@@ -1419,7 +1419,7 @@ Dumps the accumulated commands for the current level.
 This should still work after disconnecting from a level
 ==============
 */
-void idSessionLocal::WriteCmdDemo(const char* demoName, bool save) {
+void idSessionLocal::WriteCmdDemo(const char *demoName, bool save) {
 
     if (!demoName[0]) {
         common->Printf("idSessionLocal::WriteCmdDemo: no name specified\n");
@@ -1436,7 +1436,7 @@ void idSessionLocal::WriteCmdDemo(const char* demoName, bool save) {
 
     common->Printf("writing save data to %s\n", demoName);
 
-    idFile* cmdDemoFile = fileSystem->OpenFileWrite(demoName);
+    idFile *cmdDemoFile = fileSystem->OpenFileWrite(demoName);
 
     if (!cmdDemoFile) {
         common->Printf("Couldn't open for writing %s\n", demoName);
@@ -1450,7 +1450,7 @@ void idSessionLocal::WriteCmdDemo(const char* demoName, bool save) {
     SaveCmdDemoToFile(cmdDemoFile);
 
     if (save) {
-        idFile* statsFile = fileSystem->OpenFileWrite(statsName);
+        idFile *statsFile = fileSystem->OpenFileWrite(statsName);
 
         if (statsFile) {
             statsFile->Write(&statIndex, sizeof(statIndex));
@@ -1475,7 +1475,7 @@ void idSessionLocal::FinishCmdLoad() {
 idSessionLocal::StartPlayingCmdDemo
 ===============
 */
-void idSessionLocal::StartPlayingCmdDemo(const char* demoName) {
+void idSessionLocal::StartPlayingCmdDemo(const char *demoName) {
     // exit any current game
     Stop();
 
@@ -1511,7 +1511,7 @@ void idSessionLocal::StartPlayingCmdDemo(const char* demoName) {
 idSessionLocal::TimeCmdDemo
 ===============
 */
-void idSessionLocal::TimeCmdDemo(const char* demoName) {
+void idSessionLocal::TimeCmdDemo(const char *demoName) {
     StartPlayingCmdDemo(demoName);
     ClearWipe();
     UpdateScreen();
@@ -1576,7 +1576,7 @@ void idSessionLocal::UnloadMap() {
 idSessionLocal::LoadLoadingGui
 ===============
 */
-void idSessionLocal::LoadLoadingGui(const char* mapName) {
+void idSessionLocal::LoadLoadingGui(const char *mapName) {
     // load / program a gui to stay up on the screen while loading
     idStr stripped = mapName;
     stripped.StripFileExtension();
@@ -1601,9 +1601,9 @@ void idSessionLocal::LoadLoadingGui(const char* mapName) {
 idSessionLocal::GetBytesNeededForMapLoad
 ===============
 */
-int idSessionLocal::GetBytesNeededForMapLoad(const char* mapName) {
-    const idDecl* mapDecl = declManager->FindType(DECL_MAPDEF, mapName, false);
-    const idDeclEntityDef* mapDef = static_cast<const idDeclEntityDef*>(mapDecl);
+int idSessionLocal::GetBytesNeededForMapLoad(const char *mapName) {
+    const idDecl *mapDecl = declManager->FindType(DECL_MAPDEF, mapName, false);
+    const idDeclEntityDef *mapDef = static_cast<const idDeclEntityDef *>(mapDecl);
 
     if (mapDef) {
         return mapDef->dict.GetInt(va("size%d", Max(0, com_machineSpec.GetInteger())));
@@ -1621,9 +1621,9 @@ int idSessionLocal::GetBytesNeededForMapLoad(const char* mapName) {
 idSessionLocal::SetBytesNeededForMapLoad
 ===============
 */
-void idSessionLocal::SetBytesNeededForMapLoad(const char* mapName, int bytesNeeded) {
-    idDecl* mapDecl = const_cast<idDecl*>(declManager->FindType(DECL_MAPDEF, mapName, false));
-    idDeclEntityDef* mapDef = static_cast<idDeclEntityDef*>(mapDecl);
+void idSessionLocal::SetBytesNeededForMapLoad(const char *mapName, int bytesNeeded) {
+    idDecl *mapDecl = const_cast<idDecl *>(declManager->FindType(DECL_MAPDEF, mapName, false));
+    idDeclEntityDef *mapDef = static_cast<idDeclEntityDef *>(mapDecl);
 
     if (com_updateLoadSize.GetBool() && mapDef) {
         // we assume that if com_updateLoadSize is true then the file is writable
@@ -1635,7 +1635,7 @@ void idSessionLocal::SetBytesNeededForMapLoad(const char* mapName, int bytesNeed
         declText += " {\n";
 
         for (int i=0; i<mapDef->dict.GetNumKeyVals(); i++) {
-            const idKeyValue* kv = mapDef->dict.GetKeyVal(i);
+            const idKeyValue *kv = mapDef->dict.GetKeyVal(i);
 
             if (kv && (kv->GetKey().Cmp("classname") != 0)) {
                 declText += "\t\"" + kv->GetKey() + "\"\t\t\"" + kv->GetValue() + "\"\n";
@@ -1882,7 +1882,7 @@ void idSessionLocal::ExecuteMapChange(bool noFadeWipe) {
 LoadGame_f
 ===============
 */
-void LoadGame_f(const idCmdArgs& args) {
+void LoadGame_f(const idCmdArgs &args) {
     console->Close();
 
     if (args.Argc() < 2 || idStr::Icmp(args.Argv(1), "quick") == 0) {
@@ -1898,7 +1898,7 @@ void LoadGame_f(const idCmdArgs& args) {
 SaveGame_f
 ===============
 */
-void SaveGame_f(const idCmdArgs& args) {
+void SaveGame_f(const idCmdArgs &args) {
     if (args.Argc() < 2 || idStr::Icmp(args.Argv(1), "quick") == 0) {
         idStr saveName = common->GetLanguageDict()->GetString("#str_07178");
 
@@ -1917,8 +1917,8 @@ void SaveGame_f(const idCmdArgs& args) {
 TakeViewNotes_f
 ===============
 */
-void TakeViewNotes_f(const idCmdArgs& args) {
-    const char* p = (args.Argc() > 1) ? args.Argv(1) : "";
+void TakeViewNotes_f(const idCmdArgs &args) {
+    const char *p = (args.Argc() > 1) ? args.Argv(1) : "";
     sessLocal.TakeNotes(p);
 }
 
@@ -1927,8 +1927,8 @@ void TakeViewNotes_f(const idCmdArgs& args) {
 TakeViewNotes2_f
 ===============
 */
-void TakeViewNotes2_f(const idCmdArgs& args) {
-    const char* p = (args.Argc() > 1) ? args.Argv(1) : "";
+void TakeViewNotes2_f(const idCmdArgs &args) {
+    const char *p = (args.Argc() > 1) ? args.Argv(1) : "";
     sessLocal.TakeNotes(p, true);
 }
 
@@ -1937,7 +1937,7 @@ void TakeViewNotes2_f(const idCmdArgs& args) {
 idSessionLocal::TakeNotes
 ===============
 */
-void idSessionLocal::TakeNotes(const char* p, bool extended) {
+void idSessionLocal::TakeNotes(const char *p, bool extended) {
     if (!mapSpawned) {
         common->Printf("No map loaded!\n");
         return;
@@ -1947,12 +1947,12 @@ void idSessionLocal::TakeNotes(const char* p, bool extended) {
         guiTakeNotes = uiManager->FindGui("guis/takeNotes2.gui", true, false, true);
 
         #if 0
-        const char* people[] = {
+        const char *people[] = {
             "Nobody", "Adam", "Brandon", "David", "PHook", "Jay", "Jake",
             "PatJ", "Brett", "Ted", "Darin", "Brian", "Sean"
         };
         #else
-        const char* people[] = {
+        const char *people[] = {
             "Tim", "Kenneth", "Robert",
             "Matt", "Mal", "Jerry", "Steve", "Pat",
             "Xian", "Ed", "Fred", "James", "Eric", "Andy", "Seneca", "Patrick", "Kevin",
@@ -1961,7 +1961,7 @@ void idSessionLocal::TakeNotes(const char* p, bool extended) {
         #endif
         const int numPeople = sizeof(people) / sizeof(people[0]);
 
-        idListGUI* guiList_people = uiManager->AllocListGUI();
+        idListGUI *guiList_people = uiManager->AllocListGUI();
         guiList_people->Config(guiTakeNotes, "person");
 
         for (int i = 0; i < numPeople; i++) {
@@ -1986,8 +1986,8 @@ void idSessionLocal::TakeNotes(const char* p, bool extended) {
 Session_Hitch_f
 ===============
 */
-void Session_Hitch_f(const idCmdArgs& args) {
-    idSoundWorld* sw = soundSystem->GetPlayingSoundWorld();
+void Session_Hitch_f(const idCmdArgs &args) {
+    idSoundWorld *sw = soundSystem->GetPlayingSoundWorld();
 
     if (sw) {
         soundSystem->SetMute(true);
@@ -2015,7 +2015,7 @@ idSessionLocal::ScrubSaveGameFileName
 Turns a bad file name into a good one or your money back
 ===============
 */
-void idSessionLocal::ScrubSaveGameFileName(idStr& saveFileName) const {
+void idSessionLocal::ScrubSaveGameFileName(idStr &saveFileName) const {
     int i;
     idStr inFileName;
 
@@ -2047,7 +2047,7 @@ void idSessionLocal::ScrubSaveGameFileName(idStr& saveFileName) const {
 idSessionLocal::SaveGame
 ===============
 */
-bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
+bool idSessionLocal::SaveGame(const char *saveName, bool autosave) {
     #ifdef  ID_DEDICATED
     common->Printf("Dedicated servers cannot save games.\n");
     return false;
@@ -2077,7 +2077,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
         return false;
     }
 
-    idSoundWorld* pauseWorld = soundSystem->GetPlayingSoundWorld();
+    idSoundWorld *pauseWorld = soundSystem->GetPlayingSoundWorld();
 
     if (pauseWorld) {
         pauseWorld->Pause();
@@ -2098,7 +2098,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
     descriptionFile.SetFileExtension(".txt");
 
     // Open savegame file
-    idFile* fileOut = fileSystem->OpenFileWrite(gameFile);
+    idFile *fileOut = fileSystem->OpenFileWrite(gameFile);
 
     if (fileOut == NULL) {
         common->Warning("Failed to open save file '%s'\n", gameFile.c_str());
@@ -2115,7 +2115,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
     // Game Name / Version / Map Name / Persistant Player Info
 
     // game
-    const char* gamename = GAME_NAME;
+    const char *gamename = GAME_NAME;
     fileOut->WriteString(gamename);
 
     // version
@@ -2147,7 +2147,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
 
     // Write description, which is just a text file with
     // the unclean save name on line 1, map name on line 2, screenshot on line 3
-    idFile* fileDesc = fileSystem->OpenFileWrite(descriptionFile);
+    idFile *fileDesc = fileSystem->OpenFileWrite(descriptionFile);
 
     if (fileDesc == NULL) {
         common->Warning("Failed to open description file '%s'\n", descriptionFile.c_str());
@@ -2164,7 +2164,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
     description.Replace("\\", "\\\\");
     description.Replace("\"", "\\\"");
 
-    const idDeclEntityDef* mapDef = static_cast<const idDeclEntityDef*>(declManager->FindType(DECL_MAPDEF, mapName, false));
+    const idDeclEntityDef *mapDef = static_cast<const idDeclEntityDef *>(declManager->FindType(DECL_MAPDEF, mapName, false));
 
     if (mapDef) {
         mapName = common->GetLanguageDict()->GetString(mapDef->dict.GetString("name", mapName));
@@ -2201,7 +2201,7 @@ bool idSessionLocal::SaveGame(const char* saveName, bool autosave) {
 idSessionLocal::LoadGame
 ===============
 */
-bool idSessionLocal::LoadGame(const char* saveName) {
+bool idSessionLocal::LoadGame(const char *saveName) {
     #ifdef  ID_DEDICATED
     common->Printf("Dedicated servers cannot load games.\n");
     return false;
@@ -2313,7 +2313,7 @@ bool idSessionLocal::LoadGame(const char* saveName) {
 idSessionLocal::ProcessEvent
 ===============
 */
-bool idSessionLocal::ProcessEvent(const sysEvent_t* event) {
+bool idSessionLocal::ProcessEvent(const sysEvent_t *event) {
     // hitting escape anywhere brings up the menu
     // DG: but shift-escape should bring up console instead so ignore that
     if (!guiActive && event->evType == SE_KEY && event->evValue2 == 1
@@ -2321,7 +2321,7 @@ bool idSessionLocal::ProcessEvent(const sysEvent_t* event) {
         console->Close();
 
         if (game) {
-            idUserInterface* gui = NULL;
+            idUserInterface *gui = NULL;
             escReply_t      op;
             op = game->HandleESC(&gui);
 
@@ -2350,7 +2350,7 @@ bool idSessionLocal::ProcessEvent(const sysEvent_t* event) {
             return true;
         }
 
-        static const char* cmd;
+        static const char *cmd;
         cmd = guiTest->HandleEvent(event, com_frameTime);
 
         if (cmd && cmd[0]) {
@@ -3201,7 +3201,7 @@ idSessionLocal::ReadCDKey
 */
 void idSessionLocal::ReadCDKey(void) {
     idStr filename;
-    idFile* f;
+    idFile *f;
     char buffer[32];
 
     cdkey_state = CDKEY_UNKNOWN;
@@ -3252,8 +3252,8 @@ idSessionLocal::WriteCDKey
 */
 void idSessionLocal::WriteCDKey(void) {
     idStr filename;
-    idFile* f;
-    const char* OSPath;
+    idFile *f;
+    const char *OSPath;
 
     filename = CDKEY_FILEPATH;
     // OpenFileWrite advertises creating directories to the path if needed, but that won't work with a '..' in the path
@@ -3311,7 +3311,7 @@ void idSessionLocal::ClearCDKey(bool valid[ 2 ]) {
 idSessionLocal::GetCDKey
 ================
 */
-const char* idSessionLocal::GetCDKey(bool xp) {
+const char *idSessionLocal::GetCDKey(bool xp) {
     if (!xp) {
         return cdkey;
     }
@@ -3360,7 +3360,7 @@ the function will only modify keys to _OK or _CHECKING if the offline checks are
 if the function returns false, the offline checks failed, and offline_valid holds which keys are bad
 ================
 */
-bool idSessionLocal::CheckKey(const char* key, bool netConnect, bool offline_valid[ 2 ]) {
+bool idSessionLocal::CheckKey(const char *key, bool netConnect, bool offline_valid[ 2 ]) {
     char lkey[ 2 ][ CDKEY_BUF_LEN ];
     char l_chk[ 2 ][ 3 ];
     char s_chk[ 3 ];
@@ -3520,7 +3520,7 @@ bool idSessionLocal::WaitingForGameAuth(void) {
 idSessionLocal::CDKeysAuthReply
 ===============
 */
-void idSessionLocal::CDKeysAuthReply(bool valid, const char* auth_msg) {
+void idSessionLocal::CDKeysAuthReply(bool valid, const char *auth_msg) {
     //assert( authEmitTimeout > 0 );
     if (authWaitBox) {
         // close the wait box
@@ -3560,7 +3560,7 @@ void idSessionLocal::CDKeysAuthReply(bool valid, const char* auth_msg) {
 idSessionLocal::GetCurrentMapName
 ===============
 */
-const char* idSessionLocal::GetCurrentMapName() {
+const char *idSessionLocal::GetCurrentMapName() {
     return currentMapName.c_str();
 }
 
@@ -3578,6 +3578,6 @@ int idSessionLocal::GetSaveGameVersion(void) {
 idSessionLocal::GetAuthMsg
 ===============
 */
-const char* idSessionLocal::GetAuthMsg(void) {
+const char *idSessionLocal::GetAuthMsg(void) {
     return authMsg.c_str();
 }

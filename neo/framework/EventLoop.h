@@ -70,8 +70,8 @@ class idEventLoop {
     int             JournalLevel(void) const;
 
     // Journal file.
-    idFile*         com_journalFile;
-    idFile*         com_journalDataFile;
+    idFile         *com_journalFile;
+    idFile         *com_journalDataFile;
 
   private:
     // all events will have this subtracted from their time
@@ -84,9 +84,9 @@ class idEventLoop {
 
     sysEvent_t      GetRealEvent(void);
     void            ProcessEvent(sysEvent_t ev);
-    void            PushEvent(sysEvent_t* event);
+    void            PushEvent(sysEvent_t *event);
 };
 
-extern  idEventLoop* eventLoop;
+extern  idEventLoop *eventLoop;
 
 #endif /* !__EVENTLOOP_H__ */

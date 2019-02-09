@@ -54,7 +54,7 @@ typedef enum {
 // a cinematic stream generates an image buffer, which the caller will upload to a texture
 typedef struct {
     int                 imageWidth, imageHeight;    // will be a power of 2
-    const byte*         image;                      // RGBA format, alpha will be 255
+    const byte         *image;                      // RGBA format, alpha will be 255
     int                 status;
 } cinData_t;
 
@@ -68,13 +68,13 @@ class idCinematic {
 
     // allocates and returns a private subclass that implements the methods
     // This should be used instead of new
-    static idCinematic*  Alloc();
+    static idCinematic  *Alloc();
 
     // frees all allocated memory
     virtual             ~idCinematic();
 
     // returns false if it failed to load
-    virtual bool        InitFromFile(const char* qpath, bool looping);
+    virtual bool        InitFromFile(const char *qpath, bool looping);
 
     // returns the length of the animation in milliseconds
     virtual int         AnimationLength();
@@ -105,7 +105,7 @@ class idSndWindow : public idCinematic {
     }
     ~idSndWindow() {}
 
-    bool                InitFromFile(const char* qpath, bool looping);
+    bool                InitFromFile(const char *qpath, bool looping);
     cinData_t           ImageForTime(int milliseconds);
     int                 AnimationLength();
 

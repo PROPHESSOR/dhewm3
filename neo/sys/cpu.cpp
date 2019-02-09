@@ -63,7 +63,7 @@ void Sys_FPU_SetFTZ(bool enable) {
 #else
 
 #if defined(__GNUC__)
-static inline void CPUid(int index, int* a, int* b, int* c, int* d) {
+static inline void CPUid(int index, int *a, int *b, int *c, int *d) {
     #if __x86_64__
 #   define REG_b "rbx"
 #   define REG_S "rsi"
@@ -83,7 +83,7 @@ static inline void CPUid(int index, int* a, int* b, int* c, int* d) {
 }
 #elif defined(_MSC_VER)
 #include <intrin.h>
-static inline void CPUid(int index, int* a, int* b, int* c, int* d) {
+static inline void CPUid(int index, int *a, int *b, int *c, int *d) {
     int info[4] = { };
 
     // VS2005 and up
@@ -144,7 +144,7 @@ static inline bool HasSSE3() {
     #define STREFLOP_LDMXCSR(cw) do { asm volatile ("ldmxcsr %0" : : "m" (cw) ); } while (0)
 #endif
 
-static void EnableMXCSRFlag(int flag, bool enable, const char* name) {
+static void EnableMXCSRFlag(int flag, bool enable, const char *name) {
     int sse_mode;
 
     STREFLOP_STMXCSR(sse_mode);

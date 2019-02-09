@@ -37,7 +37,7 @@ A simple sprite model that always faces the view axis.
 
 */
 
-static const char* sprite_SnapshotName = "_sprite_Snapshot_";
+static const char *sprite_SnapshotName = "_sprite_Snapshot_";
 
 /*
 ===============
@@ -62,9 +62,9 @@ bool idRenderModelSprite::IsLoaded() const {
 idRenderModelSprite::InstantiateDynamicModel
 ===============
 */
-idRenderModel*  idRenderModelSprite::InstantiateDynamicModel(const struct renderEntity_s* renderEntity, const struct viewDef_s* viewDef, idRenderModel* cachedModel) {
-    idRenderModelStatic* staticModel;
-    srfTriangles_t* tri;
+idRenderModel  *idRenderModelSprite::InstantiateDynamicModel(const struct renderEntity_s *renderEntity, const struct viewDef_s *viewDef, idRenderModel *cachedModel) {
+    idRenderModelStatic *staticModel;
+    srfTriangles_t *tri;
     modelSurface_t surf;
 
     if (cachedModel && !r_useCachedDynamicModels.GetBool()) {
@@ -79,10 +79,10 @@ idRenderModel*  idRenderModelSprite::InstantiateDynamicModel(const struct render
 
     if (cachedModel != NULL) {
 
-        assert(dynamic_cast<idRenderModelStatic*>(cachedModel) != NULL);
+        assert(dynamic_cast<idRenderModelStatic *>(cachedModel) != NULL);
         assert(idStr::Icmp(cachedModel->Name(), sprite_SnapshotName) == 0);
 
-        staticModel = static_cast<idRenderModelStatic*>(cachedModel);
+        staticModel = static_cast<idRenderModelStatic *>(cachedModel);
         surf = *staticModel->Surface(0);
         tri = surf.geometry;
 
@@ -183,7 +183,7 @@ idRenderModel*  idRenderModelSprite::InstantiateDynamicModel(const struct render
 idRenderModelSprite::Bounds
 ===============
 */
-idBounds idRenderModelSprite::Bounds(const struct renderEntity_s* renderEntity) const {
+idBounds idRenderModelSprite::Bounds(const struct renderEntity_s *renderEntity) const {
     idBounds b;
 
     b.Zero();

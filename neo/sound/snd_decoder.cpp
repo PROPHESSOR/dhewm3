@@ -50,33 +50,33 @@ idDynamicBlockAlloc<byte, 1<<20, 128>       decoderMemoryAllocator;
 const int MIN_OGGVORBIS_MEMORY              = 768 * 1024;
 
 extern "C" {
-    void* _decoder_malloc(size_t size);
-    void* _decoder_calloc(size_t num, size_t size);
-    void* _decoder_realloc(void* memblock, size_t size);
-    void _decoder_free(void* memblock);
+    void *_decoder_malloc(size_t size);
+    void *_decoder_calloc(size_t num, size_t size);
+    void *_decoder_realloc(void *memblock, size_t size);
+    void _decoder_free(void *memblock);
 }
 
-void* _decoder_malloc(size_t size) {
-    void* ptr = decoderMemoryAllocator.Alloc(size);
+void *_decoder_malloc(size_t size) {
+    void *ptr = decoderMemoryAllocator.Alloc(size);
     assert(size == 0 || ptr != NULL);
     return ptr;
 }
 
-void* _decoder_calloc(size_t num, size_t size) {
-    void* ptr = decoderMemoryAllocator.Alloc(num * size);
+void *_decoder_calloc(size_t num, size_t size) {
+    void *ptr = decoderMemoryAllocator.Alloc(num * size);
     assert((num * size) == 0 || ptr != NULL);
     memset(ptr, 0, num * size);
     return ptr;
 }
 
-void* _decoder_realloc(void* memblock, size_t size) {
-    void* ptr = decoderMemoryAllocator.Resize((byte*)memblock, size);
+void *_decoder_realloc(void *memblock, size_t size) {
+    void *ptr = decoderMemoryAllocator.Resize((byte *)memblock, size);
     assert(size == 0 || ptr != NULL);
     return ptr;
 }
 
-void _decoder_free(void* memblock) {
-    decoderMemoryAllocator.Free((byte*)memblock);
+void _decoder_free(void *memblock) {
+    decoderMemoryAllocator.Free((byte *)memblock);
 }
 
 
@@ -93,8 +93,8 @@ void _decoder_free(void* memblock) {
 FS_ReadOGG
 ====================
 */
-size_t FS_ReadOGG(void* dest, size_t size1, size_t size2, void* fh) {
-    idFile* f = reinterpret_cast<idFile*>(fh);
+size_t FS_ReadOGG(void *dest, size_t size1, size_t size2, void *fh) {
+    idFile *f = reinterpret_cast<idFile *>(fh);
     return f->Read(dest, size1 * size2);
 }
 
@@ -103,7 +103,7 @@ size_t FS_ReadOGG(void* dest, size_t size1, size_t size2, void* fh) {
 FS_SeekOGG
 ====================
 */
-int FS_SeekOGG(void* fh, ogg_int64_t to, int type) {
+int FS_SeekOGG(void *fh, ogg_int64_t to, int type) {
     fsOrigin_t retype = FS_SEEK_SET;
 
     if (type == SEEK_CUR) {
@@ -116,7 +116,7 @@ int FS_SeekOGG(void* fh, ogg_int64_t to, int type) {
         common->FatalError("fs_seekOGG: seek without type\n");
     }
 
-    idFile* f = reinterpret_cast<idFile*>(fh);
+    idFile *f = reinterpret_cast<idFile *>(fh);
     return f->Seek(to, retype);
 }
 
@@ -125,7 +125,7 @@ int FS_SeekOGG(void* fh, ogg_int64_t to, int type) {
 FS_CloseOGG
 ====================
 */
-int FS_CloseOGG(void* fh) {
+int FS_CloseOGG(void *fh) {
     return 0;
 }
 
@@ -134,8 +134,8 @@ int FS_CloseOGG(void* fh) {
 FS_TellOGG
 ====================
 */
-long FS_TellOGG(void* fh) {
-    idFile* f = reinterpret_cast<idFile*>(fh);
+long FS_TellOGG(void *fh) {
+    idFile *f = reinterpret_cast<idFile *>(fh);
     return f->Tell();
 }
 
@@ -144,7 +144,7 @@ long FS_TellOGG(void* fh) {
 ov_openFile
 ====================
 */
-int ov_openFile(idFile* f, OggVorbis_File* vf) {
+int ov_openFile(idFile *f, OggVorbis_File *vf) {
     ov_callbacks callbacks;
 
     memset(vf, 0, sizeof(OggVorbis_File));
@@ -153,7 +153,7 @@ int ov_openFile(idFile* f, OggVorbis_File* vf) {
     callbacks.seek_func = FS_SeekOGG;
     callbacks.close_func = FS_CloseOGG;
     callbacks.tell_func = FS_TellOGG;
-    return ov_open_callbacks((void*)f, vf, NULL, -1, callbacks);
+    return ov_open_callbacks((void *)f, vf, NULL, -1, callbacks);
 }
 
 /*
@@ -161,8 +161,8 @@ int ov_openFile(idFile* f, OggVorbis_File* vf) {
 idWaveFile::OpenOGG
 ====================
 */
-int idWaveFile::OpenOGG(const char* strFileName, waveformatex_t* pwfx) {
-    OggVorbis_File* ov;
+int idWaveFile::OpenOGG(const char *strFileName, waveformatex_t *pwfx) {
+    OggVorbis_File *ov;
 
     memset(pwfx, 0, sizeof(waveformatex_t));
 
@@ -186,7 +186,7 @@ int idWaveFile::OpenOGG(const char* strFileName, waveformatex_t* pwfx) {
 
     mfileTime = mhmmio->Timestamp();
 
-    vorbis_info* vi = ov_info(ov, -1);
+    vorbis_info *vi = ov_info(ov, -1);
 
     mpwfx.Format.nSamplesPerSec = vi->rate;
     mpwfx.Format.nChannels = vi->channels;
@@ -227,10 +227,10 @@ int idWaveFile::OpenOGG(const char* strFileName, waveformatex_t* pwfx) {
 idWaveFile::ReadOGG
 ====================
 */
-int idWaveFile::ReadOGG(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead) {
+int idWaveFile::ReadOGG(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead) {
     int total = dwSizeToRead;
-    char* bufferPtr = (char*)pBuffer;
-    OggVorbis_File* ov = (OggVorbis_File*) ogg;
+    char *bufferPtr = (char *)pBuffer;
+    OggVorbis_File *ov = (OggVorbis_File *) ogg;
 
     do {
         int ret = ov_read(ov, bufferPtr, total >= 4096 ? 4096 : total, Swap_IsBigEndian(), 2, 1, NULL);
@@ -247,7 +247,7 @@ int idWaveFile::ReadOGG(byte* pBuffer, int dwSizeToRead, int* pdwSizeRead) {
         total -= ret;
     } while (total > 0);
 
-    dwSizeToRead = (byte*)bufferPtr - pBuffer;
+    dwSizeToRead = (byte *)bufferPtr - pBuffer;
 
     if (pdwSizeRead != NULL) {
         *pdwSizeRead = dwSizeToRead;
@@ -262,7 +262,7 @@ idWaveFile::CloseOGG
 ====================
 */
 int idWaveFile::CloseOGG(void) {
-    OggVorbis_File* ov = (OggVorbis_File*) ogg;
+    OggVorbis_File *ov = (OggVorbis_File *) ogg;
 
     if (ov != NULL) {
         Sys_EnterCriticalSection(CRITICAL_SECTION_ONE);
@@ -289,19 +289,19 @@ int idWaveFile::CloseOGG(void) {
 
 class idSampleDecoderLocal : public idSampleDecoder {
   public:
-    virtual void            Decode(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest);
+    virtual void            Decode(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest);
     virtual void            ClearDecoder(void);
-    virtual idSoundSample*  GetSample(void) const;
+    virtual idSoundSample  *GetSample(void) const;
     virtual int             GetLastDecodeTime(void) const;
 
     void                    Clear(void);
-    int                     DecodePCM(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest);
-    int                     DecodeOGG(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest);
+    int                     DecodePCM(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest);
+    int                     DecodeOGG(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest);
 
   private:
     bool                    failed;             // set if decoding failed
     int                     lastFormat;         // last format being decoded
-    idSoundSample*          lastSample;         // last sample being decoded
+    idSoundSample          *lastSample;         // last sample being decoded
     int                     lastSampleOffset;   // last offset into the decoded sample
     int                     lastDecodeTime;     // last time decoding sound
     idFile_Memory           file;               // encoded file in memory
@@ -337,8 +337,8 @@ void idSampleDecoder::Shutdown(void) {
 idSampleDecoder::Alloc
 ====================
 */
-idSampleDecoder* idSampleDecoder::Alloc(void) {
-    idSampleDecoderLocal* decoder = sampleDecoderAllocator.Alloc();
+idSampleDecoder *idSampleDecoder::Alloc(void) {
+    idSampleDecoderLocal *decoder = sampleDecoderAllocator.Alloc();
     decoder->Clear();
     return decoder;
 }
@@ -348,8 +348,8 @@ idSampleDecoder* idSampleDecoder::Alloc(void) {
 idSampleDecoder::Free
 ====================
 */
-void idSampleDecoder::Free(idSampleDecoder* decoder) {
-    idSampleDecoderLocal* localDecoder = static_cast<idSampleDecoderLocal*>(decoder);
+void idSampleDecoder::Free(idSampleDecoder *decoder) {
+    idSampleDecoderLocal *localDecoder = static_cast<idSampleDecoderLocal *>(decoder);
     localDecoder->ClearDecoder();
     sampleDecoderAllocator.Free(localDecoder);
 }
@@ -415,7 +415,7 @@ void idSampleDecoderLocal::ClearDecoder(void) {
 idSampleDecoderLocal::GetSample
 ====================
 */
-idSoundSample* idSampleDecoderLocal::GetSample(void) const {
+idSoundSample *idSampleDecoderLocal::GetSample(void) const {
     return lastSample;
 }
 
@@ -433,7 +433,7 @@ int idSampleDecoderLocal::GetLastDecodeTime(void) const {
 idSampleDecoderLocal::Decode
 ====================
 */
-void idSampleDecoderLocal::Decode(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest) {
+void idSampleDecoderLocal::Decode(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest) {
     int readSamples44k;
 
     if (sample->objectInfo.wFormatTag != lastFormat || sample != lastSample) {
@@ -479,8 +479,8 @@ void idSampleDecoderLocal::Decode(idSoundSample* sample, int sampleOffset44k, in
 idSampleDecoderLocal::DecodePCM
 ====================
 */
-int idSampleDecoderLocal::DecodePCM(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest) {
-    const byte* first;
+int idSampleDecoderLocal::DecodePCM(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest) {
+    const byte *first;
     int pos, size, readSamples;
 
     lastFormat = WAVE_FORMAT_TAG_PCM;
@@ -508,7 +508,7 @@ int idSampleDecoderLocal::DecodePCM(idSoundSample* sample, int sampleOffset44k, 
     }
 
     // duplicate samples for 44kHz output
-    SIMDProcessor->UpSamplePCMTo44kHz(dest, (const short*)(first+pos), readSamples, sample->objectInfo.nSamplesPerSec, sample->objectInfo.nChannels);
+    SIMDProcessor->UpSamplePCMTo44kHz(dest, (const short *)(first+pos), readSamples, sample->objectInfo.nSamplesPerSec, sample->objectInfo.nChannels);
 
     return (readSamples << shift);
 }
@@ -518,7 +518,7 @@ int idSampleDecoderLocal::DecodePCM(idSoundSample* sample, int sampleOffset44k, 
 idSampleDecoderLocal::DecodeOGG
 ====================
 */
-int idSampleDecoderLocal::DecodeOGG(idSoundSample* sample, int sampleOffset44k, int sampleCount44k, float* dest) {
+int idSampleDecoderLocal::DecodeOGG(idSoundSample *sample, int sampleOffset44k, int sampleCount44k, float *dest) {
     int readSamples, totalSamples;
 
     int shift = 22050 / sample->objectInfo.nSamplesPerSec;
@@ -538,7 +538,7 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample* sample, int sampleOffset44k, 
             return 0;
         }
 
-        file.SetData((const char*)sample->nonCacheData, sample->objectMemSize);
+        file.SetData((const char *)sample->nonCacheData, sample->objectMemSize);
 
         if (ov_openFile(&file, &ogg) < 0) {
             failed = true;
@@ -564,7 +564,7 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample* sample, int sampleOffset44k, 
     readSamples = 0;
 
     do {
-        float** samples;
+        float **samples;
         int ret = ov_read_float(&ogg, &samples, totalSamples / sample->objectInfo.nChannels, NULL);
 
         if (ret == 0) {

@@ -52,12 +52,12 @@ class idGrabber : public idEntity {
     idGrabber(void);
     ~idGrabber(void);
 
-    void                    Save(idSaveGame* savefile) const;
-    void                    Restore(idRestoreGame* savefile);
+    void                    Save(idSaveGame *savefile) const;
+    void                    Restore(idRestoreGame *savefile);
 
     void                    Initialize(void);
     void                    SetDragDistance(float dist);
-    int                     Update(idPlayer* player, bool hide);
+    int                     Update(idPlayer *player, bool hide);
 
   private:
     idEntityPtr<idEntity>   dragEnt;            // entity being dragged
@@ -78,13 +78,13 @@ class idGrabber : public idEntity {
     int                     savedContents;
     int                     savedClipmask;
 
-    idBeam*                 beam;
-    idBeam*                 beamTarget;
+    idBeam                 *beam;
+    idBeam                 *beamTarget;
 
     int                     warpId;
 
-    bool                    grabbableAI(const char* aiName);
-    void                    StartDrag(idEntity* grabEnt, int id);
+    bool                    grabbableAI(const char *aiName);
+    void                    StartDrag(idEntity *grabEnt, int id);
     void                    StopDrag(bool dropOnly);
     void                    UpdateBeams(void);
     void                    ApplyShake(void);

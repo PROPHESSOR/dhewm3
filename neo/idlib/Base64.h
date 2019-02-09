@@ -42,22 +42,22 @@ If you have questions concerning this license or the applicable additional terms
 class idBase64 {
   public:
     idBase64(void);
-    idBase64(const idStr& s);
+    idBase64(const idStr &s);
     ~idBase64(void);
 
-    void        Encode(const byte* from, int size);
-    void        Encode(const idStr& src);
+    void        Encode(const byte *from, int size);
+    void        Encode(const idStr &src);
     int         DecodeLength(void) const;   // minimum size in bytes of destination buffer for decoding
-    int         Decode(byte* to) const;   // does not append a \0 - needs a DecodeLength() bytes buffer
-    void        Decode(idStr& dest) const;   // decodes the binary content to an idStr (a bit dodgy, \0 and other non-ascii are possible in the decoded content)
-    void        Decode(idFile* dest) const;
+    int         Decode(byte *to) const;   // does not append a \0 - needs a DecodeLength() bytes buffer
+    void        Decode(idStr &dest) const;   // decodes the binary content to an idStr (a bit dodgy, \0 and other non-ascii are possible in the decoded content)
+    void        Decode(idFile *dest) const;
 
-    const char*  c_str() const;
+    const char  *c_str() const;
 
-    void        operator=(const idStr& s);
+    void        operator=(const idStr &s);
 
   private:
-    byte*       data;
+    byte       *data;
     int         len;
     int         alloced;
 
@@ -70,7 +70,7 @@ ID_INLINE idBase64::idBase64(void) {
     Init();
 }
 
-ID_INLINE idBase64::idBase64(const idStr& s) {
+ID_INLINE idBase64::idBase64(const idStr &s) {
     Init();
     *this = s;
 }
@@ -79,8 +79,8 @@ ID_INLINE idBase64::~idBase64(void) {
     Release();
 }
 
-ID_INLINE const char* idBase64::c_str(void) const {
-    return (const char*)data;
+ID_INLINE const char *idBase64::c_str(void) const {
+    return (const char *)data;
 }
 
 ID_INLINE void idBase64::Init(void) {
@@ -106,9 +106,9 @@ ID_INLINE void idBase64::EnsureAlloced(int size) {
     alloced = size;
 }
 
-ID_INLINE void idBase64::operator=(const idStr& s) {
+ID_INLINE void idBase64::operator=(const idStr &s) {
     EnsureAlloced(s.Length()+1);   // trailing \0 - beware, this does a Release
-    strcpy((char*)data, s.c_str());
+    strcpy((char *)data, s.c_str());
     len = s.Length();
 }
 

@@ -80,9 +80,9 @@ this is the canonical renderLight parm parsing,
 which should be used by dmap and the editor
 ================
 */
-void idGameEdit::ParseSpawnArgsToRenderLight(const idDict* args, renderLight_t* renderLight) {
+void idGameEdit::ParseSpawnArgsToRenderLight(const idDict *args, renderLight_t *renderLight) {
     bool    gotTarget, gotUp, gotRight;
-    const char*  texture;
+    const char  *texture;
     idVec3  color;
 
     memset(renderLight, 0, sizeof(*renderLight));
@@ -172,7 +172,7 @@ void idGameEdit::ParseSpawnArgsToRenderLight(const idDict* args, renderLight_t* 
 idLight::UpdateChangeableSpawnArgs
 ================
 */
-void idLight::UpdateChangeableSpawnArgs(const idDict* source) {
+void idLight::UpdateChangeableSpawnArgs(const idDict *source) {
 
     idEntity::UpdateChangeableSpawnArgs(source);
 
@@ -234,7 +234,7 @@ idLight::Save
 archives object for save game file
 ================
 */
-void idLight::Save(idSaveGame* savefile) const {
+void idLight::Save(idSaveGame *savefile) const {
     savefile->WriteRenderLight(renderLight);
 
     savefile->WriteBool(renderLight.prelightModel != NULL);
@@ -266,7 +266,7 @@ idLight::Restore
 unarchives object from save game file
 ================
 */
-void idLight::Restore(idRestoreGame* savefile) {
+void idLight::Restore(idRestoreGame *savefile) {
     bool hadPrelightModel;
 
     savefile->ReadRenderLight(renderLight);
@@ -297,7 +297,7 @@ void idLight::Restore(idRestoreGame* savefile) {
     savefile->ReadBool(breakOnTrigger);
     savefile->ReadInt(count);
     savefile->ReadInt(triggercount);
-    savefile->ReadObject(reinterpret_cast<idClass*&>(lightParent));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(lightParent));
 
     savefile->ReadVec4(fadeFrom);
     savefile->ReadVec4(fadeTo);
@@ -318,7 +318,7 @@ idLight::Spawn
 void idLight::Spawn(void) {
     bool start_off;
     bool needBroken;
-    const char* demonic_shader;
+    const char *demonic_shader;
 
     // do the parsing the same way dmap and the editor do
     gameEdit->ParseSpawnArgsToRenderLight(&spawnArgs, &renderLight);
@@ -462,7 +462,7 @@ void idLight::SetLightLevel(void) {
 idLight::GetColor
 ================
 */
-void idLight::GetColor(idVec3& out) const {
+void idLight::GetColor(idVec3 &out) const {
     out[ 0 ] = renderLight.shaderParms[ SHADERPARM_RED ];
     out[ 1 ] = renderLight.shaderParms[ SHADERPARM_GREEN ];
     out[ 2 ] = renderLight.shaderParms[ SHADERPARM_BLUE ];
@@ -473,7 +473,7 @@ void idLight::GetColor(idVec3& out) const {
 idLight::GetColor
 ================
 */
-void idLight::GetColor(idVec4& out) const {
+void idLight::GetColor(idVec4 &out) const {
     out[ 0 ] = renderLight.shaderParms[ SHADERPARM_RED ];
     out[ 1 ] = renderLight.shaderParms[ SHADERPARM_GREEN ];
     out[ 2 ] = renderLight.shaderParms[ SHADERPARM_BLUE ];
@@ -495,7 +495,7 @@ void idLight::SetColor(float red, float green, float blue) {
 idLight::SetColor
 ================
 */
-void idLight::SetColor(const idVec3& color) {
+void idLight::SetColor(const idVec3 &color) {
     baseColor = color;
     SetLightLevel();
 }
@@ -505,7 +505,7 @@ void idLight::SetColor(const idVec3& color) {
 idLight::SetColor
 ================
 */
-void idLight::SetColor(const idVec4& color) {
+void idLight::SetColor(const idVec4 &color) {
     baseColor = color.ToVec3();
     renderLight.shaderParms[ SHADERPARM_ALPHA ]     = color[ 3 ];
     renderEntity.shaderParms[ SHADERPARM_ALPHA ]    = color[ 3 ];
@@ -517,7 +517,7 @@ void idLight::SetColor(const idVec4& color) {
 idLight::SetShader
 ================
 */
-void idLight::SetShader(const char* shadername) {
+void idLight::SetShader(const char *shadername) {
     // allow this to be NULL
     renderLight.shader = declManager->FindMaterial(shadername, false);
     PresentLightDefChange();
@@ -619,7 +619,7 @@ void idLight::Off(void) {
 idLight::Fade
 ================
 */
-void idLight::Fade(const idVec4& to, float fadeTime) {
+void idLight::Fade(const idVec4 &to, float fadeTime) {
     GetColor(fadeFrom);
     fadeTo = to;
     fadeStart = gameLocal.time;
@@ -656,7 +656,7 @@ void idLight::FadeIn(float time) {
 idLight::Killed
 ================
 */
-void idLight::Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location) {
+void idLight::Killed(idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location) {
     BecomeBroken(attacker);
 }
 
@@ -665,8 +665,8 @@ void idLight::Killed(idEntity* inflictor, idEntity* attacker, int damage, const 
 idLight::BecomeBroken
 ================
 */
-void idLight::BecomeBroken(idEntity* activator) {
-    const char* damageDefName;
+void idLight::BecomeBroken(idEntity *activator) {
+    const char *damageDefName;
 
     fl.takedamage = false;
 
@@ -704,11 +704,11 @@ void idLight::BecomeBroken(idEntity* activator) {
     renderLight.shaderParms[ SHADERPARM_MODE ] = 1;
 
     // if the light has a sound, either start the alternate (broken) sound, or stop the sound
-    const char* parm = spawnArgs.GetString("snd_broken");
+    const char *parm = spawnArgs.GetString("snd_broken");
 
     if (refSound.shader || (parm && *parm)) {
         StopSound(SND_CHANNEL_ANY, false);
-        const idSoundShader* alternate = refSound.shader ? refSound.shader->GetAltSound() : declManager->FindSound(parm);
+        const idSoundShader *alternate = refSound.shader ? refSound.shader->GetAltSound() : declManager->FindSound(parm);
 
         if (alternate) {
             // start it with no diversity, so the leadin break sound plays
@@ -821,7 +821,7 @@ void idLight::Think(void) {
 idLight::GetPhysicsToSoundTransform
 ================
 */
-bool idLight::GetPhysicsToSoundTransform(idVec3& origin, idMat3& axis) {
+bool idLight::GetPhysicsToSoundTransform(idVec3 &origin, idMat3 &axis) {
     origin = localLightOrigin + renderLight.lightCenter;
     axis = localLightAxis * GetPhysics()->GetAxis();
     return true;
@@ -844,11 +844,11 @@ void idLight::FreeLightDef(void) {
 idLight::SaveState
 ================
 */
-void idLight::SaveState(idDict* args) {
+void idLight::SaveState(idDict *args) {
     int i, c = spawnArgs.GetNumKeyVals();
 
     for (i = 0; i < c; i++) {
-        const idKeyValue* pv = spawnArgs.GetKeyVal(i);
+        const idKeyValue *pv = spawnArgs.GetKeyVal(i);
 
         if (pv->GetKey().Find("editor_", false) >= 0 || pv->GetKey().Find("parse_", false) >= 0) {
             continue;
@@ -876,7 +876,7 @@ void idLight::ShowEditingDialog(void) {
 idLight::Event_SetShader
 ================
 */
-void idLight::Event_SetShader(const char* shadername) {
+void idLight::Event_SetShader(const char *shadername) {
     SetShader(shadername);
 }
 
@@ -974,7 +974,7 @@ void idLight::Event_Off(void) {
 idLight::Event_ToggleOnOff
 ================
 */
-void idLight::Event_ToggleOnOff(idEntity* activator) {
+void idLight::Event_ToggleOnOff(idEntity *activator) {
     triggercount++;
 
     if (triggercount < count) {
@@ -1012,7 +1012,7 @@ idLight::Event_SetSoundHandles
 */
 void idLight::Event_SetSoundHandles(void) {
     int i;
-    idEntity* targetEnt;
+    idEntity *targetEnt;
 
     if (!refSound.referenceSound) {
         return;
@@ -1022,7 +1022,7 @@ void idLight::Event_SetSoundHandles(void) {
         targetEnt = targets[ i ].GetEntity();
 
         if (targetEnt && targetEnt->IsType(idLight::Type)) {
-            idLight* light = static_cast<idLight*>(targetEnt);
+            idLight *light = static_cast<idLight *>(targetEnt);
             light->lightParent = this;
 
             // explicitly delete any sounds on the entity
@@ -1069,7 +1069,7 @@ void idLight::ClientPredictionThink(void) {
 idLight::WriteToSnapshot
 ================
 */
-void idLight::WriteToSnapshot(idBitMsgDelta& msg) const {
+void idLight::WriteToSnapshot(idBitMsgDelta &msg) const {
 
     GetPhysics()->WriteToSnapshot(msg);
     WriteBindToSnapshot(msg);
@@ -1108,7 +1108,7 @@ void idLight::WriteToSnapshot(idBitMsgDelta& msg) const {
 idLight::ReadFromSnapshot
 ================
 */
-void idLight::ReadFromSnapshot(const idBitMsgDelta& msg) {
+void idLight::ReadFromSnapshot(const idBitMsgDelta &msg) {
     idVec4  shaderColor;
     int     oldCurrentLevel = currentLevel;
     idVec3  oldBaseColor = baseColor;
@@ -1172,7 +1172,7 @@ void idLight::ReadFromSnapshot(const idBitMsgDelta& msg) {
 idLight::ClientReceiveEvent
 ================
 */
-bool idLight::ClientReceiveEvent(int event, int time, const idBitMsg& msg) {
+bool idLight::ClientReceiveEvent(int event, int time, const idBitMsg &msg) {
 
     switch (event) {
         case EVENT_BECOMEBROKEN: {

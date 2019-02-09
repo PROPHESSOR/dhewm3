@@ -62,7 +62,7 @@ typedef enum {
     DECLAF_JOINTMOD_BOTH
 } declAFJointMod_t;
 
-typedef bool (*getJointTransform_t)(void* model, const idJointMat* frame, const char* jointName, idVec3& origin, idMat3& axis);
+typedef bool (*getJointTransform_t)(void *model, const idJointMat *frame, const char *jointName, idVec3 &origin, idMat3 &axis);
 
 class idAFVector {
   public:
@@ -78,14 +78,14 @@ class idAFVector {
   public:
     idAFVector(void);
 
-    bool                    Parse(idLexer& src);
-    bool                    Finish(const char* fileName, const getJointTransform_t GetJointTransform, const idJointMat* frame, void* model) const;
-    bool                    Write(idFile* f) const;
-    const char*             ToString(idStr& str, const int precision = 8);
-    const idVec3&           ToVec3(void) const {
+    bool                    Parse(idLexer &src);
+    bool                    Finish(const char *fileName, const getJointTransform_t GetJointTransform, const idJointMat *frame, void *model) const;
+    bool                    Write(idFile *f) const;
+    const char             *ToString(idStr &str, const int precision = 8);
+    const idVec3           &ToVec3(void) const {
         return vec;
     }
-    idVec3&                 ToVec3(void) {
+    idVec3                 &ToVec3(void) {
         return vec;
     }
 
@@ -117,7 +117,7 @@ class idDeclAF_Body {
     idAFVector              frictionDirection;
     idAFVector              contactMotorDirection;
   public:
-    void                    SetDefault(const idDeclAF* file);
+    void                    SetDefault(const idDeclAF *file);
 };
 
 class idDeclAF_Constraint {
@@ -146,7 +146,7 @@ class idDeclAF_Constraint {
     float                   limitAngles[3];
 
   public:
-    void                    SetDefault(const idDeclAF* file);
+    void                    SetDefault(const idDeclAF *file);
 };
 
 class idDeclAF : public idDecl {
@@ -156,27 +156,27 @@ class idDeclAF : public idDecl {
     virtual                 ~idDeclAF(void);
 
     virtual size_t          Size(void) const;
-    virtual const char*     DefaultDefinition(void) const;
-    virtual bool            Parse(const char* text, const int textLength);
+    virtual const char     *DefaultDefinition(void) const;
+    virtual bool            Parse(const char *text, const int textLength);
     virtual void            FreeData(void);
 
-    virtual void            Finish(const getJointTransform_t GetJointTransform, const idJointMat* frame, void* model) const;
+    virtual void            Finish(const getJointTransform_t GetJointTransform, const idJointMat *frame, void *model) const;
 
     bool                    Save(void);
 
-    void                    NewBody(const char* name);
-    void                    RenameBody(const char* oldName, const char* newName);
-    void                    DeleteBody(const char* name);
+    void                    NewBody(const char *name);
+    void                    RenameBody(const char *oldName, const char *newName);
+    void                    DeleteBody(const char *name);
 
-    void                    NewConstraint(const char* name);
-    void                    RenameConstraint(const char* oldName, const char* newName);
-    void                    DeleteConstraint(const char* name);
+    void                    NewConstraint(const char *name);
+    void                    RenameConstraint(const char *oldName, const char *newName);
+    void                    DeleteConstraint(const char *name);
 
-    static int              ContentsFromString(const char* str);
-    static const char*      ContentsToString(const int contents, idStr& str);
+    static int              ContentsFromString(const char *str);
+    static const char      *ContentsToString(const int contents, idStr &str);
 
-    static declAFJointMod_t JointModFromString(const char* str);
-    static const char*      JointModToString(declAFJointMod_t jointMod);
+    static declAFJointMod_t JointModFromString(const char *str);
+    static const char      *JointModToString(declAFJointMod_t jointMod);
 
   public:
     bool                    modified;
@@ -197,29 +197,29 @@ class idDeclAF : public idDecl {
     int                     contents;
     int                     clipMask;
     bool                    selfCollision;
-    idList<idDeclAF_Body*>         bodies;
-    idList<idDeclAF_Constraint*>   constraints;
+    idList<idDeclAF_Body *>         bodies;
+    idList<idDeclAF_Constraint *>   constraints;
 
   private:
-    bool                    ParseContents(idLexer& src, int& c) const;
-    bool                    ParseBody(idLexer& src);
-    bool                    ParseFixed(idLexer& src);
-    bool                    ParseBallAndSocketJoint(idLexer& src);
-    bool                    ParseUniversalJoint(idLexer& src);
-    bool                    ParseHinge(idLexer& src);
-    bool                    ParseSlider(idLexer& src);
-    bool                    ParseSpring(idLexer& src);
-    bool                    ParseSettings(idLexer& src);
+    bool                    ParseContents(idLexer &src, int &c) const;
+    bool                    ParseBody(idLexer &src);
+    bool                    ParseFixed(idLexer &src);
+    bool                    ParseBallAndSocketJoint(idLexer &src);
+    bool                    ParseUniversalJoint(idLexer &src);
+    bool                    ParseHinge(idLexer &src);
+    bool                    ParseSlider(idLexer &src);
+    bool                    ParseSpring(idLexer &src);
+    bool                    ParseSettings(idLexer &src);
 
-    bool                    WriteBody(idFile* f, const idDeclAF_Body& body) const;
-    bool                    WriteFixed(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteBallAndSocketJoint(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteUniversalJoint(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteHinge(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteSlider(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteSpring(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteConstraint(idFile* f, const idDeclAF_Constraint& c) const;
-    bool                    WriteSettings(idFile* f) const;
+    bool                    WriteBody(idFile *f, const idDeclAF_Body &body) const;
+    bool                    WriteFixed(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteBallAndSocketJoint(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteUniversalJoint(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteHinge(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteSlider(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteSpring(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteConstraint(idFile *f, const idDeclAF_Constraint &c) const;
+    bool                    WriteSettings(idFile *f) const;
 
     bool                    RebuildTextSource(void);
 };

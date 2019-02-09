@@ -35,13 +35,13 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/RenderWindow.h"
 
-idRenderWindow::idRenderWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idRenderWindow::idRenderWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idRenderWindow::idRenderWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idRenderWindow::idRenderWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -73,7 +73,7 @@ void idRenderWindow::BuildAnimation(int time) {
 
     if (animName.Length() && animClass.Length()) {
         worldEntity.numJoints = worldEntity.hModel->NumJoints();
-        worldEntity.joints = (idJointMat*)Mem_Alloc16(worldEntity.numJoints * sizeof(*worldEntity.joints));
+        worldEntity.joints = (idJointMat *)Mem_Alloc16(worldEntity.numJoints * sizeof(*worldEntity.joints));
         modelAnim = gameEdit->ANIM_GetAnimFromEntityDef(animClass, animName);
 
         if (modelAnim) {
@@ -181,7 +181,7 @@ void idRenderWindow::PostParse() {
 
 //
 //
-idWinVar* idRenderWindow::GetWinVarByName(const char* _name, bool fixup, drawWin_t** owner) {
+idWinVar *idRenderWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner) {
 //
     if (idStr::Icmp(_name, "model") == 0) {
         return &modelName;
@@ -221,7 +221,7 @@ idWinVar* idRenderWindow::GetWinVarByName(const char* _name, bool fixup, drawWin
 //
 }
 
-bool idRenderWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idRenderWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "animClass") == 0) {
         ParseString(src, animClass);
         return true;

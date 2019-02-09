@@ -70,15 +70,15 @@ properly without knowing the texture coordinate stretching.
 We can assume constant and equal ST vectors for walls, but not for characters.
 =================
 */
-static void R_HeightmapToNormalMap(byte* data, int width, int height, float scale) {
+static void R_HeightmapToNormalMap(byte *data, int width, int height, float scale) {
     int     i, j;
-    byte*    depth;
+    byte    *depth;
 
     scale = scale / 256;
 
     // copy and convert to grey scale
     j = width * height;
-    depth = (byte*)R_StaticAlloc(j);
+    depth = (byte *)R_StaticAlloc(j);
 
     for (i = 0 ; i < j ; i++) {
         depth[i] = (data[i*4] + data[i*4+1] + data[i*4+2]) / 3;
@@ -136,7 +136,7 @@ static void R_HeightmapToNormalMap(byte* data, int width, int height, float scal
 R_ImageScale
 =================
 */
-static void R_ImageScale(byte* data, int width, int height, float scale[4]) {
+static void R_ImageScale(byte *data, int width, int height, float scale[4]) {
     int     i, j;
     int     c;
 
@@ -160,7 +160,7 @@ static void R_ImageScale(byte* data, int width, int height, float scale[4]) {
 R_InvertAlpha
 =================
 */
-static void R_InvertAlpha(byte* data, int width, int height) {
+static void R_InvertAlpha(byte *data, int width, int height) {
     int     i;
     int     c;
 
@@ -176,7 +176,7 @@ static void R_InvertAlpha(byte* data, int width, int height) {
 R_InvertColor
 =================
 */
-static void R_InvertColor(byte* data, int width, int height) {
+static void R_InvertColor(byte *data, int width, int height) {
     int     i;
     int     c;
 
@@ -196,9 +196,9 @@ R_AddNormalMaps
 
 ===================
 */
-static void R_AddNormalMaps(byte* data1, int width1, int height1, byte* data2, int width2, int height2) {
+static void R_AddNormalMaps(byte *data1, int width1, int height1, byte *data2, int width2, int height2) {
     int     i, j;
-    byte*    newMap;
+    byte    *newMap;
 
     // resample pic2 to the same size as pic1
     if (width2 != width1 || height2 != height1) {
@@ -211,7 +211,7 @@ static void R_AddNormalMaps(byte* data1, int width1, int height1, byte* data2, i
     // add the normal change from the second and renormalize
     for (i = 0 ; i < height1 ; i++) {
         for (j = 0 ; j < width1 ; j++) {
-            byte*    d1, *d2;
+            byte    *d1, *d2;
             idVec3  n;
             float   len;
 
@@ -251,18 +251,18 @@ static void R_AddNormalMaps(byte* data1, int width1, int height1, byte* data2, i
 R_SmoothNormalMap
 ================
 */
-static void R_SmoothNormalMap(byte* data, int width, int height) {
-    byte*    orig;
+static void R_SmoothNormalMap(byte *data, int width, int height) {
+    byte    *orig;
     int     i, j, k, l;
     idVec3  normal;
-    byte*    out;
+    byte    *out;
     static float    factors[3][3] = {
         { 1, 1, 1 },
         { 1, 1, 1 },
         { 1, 1, 1 }
     };
 
-    orig = (byte*)R_StaticAlloc(width * height * 4);
+    orig = (byte *)R_StaticAlloc(width * height * 4);
     memcpy(orig, data, width * height * 4);
 
     for (i = 0 ; i < width ; i++) {
@@ -271,7 +271,7 @@ static void R_SmoothNormalMap(byte* data, int width, int height) {
 
             for (k = -1 ; k < 2 ; k++) {
                 for (l = -1 ; l < 2 ; l++) {
-                    byte*    in;
+                    byte    *in;
 
                     in = orig + (((j+l)&(height-1))*width + ((i+k)&(width-1))) * 4;
 
@@ -308,10 +308,10 @@ R_ImageAdd
 
 ===================
 */
-static void R_ImageAdd(byte* data1, int width1, int height1, byte* data2, int width2, int height2) {
+static void R_ImageAdd(byte *data1, int width1, int height1, byte *data2, int width2, int height2) {
     int     i, j;
     int     c;
-    byte*    newMap;
+    byte    *newMap;
 
     // resample pic2 to the same size as pic1
     if (width2 != width1 || height2 != height1) {
@@ -348,7 +348,7 @@ static char parseBuffer[MAX_IMAGE_NAME];
 AppendToken
 ===================
 */
-static void AppendToken(idToken& token) {
+static void AppendToken(idToken &token) {
     // add a leading space if not at the beginning
     if (parseBuffer[0]) {
         idStr::Append(parseBuffer, MAX_IMAGE_NAME, " ");
@@ -362,7 +362,7 @@ static void AppendToken(idToken& token) {
 MatchAndAppendToken
 ===================
 */
-static void MatchAndAppendToken(idLexer& src, const char* match) {
+static void MatchAndAppendToken(idLexer &src, const char *match) {
     if (!src.ExpectTokenString(match)) {
         return;
     }
@@ -380,8 +380,8 @@ If both pic and timestamps are NULL, it will just advance past it, which can be
 used to parse an image program from a text stream.
 ===================
 */
-static bool R_ParseImageProgram_r(idLexer& src, byte** pic, int* width, int* height,
-                                  ID_TIME_T* timestamps, textureDepth_t* depth) {
+static bool R_ParseImageProgram_r(idLexer &src, byte **pic, int *width, int *height,
+                                  ID_TIME_T *timestamps, textureDepth_t *depth) {
     idToken     token;
     float       scale;
     ID_TIME_T       timestamp;
@@ -416,7 +416,7 @@ static bool R_ParseImageProgram_r(idLexer& src, byte** pic, int* width, int* hei
     }
 
     if (!token.Icmp("addnormals")) {
-        byte*    pic2;
+        byte    *pic2;
         int     width2, height2;
 
         MatchAndAppendToken(src, "(");
@@ -470,7 +470,7 @@ static bool R_ParseImageProgram_r(idLexer& src, byte** pic, int* width, int* hei
     }
 
     if (!token.Icmp("add")) {
-        byte*    pic2;
+        byte    *pic2;
         int     width2, height2;
 
         MatchAndAppendToken(src, "(");
@@ -628,7 +628,7 @@ static bool R_ParseImageProgram_r(idLexer& src, byte** pic, int* width, int* hei
 R_LoadImageProgram
 ===================
 */
-void R_LoadImageProgram(const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamps, textureDepth_t* depth) {
+void R_LoadImageProgram(const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamps, textureDepth_t *depth) {
     idLexer src;
 
     src.LoadMemory(name, strlen(name), name);
@@ -650,7 +650,7 @@ void R_LoadImageProgram(const char* name, byte** pic, int* width, int* height, I
 R_ParsePastImageProgram
 ===================
 */
-const char* R_ParsePastImageProgram(idLexer& src) {
+const char *R_ParsePastImageProgram(idLexer &src) {
     parseBuffer[0] = 0;
     R_ParseImageProgram_r(src, NULL, NULL, NULL, NULL, NULL);
     return parseBuffer;

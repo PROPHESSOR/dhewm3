@@ -133,10 +133,10 @@ UploadCompressedNormalMap
 Create a 256 color palette to be used by compressed normal maps
 ==================
 */
-void idImage::UploadCompressedNormalMap(int width, int height, const byte* rgba, int mipLevel) {
-    byte*    normals;
-    const byte*  in;
-    byte*    out;
+void idImage::UploadCompressedNormalMap(int width, int height, const byte *rgba, int mipLevel) {
+    byte    *normals;
+    const byte  *in;
+    byte    *out;
     int     i, j;
     int     x, y, z;
     int     row;
@@ -144,7 +144,7 @@ void idImage::UploadCompressedNormalMap(int width, int height, const byte* rgba,
     // OpenGL's pixel packing rule
     row = width < 4 ? 4 : width;
 
-    normals = (byte*)_alloca(row * height);
+    normals = (byte *)_alloca(row * height);
 
     if (!normals) {
         common->Error("R_UploadCompressedNormalMap: _alloca failed");
@@ -181,7 +181,7 @@ void idImage::UploadCompressedNormalMap(int width, int height, const byte* rgba,
         if (globalImages->image_writeNormalTGAPalletized.GetBool()) {
             char filename[MAX_IMAGE_NAME];
             ImageProgramStringToCompressedFileName(imgName, filename);
-            char* ext = strrchr(filename, '.');
+            char *ext = strrchr(filename, '.');
 
             if (ext) {
                 strcpy(ext, "_pal.tga");
@@ -233,10 +233,10 @@ SelectInternalFormat
 This may need to scan six cube map images
 ===============
 */
-GLenum idImage::SelectInternalFormat(const byte** dataPtrs, int numDataPtrs, int width, int height,
+GLenum idImage::SelectInternalFormat(const byte **dataPtrs, int numDataPtrs, int width, int height,
                                      textureDepth_t minimumDepth) const {
     int     i, c;
-    const byte*  scan;
+    const byte  *scan;
     int     rgbOr, rgbAnd, aOr, aAnd;
     int     rgbDiffer, rgbaDiffer;
 
@@ -460,7 +460,7 @@ idImage::Downsize
 helper function that takes the current width/height and might make them smaller
 ================
 */
-void idImage::GetDownsize(int& scaled_width, int& scaled_height) const {
+void idImage::GetDownsize(int &scaled_width, int &scaled_height) const {
     int size = 0;
 
     // perform optional picmip operation to save texture memory
@@ -546,13 +546,13 @@ There is no way to specify explicit mip map levels
 
 ================
 */
-void idImage::GenerateImage(const byte* pic, int width, int height,
+void idImage::GenerateImage(const byte *pic, int width, int height,
                             textureFilter_t filterParm, bool allowDownSizeParm,
                             textureRepeat_t repeatParm, textureDepth_t depthParm) {
     bool    preserveBorder;
-    byte*        scaledBuffer;
+    byte        *scaledBuffer;
     int         scaled_width, scaled_height;
-    byte*        shrunk;
+    byte        *shrunk;
 
     PurgeImage();
 
@@ -599,7 +599,7 @@ void idImage::GenerateImage(const byte* pic, int width, int height,
     if ((scaled_width == width) && (scaled_height == height)) {
         // we must copy even if unchanged, because the border zeroing
         // would otherwise modify const data
-        scaledBuffer = (byte*)R_StaticAlloc(sizeof(unsigned) * scaled_width * scaled_height);
+        scaledBuffer = (byte *)R_StaticAlloc(sizeof(unsigned) * scaled_width * scaled_height);
         memcpy(scaledBuffer, pic, width*height*4);
     } else {
         // resample down as needed (FIXME: this doesn't seem like it resamples anymore!)
@@ -649,7 +649,7 @@ void idImage::GenerateImage(const byte* pic, int width, int height,
 
         rgba[0] = rgba[1] = rgba[2] = 0;
         rgba[3] = 255;
-        R_SetBorderTexels((byte*)scaledBuffer, width, height, rgba);
+        R_SetBorderTexels((byte *)scaledBuffer, width, height, rgba);
     }
 
     if (repeat == TR_CLAMP_TO_ZERO_ALPHA) {
@@ -657,14 +657,14 @@ void idImage::GenerateImage(const byte* pic, int width, int height,
 
         rgba[0] = rgba[1] = rgba[2] = 255;
         rgba[3] = 0;
-        R_SetBorderTexels((byte*)scaledBuffer, width, height, rgba);
+        R_SetBorderTexels((byte *)scaledBuffer, width, height, rgba);
     }
 
     if (generatorFunction == NULL && ((depth == TD_BUMP && globalImages->image_writeNormalTGA.GetBool()) || (depth != TD_BUMP && globalImages->image_writeTGA.GetBool()))) {
         // Optionally write out the texture to a .tga
         char filename[MAX_IMAGE_NAME];
         ImageProgramStringToCompressedFileName(imgName, filename);
-        char* ext = strrchr(filename, '.');
+        char *ext = strrchr(filename, '.');
 
         if (ext) {
             strcpy(ext, ".tga");
@@ -750,7 +750,7 @@ void idImage::GenerateImage(const byte* pic, int width, int height,
         // rasterizer's texture level selection algorithm
         // Changing the color doesn't help with lumminance/alpha/intensity formats...
         if (depth == TD_DIFFUSE && globalImages->image_colorMipLevels.GetBool()) {
-            R_BlendOverTexture((byte*)scaledBuffer, scaled_width * scaled_height, mipBlendColors[miplevel]);
+            R_BlendOverTexture((byte *)scaledBuffer, scaled_width * scaled_height, mipBlendColors[miplevel]);
         }
 
         // upload the mip map
@@ -778,7 +778,7 @@ void idImage::GenerateImage(const byte* pic, int width, int height,
 Generate3DImage
 ==================
 */
-void idImage::Generate3DImage(const byte* pic, int width, int height, int picDepth,
+void idImage::Generate3DImage(const byte *pic, int width, int height, int picDepth,
                               textureFilter_t filterParm, bool allowDownSizeParm,
                               textureRepeat_t repeatParm, textureDepth_t minDepthParm) {
     int         scaled_width, scaled_height, scaled_depth;
@@ -831,9 +831,9 @@ void idImage::Generate3DImage(const byte* pic, int width, int height, int picDep
 
     // create and upload the mip map levels
     int     miplevel;
-    byte*    scaledBuffer, *shrunk;
+    byte    *scaledBuffer, *shrunk;
 
-    scaledBuffer = (byte*)R_StaticAlloc(scaled_width * scaled_height * scaled_depth * 4);
+    scaledBuffer = (byte *)R_StaticAlloc(scaled_width * scaled_height * scaled_depth * 4);
     memcpy(scaledBuffer, pic, scaled_width * scaled_height * scaled_depth * 4);
     miplevel = 0;
 
@@ -927,7 +927,7 @@ GenerateCubeImage
 Non-square cube sides are not allowed
 ====================
 */
-void idImage::GenerateCubeImage(const byte* pic[6], int size,
+void idImage::GenerateCubeImage(const byte *pic[6], int size,
                                 textureFilter_t filterParm, bool allowDownSizeParm,
                                 textureDepth_t depthParm) {
     int         scaled_width, scaled_height;
@@ -1006,7 +1006,7 @@ void idImage::GenerateCubeImage(const byte* pic[6], int size,
 
     // create and upload the mip map levels
     int     miplevel;
-    byte*    shrunk[6];
+    byte    *shrunk[6];
 
     for (i = 0 ; i < 6 ; i++) {
         shrunk[i] = R_MipMap(pic[i], scaled_width, scaled_height, false);
@@ -1016,7 +1016,7 @@ void idImage::GenerateCubeImage(const byte* pic[6], int size,
 
     while (scaled_width > 1) {
         for (i = 0 ; i < 6 ; i++) {
-            byte*    shrunken;
+            byte    *shrunken;
 
             qglTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X_EXT+i, miplevel, internalFormat,
                           scaled_width / 2, scaled_height / 2, 0,
@@ -1047,9 +1047,9 @@ void idImage::GenerateCubeImage(const byte* pic[6], int size,
 ImageProgramStringToFileCompressedFileName
 ================
 */
-void idImage::ImageProgramStringToCompressedFileName(const char* imageProg, char* fileName) const {
-    const char*  s;
-    char*    f;
+void idImage::ImageProgramStringToCompressedFileName(const char *imageProg, char *fileName) const {
+    const char  *s;
+    char    *f;
 
     strcpy(fileName, "dds/");
     f = fileName + strlen(fileName);
@@ -1290,7 +1290,7 @@ void idImage::WritePrecompressedImage() {
         }
     }
 
-    idFile* f = fileSystem->OpenFileWrite(filename);
+    idFile *f = fileSystem->OpenFileWrite(filename);
 
     if (f == NULL) {
         common->Warning("Could not open %s trying to write precompressed image", filename);
@@ -1311,7 +1311,7 @@ void idImage::WritePrecompressedImage() {
     int uh = uploadHeight;
 
     // Will be allocated first time through the loop
-    byte* data = NULL;
+    byte *data = NULL;
 
     for (int level = 0 ; level < numLevels ; level++) {
 
@@ -1325,7 +1325,7 @@ void idImage::WritePrecompressedImage() {
         }
 
         if (data == NULL) {
-            data = (byte*)R_StaticAlloc(size);
+            data = (byte *)R_StaticAlloc(size);
         }
 
         if (FormatIsDXT(altInternalFormat)) {
@@ -1397,7 +1397,7 @@ bool idImage::ShouldImageBePartialCached() {
     }
 
     // open it and get the file size
-    idFile* f;
+    idFile *f;
 
     f = fileSystem->OpenFileRead(filename);
 
@@ -1468,7 +1468,7 @@ bool idImage::CheckPrecompressedImage(bool fullLoad) {
     timestamp = precompTimestamp;
 
     // open it and just read the header
-    idFile* f;
+    idFile *f;
 
     f = fileSystem->OpenFileRead(filename);
 
@@ -1487,14 +1487,14 @@ bool idImage::CheckPrecompressedImage(bool fullLoad) {
         len = globalImages->image_cacheMinK.GetInteger() * 1024;
     }
 
-    byte* data = (byte*)R_StaticAlloc(len);
+    byte *data = (byte *)R_StaticAlloc(len);
 
     f->Read(data, len);
 
     fileSystem->CloseFile(f);
 
-    unsigned int magic = LittleInt(*(unsigned int*)data);
-    ddsFileHeader_t* _header = (ddsFileHeader_t*)(data + 4);
+    unsigned int magic = LittleInt(*(unsigned int *)data);
+    ddsFileHeader_t *_header = (ddsFileHeader_t *)(data + 4);
     int ddspf_dwFlags = LittleInt(_header->ddspf.dwFlags);
 
     if (magic != DDS_MAKEFOURCC('D', 'D', 'S', ' ')) {
@@ -1527,8 +1527,8 @@ or by the backend after a background read of the file
 has completed
 ===================
 */
-void idImage::UploadPrecompressedImage(byte* data, int len) {
-    ddsFileHeader_t* header = (ddsFileHeader_t*)(data + 4);
+void idImage::UploadPrecompressedImage(byte *data, int len) {
+    ddsFileHeader_t *header = (ddsFileHeader_t *)(data + 4);
 
     // ( not byte swapping dwReserved1 dwReserved2 )
     header->dwSize = LittleInt(header->dwSize);
@@ -1626,7 +1626,7 @@ void idImage::UploadPrecompressedImage(byte* data, int len) {
     int skipMip = 0;
     GetDownsize(uploadWidth, uploadHeight);
 
-    byte* imagedata = data + sizeof(ddsFileHeader_t) + 4;
+    byte *imagedata = data + sizeof(ddsFileHeader_t) + 4;
 
     for (int i = 0 ; i < numMipmaps; i++) {
         int size = 0;
@@ -1674,7 +1674,7 @@ On exit, the idImage will have a valid OpenGL texture number that can be bound
 */
 void    idImage::ActuallyLoadImage(bool checkForPrecompressed, bool fromBackEnd) {
     int     width, height;
-    byte*    pic;
+    byte    *pic;
 
     // this is the ONLY place generatorFunction will ever be called
     if (generatorFunction) {
@@ -1697,7 +1697,7 @@ void    idImage::ActuallyLoadImage(bool checkForPrecompressed, bool fromBackEnd)
     // load the image from disk
     //
     if (cubeFiles != CF_2D) {
-        byte*    pics[6];
+        byte    *pics[6];
 
         // we don't check for pre-compressed cube images currently
         R_LoadCubeImages(imgName, cubeFiles, pics, &width, &timestamp);
@@ -1708,7 +1708,7 @@ void    idImage::ActuallyLoadImage(bool checkForPrecompressed, bool fromBackEnd)
             return;
         }
 
-        GenerateCubeImage((const byte**)pics, width, filter, allowDownSize, depth);
+        GenerateCubeImage((const byte **)pics, width, filter, allowDownSize, depth);
         precompressedFile = false;
 
         for (int i = 0 ; i < 6 ; i++) {
@@ -1833,7 +1833,7 @@ void idImage::Bind() {
     frameUsed = backEnd.frameCount;
     bindCount++;
 
-    tmu_t*           tmu = &backEnd.glState.tmu[backEnd.glState.currenttmu];
+    tmu_t           *tmu = &backEnd.glState.tmu[backEnd.glState.currenttmu];
 
     // enable or disable apropriate texture modes
     if (tmu->textureType != type && (backEnd.glState.currenttmu <   glConfig.maxTextureUnits)) {
@@ -1975,11 +1975,11 @@ void idImage::CopyFramebuffer(int x, int y, int imageWidth, int imageHeight, boo
         if (potWidth == imageWidth && potHeight == imageHeight) {
             qglCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, x, y, imageWidth, imageHeight, 0);
         } else {
-            byte*    junk;
+            byte    *junk;
             // we need to create a dummy image with power of two dimensions,
             // then do a qglCopyTexSubImage2D of the data we want
             // this might be a 16+ meg allocation, which could fail on _alloca
-            junk = (byte*)Mem_Alloc(potWidth * potHeight * 4);
+            junk = (byte *)Mem_Alloc(potWidth * potHeight * 4);
             memset(junk, 0, potWidth * potHeight * 4);       //!@#
             #if 0 // Disabling because it's unnecessary and introduces a green strip on edge of _currentRender
 
@@ -2065,7 +2065,7 @@ RB_UploadScratchImage
 if rows = cols * 6, assume it is a cube map animation
 =============
 */
-void idImage::UploadScratch(const byte* data, int cols, int rows) {
+void idImage::UploadScratch(const byte *data, int cols, int rows) {
     int         i;
 
     // if rows = cols * 6, assume it is a cube map animation

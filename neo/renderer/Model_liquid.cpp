@@ -63,9 +63,9 @@ idRenderModelLiquid::GenerateSurface
 ====================
 */
 modelSurface_t idRenderModelLiquid::GenerateSurface(float lerp) {
-    srfTriangles_t*  tri;
+    srfTriangles_t  *tri;
     int             i, base;
-    idDrawVert*      vert;
+    idDrawVert      *vert;
     modelSurface_t  surf;
     float           inv_lerp;
 
@@ -129,7 +129,7 @@ modelSurface_t idRenderModelLiquid::GenerateSurface(float lerp) {
 idRenderModelLiquid::WaterDrop
 ====================
 */
-void idRenderModelLiquid::WaterDrop(int x, int y, float* page) {
+void idRenderModelLiquid::WaterDrop(int x, int y, float *page) {
     int     cx, cy;
     int     left,top,right,bottom;
     int     square;
@@ -184,12 +184,12 @@ void idRenderModelLiquid::WaterDrop(int x, int y, float* page) {
 idRenderModelLiquid::IntersectBounds
 ====================
 */
-void idRenderModelLiquid::IntersectBounds(const idBounds& bounds, float displacement) {
+void idRenderModelLiquid::IntersectBounds(const idBounds &bounds, float displacement) {
     int     cx, cy;
     int     left,top,right,bottom;
     //float up;
     float   down;
-    float*   pos;
+    float   *pos;
 
     left    = (int)(bounds[ 0 ].x / scale_x);
     right   = (int)(bounds[ 1 ].x / scale_x);
@@ -237,8 +237,8 @@ idRenderModelLiquid::Update
 */
 void idRenderModelLiquid::Update(void) {
     int     x, y;
-    float*   p2;
-    float*   p1;
+    float   *p2;
+    float   *p1;
     float   value;
 
     time += update_tics;
@@ -361,7 +361,7 @@ void idRenderModelLiquid::Reset() {
 idRenderModelLiquid::InitFromFile
 ====================
 */
-void idRenderModelLiquid::InitFromFile(const char* fileName) {
+void idRenderModelLiquid::InitFromFile(const char *fileName) {
     int             i, x, y;
     idToken         token;
     idParser        parser(LEXFL_ALLOWPATHNAMES | LEXFL_NOSTRINGESCAPECHARS);
@@ -490,8 +490,8 @@ void idRenderModelLiquid::InitFromFile(const char* fileName) {
 idRenderModelLiquid::InstantiateDynamicModel
 ====================
 */
-idRenderModel* idRenderModelLiquid::InstantiateDynamicModel(const struct renderEntity_s* ent, const struct viewDef_s* view, idRenderModel* cachedModel) {
-    idRenderModelStatic* staticModel;
+idRenderModel *idRenderModelLiquid::InstantiateDynamicModel(const struct renderEntity_s *ent, const struct viewDef_s *view, idRenderModel *cachedModel) {
+    idRenderModelStatic *staticModel;
     int     frames;
     int     t;
     float   lerp;
@@ -551,7 +551,7 @@ dynamicModel_t idRenderModelLiquid::IsDynamicModel() const {
 idRenderModelLiquid::Bounds
 ====================
 */
-idBounds idRenderModelLiquid::Bounds(const struct renderEntity_s* ent) const {
+idBounds idRenderModelLiquid::Bounds(const struct renderEntity_s *ent) const {
     // FIXME: need to do this better
     return bounds;
 }

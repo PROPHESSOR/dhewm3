@@ -74,9 +74,9 @@ idPlayerView::idPlayerView() {
 idPlayerView::Save
 ==============
 */
-void idPlayerView::Save(idSaveGame* savefile) const {
+void idPlayerView::Save(idSaveGame *savefile) const {
     int i;
-    const screenBlob_t* blob;
+    const screenBlob_t *blob;
 
     blob = &screenBlobs[ 0 ];
 
@@ -126,9 +126,9 @@ void idPlayerView::Save(idSaveGame* savefile) const {
 idPlayerView::Restore
 ==============
 */
-void idPlayerView::Restore(idRestoreGame* savefile) {
+void idPlayerView::Restore(idRestoreGame *savefile) {
     int i;
-    screenBlob_t* blob;
+    screenBlob_t *blob;
 
     blob = &screenBlobs[ 0 ];
 
@@ -169,7 +169,7 @@ void idPlayerView::Restore(idRestoreGame* savefile) {
 
     savefile->ReadAngles(shakeAng);
 
-    savefile->ReadObject(reinterpret_cast<idClass*&>(player));
+    savefile->ReadObject(reinterpret_cast<idClass *&>(player));
     savefile->ReadRenderView(view);
 }
 
@@ -178,7 +178,7 @@ void idPlayerView::Restore(idRestoreGame* savefile) {
 idPlayerView::SetPlayerEntity
 ==============
 */
-void idPlayerView::SetPlayerEntity(idPlayer* playerEnt) {
+void idPlayerView::SetPlayerEntity(idPlayer *playerEnt) {
     player = playerEnt;
 }
 
@@ -206,8 +206,8 @@ void idPlayerView::ClearEffects() {
 idPlayerView::GetScreenBlob
 ==============
 */
-screenBlob_t* idPlayerView::GetScreenBlob() {
-    screenBlob_t*    oldest = &screenBlobs[0];
+screenBlob_t *idPlayerView::GetScreenBlob() {
+    screenBlob_t    *oldest = &screenBlobs[0];
 
     for (int i = 1 ; i < MAX_SCREEN_BLOBS ; i++) {
         if (screenBlobs[i].finishTime < oldest->finishTime) {
@@ -226,7 +226,7 @@ LocalKickDir is the direction of force in the player's coordinate system,
 which will determine the head kick direction
 ==============
 */
-void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict* damageDef) {
+void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict *damageDef) {
     //
     // double vision effect
     //
@@ -283,11 +283,11 @@ void idPlayerView::DamageImpulse(idVec3 localKickDir, const idDict* damageDef) {
     float   blobTime = damageDef->GetFloat("blob_time");
 
     if (blobTime) {
-        screenBlob_t*    blob = GetScreenBlob();
+        screenBlob_t    *blob = GetScreenBlob();
         blob->startFadeTime = gameLocal.time;
         blob->finishTime = gameLocal.time + blobTime * g_blobTime.GetFloat();
 
-        const char* materialName = damageDef->GetString("mtr_blob");
+        const char *materialName = damageDef->GetString("mtr_blob");
         blob->material = declManager->FindMaterial(materialName);
         blob->x = damageDef->GetFloat("blob_x");
         blob->x += (gameLocal.random.RandomInt()&63) - 32;
@@ -364,7 +364,7 @@ idPlayerView::WeaponFireFeedback
 Called when a weapon fires, generates head twitches, etc
 ==================
 */
-void idPlayerView::WeaponFireFeedback(const idDict* weaponDef) {
+void idPlayerView::WeaponFireFeedback(const idDict *weaponDef) {
     int     recoilTime;
 
     recoilTime = weaponDef->GetInt("recoilTime");
@@ -443,7 +443,7 @@ idAngles idPlayerView::AngleOffset() const {
 idPlayerView::SingleView
 ==================
 */
-void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
+void idPlayerView::SingleView(idUserInterface *hud, const renderView_t *view) {
 
     // normal rendering
     if (!view) {
@@ -472,7 +472,7 @@ void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
     // draw screen blobs
     if (!pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool()) {
         for (int i = 0 ; i < MAX_SCREEN_BLOBS ; i++) {
-            screenBlob_t*    blob = &screenBlobs[i];
+            screenBlob_t    *blob = &screenBlobs[i];
 
             if (blob->finishTime <= gameLocal.time) {
                 continue;
@@ -547,7 +547,7 @@ void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
 
     // test a single material drawn over everything
     if (g_testPostProcess.GetString()[0]) {
-        const idMaterial* mtr = declManager->FindMaterial(g_testPostProcess.GetString(), false);
+        const idMaterial *mtr = declManager->FindMaterial(g_testPostProcess.GetString(), false);
 
         if (!mtr) {
             common->Printf("Material not found.\n");
@@ -564,7 +564,7 @@ void idPlayerView::SingleView(idUserInterface* hud, const renderView_t* view) {
 idPlayerView::DoubleVision
 ===================
 */
-void idPlayerView::DoubleVision(idUserInterface* hud, const renderView_t* view, int offset) {
+void idPlayerView::DoubleVision(idUserInterface *hud, const renderView_t *view, int offset) {
 
     if (!g_doubleVision.GetBool()) {
         SingleView(hud, view);
@@ -605,7 +605,7 @@ void idPlayerView::DoubleVision(idUserInterface* hud, const renderView_t* view, 
 idPlayerView::BerserkVision
 ===================
 */
-void idPlayerView::BerserkVision(idUserInterface* hud, const renderView_t* view) {
+void idPlayerView::BerserkVision(idUserInterface *hud, const renderView_t *view) {
     renderSystem->CropRenderSize(512, 256, true);
     SingleView(hud, view);
     renderSystem->CaptureRenderToImage("_scratch");
@@ -697,7 +697,7 @@ void idPlayerView::ScreenFade() {
 idPlayerView::InfluenceVision
 ===================
 */
-void idPlayerView::InfluenceVision(idUserInterface* hud, const renderView_t* view) {
+void idPlayerView::InfluenceVision(idUserInterface *hud, const renderView_t *view) {
 
     float distance = 0.0f;
     float pct = 1.0f;
@@ -730,8 +730,8 @@ void idPlayerView::InfluenceVision(idUserInterface* hud, const renderView_t* vie
 idPlayerView::RenderPlayerView
 ===================
 */
-void idPlayerView::RenderPlayerView(idUserInterface* hud) {
-    const renderView_t* view = player->GetRenderView();
+void idPlayerView::RenderPlayerView(idUserInterface *hud) {
+    const renderView_t *view = player->GetRenderView();
 
     if (g_skipViewEffects.GetBool()) {
         SingleView(hud, view);

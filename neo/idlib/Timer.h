@@ -47,10 +47,10 @@ class idTimer {
     idTimer(unsigned int ms);
     ~idTimer(void);
 
-    idTimer         operator+(const idTimer& t) const;
-    idTimer         operator-(const idTimer& t) const;
-    idTimer&        operator+=(const idTimer& t);
-    idTimer&        operator-=(const idTimer& t);
+    idTimer         operator+(const idTimer &t) const;
+    idTimer         operator-(const idTimer &t) const;
+    idTimer        &operator+=(const idTimer &t);
+    idTimer        &operator-=(const idTimer &t);
 
     void            Start(void);
     void            Stop(void);
@@ -99,7 +99,7 @@ ID_INLINE idTimer::~idTimer(void) {
 idTimer::operator+
 =================
 */
-ID_INLINE idTimer idTimer::operator+(const idTimer& t) const {
+ID_INLINE idTimer idTimer::operator+(const idTimer &t) const {
     assert(state == TS_STOPPED && t.state == TS_STOPPED);
     return idTimer(ms + t.ms);
 }
@@ -109,7 +109,7 @@ ID_INLINE idTimer idTimer::operator+(const idTimer& t) const {
 idTimer::operator-
 =================
 */
-ID_INLINE idTimer idTimer::operator-(const idTimer& t) const {
+ID_INLINE idTimer idTimer::operator-(const idTimer &t) const {
     assert(state == TS_STOPPED && t.state == TS_STOPPED);
     return idTimer(ms - t.ms);
 }
@@ -119,7 +119,7 @@ ID_INLINE idTimer idTimer::operator-(const idTimer& t) const {
 idTimer::operator+=
 =================
 */
-ID_INLINE idTimer& idTimer::operator+=(const idTimer& t) {
+ID_INLINE idTimer &idTimer::operator+=(const idTimer &t) {
     assert(state == TS_STOPPED && t.state == TS_STOPPED);
     ms += t.ms;
     return *this;
@@ -130,7 +130,7 @@ ID_INLINE idTimer& idTimer::operator+=(const idTimer& t) {
 idTimer::operator-=
 =================
 */
-ID_INLINE idTimer& idTimer::operator-=(const idTimer& t) {
+ID_INLINE idTimer &idTimer::operator-=(const idTimer &t) {
     assert(state == TS_STOPPED && t.state == TS_STOPPED);
     ms -= t.ms;
     return *this;
@@ -191,15 +191,15 @@ class idTimerReport {
     idTimerReport(void);
     ~idTimerReport(void);
 
-    void            SetReportName(const char* name);
-    int             AddReport(const char* name);
+    void            SetReportName(const char *name);
+    int             AddReport(const char *name);
     void            Clear(void);
     void            Reset(void);
     void            PrintReport(void);
-    void            AddTime(const char* name, idTimer* time);
+    void            AddTime(const char *name, idTimer *time);
 
   private:
-    idList<idTimer*>timers;
+    idList<idTimer *>timers;
     idStrList       names;
     idStr           reportName;
 };

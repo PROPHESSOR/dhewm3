@@ -47,7 +47,7 @@ If you have questions concerning this license or the applicable additional terms
 * BOEntity
 ****************************************************************************
 */
-BOEntity::BOEntity(idGameBustOutWindow* _game) {
+BOEntity::BOEntity(idGameBustOutWindow *_game) {
     game = _game;
     visible = true;
 
@@ -72,7 +72,7 @@ BOEntity::~BOEntity() {
 BOEntity::WriteToSaveGame
 ======================
 */
-void BOEntity::WriteToSaveGame(idFile* savefile) {
+void BOEntity::WriteToSaveGame(idFile *savefile) {
 
     savefile->Write(&visible, sizeof(visible));
 
@@ -95,7 +95,7 @@ void BOEntity::WriteToSaveGame(idFile* savefile) {
 BOEntity::ReadFromSaveGame
 ======================
 */
-void BOEntity::ReadFromSaveGame(idFile* savefile, idGameBustOutWindow* _game) {
+void BOEntity::ReadFromSaveGame(idFile *savefile, idGameBustOutWindow *_game) {
     game = _game;
 
     savefile->Read(&visible, sizeof(visible));
@@ -120,7 +120,7 @@ void BOEntity::ReadFromSaveGame(idFile* savefile, idGameBustOutWindow* _game) {
 BOEntity::SetMaterial
 ======================
 */
-void BOEntity::SetMaterial(const char* name) {
+void BOEntity::SetMaterial(const char *name) {
     materialName = name;
     material = declManager->FindMaterial(name);
     material->SetSort(SS_GUI);
@@ -187,7 +187,7 @@ void BOEntity::Update(float timeslice, int guiTime) {
 BOEntity::Draw
 ======================
 */
-void BOEntity::Draw(idDeviceContext* dc) {
+void BOEntity::Draw(idDeviceContext *dc) {
     if (visible) {
         dc->DrawMaterialRotated(position.x, position.y, width, height, material, color, 1.0f, 1.0f, DEG2RAD(0.f));
     }
@@ -205,7 +205,7 @@ BOBrick::BOBrick(void) {
     isBroken = false;
 }
 
-BOBrick::BOBrick(BOEntity* _ent, float _x, float _y, float _width, float _height) {
+BOBrick::BOBrick(BOEntity *_ent, float _x, float _y, float _width, float _height) {
     ent = _ent;
     x = _x;
     y = _y;
@@ -231,7 +231,7 @@ BOBrick::~BOBrick(void) {
 BOBrick::WriteToSaveGame
 ======================
 */
-void BOBrick::WriteToSaveGame(idFile* savefile) {
+void BOBrick::WriteToSaveGame(idFile *savefile) {
     savefile->Write(&x, sizeof(x));
     savefile->Write(&y, sizeof(y));
     savefile->Write(&width, sizeof(width));
@@ -249,7 +249,7 @@ void BOBrick::WriteToSaveGame(idFile* savefile) {
 BOBrick::ReadFromSaveGame
 ======================
 */
-void BOBrick::ReadFromSaveGame(idFile* savefile, idGameBustOutWindow* game) {
+void BOBrick::ReadFromSaveGame(idFile *savefile, idGameBustOutWindow *game) {
     savefile->Read(&x, sizeof(x));
     savefile->Read(&y, sizeof(y));
     savefile->Read(&width, sizeof(width));
@@ -407,13 +407,13 @@ collideDir_t BOBrick::checkCollision(idVec2 pos, idVec2 vel) {
 * idGameBustOutWindow
 ****************************************************************************
 */
-idGameBustOutWindow::idGameBustOutWindow(idDeviceContext* d, idUserInterfaceLocal* g) : idWindow(d, g) {
+idGameBustOutWindow::idGameBustOutWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
     dc = d;
     gui = g;
     CommonInit();
 }
 
-idGameBustOutWindow::idGameBustOutWindow(idUserInterfaceLocal* g) : idWindow(g) {
+idGameBustOutWindow::idGameBustOutWindow(idUserInterfaceLocal *g) : idWindow(g) {
     gui = g;
     CommonInit();
 }
@@ -429,7 +429,7 @@ idGameBustOutWindow::~idGameBustOutWindow() {
 idGameBustOutWindow::WriteToSaveGame
 =============================
 */
-void idGameBustOutWindow::WriteToSaveGame(idFile* savefile) {
+void idGameBustOutWindow::WriteToSaveGame(idFile *savefile) {
     idWindow::WriteToSaveGame(savefile);
 
     gamerunning.WriteToSaveGame(savefile);
@@ -507,7 +507,7 @@ void idGameBustOutWindow::WriteToSaveGame(idFile* savefile) {
 idGameBustOutWindow::ReadFromSaveGame
 =============================
 */
-void idGameBustOutWindow::ReadFromSaveGame(idFile* savefile) {
+void idGameBustOutWindow::ReadFromSaveGame(idFile *savefile) {
     idWindow::ReadFromSaveGame(savefile);
 
     // Clear out existing paddle and entities from GUI load
@@ -548,7 +548,7 @@ void idGameBustOutWindow::ReadFromSaveGame(idFile* savefile) {
     savefile->Read(&numberOfEnts, sizeof(numberOfEnts));
 
     for (i=0; i<numberOfEnts; i++) {
-        BOEntity* ent;
+        BOEntity *ent;
 
         ent = new BOEntity(this);
         ent->ReadFromSaveGame(savefile, this);
@@ -584,7 +584,7 @@ void idGameBustOutWindow::ReadFromSaveGame(idFile* savefile) {
         savefile->Read(&numberOfEnts, sizeof(numberOfEnts));
 
         for (i=0; i<numberOfEnts; i++) {
-            BOBrick* brick = new BOBrick();
+            BOBrick *brick = new BOBrick();
             brick->ReadFromSaveGame(savefile, this);
             board[row].Append(brick);
         }
@@ -625,7 +625,7 @@ idGameBustOutWindow::CommonInit
 =============================
 */
 void idGameBustOutWindow::CommonInit() {
-    BOEntity* ent;
+    BOEntity *ent;
 
     // Precache images
     declManager->FindMaterial("game/bustout/ball");
@@ -659,11 +659,11 @@ void idGameBustOutWindow::CommonInit() {
 idGameBustOutWindow::HandleEvent
 =============================
 */
-const char* idGameBustOutWindow::HandleEvent(const sysEvent_t* event, bool* updateVisuals) {
+const char *idGameBustOutWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
     int key = event->evValue;
 
     // need to call this to allow proper focus and capturing on embedded children
-    const char* ret = idWindow::HandleEvent(event, updateVisuals);
+    const char *ret = idWindow::HandleEvent(event, updateVisuals);
 
     if (event->evType == SE_KEY) {
 
@@ -674,7 +674,7 @@ const char* idGameBustOutWindow::HandleEvent(const sysEvent_t* event, bool* upda
         if (key == K_MOUSE1) {
             // Mouse was clicked
             if (ballsInPlay == 0) {
-                BOEntity* ball = CreateNewBall();
+                BOEntity *ball = CreateNewBall();
 
                 ball->SetVisible(true);
                 ball->position.x = paddle->ent->position.x + 48.f;
@@ -698,7 +698,7 @@ const char* idGameBustOutWindow::HandleEvent(const sysEvent_t* event, bool* upda
 idGameBustOutWindow::ParseInternalVar
 =============================
 */
-bool idGameBustOutWindow::ParseInternalVar(const char* _name, idParser* src) {
+bool idGameBustOutWindow::ParseInternalVar(const char *_name, idParser *src) {
     if (idStr::Icmp(_name, "gamerunning") == 0) {
         gamerunning = src->ParseBool();
         return true;
@@ -740,8 +740,8 @@ bool idGameBustOutWindow::ParseInternalVar(const char* _name, idParser* src) {
 idGameBustOutWindow::GetWinVarByName
 =============================
 */
-idWinVar* idGameBustOutWindow::GetWinVarByName(const char* _name, bool winLookup, drawWin_t** owner) {
-    idWinVar* retVar = NULL;
+idWinVar *idGameBustOutWindow::GetWinVarByName(const char *_name, bool winLookup, drawWin_t **owner) {
+    idWinVar *retVar = NULL;
 
     if (idStr::Icmp(_name, "gamerunning") == 0) {
         retVar = &gamerunning;
@@ -838,7 +838,7 @@ void idGameBustOutWindow::ClearBoard(void) {
     for (i=0; i<BOARD_ROWS; i++) {
         for (j=0; j<board[i].Num(); j++) {
 
-            BOBrick* brick = board[i][j];
+            BOBrick *brick = board[i][j];
             brick->ent->removed = true;
         }
 
@@ -882,19 +882,19 @@ void idGameBustOutWindow::LoadBoardFiles(void) {
     int w,h;
     ID_TIME_T time;
     int boardSize;
-    byte* currentBoard;
+    byte *currentBoard;
 
     if (boardDataLoaded) {
         return;
     }
 
     boardSize = 9 * 12 * 4;
-    levelBoardData = (byte*)Mem_Alloc(boardSize * numLevels);
+    levelBoardData = (byte *)Mem_Alloc(boardSize * numLevels);
 
     currentBoard = levelBoardData;
 
     for (i=0; i<numLevels; i++) {
-        byte* pic;
+        byte *pic;
         idStr   name = "guis/assets/bustout/level";
         name += (i+1);
         name += ".tga";
@@ -925,7 +925,7 @@ void idGameBustOutWindow::SetCurrentBoard(void) {
     int i,j;
     int realLevel = ((currentLevel-1) % numLevels);
     int boardSize;
-    byte* currentBoard;
+    byte *currentBoard;
     float   bx = 11.f;
     float   by = 24.f;
     float   stepx = 619.f / 9.f;
@@ -944,8 +944,8 @@ void idGameBustOutWindow::SetCurrentBoard(void) {
                 idVec4 bcolor;
                 float pType = 0.f;
 
-                BOEntity* bent = new BOEntity(this);
-                BOBrick* brick = new BOBrick(bent, bx, by, stepx, stepy);
+                BOEntity *bent = new BOEntity(this);
+                BOBrick *brick = new BOBrick(bent, bx, by, stepx, stepy);
 
                 bcolor.x = currentBoard[pixelindex + 0] / 255.f;
                 bcolor.y = currentBoard[pixelindex + 1] / 255.f;
@@ -979,8 +979,8 @@ void idGameBustOutWindow::SetCurrentBoard(void) {
 idGameBustOutWindow::CreateNewBall
 =============================
 */
-BOEntity* idGameBustOutWindow::CreateNewBall(void) {
-    BOEntity* ball;
+BOEntity *idGameBustOutWindow::CreateNewBall(void) {
+    BOEntity *ball;
 
     ball = new BOEntity(this);
     ball->position.x = 300.f;
@@ -1002,8 +1002,8 @@ BOEntity* idGameBustOutWindow::CreateNewBall(void) {
 idGameBustOutWindow::CreatePowerup
 =============================
 */
-BOEntity* idGameBustOutWindow::CreatePowerup(BOBrick* brick) {
-    BOEntity* powerEnt = new BOEntity(this);
+BOEntity *idGameBustOutWindow::CreatePowerup(BOBrick *brick) {
+    BOEntity *powerEnt = new BOEntity(this);
 
     powerEnt->position.x = brick->x;
     powerEnt->position.y = brick->y;
@@ -1044,7 +1044,7 @@ void idGameBustOutWindow::UpdatePowerups(void) {
     idVec2 pos;
 
     for (int i=0; i < powerUps.Num(); i++) {
-        BOEntity* pUp = powerUps[i];
+        BOEntity *pUp = powerUps[i];
 
         // Check for powerup falling below screen
         if (pUp->position.y > 480) {
@@ -1061,7 +1061,7 @@ void idGameBustOutWindow::UpdatePowerups(void) {
         collideDir_t collision = paddle->checkCollision(pos, pUp->velocity);
 
         if (collision != COLLIDE_NONE) {
-            BOEntity* ball;
+            BOEntity *ball;
 
             // Give the powerup to the player
             switch (pUp->powerup) {
@@ -1150,7 +1150,7 @@ void idGameBustOutWindow::UpdateBall(void) {
     }
 
     for (ballnum = 0; ballnum < balls.Num(); ballnum++) {
-        BOEntity* ball = balls[ballnum];
+        BOEntity *ball = balls[ballnum];
 
         // Check for ball going below screen, lost ball
         if (ball->position.y > 480.f) {
@@ -1218,7 +1218,7 @@ void idGameBustOutWindow::UpdateBall(void) {
             int num = board[i].Num();
 
             for (j=0; j<num; j++) {
-                BOBrick* brick = (board[i])[j];
+                BOBrick *brick = (board[i])[j];
 
                 collision = brick->checkCollision(ballCenter, ball->velocity);
 
@@ -1352,7 +1352,7 @@ void idGameBustOutWindow::UpdateGame() {
         // Delete entities that need to be deleted
         for (i = entities.Num()-1; i >= 0; i--) {
             if (entities[i]->removed) {
-                BOEntity* ent = entities[i];
+                BOEntity *ent = entities[i];
                 delete ent;
                 entities.RemoveIndex(i);
             }

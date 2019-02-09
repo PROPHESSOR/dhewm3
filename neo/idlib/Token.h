@@ -84,11 +84,11 @@ class idToken : public idStr {
 
   public:
     idToken(void);
-    idToken(const idToken* token);
+    idToken(const idToken *token);
     ~idToken(void);
 
-    void            operator=(const idStr& text);
-    void            operator=(const char* text);
+    void            operator=(const idStr &text);
+    void            operator=(const char *text);
 
     double          GetDoubleValue(void);                // double value of TT_NUMBER
     float           GetFloatValue(void);                 // float value of TT_NUMBER
@@ -102,9 +102,9 @@ class idToken : public idStr {
   private:
     unsigned int    intvalue;                           // integer value
     double          floatvalue;                         // floating point value
-    const char*     whiteSpaceStart_p;                  // start of white space before token, only used by idLexer
-    const char*     whiteSpaceEnd_p;                    // end of white space before token, only used by idLexer
-    idToken*        next;                               // next token in chain, only used by idParser
+    const char     *whiteSpaceStart_p;                  // start of white space before token, only used by idLexer
+    const char     *whiteSpaceEnd_p;                    // end of white space before token, only used by idLexer
+    idToken        *next;                               // next token in chain, only used by idParser
 
     void            AppendDirty(const char a);       // append character without adding trailing zero
 };
@@ -112,19 +112,19 @@ class idToken : public idStr {
 ID_INLINE idToken::idToken(void) {
 }
 
-ID_INLINE idToken::idToken(const idToken* token) {
+ID_INLINE idToken::idToken(const idToken *token) {
     *this = *token;
 }
 
 ID_INLINE idToken::~idToken(void) {
 }
 
-ID_INLINE void idToken::operator=(const char* text) {
-    *static_cast<idStr*>(this) = text;
+ID_INLINE void idToken::operator=(const char *text) {
+    *static_cast<idStr *>(this) = text;
 }
 
-ID_INLINE void idToken::operator=(const idStr& text) {
-    *static_cast<idStr*>(this) = text;
+ID_INLINE void idToken::operator=(const idStr &text) {
+    *static_cast<idStr *>(this) = text;
 }
 
 ID_INLINE double idToken::GetDoubleValue(void) {

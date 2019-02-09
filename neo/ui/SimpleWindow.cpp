@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/SimpleWindow.h"
 
-idSimpleWindow::idSimpleWindow(idWindow* win) {
+idSimpleWindow::idSimpleWindow(idWindow *win) {
     gui = win->GetGui();
     dc = win->dc;
     drawRect = win->drawRect;
@@ -79,7 +79,7 @@ idSimpleWindow::idSimpleWindow(idWindow* win) {
 
     hideCursor = win->hideCursor;
 
-    idWindow* parent = win->GetParent();
+    idWindow *parent = win->GetParent();
 
     if (parent) {
         if (text.NeedsUpdate()) {
@@ -166,7 +166,7 @@ void idSimpleWindow::SetupTransforms(float x, float y) {
     }
 }
 
-void idSimpleWindow::DrawBackground(const idRectangle& drawRect) {
+void idSimpleWindow::DrawBackground(const idRectangle &drawRect) {
     if (backColor.w() > 0) {
         dc->DrawFilledRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h, backColor);
     }
@@ -188,7 +188,7 @@ void idSimpleWindow::DrawBackground(const idRectangle& drawRect) {
     }
 }
 
-void idSimpleWindow::DrawBorderAndCaption(const idRectangle& drawRect) {
+void idSimpleWindow::DrawBorderAndCaption(const idRectangle &drawRect) {
     if (flags & WIN_BORDER) {
         if (borderSize) {
             dc->DrawRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h, borderSize, borderColor);
@@ -277,7 +277,7 @@ void idSimpleWindow::Redraw(float x, float y) {
     textRect.Offset(-x, -y);
 }
 
-intptr_t idSimpleWindow::GetWinVarOffset(idWinVar* wv, drawWin_t* owner) {
+intptr_t idSimpleWindow::GetWinVarOffset(idWinVar *wv, drawWin_t *owner) {
     intptr_t ret = -1;
 
     if (wv == &rect) {
@@ -315,8 +315,8 @@ intptr_t idSimpleWindow::GetWinVarOffset(idWinVar* wv, drawWin_t* owner) {
     return ret;
 }
 
-idWinVar* idSimpleWindow::GetWinVarByName(const char* _name) {
-    idWinVar* retVar = NULL;
+idWinVar *idSimpleWindow::GetWinVarByName(const char *_name) {
+    idWinVar *retVar = NULL;
 
     if (idStr::Icmp(_name, "background") == 0) {
         retVar = &backGroundName;
@@ -370,7 +370,7 @@ idWinVar* idSimpleWindow::GetWinVarByName(const char* _name) {
 idSimpleWindow::WriteToSaveGame
 ========================
 */
-void idSimpleWindow::WriteToSaveGame(idFile* savefile) {
+void idSimpleWindow::WriteToSaveGame(idFile *savefile) {
 
     savefile->Write(&flags, sizeof(flags));
     savefile->Write(&drawRect, sizeof(drawRect));
@@ -416,7 +416,7 @@ void idSimpleWindow::WriteToSaveGame(idFile* savefile) {
 idSimpleWindow::ReadFromSaveGame
 ========================
 */
-void idSimpleWindow::ReadFromSaveGame(idFile* savefile) {
+void idSimpleWindow::ReadFromSaveGame(idFile *savefile) {
 
     savefile->Read(&flags, sizeof(flags));
     savefile->Read(&drawRect, sizeof(drawRect));

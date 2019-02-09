@@ -39,7 +39,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "renderer/tr_local.h"
 
 idRenderSystemLocal tr;
-idRenderSystem*  renderSystem = &tr;
+idRenderSystem  *renderSystem = &tr;
 
 
 /*
@@ -169,15 +169,15 @@ drawSurfsCommand_t, etc) and links it to the end of the
 current command chain.
 ============
 */
-void* R_GetCommandBuffer(int bytes) {
-    emptyCommand_t*  cmd;
+void *R_GetCommandBuffer(int bytes) {
+    emptyCommand_t  *cmd;
 
-    cmd = (emptyCommand_t*)R_FrameAlloc(bytes);
+    cmd = (emptyCommand_t *)R_FrameAlloc(bytes);
     cmd->next = NULL;
     frameData->cmdTail->next = &cmd->commandId;
     frameData->cmdTail = cmd;
 
-    return (void*)cmd;
+    return (void *)cmd;
 }
 
 
@@ -191,7 +191,7 @@ and by R_ToggleSmpFrame
 */
 void R_ClearCommandChain(void) {
     // clear the command chain
-    frameData->cmdHead = frameData->cmdTail = (emptyCommand_t*)R_FrameAlloc(sizeof(*frameData->cmdHead));
+    frameData->cmdHead = frameData->cmdTail = (emptyCommand_t *)R_FrameAlloc(sizeof(*frameData->cmdHead));
     frameData->cmdHead->commandId = RC_NOP;
     frameData->cmdHead->next = NULL;
 }
@@ -201,7 +201,7 @@ void R_ClearCommandChain(void) {
 R_ViewStatistics
 =================
 */
-static void R_ViewStatistics(viewDef_t* parms) {
+static void R_ViewStatistics(viewDef_t *parms) {
     // report statistics about this view
     if (!r_showSurfaces.GetBool()) {
         return;
@@ -218,10 +218,10 @@ This is the main 3D rendering command.  A single scene may
 have multiple views if a mirror, portal, or dynamic texture is present.
 =============
 */
-void    R_AddDrawViewCmd(viewDef_t* parms) {
-    drawSurfsCommand_t*  cmd;
+void    R_AddDrawViewCmd(viewDef_t *parms) {
+    drawSurfsCommand_t  *cmd;
 
-    cmd = (drawSurfsCommand_t*)R_GetCommandBuffer(sizeof(*cmd));
+    cmd = (drawSurfsCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
     cmd->commandId = RC_DRAW_VIEW;
 
     cmd->viewDef = parms;
@@ -256,9 +256,9 @@ matricies have been changed.  This allow the culling tightness to be
 evaluated interactively.
 ======================
 */
-void R_LockSurfaceScene(viewDef_t* parms) {
-    drawSurfsCommand_t*  cmd;
-    viewEntity_t*            vModel;
+void R_LockSurfaceScene(viewDef_t *parms) {
+    drawSurfsCommand_t  *cmd;
+    viewEntity_t            *vModel;
 
     // set the matrix for world space to eye space
     R_SetViewMatrix(parms);
@@ -273,7 +273,7 @@ void R_LockSurfaceScene(viewDef_t* parms) {
     }
 
     // add the stored off surface commands again
-    cmd = (drawSurfsCommand_t*)R_GetCommandBuffer(sizeof(*cmd));
+    cmd = (drawSurfsCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
     *cmd = tr.lockSurfacesCmd;
 }
 
@@ -320,7 +320,7 @@ This can be used to pass general information to the current material, not
 just colors
 =============
 */
-void idRenderSystemLocal::SetColor(const idVec4& rgba) {
+void idRenderSystemLocal::SetColor(const idVec4 &rgba) {
     guiModel->SetColor(rgba[0], rgba[1], rgba[2], rgba[3]);
 }
 
@@ -339,7 +339,7 @@ void idRenderSystemLocal::SetColor4(float r, float g, float b, float a) {
 DrawStretchPic
 =============
 */
-void idRenderSystemLocal::DrawStretchPic(const idDrawVert* verts, const glIndex_t* indexes, int vertCount, int indexCount, const idMaterial* material,
+void idRenderSystemLocal::DrawStretchPic(const idDrawVert *verts, const glIndex_t *indexes, int vertCount, int indexCount, const idMaterial *material,
         bool clip, float min_x, float min_y, float max_x, float max_y) {
     guiModel->DrawStretchPic(verts, indexes, vertCount, indexCount, material,
                              clip, min_x, min_y, max_x, max_y);
@@ -352,7 +352,7 @@ DrawStretchPic
 x/y/w/h are in the 0,0 to 640,480 range
 =============
 */
-void idRenderSystemLocal::DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial* material) {
+void idRenderSystemLocal::DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, const idMaterial *material) {
     guiModel->DrawStretchPic(x, y, w, h, s1, t1, s2, t2, material);
 }
 
@@ -363,7 +363,7 @@ DrawStretchTri
 x/y/w/h are in the 0,0 to 640,480 range
 =============
 */
-void idRenderSystemLocal::DrawStretchTri(idVec2 p1, idVec2 p2, idVec2 p3, idVec2 t1, idVec2 t2, idVec2 t3, const idMaterial* material) {
+void idRenderSystemLocal::DrawStretchTri(idVec2 p1, idVec2 p2, idVec2 p3, idVec2 t1, idVec2 t2, idVec2 t3, const idMaterial *material) {
     tr.guiModel->DrawStretchTri(p1, p2, p3, t1, t2, t3, material);
 }
 
@@ -372,7 +372,7 @@ void idRenderSystemLocal::DrawStretchTri(idVec2 p1, idVec2 p2, idVec2 p3, idVec2
 GlobalToNormalizedDeviceCoordinates
 =============
 */
-void idRenderSystemLocal::GlobalToNormalizedDeviceCoordinates(const idVec3& global, idVec3& ndc) {
+void idRenderSystemLocal::GlobalToNormalizedDeviceCoordinates(const idVec3 &global, idVec3 &ndc) {
     R_GlobalToNormalizedDeviceCoordinates(global, ndc);
 }
 
@@ -381,7 +381,7 @@ void idRenderSystemLocal::GlobalToNormalizedDeviceCoordinates(const idVec3& glob
 GlobalToNormalizedDeviceCoordinates
 =============
 */
-void idRenderSystemLocal::GetGLSettings(int& width, int& height) {
+void idRenderSystemLocal::GetGLSettings(int &width, int &height) {
     width = glConfig.vidWidth;
     height = glConfig.vidHeight;
 }
@@ -393,7 +393,7 @@ idRenderSystemLocal::DrawSmallChar
 small chars are drawn at native screen resolution
 =====================
 */
-void idRenderSystemLocal::DrawSmallChar(int x, int y, int ch, const idMaterial* material) {
+void idRenderSystemLocal::DrawSmallChar(int x, int y, int ch, const idMaterial *material) {
     int row, col;
     float frow, fcol;
     float size;
@@ -431,18 +431,18 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void idRenderSystemLocal::DrawSmallStringExt(int x, int y, const char* string, const idVec4& setColor, bool forceColor, const idMaterial* material) {
+void idRenderSystemLocal::DrawSmallStringExt(int x, int y, const char *string, const idVec4 &setColor, bool forceColor, const idMaterial *material) {
     idVec4      color;
-    const unsigned char* s;
+    const unsigned char *s;
     int         xx;
 
     // draw the colored text
-    s = (const unsigned char*)string;
+    s = (const unsigned char *)string;
     xx = x;
     SetColor(setColor);
 
     while (*s) {
-        if (idStr::IsColor((const char*)s)) {
+        if (idStr::IsColor((const char *)s)) {
             if (!forceColor) {
                 if (*(s+1) == C_COLOR_DEFAULT) {
                     SetColor(setColor);
@@ -470,7 +470,7 @@ void idRenderSystemLocal::DrawSmallStringExt(int x, int y, const char* string, c
 idRenderSystemLocal::DrawBigChar
 =====================
 */
-void idRenderSystemLocal::DrawBigChar(int x, int y, int ch, const idMaterial* material) {
+void idRenderSystemLocal::DrawBigChar(int x, int y, int ch, const idMaterial *material) {
     int row, col;
     float frow, fcol;
     float size;
@@ -508,9 +508,9 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void idRenderSystemLocal::DrawBigStringExt(int x, int y, const char* string, const idVec4& setColor, bool forceColor, const idMaterial* material) {
+void idRenderSystemLocal::DrawBigStringExt(int x, int y, const char *string, const idVec4 &setColor, bool forceColor, const idMaterial *material) {
     idVec4      color;
-    const char*  s;
+    const char  *s;
     int         xx;
 
     // draw the colored text
@@ -608,7 +608,7 @@ BeginFrame
 ====================
 */
 void idRenderSystemLocal::BeginFrame(int windowWidth, int windowHeight) {
-    setBufferCommand_t*  cmd;
+    setBufferCommand_t  *cmd;
 
     if (!glConfig.isInitialized) {
         return;
@@ -660,7 +660,7 @@ void idRenderSystemLocal::BeginFrame(int windowWidth, int windowHeight) {
     //
     // draw buffer stuff
     //
-    cmd = (setBufferCommand_t*)R_GetCommandBuffer(sizeof(*cmd));
+    cmd = (setBufferCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
     cmd->commandId = RC_SET_BUFFER;
     cmd->frameCount = frameCount;
 
@@ -688,8 +688,8 @@ EndFrame
 Returns the number of msec spent in the back end
 =============
 */
-void idRenderSystemLocal::EndFrame(int* frontEndMsec, int* backEndMsec) {
-    emptyCommand_t* cmd;
+void idRenderSystemLocal::EndFrame(int *frontEndMsec, int *backEndMsec) {
+    emptyCommand_t *cmd;
 
     if (!glConfig.isInitialized) {
         return;
@@ -718,7 +718,7 @@ void idRenderSystemLocal::EndFrame(int* frontEndMsec, int* backEndMsec) {
     GL_CheckErrors();
 
     // add the swapbuffers command
-    cmd = (emptyCommand_t*)R_GetCommandBuffer(sizeof(*cmd));
+    cmd = (emptyCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
     cmd->commandId = RC_SWAP_BUFFERS;
 
     // start the back end up again with the new command list
@@ -749,8 +749,8 @@ RenderViewToViewport
 Converts from SCREEN_WIDTH / SCREEN_HEIGHT coordinates to current cropped pixel coordinates
 =====================
 */
-void idRenderSystemLocal::RenderViewToViewport(const renderView_t* renderView, idScreenRect* viewport) {
-    renderCrop_t*    rc = &renderCrops[currentRenderCrop];
+void idRenderSystemLocal::RenderViewToViewport(const renderView_t *renderView, idScreenRect *viewport) {
+    renderCrop_t    *rc = &renderCrops[currentRenderCrop];
 
     float wRatio = (float)rc->width / SCREEN_WIDTH;
     float hRatio = (float)rc->height / SCREEN_HEIGHT;
@@ -837,7 +837,7 @@ void    idRenderSystemLocal::CropRenderSize(int width, int height, bool makePowe
         // FIXME: megascreenshots with offset viewports don't work right with this yet
     }
 
-    renderCrop_t*    rc = &renderCrops[currentRenderCrop];
+    renderCrop_t    *rc = &renderCrops[currentRenderCrop];
 
     // we might want to clip these to the crop window instead
     while (width > glConfig.vidWidth) {
@@ -897,7 +897,7 @@ void idRenderSystemLocal::UnCrop() {
 CaptureRenderToImage
 ================
 */
-void idRenderSystemLocal::CaptureRenderToImage(const char* imageName) {
+void idRenderSystemLocal::CaptureRenderToImage(const char *imageName) {
     if (!glConfig.isInitialized) {
         return;
     }
@@ -917,11 +917,11 @@ void idRenderSystemLocal::CaptureRenderToImage(const char* imageName) {
 
     // look up the image before we create the render command, because it
     // may need to sync to create the image
-    idImage* image = globalImages->ImageFromFile(imageName, TF_DEFAULT, true, TR_REPEAT, TD_DEFAULT);
+    idImage *image = globalImages->ImageFromFile(imageName, TF_DEFAULT, true, TR_REPEAT, TD_DEFAULT);
 
-    renderCrop_t* rc = &renderCrops[currentRenderCrop];
+    renderCrop_t *rc = &renderCrops[currentRenderCrop];
 
-    copyRenderCommand_t* cmd = (copyRenderCommand_t*)R_GetCommandBuffer(sizeof(*cmd));
+    copyRenderCommand_t *cmd = (copyRenderCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
     cmd->commandId = RC_COPY_RENDER;
     cmd->x = rc->x;
     cmd->y = rc->y;
@@ -938,12 +938,12 @@ CaptureRenderToFile
 
 ==============
 */
-void idRenderSystemLocal::CaptureRenderToFile(const char* fileName, bool fixAlpha) {
+void idRenderSystemLocal::CaptureRenderToFile(const char *fileName, bool fixAlpha) {
     if (!glConfig.isInitialized) {
         return;
     }
 
-    renderCrop_t* rc = &renderCrops[currentRenderCrop];
+    renderCrop_t *rc = &renderCrops[currentRenderCrop];
 
     guiModel->EmitFullScreen();
     guiModel->Clear();
@@ -953,11 +953,11 @@ void idRenderSystemLocal::CaptureRenderToFile(const char* fileName, bool fixAlph
 
     // include extra space for OpenGL padding to word boundaries
     int c = (rc->width + 3) * rc->height;
-    byte* data = (byte*)R_StaticAlloc(c * 3);
+    byte *data = (byte *)R_StaticAlloc(c * 3);
 
     qglReadPixels(rc->x, rc->y, rc->width, rc->height, GL_RGB, GL_UNSIGNED_BYTE, data);
 
-    byte* data2 = (byte*)R_StaticAlloc(c * 4);
+    byte *data2 = (byte *)R_StaticAlloc(c * 4);
 
     for (int i = 0 ; i < c ; i++) {
         data2[ i * 4 ] = data[ i * 3 ];
@@ -978,8 +978,8 @@ void idRenderSystemLocal::CaptureRenderToFile(const char* fileName, bool fixAlph
 AllocRenderWorld
 ==============
 */
-idRenderWorld* idRenderSystemLocal::AllocRenderWorld() {
-    idRenderWorldLocal* rw;
+idRenderWorld *idRenderSystemLocal::AllocRenderWorld() {
+    idRenderWorldLocal *rw;
     rw = new idRenderWorldLocal;
     worlds.Append(rw);
     return rw;
@@ -990,12 +990,12 @@ idRenderWorld* idRenderSystemLocal::AllocRenderWorld() {
 FreeRenderWorld
 ==============
 */
-void idRenderSystemLocal::FreeRenderWorld(idRenderWorld* rw) {
+void idRenderSystemLocal::FreeRenderWorld(idRenderWorld *rw) {
     if (primaryWorld == rw) {
         primaryWorld = NULL;
     }
 
-    worlds.Remove(static_cast<idRenderWorldLocal*>(rw));
+    worlds.Remove(static_cast<idRenderWorldLocal *>(rw));
     delete rw;
 }
 
@@ -1004,7 +1004,7 @@ void idRenderSystemLocal::FreeRenderWorld(idRenderWorld* rw) {
 PrintMemInfo
 ==============
 */
-void idRenderSystemLocal::PrintMemInfo(MemInfo_t* mi) {
+void idRenderSystemLocal::PrintMemInfo(MemInfo_t *mi) {
     // sum up image totals
     globalImages->PrintMemInfo(mi);
 
@@ -1020,8 +1020,8 @@ void idRenderSystemLocal::PrintMemInfo(MemInfo_t* mi) {
 idRenderSystemLocal::UploadImage
 ===============
 */
-bool idRenderSystemLocal::UploadImage(const char* imageName, const byte* data, int width, int height) {
-    idImage* image = globalImages->GetImage(imageName);
+bool idRenderSystemLocal::UploadImage(const char *imageName, const byte *data, int width, int height) {
+    idImage *image = globalImages->GetImage(imageName);
 
     if (!image) {
         return false;
