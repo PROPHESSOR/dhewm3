@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 /*
 ===============================================================================
 
-	Non-portable system services.
+    Non-portable system services.
 
 ===============================================================================
 */
@@ -43,62 +43,62 @@ If you have questions concerning this license or the applicable additional terms
 // Win32
 #if defined(__AROS__)
 
-#define _alloca						alloca
-#define _alloca16( x )				((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
+    #define _alloca                     alloca
+    #define _alloca16( x )              ((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
 
-#ifdef GAME_DLL
-#define ID_GAME_API					__attribute__((visibility ("default")))
-#else
-#define ID_GAME_API
-#endif
+    #ifdef GAME_DLL
+        #define ID_GAME_API                 __attribute__((visibility ("default")))
+    #else
+        #define ID_GAME_API
+    #endif
 
-#define ALIGN16( x )				x __attribute__ ((aligned (16)))
-#define PACKED						__attribute__((packed))
+    #define ALIGN16( x )                x __attribute__ ((aligned (16)))
+    #define PACKED                      __attribute__((packed))
 
-#define PATHSEPERATOR_STR			"/"
-#define PATHSEPERATOR_CHAR			'/'
+    #define PATHSEPERATOR_STR           "/"
+    #define PATHSEPERATOR_CHAR          '/'
 
-#define __cdecl
-#define ASSERT						assert
+    #define __cdecl
+    #define ASSERT                      assert
 
-#define ID_INLINE					inline
-#define ID_STATIC_TEMPLATE
+    #define ID_INLINE                   inline
+    #define ID_STATIC_TEMPLATE
 
-#define assertmem( x, y )
+    #define assertmem( x, y )
 
 #endif
 
 // Win32
 #if defined(WIN32) || defined(_WIN32)
 
-#define _alloca16( x )				((void *)((((uintptr_t)_alloca( (x)+15 )) + 15) & ~15))
+    #define _alloca16( x )              ((void *)((((uintptr_t)_alloca( (x)+15 )) + 15) & ~15))
 
-#define PATHSEPERATOR_STR			"\\"
-#define PATHSEPERATOR_CHAR			'\\'
+    #define PATHSEPERATOR_STR           "\\"
+    #define PATHSEPERATOR_CHAR          '\\'
 
-#ifdef _MSC_VER
-#ifdef GAME_DLL
-#define ID_GAME_API					__declspec(dllexport)
-#else
-#define ID_GAME_API
-#endif
-#define ALIGN16( x )				__declspec(align(16)) x
-#define PACKED
-#define ID_INLINE					__forceinline
-#define ID_STATIC_TEMPLATE			static
-#define assertmem( x, y )			assert( _CrtIsValidPointer( x, y, true ) )
-#else
-#ifdef GAME_DLL
-#define ID_GAME_API					__attribute__((visibility ("default")))
-#else
-#define ID_GAME_API
-#endif
-#define ALIGN16( x )				x __attribute__ ((aligned (16)))
-#define PACKED						__attribute__((packed))
-#define ID_INLINE					inline
-#define ID_STATIC_TEMPLATE
-#define assertmem( x, y )
-#endif
+    #ifdef _MSC_VER
+        #ifdef GAME_DLL
+            #define ID_GAME_API                 __declspec(dllexport)
+        #else
+            #define ID_GAME_API
+        #endif
+        #define ALIGN16( x )                __declspec(align(16)) x
+        #define PACKED
+        #define ID_INLINE                   __forceinline
+        #define ID_STATIC_TEMPLATE          static
+        #define assertmem( x, y )           assert( _CrtIsValidPointer( x, y, true ) )
+    #else
+        #ifdef GAME_DLL
+            #define ID_GAME_API                 __attribute__((visibility ("default")))
+        #else
+            #define ID_GAME_API
+        #endif
+        #define ALIGN16( x )                x __attribute__ ((aligned (16)))
+        #define PACKED                      __attribute__((packed))
+        #define ID_INLINE                   inline
+        #define ID_STATIC_TEMPLATE
+        #define assertmem( x, y )
+    #endif
 
 #endif
 
@@ -106,29 +106,29 @@ If you have questions concerning this license or the applicable additional terms
 // Mac OSX
 #if defined(MACOS_X) || defined(__APPLE__)
 
-#ifdef GAME_DLL
-#define ID_GAME_API					__attribute__((visibility ("default")))
-#else
-#define ID_GAME_API
-#endif
+    #ifdef GAME_DLL
+        #define ID_GAME_API                 __attribute__((visibility ("default")))
+    #else
+        #define ID_GAME_API
+    #endif
 
-#define ALIGN16( x )				x __attribute__ ((aligned (16)))
+    #define ALIGN16( x )                x __attribute__ ((aligned (16)))
 
-#define PACKED						__attribute__((packed))
+    #define PACKED                      __attribute__((packed))
 
-#define _alloca						alloca
-#define _alloca16( x )				((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
+    #define _alloca                     alloca
+    #define _alloca16( x )              ((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
 
-#define PATHSEPERATOR_STR			"/"
-#define PATHSEPERATOR_CHAR			'/'
+    #define PATHSEPERATOR_STR           "/"
+    #define PATHSEPERATOR_CHAR          '/'
 
-#define __cdecl
-#define ASSERT						assert
+    #define __cdecl
+    #define ASSERT                      assert
 
-#define ID_INLINE					inline
-#define ID_STATIC_TEMPLATE
+    #define ID_INLINE                   inline
+    #define ID_STATIC_TEMPLATE
 
-#define assertmem( x, y )
+    #define assertmem( x, y )
 
 #endif
 
@@ -136,44 +136,44 @@ If you have questions concerning this license or the applicable additional terms
 // Unix
 #ifdef __unix__
 
-#define _alloca						alloca
-#define _alloca16( x )				((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
+    #define _alloca                     alloca
+    #define _alloca16( x )              ((void *)((((uintptr_t)alloca( (x)+15 )) + 15) & ~15))
 
-#ifdef GAME_DLL
-#define ID_GAME_API					__attribute__((visibility ("default")))
-#else
-#define ID_GAME_API
-#endif
+    #ifdef GAME_DLL
+        #define ID_GAME_API                 __attribute__((visibility ("default")))
+    #else
+        #define ID_GAME_API
+    #endif
 
-#define ALIGN16( x )				x
-#define PACKED						__attribute__((packed))
+    #define ALIGN16( x )                x
+    #define PACKED                      __attribute__((packed))
 
-#define PATHSEPERATOR_STR			"/"
-#define PATHSEPERATOR_CHAR			'/'
+    #define PATHSEPERATOR_STR           "/"
+    #define PATHSEPERATOR_CHAR          '/'
 
-#define __cdecl
-#define ASSERT						assert
+    #define __cdecl
+    #define ASSERT                      assert
 
-#define ID_INLINE					inline
-#define ID_STATIC_TEMPLATE
+    #define ID_INLINE                   inline
+    #define ID_STATIC_TEMPLATE
 
-#define assertmem( x, y )
+    #define assertmem( x, y )
 
 #endif
 
 
 #ifdef __GNUC__
-#define id_attribute(x) __attribute__(x)
+    #define id_attribute(x) __attribute__(x)
 #else
-#define id_attribute(x)
+    #define id_attribute(x)
 #endif
 
 #if !defined(_MSC_VER)
-	// MSVC does not provide this C99 header
-	#include <inttypes.h>
+    // MSVC does not provide this C99 header
+    #include <inttypes.h>
 #endif
 #if defined(__MINGW32__)
-	#include <malloc.h>
+    #include <malloc.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -188,34 +188,34 @@ If you have questions concerning this license or the applicable additional terms
 #include <math.h>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef FindText								// stupid namespace poluting Microsoft monkeys
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
+    #undef FindText                             // stupid namespace poluting Microsoft monkeys
 #endif
 
 #define ID_TIME_T time_t
 
-typedef unsigned char			byte;		// 8 bits
-typedef unsigned short			word;		// 16 bits
-typedef unsigned int			dword;		// 32 bits
-typedef unsigned int			uint;
-typedef unsigned long			ulong;
+typedef unsigned char           byte;       // 8 bits
+typedef unsigned short          word;       // 16 bits
+typedef unsigned int            dword;      // 32 bits
+typedef unsigned int            uint;
+typedef unsigned long           ulong;
 
-typedef int						qhandle_t;
+typedef int                     qhandle_t;
 
 #ifndef NULL
-#define NULL					((void *)0)
+    #define NULL                    ((void *)0)
 #endif
 
 #ifndef BIT
-#define BIT( num )				( 1 << ( num ) )
+    #define BIT( num )              ( 1 << ( num ) )
 #endif
 
-#define	MAX_STRING_CHARS		1024		// max length of a string
+#define MAX_STRING_CHARS        1024        // max length of a string
 
 // maximum world size
-#define MAX_WORLD_COORD			( 128 * 1024 )
-#define MIN_WORLD_COORD			( -128 * 1024 )
-#define MAX_WORLD_SIZE			( MAX_WORLD_COORD - MIN_WORLD_COORD )
+#define MAX_WORLD_COORD         ( 128 * 1024 )
+#define MIN_WORLD_COORD         ( -128 * 1024 )
+#define MAX_WORLD_SIZE          ( MAX_WORLD_COORD - MIN_WORLD_COORD )
 
 #endif

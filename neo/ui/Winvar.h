@@ -32,811 +32,900 @@ If you have questions concerning this license or the applicable additional terms
 #include "framework/File.h"
 #include "ui/Rectangle.h"
 
-extern const char *VAR_GUIPREFIX;
+extern const char* VAR_GUIPREFIX;
 
 class idWindow;
 class idWinVar {
-public:
-	idWinVar();
-	virtual ~idWinVar();
+  public:
+    idWinVar();
+    virtual ~idWinVar();
 
-	void SetGuiInfo(idDict *gd, const char *_name);
-	const char *GetName() const {
-		if (name) {
-			if (guiDict && *name == '*') {
-				return guiDict->GetString(&name[1]);
-			}
-			return name;
-		}
-		return "";
-	}
-	void SetName(const char *_name) {
-		delete[] name;
-		name = NULL;
-		if (_name) {
-			name = new char[strlen(_name)+1];
-			strcpy(name, _name);
-		}
-	}
+    void SetGuiInfo(idDict* gd, const char* _name);
+    const char* GetName() const {
+        if (name) {
+            if (guiDict && *name == '*') {
+                return guiDict->GetString(&name[1]);
+            }
 
-	idWinVar &operator=( const idWinVar &other ) {
-		guiDict = other.guiDict;
-		SetName(other.name);
-		return *this;
-	}
+            return name;
+        }
 
-	idDict *GetDict() const { return guiDict; }
-	bool NeedsUpdate() { return (guiDict != NULL); }
+        return "";
+    }
+    void SetName(const char* _name) {
+        delete[] name;
+        name = NULL;
 
-	virtual void Init(const char *_name, idWindow* win) = 0;
-	virtual void Set(const char *val) = 0;
-	virtual void Update() = 0;
-	virtual const char *c_str() const = 0;
-	virtual size_t Size() {	size_t sz = (name) ? strlen(name) : 0; return sz + sizeof(*this); }
+        if (_name) {
+            name = new char[strlen(_name)+1];
+            strcpy(name, _name);
+        }
+    }
 
-	virtual void WriteToSaveGame( idFile *savefile ) = 0;
-	virtual void ReadFromSaveGame( idFile *savefile ) = 0;
+    idWinVar& operator=(const idWinVar& other) {
+        guiDict = other.guiDict;
+        SetName(other.name);
+        return *this;
+    }
 
-	virtual float x( void ) const = 0;
+    idDict* GetDict() const {
+        return guiDict;
+    }
+    bool NeedsUpdate() {
+        return (guiDict != NULL);
+    }
 
-	void SetEval(bool b) {
-		eval = b;
-	}
-	bool GetEval() {
-		return eval;
-	}
+    virtual void Init(const char* _name, idWindow* win) = 0;
+    virtual void Set(const char* val) = 0;
+    virtual void Update() = 0;
+    virtual const char* c_str() const = 0;
+    virtual size_t Size() {
+        size_t sz = (name) ? strlen(name) : 0;
+        return sz + sizeof(*this);
+    }
 
-protected:
-	idDict *guiDict;
-	char *name;
-	bool eval;
+    virtual void WriteToSaveGame(idFile* savefile) = 0;
+    virtual void ReadFromSaveGame(idFile* savefile) = 0;
+
+    virtual float x(void) const = 0;
+
+    void SetEval(bool b) {
+        eval = b;
+    }
+    bool GetEval() {
+        return eval;
+    }
+
+  protected:
+    idDict* guiDict;
+    char* name;
+    bool eval;
 };
 
 class idWinBool : public idWinVar {
-public:
-	idWinBool() : idWinVar() {};
-	~idWinBool() {};
-	virtual void Init(const char *_name, idWindow *win) { idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetBool(GetName());
-		}
-	}
-	int	operator==(	const bool &other ) { return (other == data); }
-	bool &operator=(	const bool &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetBool(GetName(), data);
-		}
-		return data;
-	}
-	idWinBool &operator=( const idWinBool &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
+  public:
+    idWinBool() : idWinVar() {};
+    ~idWinBool() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	operator bool() const { return data; }
+        if (guiDict) {
+            data = guiDict->GetBool(GetName());
+        }
+    }
+    int operator==(const bool& other) {
+        return (other == data);
+    }
+    bool& operator=(const bool& other) {
+        data = other;
 
-	virtual void Set(const char *val) {
-		data = ( atoi( val ) != 0 );
-		if (guiDict) {
-			guiDict->SetBool(GetName(), data);
-		}
-	}
+        if (guiDict) {
+            guiDict->SetBool(GetName(), data);
+        }
 
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetBool( s );
-		}
-	}
+        return data;
+    }
+    idWinBool& operator=(const idWinBool& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
 
-	virtual const char *c_str() const {return va("%i", data); }
+    operator bool() const {
+        return data;
+    }
 
-	// SaveGames
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+    virtual void Set(const char* val) {
+        data = (atoi(val) != 0);
 
-	virtual float x( void ) const { return data ? 1.0f : 0.0f; };
+        if (guiDict) {
+            guiDict->SetBool(GetName(), data);
+        }
+    }
 
-protected:
-	bool data;
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetBool(s);
+        }
+    }
+
+    virtual const char* c_str() const {
+        return va("%i", data);
+    }
+
+    // SaveGames
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+    virtual float x(void) const {
+        return data ? 1.0f : 0.0f;
+    };
+
+  protected:
+    bool data;
 };
 
 class idWinStr : public idWinVar {
-public:
-	idWinStr() : idWinVar() {};
-	~idWinStr() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetString(GetName());
-		}
-	}
-	int	operator==(	const idStr &other ) const {
-		return (other == data);
-	}
-	int	operator==(	const char *other ) const {
-		return (data == other);
-	}
-	idStr &operator=(	const idStr &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->Set(GetName(), data);
-		}
-		return data;
-	}
-	idWinStr &operator=( const idWinStr &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	operator const char *() const {
-		return data.c_str();
-	}
-	operator const idStr &() const {
-		return data;
-	}
-	int LengthWithoutColors() {
-		if (guiDict && name && *name) {
-			data = guiDict->GetString(GetName());
-		}
-		return data.LengthWithoutColors();
-	}
-	int Length() {
-		if (guiDict && name && *name) {
-			data = guiDict->GetString(GetName());
-		}
-		return data.Length();
-	}
-	void RemoveColors() {
-		if (guiDict && name && *name) {
-			data = guiDict->GetString(GetName());
-		}
-		data.RemoveColors();
-	}
-	virtual const char *c_str() const {
-		return data.c_str();
-	}
+  public:
+    idWinStr() : idWinVar() {};
+    ~idWinStr() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	virtual void Set(const char *val) {
-		data = val;
-		if ( guiDict ) {
-			guiDict->Set(GetName(), data);
-		}
-	}
+        if (guiDict) {
+            data = guiDict->GetString(GetName());
+        }
+    }
+    int operator==(const idStr& other) const {
+        return (other == data);
+    }
+    int operator==(const char* other) const {
+        return (data == other);
+    }
+    idStr& operator=(const idStr& other) {
+        data = other;
 
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetString( s );
-		}
-	}
+        if (guiDict) {
+            guiDict->Set(GetName(), data);
+        }
 
-	virtual size_t Size() {
-		size_t sz = idWinVar::Size();
-		return sz +data.Allocated();
-	}
+        return data;
+    }
+    idWinStr& operator=(const idWinStr& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    operator const char* () const {
+        return data.c_str();
+    }
+    operator const idStr& () const {
+        return data;
+    }
+    int LengthWithoutColors() {
+        if (guiDict && name && *name) {
+            data = guiDict->GetString(GetName());
+        }
 
-	// SaveGames
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
+        return data.LengthWithoutColors();
+    }
+    int Length() {
+        if (guiDict && name && *name) {
+            data = guiDict->GetString(GetName());
+        }
 
-		int len = data.Length();
-		savefile->Write( &len, sizeof( len ) );
-		if ( len > 0 ) {
-			savefile->Write( data.c_str(), len );
-		}
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
+        return data.Length();
+    }
+    void RemoveColors() {
+        if (guiDict && name && *name) {
+            data = guiDict->GetString(GetName());
+        }
 
-		int len;
-		savefile->Read( &len, sizeof( len ) );
-		if ( len > 0 ) {
-			data.Fill( ' ', len );
-			savefile->Read( &data[0], len );
-		}
-	}
+        data.RemoveColors();
+    }
+    virtual const char* c_str() const {
+        return data.c_str();
+    }
 
-	// return wether string is emtpy
-	virtual float x( void ) const { return data[0] ? 1.0f : 0.0f; };
+    virtual void Set(const char* val) {
+        data = val;
 
-protected:
-	idStr data;
+        if (guiDict) {
+            guiDict->Set(GetName(), data);
+        }
+    }
+
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetString(s);
+        }
+    }
+
+    virtual size_t Size() {
+        size_t sz = idWinVar::Size();
+        return sz +data.Allocated();
+    }
+
+    // SaveGames
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+
+        int len = data.Length();
+        savefile->Write(&len, sizeof(len));
+
+        if (len > 0) {
+            savefile->Write(data.c_str(), len);
+        }
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+
+        int len;
+        savefile->Read(&len, sizeof(len));
+
+        if (len > 0) {
+            data.Fill(' ', len);
+            savefile->Read(&data[0], len);
+        }
+    }
+
+    // return wether string is emtpy
+    virtual float x(void) const {
+        return data[0] ? 1.0f : 0.0f;
+    };
+
+  protected:
+    idStr data;
 };
 
 class idWinInt : public idWinVar {
-public:
-	idWinInt() : idWinVar() {};
-	~idWinInt() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name,  win);
-		if (guiDict) {
-			data = guiDict->GetInt(GetName());
-		}
-	}
-	int &operator=(	const int &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetInt(GetName(), data);
-		}
-		return data;
-	}
-	idWinInt &operator=( const idWinInt &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	operator int () const {
-		return data;
-	}
-	virtual void Set(const char *val) {
-		data = atoi(val);;
-		if (guiDict) {
-			guiDict->SetInt(GetName(), data);
-		}
-	}
+  public:
+    idWinInt() : idWinVar() {};
+    ~idWinInt() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name,  win);
 
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetInt( s );
-		}
-	}
-	virtual const char *c_str() const {
-		return va("%i", data);
-	}
+        if (guiDict) {
+            data = guiDict->GetInt(GetName());
+        }
+    }
+    int& operator=(const int& other) {
+        data = other;
 
-	// SaveGames
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+        if (guiDict) {
+            guiDict->SetInt(GetName(), data);
+        }
 
-	// no suitable conversion
-	virtual float x( void ) const { assert( false ); return 0.0f; };
+        return data;
+    }
+    idWinInt& operator=(const idWinInt& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    operator int () const {
+        return data;
+    }
+    virtual void Set(const char* val) {
+        data = atoi(val);;
 
-protected:
-	int data;
+        if (guiDict) {
+            guiDict->SetInt(GetName(), data);
+        }
+    }
+
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetInt(s);
+        }
+    }
+    virtual const char* c_str() const {
+        return va("%i", data);
+    }
+
+    // SaveGames
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+    // no suitable conversion
+    virtual float x(void) const {
+        assert(false);
+        return 0.0f;
+    };
+
+  protected:
+    int data;
 };
 
 class idWinFloat : public idWinVar {
-public:
-	idWinFloat() : idWinVar() {};
-	~idWinFloat() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetFloat(GetName());
-		}
-	}
-	idWinFloat &operator=( const idWinFloat &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	float &operator=(	const float &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetFloat(GetName(), data);
-		}
-		return data;
-	}
-	operator float() const {
-		return data;
-	}
-	virtual void Set(const char *val) {
-		data = atof(val);
-		if (guiDict) {
-			guiDict->SetFloat(GetName(), data);
-		}
-	}
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetFloat( s );
-		}
-	}
-	virtual const char *c_str() const {
-		return va("%f", data);
-	}
+  public:
+    idWinFloat() : idWinVar() {};
+    ~idWinFloat() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+        if (guiDict) {
+            data = guiDict->GetFloat(GetName());
+        }
+    }
+    idWinFloat& operator=(const idWinFloat& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    float& operator=(const float& other) {
+        data = other;
 
-	virtual float x( void ) const { return data; };
-protected:
-	float data;
+        if (guiDict) {
+            guiDict->SetFloat(GetName(), data);
+        }
+
+        return data;
+    }
+    operator float() const {
+        return data;
+    }
+    virtual void Set(const char* val) {
+        data = atof(val);
+
+        if (guiDict) {
+            guiDict->SetFloat(GetName(), data);
+        }
+    }
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetFloat(s);
+        }
+    }
+    virtual const char* c_str() const {
+        return va("%f", data);
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+    virtual float x(void) const {
+        return data;
+    };
+  protected:
+    float data;
 };
 
 class idWinRectangle : public idWinVar {
-public:
-	idWinRectangle() : idWinVar() {};
-	~idWinRectangle() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			idVec4 v = guiDict->GetVec4(GetName());
-			data.x = v.x;
-			data.y = v.y;
-			data.w = v.z;
-			data.h = v.w;
-		}
-	}
+  public:
+    idWinRectangle() : idWinVar() {};
+    ~idWinRectangle() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	int	operator==(	const idRectangle &other ) const {
-		return (other == data);
-	}
+        if (guiDict) {
+            idVec4 v = guiDict->GetVec4(GetName());
+            data.x = v.x;
+            data.y = v.y;
+            data.w = v.z;
+            data.h = v.w;
+        }
+    }
 
-	idWinRectangle &operator=( const idWinRectangle &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	idRectangle &operator=(	const idVec4 &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetVec4(GetName(), other);
-		}
-		return data;
-	}
+    int operator==(const idRectangle& other) const {
+        return (other == data);
+    }
 
-	idRectangle &operator=(	const idRectangle &other ) {
-		data = other;
-		if (guiDict) {
-			idVec4 v = data.ToVec4();
-			guiDict->SetVec4(GetName(), v);
-		}
-		return data;
-	}
+    idWinRectangle& operator=(const idWinRectangle& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    idRectangle& operator=(const idVec4& other) {
+        data = other;
 
-	operator const idRectangle&() const {
-		return data;
-	}
+        if (guiDict) {
+            guiDict->SetVec4(GetName(), other);
+        }
 
-	float x() const {
-		return data.x;
-	}
-	float y() const {
-		return data.y;
-	}
-	float w() const {
-		return data.w;
-	}
-	float h() const {
-		return data.h;
-	}
-	float Right() const {
-		return data.Right();
-	}
-	float Bottom() const {
-		return data.Bottom();
-	}
-	idVec4 &ToVec4() {
-		static idVec4 ret;
-		ret = data.ToVec4();
-		return ret;
-	}
-	virtual void Set(const char *val) {
-		if ( strchr ( val, ',' ) ) {
-			sscanf( val, "%f,%f,%f,%f", &data.x, &data.y, &data.w, &data.h );
-		} else {
-			sscanf( val, "%f %f %f %f", &data.x, &data.y, &data.w, &data.h );
-		}
-		if (guiDict) {
-			idVec4 v = data.ToVec4();
-			guiDict->SetVec4(GetName(), v);
-		}
-	}
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			idVec4 v = guiDict->GetVec4( s );
-			data.x = v.x;
-			data.y = v.y;
-			data.w = v.z;
-			data.h = v.w;
-		}
-	}
+        return data;
+    }
 
-	virtual const char *c_str() const {
-		return data.ToVec4().ToString();
-	}
+    idRectangle& operator=(const idRectangle& other) {
+        data = other;
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+        if (guiDict) {
+            idVec4 v = data.ToVec4();
+            guiDict->SetVec4(GetName(), v);
+        }
 
-protected:
-	idRectangle data;
+        return data;
+    }
+
+    operator const idRectangle& () const {
+        return data;
+    }
+
+    float x() const {
+        return data.x;
+    }
+    float y() const {
+        return data.y;
+    }
+    float w() const {
+        return data.w;
+    }
+    float h() const {
+        return data.h;
+    }
+    float Right() const {
+        return data.Right();
+    }
+    float Bottom() const {
+        return data.Bottom();
+    }
+    idVec4& ToVec4() {
+        static idVec4 ret;
+        ret = data.ToVec4();
+        return ret;
+    }
+    virtual void Set(const char* val) {
+        if (strchr(val, ',')) {
+            sscanf(val, "%f,%f,%f,%f", &data.x, &data.y, &data.w, &data.h);
+        } else {
+            sscanf(val, "%f %f %f %f", &data.x, &data.y, &data.w, &data.h);
+        }
+
+        if (guiDict) {
+            idVec4 v = data.ToVec4();
+            guiDict->SetVec4(GetName(), v);
+        }
+    }
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            idVec4 v = guiDict->GetVec4(s);
+            data.x = v.x;
+            data.y = v.y;
+            data.w = v.z;
+            data.h = v.w;
+        }
+    }
+
+    virtual const char* c_str() const {
+        return data.ToVec4().ToString();
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+  protected:
+    idRectangle data;
 };
 
 class idWinVec2 : public idWinVar {
-public:
-	idWinVec2() : idWinVar() {};
-	~idWinVec2() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetVec2(GetName());
-		}
-	}
-	int	operator==(	const idVec2 &other ) const {
-		return (other == data);
-	}
-	idWinVec2 &operator=( const idWinVec2 &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
+  public:
+    idWinVec2() : idWinVar() {};
+    ~idWinVec2() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	idVec2 &operator=(	const idVec2 &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetVec2(GetName(), data);
-		}
-		return data;
-	}
-	float x() const {
-		return data.x;
-	}
-	float y() const {
-		return data.y;
-	}
-	virtual void Set(const char *val) {
-		if ( strchr ( val, ',' ) ) {
-			sscanf( val, "%f,%f", &data.x, &data.y );
-		} else {
-		sscanf( val, "%f %f", &data.x, &data.y);
-		}
-		if (guiDict) {
-			guiDict->SetVec2(GetName(), data);
-		}
-	}
-	operator const idVec2&() const {
-		return data;
-	}
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetVec2( s );
-		}
-	}
-	virtual const char *c_str() const {
-		return data.ToString();
-	}
-	void Zero() {
-		data.Zero();
-	}
+        if (guiDict) {
+            data = guiDict->GetVec2(GetName());
+        }
+    }
+    int operator==(const idVec2& other) const {
+        return (other == data);
+    }
+    idWinVec2& operator=(const idWinVec2& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+    idVec2& operator=(const idVec2& other) {
+        data = other;
 
-protected:
-	idVec2 data;
+        if (guiDict) {
+            guiDict->SetVec2(GetName(), data);
+        }
+
+        return data;
+    }
+    float x() const {
+        return data.x;
+    }
+    float y() const {
+        return data.y;
+    }
+    virtual void Set(const char* val) {
+        if (strchr(val, ',')) {
+            sscanf(val, "%f,%f", &data.x, &data.y);
+        } else {
+            sscanf(val, "%f %f", &data.x, &data.y);
+        }
+
+        if (guiDict) {
+            guiDict->SetVec2(GetName(), data);
+        }
+    }
+    operator const idVec2& () const {
+        return data;
+    }
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetVec2(s);
+        }
+    }
+    virtual const char* c_str() const {
+        return data.ToString();
+    }
+    void Zero() {
+        data.Zero();
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+  protected:
+    idVec2 data;
 };
 
 class idWinVec4 : public idWinVar {
-public:
-	idWinVec4() : idWinVar() {};
-	~idWinVec4() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetVec4(GetName());
-		}
-	}
-	int	operator==(	const idVec4 &other ) const {
-		return (other == data);
-	}
-	idWinVec4 &operator=( const idWinVec4 &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	idVec4 &operator=(	const idVec4 &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetVec4(GetName(), data);
-		}
-		return data;
-	}
-	operator const idVec4&() const {
-		return data;
-	}
+  public:
+    idWinVec4() : idWinVar() {};
+    ~idWinVec4() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	float x() const {
-		return data.x;
-	}
+        if (guiDict) {
+            data = guiDict->GetVec4(GetName());
+        }
+    }
+    int operator==(const idVec4& other) const {
+        return (other == data);
+    }
+    idWinVec4& operator=(const idWinVec4& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    idVec4& operator=(const idVec4& other) {
+        data = other;
 
-	float y() const {
-		return data.y;
-	}
+        if (guiDict) {
+            guiDict->SetVec4(GetName(), data);
+        }
 
-	float z() const {
-		return data.z;
-	}
+        return data;
+    }
+    operator const idVec4& () const {
+        return data;
+    }
 
-	float w() const {
-		return data.w;
-	}
-	virtual void Set(const char *val) {
-		if ( strchr ( val, ',' ) ) {
-			sscanf( val, "%f,%f,%f,%f", &data.x, &data.y, &data.z, &data.w );
-		} else {
-			sscanf( val, "%f %f %f %f", &data.x, &data.y, &data.z, &data.w);
-		}
-		if ( guiDict ) {
-			guiDict->SetVec4( GetName(), data );
-		}
-	}
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetVec4( s );
-		}
-	}
-	virtual const char *c_str() const {
-		return data.ToString();
-	}
+    float x() const {
+        return data.x;
+    }
 
-	void Zero() {
-		data.Zero();
-		if ( guiDict ) {
-			guiDict->SetVec4(GetName(), data);
-		}
-	}
+    float y() const {
+        return data.y;
+    }
 
-	const idVec3 &ToVec3() const {
-		return data.ToVec3();
-	}
+    float z() const {
+        return data.z;
+    }
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+    float w() const {
+        return data.w;
+    }
+    virtual void Set(const char* val) {
+        if (strchr(val, ',')) {
+            sscanf(val, "%f,%f,%f,%f", &data.x, &data.y, &data.z, &data.w);
+        } else {
+            sscanf(val, "%f %f %f %f", &data.x, &data.y, &data.z, &data.w);
+        }
 
-protected:
-	idVec4 data;
+        if (guiDict) {
+            guiDict->SetVec4(GetName(), data);
+        }
+    }
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetVec4(s);
+        }
+    }
+    virtual const char* c_str() const {
+        return data.ToString();
+    }
+
+    void Zero() {
+        data.Zero();
+
+        if (guiDict) {
+            guiDict->SetVec4(GetName(), data);
+        }
+    }
+
+    const idVec3& ToVec3() const {
+        return data.ToVec3();
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+  protected:
+    idVec4 data;
 };
 
 class idWinVec3 : public idWinVar {
-public:
-	idWinVec3() : idWinVar() {};
-	~idWinVec3() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinVar::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetVector(GetName());
-		}
-	}
-	int	operator==(	const idVec3 &other ) const {
-		return (other == data);
-	}
-	idWinVec3 &operator=( const idWinVec3 &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		return *this;
-	}
-	idVec3 &operator=(	const idVec3 &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->SetVector(GetName(), data);
-		}
-		return data;
-	}
-	operator const idVec3&() const {
-		return data;
-	}
+  public:
+    idWinVec3() : idWinVar() {};
+    ~idWinVec3() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinVar::Init(_name, win);
 
-	float x() const {
-		return data.x;
-	}
+        if (guiDict) {
+            data = guiDict->GetVector(GetName());
+        }
+    }
+    int operator==(const idVec3& other) const {
+        return (other == data);
+    }
+    idWinVec3& operator=(const idWinVec3& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        return *this;
+    }
+    idVec3& operator=(const idVec3& other) {
+        data = other;
 
-	float y() const {
-		return data.y;
-	}
+        if (guiDict) {
+            guiDict->SetVector(GetName(), data);
+        }
 
-	float z() const {
-		return data.z;
-	}
+        return data;
+    }
+    operator const idVec3& () const {
+        return data;
+    }
 
-	virtual void Set(const char *val) {
-		sscanf( val, "%f %f %f", &data.x, &data.y, &data.z);
-		if (guiDict) {
-			guiDict->SetVector(GetName(), data);
-		}
-	}
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetVector( s );
-		}
-	}
-	virtual const char *c_str() const {
-		return data.ToString();
-	}
+    float x() const {
+        return data.x;
+    }
 
-	void Zero() {
-		data.Zero();
-		if (guiDict) {
-			guiDict->SetVector(GetName(), data);
-		}
-	}
+    float y() const {
+        return data.y;
+    }
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
-		savefile->Write( &data, sizeof( data ) );
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
-		savefile->Read( &data, sizeof( data ) );
-	}
+    float z() const {
+        return data.z;
+    }
 
-protected:
-	idVec3 data;
+    virtual void Set(const char* val) {
+        sscanf(val, "%f %f %f", &data.x, &data.y, &data.z);
+
+        if (guiDict) {
+            guiDict->SetVector(GetName(), data);
+        }
+    }
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetVector(s);
+        }
+    }
+    virtual const char* c_str() const {
+        return data.ToString();
+    }
+
+    void Zero() {
+        data.Zero();
+
+        if (guiDict) {
+            guiDict->SetVector(GetName(), data);
+        }
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+        savefile->Write(&data, sizeof(data));
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+        savefile->Read(&data, sizeof(data));
+    }
+
+  protected:
+    idVec3 data;
 };
 
 class idWinBackground : public idWinStr {
-public:
-	idWinBackground() : idWinStr() {
-		mat = NULL;
-	};
-	~idWinBackground() {};
-	virtual void Init(const char *_name, idWindow *win) {
-		idWinStr::Init(_name, win);
-		if (guiDict) {
-			data = guiDict->GetString(GetName());
-		}
-	}
-	int	operator==(	const idStr &other ) const {
-		return (other == data);
-	}
-	int	operator==(	const char *other ) const {
-		return (data == other);
-	}
-	idStr &operator=(	const idStr &other ) {
-		data = other;
-		if (guiDict) {
-			guiDict->Set(GetName(), data);
-		}
-		if (mat) {
-			if ( data == "" ) {
-				(*mat) = NULL;
-			} else {
-				(*mat) = declManager->FindMaterial(data);
-			}
-		}
-		return data;
-	}
-	idWinBackground &operator=( const idWinBackground &other ) {
-		idWinVar::operator=(other);
-		data = other.data;
-		mat = other.mat;
-		if (mat) {
-			if ( data == "" ) {
-				(*mat) = NULL;
-			} else {
-				(*mat) = declManager->FindMaterial(data);
-			}
-		}
-		return *this;
-	}
-	operator const char *() const {
-		return data.c_str();
-	}
-	operator const idStr &() const {
-		return data;
-	}
-	int Length() {
-		if (guiDict) {
-			data = guiDict->GetString(GetName());
-		}
-		return data.Length();
-	}
-	virtual const char *c_str() const {
-		return data.c_str();
-	}
+  public:
+    idWinBackground() : idWinStr() {
+        mat = NULL;
+    };
+    ~idWinBackground() {};
+    virtual void Init(const char* _name, idWindow* win) {
+        idWinStr::Init(_name, win);
 
-	virtual void Set(const char *val) {
-		data = val;
-		if (guiDict) {
-			guiDict->Set(GetName(), data);
-		}
-		if (mat) {
-			if ( data == "" ) {
-				(*mat) = NULL;
-			} else {
-				(*mat) = declManager->FindMaterial(data);
-			}
-		}
-	}
+        if (guiDict) {
+            data = guiDict->GetString(GetName());
+        }
+    }
+    int operator==(const idStr& other) const {
+        return (other == data);
+    }
+    int operator==(const char* other) const {
+        return (data == other);
+    }
+    idStr& operator=(const idStr& other) {
+        data = other;
 
-	virtual void Update() {
-		const char *s = GetName();
-		if ( guiDict && s[0] != '\0' ) {
-			data = guiDict->GetString( s );
-			if (mat) {
-				if ( data == "" ) {
-					(*mat) = NULL;
-				} else {
-					(*mat) = declManager->FindMaterial(data);
-				}
-			}
-		}
-	}
+        if (guiDict) {
+            guiDict->Set(GetName(), data);
+        }
 
-	virtual size_t Size() {
-		size_t sz = idWinVar::Size();
-		return sz +data.Allocated();
-	}
+        if (mat) {
+            if (data == "") {
+                (*mat) = NULL;
+            } else {
+                (*mat) = declManager->FindMaterial(data);
+            }
+        }
 
-	void SetMaterialPtr( const idMaterial **m ) {
-		mat = m;
-	}
+        return data;
+    }
+    idWinBackground& operator=(const idWinBackground& other) {
+        idWinVar::operator=(other);
+        data = other.data;
+        mat = other.mat;
 
-	virtual void WriteToSaveGame( idFile *savefile ) {
-		savefile->Write( &eval, sizeof( eval ) );
+        if (mat) {
+            if (data == "") {
+                (*mat) = NULL;
+            } else {
+                (*mat) = declManager->FindMaterial(data);
+            }
+        }
 
-		int len = data.Length();
-		savefile->Write( &len, sizeof( len ) );
-		if ( len > 0 ) {
-			savefile->Write( data.c_str(), len );
-		}
-	}
-	virtual void ReadFromSaveGame( idFile *savefile ) {
-		savefile->Read( &eval, sizeof( eval ) );
+        return *this;
+    }
+    operator const char* () const {
+        return data.c_str();
+    }
+    operator const idStr& () const {
+        return data;
+    }
+    int Length() {
+        if (guiDict) {
+            data = guiDict->GetString(GetName());
+        }
 
-		int len;
-		savefile->Read( &len, sizeof( len ) );
-		if ( len > 0 ) {
-			data.Fill( ' ', len );
-			savefile->Read( &data[0], len );
-		}
-		if ( mat ) {
-			if ( len > 0 ) {
-				(*mat) = declManager->FindMaterial( data );
-			} else {
-				(*mat) = NULL;
-			}
-		}
-	}
+        return data.Length();
+    }
+    virtual const char* c_str() const {
+        return data.c_str();
+    }
 
-protected:
-	idStr data;
-	const idMaterial **mat;
+    virtual void Set(const char* val) {
+        data = val;
+
+        if (guiDict) {
+            guiDict->Set(GetName(), data);
+        }
+
+        if (mat) {
+            if (data == "") {
+                (*mat) = NULL;
+            } else {
+                (*mat) = declManager->FindMaterial(data);
+            }
+        }
+    }
+
+    virtual void Update() {
+        const char* s = GetName();
+
+        if (guiDict && s[0] != '\0') {
+            data = guiDict->GetString(s);
+
+            if (mat) {
+                if (data == "") {
+                    (*mat) = NULL;
+                } else {
+                    (*mat) = declManager->FindMaterial(data);
+                }
+            }
+        }
+    }
+
+    virtual size_t Size() {
+        size_t sz = idWinVar::Size();
+        return sz +data.Allocated();
+    }
+
+    void SetMaterialPtr(const idMaterial** m) {
+        mat = m;
+    }
+
+    virtual void WriteToSaveGame(idFile* savefile) {
+        savefile->Write(&eval, sizeof(eval));
+
+        int len = data.Length();
+        savefile->Write(&len, sizeof(len));
+
+        if (len > 0) {
+            savefile->Write(data.c_str(), len);
+        }
+    }
+    virtual void ReadFromSaveGame(idFile* savefile) {
+        savefile->Read(&eval, sizeof(eval));
+
+        int len;
+        savefile->Read(&len, sizeof(len));
+
+        if (len > 0) {
+            data.Fill(' ', len);
+            savefile->Read(&data[0], len);
+        }
+
+        if (mat) {
+            if (len > 0) {
+                (*mat) = declManager->FindMaterial(data);
+            } else {
+                (*mat) = NULL;
+            }
+        }
+    }
+
+  protected:
+    idStr data;
+    const idMaterial** mat;
 };
 
 /*
@@ -845,11 +934,11 @@ idMultiWinVar
 multiplexes access to a list if idWinVar*
 ================
 */
-class idMultiWinVar : public idList< idWinVar * > {
-public:
-	void Set( const char *val );
-	void Update( void );
-	void SetGuiInfo( idDict *dict );
+class idMultiWinVar : public idList< idWinVar* > {
+  public:
+    void Set(const char* val);
+    void Update(void);
+    void SetGuiInfo(idDict* dict);
 };
 
 #endif /* !__WINVAR_H__ */

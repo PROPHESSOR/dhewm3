@@ -37,8 +37,8 @@ If you have questions concerning this license or the applicable additional terms
 idDeclEntityDef::Size
 =================
 */
-size_t idDeclEntityDef::Size( void ) const {
-	return sizeof( idDeclEntityDef ) + dict.Allocated();
+size_t idDeclEntityDef::Size(void) const {
+    return sizeof(idDeclEntityDef) + dict.Allocated();
 }
 
 /*
@@ -46,8 +46,8 @@ size_t idDeclEntityDef::Size( void ) const {
 idDeclEntityDef::FreeData
 ================
 */
-void idDeclEntityDef::FreeData( void ) {
-	dict.Clear();
+void idDeclEntityDef::FreeData(void) {
+    dict.Clear();
 }
 
 /*
@@ -55,80 +55,84 @@ void idDeclEntityDef::FreeData( void ) {
 idDeclEntityDef::Parse
 ================
 */
-bool idDeclEntityDef::Parse( const char *text, const int textLength ) {
-	idLexer src;
-	idToken	token, token2;
+bool idDeclEntityDef::Parse(const char* text, const int textLength) {
+    idLexer src;
+    idToken token, token2;
 
-	src.LoadMemory( text, textLength, GetFileName(), GetLineNum() );
-	src.SetFlags( DECL_LEXER_FLAGS );
-	src.SkipUntilString( "{" );
+    src.LoadMemory(text, textLength, GetFileName(), GetLineNum());
+    src.SetFlags(DECL_LEXER_FLAGS);
+    src.SkipUntilString("{");
 
-	while (1) {
-		if ( !src.ReadToken( &token ) ) {
-			break;
-		}
+    while (1) {
+        if (!src.ReadToken(&token)) {
+            break;
+        }
 
-		if ( !token.Icmp( "}" ) ) {
-			break;
-		}
-		if ( token.type != TT_STRING ) {
-			src.Warning( "Expected quoted string, but found '%s'", token.c_str() );
-			MakeDefault();
-			return false;
-		}
+        if (!token.Icmp("}")) {
+            break;
+        }
 
-		if ( !src.ReadToken( &token2 ) ) {
-			src.Warning( "Unexpected end of file" );
-			MakeDefault();
-			return false;
-		}
+        if (token.type != TT_STRING) {
+            src.Warning("Expected quoted string, but found '%s'", token.c_str());
+            MakeDefault();
+            return false;
+        }
 
-		if ( dict.FindKey( token ) ) {
-			src.Warning( "'%s' already defined", token.c_str() );
-		}
-		dict.Set( token, token2 );
-	}
+        if (!src.ReadToken(&token2)) {
+            src.Warning("Unexpected end of file");
+            MakeDefault();
+            return false;
+        }
 
-	// we always automatically set a "classname" key to our name
-	dict.Set( "classname", GetName() );
+        if (dict.FindKey(token)) {
+            src.Warning("'%s' already defined", token.c_str());
+        }
 
-	// "inherit" keys will cause all values from another entityDef to be copied into this one
-	// if they don't conflict.  We can't have circular recursions, because each entityDef will
-	// never be parsed mroe than once
+        dict.Set(token, token2);
+    }
 
-	// find all of the dicts first, because copying inherited values will modify the dict
-	idList<const idDeclEntityDef *> defList;
+    // we always automatically set a "classname" key to our name
+    dict.Set("classname", GetName());
 
-	while ( 1 ) {
-		const idKeyValue *kv;
-		kv = dict.MatchPrefix( "inherit", NULL );
-		if ( !kv ) {
-			break;
-		}
+    // "inherit" keys will cause all values from another entityDef to be copied into this one
+    // if they don't conflict.  We can't have circular recursions, because each entityDef will
+    // never be parsed mroe than once
 
-		const idDeclEntityDef *copy = static_cast<const idDeclEntityDef *>( declManager->FindType( DECL_ENTITYDEF, kv->GetValue(), false ) );
-		if ( !copy ) {
-			src.Warning( "Unknown entityDef '%s' inherited by '%s'", kv->GetValue().c_str(), GetName() );
-		} else {
-			defList.Append( copy );
-		}
+    // find all of the dicts first, because copying inherited values will modify the dict
+    idList<const idDeclEntityDef*> defList;
 
-		// delete this key/value pair
-		dict.Delete( kv->GetKey() );
-	}
+    while (1) {
+        const idKeyValue* kv;
+        kv = dict.MatchPrefix("inherit", NULL);
 
-	// now copy over the inherited key / value pairs
-	for ( int i = 0 ; i < defList.Num() ; i++ ) {
-		dict.SetDefaults( &defList[ i ]->dict );
-	}
+        if (!kv) {
+            break;
+        }
 
-	// precache all referenced media
-	// do this as long as we arent in modview
-	if ( !( com_editors & (EDITOR_RADIANT|EDITOR_AAS) ) ) {
-		game->CacheDictionaryMedia( &dict );
-	}
+        const idDeclEntityDef* copy = static_cast<const idDeclEntityDef*>(declManager->FindType(DECL_ENTITYDEF, kv->GetValue(), false));
 
-	return true;
+        if (!copy) {
+            src.Warning("Unknown entityDef '%s' inherited by '%s'", kv->GetValue().c_str(), GetName());
+        } else {
+            defList.Append(copy);
+        }
+
+        // delete this key/value pair
+        dict.Delete(kv->GetKey());
+    }
+
+    // now copy over the inherited key / value pairs
+    for (int i = 0 ; i < defList.Num() ; i++) {
+        dict.SetDefaults(&defList[ i ]->dict);
+    }
+
+    // precache all referenced media
+    // do this as long as we arent in modview
+    if (!(com_editors & (EDITOR_RADIANT|EDITOR_AAS))) {
+        game->CacheDictionaryMedia(&dict);
+    }
+
+    return true;
 }
 
 /*
@@ -136,11 +140,11 @@ bool idDeclEntityDef::Parse( const char *text, const int textLength ) {
 idDeclEntityDef::DefaultDefinition
 ================
 */
-const char *idDeclEntityDef::DefaultDefinition( void ) const {
-	return
-		"{\n"
-	"\t"	"\"DEFAULTED\"\t\"1\"\n"
-		"}";
+const char* idDeclEntityDef::DefaultDefinition(void) const {
+    return
+        "{\n"
+        "\t"    "\"DEFAULTED\"\t\"1\"\n"
+        "}";
 }
 
 /*
@@ -150,6 +154,6 @@ idDeclEntityDef::Print
 Dumps all key/value pairs, including inherited ones
 ================
 */
-void idDeclEntityDef::Print( void ) const {
-	dict.Print();
+void idDeclEntityDef::Print(void) const {
+    dict.Print();
 }

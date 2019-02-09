@@ -32,53 +32,54 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/Winvar.h"
 
-const char *VAR_GUIPREFIX = "gui::";
+const char* VAR_GUIPREFIX = "gui::";
 static const int VAR_GUIPREFIX_LEN = strlen(VAR_GUIPREFIX);
 
 idWinVar::idWinVar() {
-	guiDict = NULL;
-	name = NULL;
-	eval = true;
+    guiDict = NULL;
+    name = NULL;
+    eval = true;
 }
 
 idWinVar::~idWinVar() {
-	delete[] name;
-	name = NULL;
+    delete[] name;
+    name = NULL;
 }
 
-void idWinVar::SetGuiInfo(idDict *gd, const char *_name) {
-	guiDict = gd;
-	SetName(_name);
+void idWinVar::SetGuiInfo(idDict* gd, const char* _name) {
+    guiDict = gd;
+    SetName(_name);
 }
 
 
-void idWinVar::Init(const char *_name, idWindow *win) {
-	idStr key = _name;
-	guiDict = NULL;
-	int len = key.Length();
-	if (len > 5 && key[0] == 'g' && key[1] == 'u' && key[2] == 'i' && key[3] == ':') {
-		key = key.Right(len - VAR_GUIPREFIX_LEN);
-		SetGuiInfo( win->GetGui()->GetStateDict(), key );
-		win->AddUpdateVar(this);
-	} else {
-		Set(_name);
-	}
+void idWinVar::Init(const char* _name, idWindow* win) {
+    idStr key = _name;
+    guiDict = NULL;
+    int len = key.Length();
+
+    if (len > 5 && key[0] == 'g' && key[1] == 'u' && key[2] == 'i' && key[3] == ':') {
+        key = key.Right(len - VAR_GUIPREFIX_LEN);
+        SetGuiInfo(win->GetGui()->GetStateDict(), key);
+        win->AddUpdateVar(this);
+    } else {
+        Set(_name);
+    }
 }
 
-void idMultiWinVar::Set( const char *val ) {
-	for ( int i = 0; i < Num(); i++ ) {
-		(*this)[i]->Set( val );
-	}
+void idMultiWinVar::Set(const char* val) {
+    for (int i = 0; i < Num(); i++) {
+        (*this)[i]->Set(val);
+    }
 }
 
-void idMultiWinVar::Update( void ) {
-	for ( int i = 0; i < Num(); i++ ) {
-		(*this)[i]->Update();
-	}
+void idMultiWinVar::Update(void) {
+    for (int i = 0; i < Num(); i++) {
+        (*this)[i]->Update();
+    }
 }
 
-void idMultiWinVar::SetGuiInfo( idDict *dict ) {
-	for ( int i = 0; i < Num(); i++ ) {
-		(*this)[i]->SetGuiInfo( dict, (*this)[i]->c_str() );
-	}
+void idMultiWinVar::SetGuiInfo(idDict* dict) {
+    for (int i = 0; i < Num(); i++) {
+        (*this)[i]->SetGuiInfo(dict, (*this)[i]->c_str());
+    }
 }

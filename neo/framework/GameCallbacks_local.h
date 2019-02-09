@@ -39,15 +39,15 @@ If you have questions concerning this license or the applicable additional terms
 
 struct idGameCallbacks {
 
-	typedef void (*ReloadImagesCallback)(void* userArg, const idCmdArgs &args);
-	ReloadImagesCallback reloadImagesCB;
-	void*                reloadImagesUserArg;
+    typedef void (*ReloadImagesCallback)(void* userArg, const idCmdArgs& args);
+    ReloadImagesCallback reloadImagesCB;
+    void*                reloadImagesUserArg;
 
 
-	idGameCallbacks();
+    idGameCallbacks();
 
-	// called when Game DLL is unloaded (=> the registered callbacks become invalid)
-	void Reset();
+    // called when Game DLL is unloaded (=> the registered callbacks become invalid)
+    void Reset();
 
 };
 

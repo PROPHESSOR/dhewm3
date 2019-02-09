@@ -34,44 +34,44 @@ If you have questions concerning this license or the applicable additional terms
 /*
 ===============================================================================
 
-	The console is strictly for development and advanced users. It should
-	never be used to convey actual game information to the user, which should
-	always be done through a GUI.
+    The console is strictly for development and advanced users. It should
+    never be used to convey actual game information to the user, which should
+    always be done through a GUI.
 
-	The force options are for the editor console display window, which
-	doesn't respond to pull up / pull down
+    The force options are for the editor console display window, which
+    doesn't respond to pull up / pull down
 
 ===============================================================================
 */
 
 class idConsole {
-public:
-	virtual			~idConsole( void ) {}
+  public:
+    virtual         ~idConsole(void) {}
 
-	virtual void	Init( void ) = 0;
-	virtual void	Shutdown( void ) = 0;
+    virtual void    Init(void) = 0;
+    virtual void    Shutdown(void) = 0;
 
-	// can't be combined with Init, because Init happens before renderer is started
-	virtual void	LoadGraphics() = 0;
+    // can't be combined with Init, because Init happens before renderer is started
+    virtual void    LoadGraphics() = 0;
 
-	virtual bool	ProcessEvent( const sysEvent_t *event, bool forceAccept ) = 0;
+    virtual bool    ProcessEvent(const sysEvent_t* event, bool forceAccept) = 0;
 
-	// the system code can release the mouse pointer when the console is active
-	virtual bool	Active( void ) = 0;
+    // the system code can release the mouse pointer when the console is active
+    virtual bool    Active(void) = 0;
 
-	// clear the timers on any recent prints that are displayed in the notify lines
-	virtual void	ClearNotifyLines( void ) = 0;
+    // clear the timers on any recent prints that are displayed in the notify lines
+    virtual void    ClearNotifyLines(void) = 0;
 
-	// some console commands, like timeDemo, will force the console closed before they start
-	virtual void	Close( void ) = 0;
+    // some console commands, like timeDemo, will force the console closed before they start
+    virtual void    Close(void) = 0;
 
-	virtual void	Draw( bool forceFullScreen ) = 0;
-	virtual void	Print( const char *text ) = 0;
+    virtual void    Draw(bool forceFullScreen) = 0;
+    virtual void    Print(const char* text) = 0;
 
-	virtual void	SaveHistory() = 0;
-	virtual void	LoadHistory() = 0;
+    virtual void    SaveHistory() = 0;
+    virtual void    LoadHistory() = 0;
 };
 
-extern idConsole *	console;	// statically initialized to an idConsoleLocal
+extern idConsole*   console;    // statically initialized to an idConsoleLocal
 
 #endif /* !__CONSOLE_H__ */

@@ -32,9 +32,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "ui/Window.h"
 
 class idGameWindowProxy : public idWindow {
-public:
-				idGameWindowProxy( idDeviceContext *d, idUserInterfaceLocal *gui );
-	void		Draw( int time, float x, float y );
+  public:
+    idGameWindowProxy(idDeviceContext* d, idUserInterfaceLocal* gui);
+    void        Draw(int time, float x, float y);
 };
 
 #endif

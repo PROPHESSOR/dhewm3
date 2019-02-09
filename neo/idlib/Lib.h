@@ -32,16 +32,16 @@ If you have questions concerning this license or the applicable additional terms
 /*
 ===============================================================================
 
-	idLib contains stateless support classes and concrete types. Some classes
-	do have static variables, but such variables are initialized once and
-	read-only after initialization (they do not maintain a modifiable state).
+    idLib contains stateless support classes and concrete types. Some classes
+    do have static variables, but such variables are initialized once and
+    read-only after initialization (they do not maintain a modifiable state).
 
-	The interface pointers idSys, idCommon, idCVarSystem and idFileSystem
-	should be set before using idLib. The pointers stored here should not
-	be used by any part of the engine except for idLib.
+    The interface pointers idSys, idCommon, idCVarSystem and idFileSystem
+    should be set before using idLib. The pointers stored here should not
+    be used by any part of the engine except for idLib.
 
-	The frameNumber should be continuously set to the number of the current
-	frame if frame base memory logging is required.
+    The frameNumber should be continuously set to the number of the current
+    frame if frame base memory logging is required.
 
 ===============================================================================
 */
@@ -52,26 +52,26 @@ class idCVarSystem;
 class idFileSystem;
 
 class idLib {
-public:
-	static class idSys *		sys;
-	static class idCommon *		common;
-	static class idCVarSystem *	cvarSystem;
-	static class idFileSystem *	fileSystem;
-	static int					frameNumber;
+  public:
+    static class idSys*         sys;
+    static class idCommon*      common;
+    static class idCVarSystem*  cvarSystem;
+    static class idFileSystem*  fileSystem;
+    static int                  frameNumber;
 
-	static void					Init( void );
-	static void					ShutDown( void );
+    static void                 Init(void);
+    static void                 ShutDown(void);
 
-	// wrapper to idCommon functions
-	static void					Error( const char *fmt, ... );
-	static void					Warning( const char *fmt, ... );
+    // wrapper to idCommon functions
+    static void                 Error(const char* fmt, ...);
+    static void                 Warning(const char* fmt, ...);
 };
 
 
 /*
 ===============================================================================
 
-	Types and defines used throughout the engine.
+    Types and defines used throughout the engine.
 
 ===============================================================================
 */
@@ -81,62 +81,68 @@ class idVec3;
 class idVec4;
 
 // basic colors
-extern	idVec4 colorBlack;
-extern	idVec4 colorWhite;
-extern	idVec4 colorRed;
-extern	idVec4 colorGreen;
-extern	idVec4 colorBlue;
-extern	idVec4 colorYellow;
-extern	idVec4 colorMagenta;
-extern	idVec4 colorCyan;
-extern	idVec4 colorOrange;
-extern	idVec4 colorPurple;
-extern	idVec4 colorPink;
-extern	idVec4 colorBrown;
-extern	idVec4 colorLtGrey;
-extern	idVec4 colorMdGrey;
-extern	idVec4 colorDkGrey;
+extern  idVec4 colorBlack;
+extern  idVec4 colorWhite;
+extern  idVec4 colorRed;
+extern  idVec4 colorGreen;
+extern  idVec4 colorBlue;
+extern  idVec4 colorYellow;
+extern  idVec4 colorMagenta;
+extern  idVec4 colorCyan;
+extern  idVec4 colorOrange;
+extern  idVec4 colorPurple;
+extern  idVec4 colorPink;
+extern  idVec4 colorBrown;
+extern  idVec4 colorLtGrey;
+extern  idVec4 colorMdGrey;
+extern  idVec4 colorDkGrey;
 
 // packs color floats in the range [0,1] into an integer
-dword	PackColor( const idVec3 &color );
-void	UnpackColor( const dword color, idVec3 &unpackedColor );
-dword	PackColor( const idVec4 &color );
-void	UnpackColor( const dword color, idVec4 &unpackedColor );
+dword   PackColor(const idVec3& color);
+void    UnpackColor(const dword color, idVec3& unpackedColor);
+dword   PackColor(const idVec4& color);
+void    UnpackColor(const dword color, idVec4& unpackedColor);
 
 // little/big endian conversion
-short	BigShort( short l );
-short	LittleShort( short l );
-int		BigInt( int l );
-int		LittleInt( int l );
-float	BigFloat( float l );
-float	LittleFloat( float l );
-void	BigRevBytes( void *bp, int elsize, int elcount );
-void	LittleRevBytes( void *bp, int elsize, int elcount );
-void	LittleBitField( void *bp, int elsize );
-void	Swap_Init( void );
+short   BigShort(short l);
+short   LittleShort(short l);
+int     BigInt(int l);
+int     LittleInt(int l);
+float   BigFloat(float l);
+float   LittleFloat(float l);
+void    BigRevBytes(void* bp, int elsize, int elcount);
+void    LittleRevBytes(void* bp, int elsize, int elcount);
+void    LittleBitField(void* bp, int elsize);
+void    Swap_Init(void);
 
-bool	Swap_IsBigEndian( void );
+bool    Swap_IsBigEndian(void);
 
 // for base64
-void	SixtetsForInt( byte *out, int src);
-int		IntForSixtets( byte *in );
+void    SixtetsForInt(byte* out, int src);
+int     IntForSixtets(byte* in);
 
 
 #ifdef _DEBUG
-void AssertFailed( const char *file, int line, const char *expression );
-#undef assert
-#define assert( X )		if ( X ) { } else AssertFailed( __FILE__, __LINE__, #X )
+    void AssertFailed(const char* file, int line, const char* expression);
+    #undef assert
+    #define assert( X )     if ( X ) { } else AssertFailed( __FILE__, __LINE__, #X )
 #endif
 
 class idException {
-public:
-	char error[MAX_STRING_CHARS];
+  public:
+    char error[MAX_STRING_CHARS];
 
-	idException( const char *text = "" ) { strcpy( error, text ); }
+    idException(const char* text = "") {
+        strcpy(error, text);
+    }
 };
 
 // move from Math.h to keep gcc happy
-template<class T> ID_INLINE T	Max( T x, T y ) { return ( x > y ) ? x : y; }
-template<class T> ID_INLINE T	Min( T x, T y ) { return ( x < y ) ? x : y; }
+template<class T> ID_INLINE T   Max(T x, T y) {
+    return (x > y) ? x : y;
+}
+template<class T> ID_INLINE T   Min(T x, T y) {
+    return (x < y) ? x : y;
+}
 
-#endif	/* !__LIB_H__ */
+#endif  /* !__LIB_H__ */

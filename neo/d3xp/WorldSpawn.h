@@ -40,18 +40,18 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 class idWorldspawn : public idEntity {
-public:
-	CLASS_PROTOTYPE( idWorldspawn );
+  public:
+    CLASS_PROTOTYPE(idWorldspawn);
 
-					~idWorldspawn();
+    ~idWorldspawn();
 
-	void			Spawn( void );
+    void            Spawn(void);
 
-	void			Save( idRestoreGame *savefile );
-	void			Restore( idRestoreGame *savefile );
+    void            Save(idRestoreGame* savefile);
+    void            Restore(idRestoreGame* savefile);
 
-private:
-	void			Event_Remove( void );
+  private:
+    void            Event_Remove(void);
 };
 
 #endif /* !__GAME_WORLDSPAWN_H__ */
