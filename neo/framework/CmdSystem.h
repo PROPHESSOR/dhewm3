@@ -125,6 +125,7 @@ public:
 	static void			ArgCompletion_ConfigName( const idCmdArgs &args, void(*callback)( const char *s ) );
 	static void			ArgCompletion_SaveGame( const idCmdArgs &args, void(*callback)( const char *s ) );
 	static void			ArgCompletion_DemoName( const idCmdArgs &args, void(*callback)( const char *s ) );
+	static void			ArgCompletion_LightName( const idCmdArgs &args, void(*callback)( const char *s ) );
 };
 
 extern idCmdSystem *	cmdSystem;
@@ -185,6 +186,10 @@ ID_INLINE void idCmdSystem::ArgCompletion_SaveGame( const idCmdArgs &args, void(
 
 ID_INLINE void idCmdSystem::ArgCompletion_DemoName( const idCmdArgs &args, void(*callback)( const char *s ) ) {
 	cmdSystem->ArgCompletion_FolderExtension( args, callback, "demos/", true, ".demo", NULL );
+}
+
+ID_INLINE void idCmdSystem::ArgCompletion_LightName( const idCmdArgs &args, void(*callback)( const char *s ) ) {
+	cmdSystem->ArgCompletion_FolderExtension( args, callback, "/", false, ".tga", NULL );
 }
 
 #endif /* !__CMDSYSTEM_H__ */
