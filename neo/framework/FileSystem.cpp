@@ -1696,43 +1696,57 @@ idModList *idFileSystemLocal::ListMods( void ) {
 	char		desc[ MAX_DESCRIPTION ];
 
 	idStrList	dirs;
+	idStrList	files;
 	idStrList	pk4s;
 
 	idModList	*list = new idModList;
 
-	const char	*search[ 4 ];
-	int			isearch;
+	// TODO: Add games list (base, q4base and more supported games directories, like iwads in previous DooMs)
+	const idStr	baseFolder("/base");
 
-	search[0] = fs_savepath.GetString();
-	search[1] = fs_devpath.GetString();
-	search[2] = fs_basepath.GetString();
-	search[3] = fs_cdpath.GetString();
+	#define SEARCH_LEN 4
+	const char *search[] = {
+		fs_savepath.GetString(),
+		fs_devpath.GetString(),
+		fs_basepath.GetString(),
+		fs_cdpath.GetString()
+	};
 
-	for ( isearch = 0; isearch < 4; isearch++ ) {
+	int isearch;
 
+	for ( isearch = 0; isearch < SEARCH_LEN; isearch++ ) {
 		dirs.Clear();
 		pk4s.Clear();
 
 		// scan for directories
-		ListOSFiles( search[ isearch ], "/", dirs );
+		ListOSFiles( search[ isearch ] + baseFolder, "/", dirs );
 
 		dirs.Remove( "." );
 		dirs.Remove( ".." );
-		dirs.Remove( "base" );
-		dirs.Remove( "pb" );
 
 		// see if there are any pk4 files in each directory
 		for( i = 0; i < dirs.Num(); i++ ) {
-			idStr gamepath = BuildOSPath( search[ isearch ], dirs[ i ], "" );
+			idStr gamepath = BuildOSPath( search[ isearch ] + baseFolder, dirs[ i ], "" );
+
 			ListOSFiles( gamepath, ".pk4", pk4s );
-			if ( pk4s.Num() ) {
-				if ( !list->mods.Find( dirs[ i ] ) ) {
-					// D3 1.3 #31, only list d3xp if the pak is present
-					if ( dirs[ i ].Icmp( "d3xp" ) || HasD3XP() ) {
-						list->mods.Append( dirs[ i ] );
-					}
+			ListOSFiles( gamepath, ".txt", files );
+
+			if( files.Find( "it4mod.txt" ) ) {
+				if( !list->mods.Find( dirs[ i ] ) ) {
+					list->mods.Append( dirs[ i ] );
 				}
 			}
+
+			// TODO: Add d3xp support
+			// if ( pk4s.Num() ) {
+			// 	if ( !list->mods.Find( dirs[ i ] ) ) {
+			// 		// D3 1.3 #31, only list d3xp if the pak is present
+			// 		if ( dirs[ i ].Icmp( "d3xp" ) || HasD3XP() ) {
+			// 			list->mods.Append( dirs[ i ] );
+			// 		}
+			// 	}
+			// }
+
 		}
 	}
 
@@ -1743,8 +1757,9 @@ idModList *idFileSystemLocal::ListMods( void ) {
 
 		for ( isearch = 0; isearch < 4; isearch++ ) {
 
-			idStr descfile = BuildOSPath( search[ isearch ], list->mods[ i ], "description.txt" );
+			idStr descfile = BuildOSPath( search[ isearch ] + baseFolder, list->mods[ i ], "it4mod.txt" );
 			FILE *f = OpenOSFile( descfile, "r" );
+
 			if ( f ) {
 				if ( fgets( desc, MAX_DESCRIPTION, f ) ) {
 					list->descriptions.Append( desc );
@@ -1764,7 +1779,7 @@ idModList *idFileSystemLocal::ListMods( void ) {
 	}
 
 	list->mods.Insert( "" );
-	list->descriptions.Insert( "dhewm 3" );
+	list->descriptions.Insert( GAME_NAME );
 
 	assert( list->mods.Num() == list->descriptions.Num() );
 

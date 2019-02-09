@@ -240,6 +240,7 @@ void idSessionLocal::SetModsMenuGuiVars( void ) {
 		guiActive->SetStateString( va("modsList_item_%i", i), list->GetDescription( i ) );
 		modsList[i] = list->GetMod( i );
 	}
+
 	guiActive->DeleteStateVar( va("modsList_item_%i", list->GetNumMods()) );
 	guiActive->SetStateString( "modsList_sel_0", "-1" );
 
