@@ -1,4 +1,4 @@
-# [Word In Progress] it4engine DECORATE Specification
+# [Work In Progress] it4engine DECORATE Specification
 
 This file format was created inspired by ZDoom DECORATE therefore it is called that way.
 
