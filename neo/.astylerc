@@ -1,3 +1,6 @@
+# PROPHESSOR's style
+# Read more about astyle configuration here: http://astyle.sourceforge.net/astyle.html
+
 --mode=c
 --style=google
 --indent=spaces=4

@@ -1,6 +1,0 @@
-#!/bin/bash
-echo "Компилирую и запускаю..."
-
-make -j`nproc`
-sudo make install
-idtech4
